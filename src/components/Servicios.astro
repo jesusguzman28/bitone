@@ -1,0 +1,182 @@
+---
+import { serviciosHome } from '../data/site';
+import Icono from './Icono.astro';
+---
+
+<section class="surface px-6 pb-10 pt-24">
+  <div class="mx-auto w-full max-w-[1120px]">
+    <div class="reveal text-center">
+      <span class="eyebrow eyebrow--light">Servicios</span>
+      <h2 class="mx-auto mt-4 max-w-[620px] font-display text-[clamp(1.7rem,4vw,2.5rem)] font-bold leading-[1.08] text-dark">
+        Lo que tu negocio necesita, <span class="gradient-text">a precio claro</span>
+      </h2>
+      <p class="mx-auto mt-3.5 max-w-[520px] text-base leading-[1.65] text-slate-500 [text-wrap:pretty]">
+        Precios en soles, sin letra chica. 50% adelanto, 50% contra entrega y hasta 3 cuotas sin interés.
+      </p>
+    </div>
+
+    <!-- La aparición va en el riel, no en cada tarjeta: dentro de un carrusel
+         las vecinas quedan recortadas y el observador no las daba por visibles,
+         así que se quedaban en blanco hasta que arrastrabas. -->
+    <div id="svc-track" class="svc-track reveal mt-12 gap-5">
+      {serviciosHome.map((s) => (
+        <div class:list={['svc-slide bezel', s.featured && 'bezel--featured']}>
+          <div class="bezel__core relative p-7">
+            {s.featured && s.badge && (
+              <span class="absolute -top-[11px] right-[22px] rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white" style="background:linear-gradient(135deg,#D91023,#E8A317)">{s.badge}</span>
+            )}
+            <div class="flex items-center justify-between">
+              <span class="grid h-11 w-11 place-items-center rounded-[12px]" style={`background:${s.featured ? 'rgba(232,163,23,0.14)' : `color-mix(in srgb, ${s.iconColor} 10%, transparent)`};color:${s.iconColor}`}>
+                <Icono name={s.iconName} size={20} />
+              </span>
+              <span class:list={['rounded-full px-2.5 py-1 text-[11px] font-semibold', s.featured ? 'bg-white/10 text-slate-300' : 'bg-slate-100 text-slate-500']}>{s.time}</span>
+            </div>
+
+            <h3 class:list={['mt-[18px] font-display text-[21px] font-bold tracking-[-0.02em]', s.featured ? 'text-white' : 'text-dark']}>{s.tag}</h3>
+            <p class:list={['mt-2.5 text-sm leading-relaxed', s.featured ? 'text-slate-400' : 'text-slate-500']}>{s.desc}</p>
+
+            <ul class:list={['m-0 mt-4 grid list-none gap-2 p-0 text-[13.5px]', s.featured ? 'text-slate-200' : 'text-slate-700']}>
+              {s.features.map((f) => (
+                <li class="flex items-center gap-2">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={s.featured ? '#E8A317' : '#16a34a'} stroke-width="2.5" stroke-linecap="round" class="shrink-0"><path d="m5 13 4 4L19 7"/></svg>
+                  {f}
+                </li>
+              ))}
+            </ul>
+
+            <div class="mt-auto flex items-end justify-between pt-[22px]">
+              <div>
+                <span class="text-[11px] text-slate-400">{s.priceLabel}</span>
+                <div class:list={['font-display text-[28px] font-bold', s.featured ? 'text-white' : 'text-dark']}>
+                  {s.price}{s.priceNote && <span class="text-xs font-medium text-slate-400">{s.priceNote}</span>}
+                </div>
+              </div>
+              <a href={s.href} class:list={['inline-flex items-center gap-1.5 text-[13.5px] font-semibold no-underline', s.featured ? 'text-accent' : 'text-primary']}>
+                Ver detalle
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Indicadores del carrusel: solo móvil -->
+    <div class="mt-5 flex justify-center gap-2 md:hidden">
+      {serviciosHome.map((s, i) => (
+        <button type="button" data-svc-dot={i} aria-label={`Ir a ${s.tag}`} class:list={['svc-dot', i === 0 && 'is-active']}></button>
+      ))}
+    </div>
+
+    <p class="reveal mt-6 text-center text-sm text-slate-500" style="--reveal-delay:300ms">
+      ¿Necesitas una app móvil? <a href="/servicios#apps" class="font-semibold text-primary">También la hacemos →</a>
+    </p>
+  </div>
+</section>
+
+<script>
+  const track = document.getElementById('svc-track');
+  const dots = document.querySelectorAll<HTMLElement>('[data-svc-dot]');
+  const slides = track ? Array.from(track.children) as HTMLElement[] : [];
+
+  if (track && slides.length) {
+    // Arranca centrado en la tarjeta destacada, con las vecinas asomando a
+    // ambos lados para que se vea que el carrusel se desliza.
+    const inicial = Math.max(0, slides.findIndex((s) => s.classList.contains('bezel--featured')));
+    const centrar = () => {
+      if (getComputedStyle(track).display !== 'flex') return; // en escritorio es grilla
+      const el = slides[inicial];
+      const caja = track.getBoundingClientRect();
+      const r = el.getBoundingClientRect();
+      track.scrollLeft += (r.left + r.width / 2) - (caja.left + caja.width / 2);
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === inicial));
+    };
+    centrar();
+    addEventListener('resize', centrar);
+
+    // Punto activo = tarjeta cuyo centro está más cerca del centro del carrusel.
+    // Medimos con getBoundingClientRect: no depende de cuál sea el offsetParent.
+    const sync = () => {
+      const caja = track.getBoundingClientRect();
+      const centro = caja.left + caja.width / 2;
+      let cerca = 0;
+      let min = Infinity;
+      slides.forEach((el, i) => {
+        const r = el.getBoundingClientRect();
+        const d = Math.abs(r.left + r.width / 2 - centro);
+        if (d < min) { min = d; cerca = i; }
+      });
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === cerca));
+    };
+
+    // Cálculo directo (son 3 tarjetas): evita depender de requestAnimationFrame,
+    // que el navegador congela en pestañas en segundo plano.
+    track.addEventListener('scroll', sync, { passive: true });
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        slides[i].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      });
+    });
+  }
+</script>
+
+<style>
+  /* Escritorio: grilla de tres. Móvil: carrusel que se arrastra con el dedo,
+     con scroll-snap para que cada tarjeta quede centrada al soltar. */
+  .svc-track {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  }
+
+  @media (max-width: 767px) {
+    .svc-track {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      /* Clave: al declarar overflow-x, el eje Y pasa a "auto" por spec y el
+         carrusel deja bajar unos píxeles por dentro — esa era la sensación de
+         que "se puede bajar más". Se fija en hidden. */
+      overflow-y: hidden;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      /* Deja pasar el gesto vertical: sin esto el carrusel se queda con el dedo
+         y la página no baja mientras lo tocas. */
+      touch-action: pan-x pan-y;
+      /* sangra hasta el borde de la pantalla para que se intuya que hay más */
+      margin-inline: -24px;
+      padding-inline: 24px;
+      /* espacio para que la insignia "Más pedido" y la elevación no se corten */
+      padding-block: 14px;
+    }
+    .svc-track::-webkit-scrollbar { display: none; }
+
+    .svc-slide {
+      /* Ancho medido contra la pantalla, no contra el riel (que es más ancho por
+         el sangrado): deja ~55px de cada vecina a la vista. */
+      flex: 0 0 calc(100vw - 124px);
+      scroll-snap-align: center;
+      transition: opacity 0.4s var(--ease-fluid);
+    }
+    /* En táctil el hover no aplica: quitamos el desplazamiento para que el
+       arrastre se sienta directo. */
+    .svc-slide:hover { transform: none; }
+  }
+
+  .svc-dot {
+    height: 8px;
+    width: 8px;
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+    border-radius: 999px;
+    background: #cbd5e1;
+    transition: all 0.4s var(--ease-fluid);
+  }
+  .svc-dot.is-active {
+    width: 22px;
+    background: var(--gradient-brand);
+  }
+</style>

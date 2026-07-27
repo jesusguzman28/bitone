@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import Servicios from '../components/Servicios.astro';
+import Stats from '../components/Stats.astro';
+import MarcasBanner from '../components/MarcasBanner.astro';
+import FAQ from '../components/FAQ.astro';
+import CTA from '../components/CTA.astro';
+---
+
+<BaseLayout
+  preloadImages={[
+    { href: '/hero/uno.webp', media: '(min-width: 641px)', type: 'image/webp' },
+    { href: '/hero/celular/uno.webp', media: '(max-width: 640px)', type: 'image/webp' },
+  ]}
+>
+  <Hero />
+  <MarcasBanner />
+  <Servicios />
+  <Stats />
+  <FAQ />
+  <CTA />
+</BaseLayout>

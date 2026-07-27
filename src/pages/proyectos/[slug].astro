@@ -1,0 +1,205 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import Stars from '../../components/Stars.astro';
+import CTA from '../../components/CTA.astro';
+import { rubros, totalModulos, type Rubro } from '../../data/rubros';
+import { site, waLink } from '../../data/site';
+
+export function getStaticPaths() {
+  return rubros.map((rubro) => ({ params: { slug: rubro.slug }, props: { rubro } }));
+}
+
+interface Props { rubro: Rubro }
+const { rubro } = Astro.props;
+
+const modulos = totalModulos(rubro);
+const otros = rubros.filter((r) => r.slug !== rubro.slug && r.cat === rubro.cat).slice(0, 3);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: `Plataforma web para ${rubro.title.toLowerCase()}`,
+  serviceType: rubro.keyword,
+  description: rubro.metaDescription,
+  provider: { '@type': 'Organization', name: site.legalName, url: site.domain },
+  areaServed: { '@type': 'Country', name: 'Perú' },
+  url: `${site.domain}/proyectos/${rubro.slug}`,
+};
+---
+
+<BaseLayout
+  title={rubro.metaTitle.replace(' | Bitwise', '')}
+  description={rubro.metaDescription}
+  keywords={[rubro.keyword, `página web para ${rubro.short}`, `sistema para ${rubro.short}`]}
+  breadcrumbLabel={rubro.title}
+>
+  <!-- Hero del rubro -->
+  <section class="hero-dark relative isolate overflow-hidden px-6 pb-20 pt-[140px] text-white">
+    <Stars />
+    <div class="mx-auto w-full max-w-[1120px]">
+      <nav aria-label="Ruta" class="mb-8 text-[13px] text-slate-400">
+        <a href="/proyectos" class="text-slate-400 no-underline transition-colors hover:text-white">Proyectos</a>
+        <span class="mx-2 text-slate-600">/</span>
+        <span class="text-slate-300">{rubro.title}</span>
+      </nav>
+
+      <span class="block text-[56px] leading-none">{rubro.emoji}</span>
+      <h1 class="mt-5 max-w-[820px] font-display text-[clamp(2rem,5.5vw,3.25rem)] font-extrabold leading-[1.08]">{rubro.title}</h1>
+      <p class="mt-4 max-w-[600px] text-[17px] leading-[1.6] text-slate-300">{rubro.tagline}</p>
+
+      <div class="mt-7 flex flex-wrap gap-3">
+        <span class="hero-chip">Entrega en <strong class="text-accent">{rubro.deliveryTime}</strong></span>
+        <span class="hero-chip"><strong class="text-accent">{modulos} módulos</strong> disponibles</span>
+        <span class="hero-chip">Cotización <strong class="text-accent">gratis en 24 h</strong></span>
+      </div>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a
+          href={waLink(`Hola Bitwise 👋 tengo una ${rubro.short} y quiero una cotización`)}
+          target="_blank"
+          rel="noopener"
+          class="btn btn--whatsapp group !py-3 !pl-[26px] !text-[15px]"
+        >
+          Cotizar por WhatsApp
+          <span class="btn__icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </span>
+        </a>
+        <a href="#formulario" class="btn btn--on-dark !px-[26px] !py-3 !text-[15px]">Formulario de contacto</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problema / Solución -->
+  <section class="surface px-6 py-20">
+    <div class="mx-auto grid w-full max-w-[1120px] gap-6" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+      <div class="reveal split-card split-card--pain rounded-[20px] bg-white p-7">
+        <span class="text-[11px] font-bold uppercase tracking-[0.14em] text-primary">El problema</span>
+        <p class="mt-3 text-[16px] leading-[1.7] text-slate-700">{rubro.pain}</p>
+      </div>
+      <div class="reveal split-card split-card--fix rounded-[20px] bg-white p-7" style="--reveal-delay:120ms">
+        <span class="text-[11px] font-bold uppercase tracking-[0.14em]" style="color:#16a34a">Nuestra solución</span>
+        <p class="mt-3 text-[16px] leading-[1.7] text-slate-700">{rubro.solution}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Módulos -->
+  <section class="surface--alt px-6 pb-24 pt-4">
+    <div class="mx-auto w-full max-w-[1120px]">
+      <div class="reveal text-center">
+        <span class="eyebrow eyebrow--light">Módulos incluidos</span>
+        <h2 class="mx-auto mt-5 max-w-[620px] font-display text-[clamp(1.6rem,3.8vw,2.3rem)] font-extrabold leading-[1.15] text-dark">
+          {modulos} módulos listos para tu <span class="gradient-text">{rubro.short}</span>
+        </h2>
+        <p class="mx-auto mt-4 max-w-[520px] text-[15px] leading-[1.65] text-slate-500">
+          Armamos tu plataforma combinando solo lo que tu negocio necesita. Empiezas con lo esencial y sumas módulos cuando quieras.
+        </p>
+      </div>
+
+      {rubro.moduleGroups.map((group, gi) => (
+        <div class="mt-12">
+          <h3 class="reveal flex items-center gap-3 font-display text-[15px] font-bold uppercase tracking-[0.12em] text-slate-500">
+            <span class="h-px w-8 bg-primary"></span>
+            {group.name}
+          </h3>
+          <div class="mt-5 grid gap-4" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">
+            {group.modules.map((m, i) => (
+              <div class="reveal card card--lift rounded-[20px] p-6" style={`--reveal-delay:${((gi + i) % 3) * 90}ms`}>
+                <span class="text-[26px] leading-none">{m.emoji}</span>
+                <h4 class="mt-3 font-display text-[16.5px] font-bold text-dark">{m.title}</h4>
+                <p class="mt-2 text-[13.5px] leading-[1.6] text-slate-500">{m.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Formulario simple -->
+  <section id="formulario" class="surface scroll-mt-24 px-6 pb-24">
+    <div class="mx-auto grid w-full max-w-[1120px] items-start gap-9" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+      <ContactForm
+        id="rubro-form"
+        context={`una ${rubro.short}`}
+        title={`¿Hablamos de tu ${rubro.short}?`}
+        subtitle="Déjanos tu nombre, celular y tu pregunta. Te respondemos en menos de 2 horas hábiles."
+      />
+
+      <div class="grid gap-4">
+        <div class="reveal card rounded-[20px] p-6">
+          <h3 class="m-0 font-display text-base font-bold text-dark">Lo que incluye tu proyecto</h3>
+          <ul class="m-0 mt-3 grid list-none gap-2.5 p-0 text-[14px] text-slate-600">
+            {[
+              `Entrega en ${rubro.deliveryTime} desde la aprobación del diseño`,
+              'Dominio, hosting y SSL incluidos el primer año',
+              'Panel administrable y capacitación grabada',
+              '30 días de garantía y soporte por WhatsApp',
+            ].map((t) => (
+              <li class="flex items-start gap-2.5">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round" class="mt-1 shrink-0"><path d="m5 13 4 4L19 7"/></svg>
+                {t}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {otros.length > 0 && (
+          <div class="reveal card rounded-[20px] p-6" style="--reveal-delay:120ms">
+            <h3 class="m-0 font-display text-base font-bold text-dark">Otros rubros de {rubro.cat.toLowerCase()}</h3>
+            <ul class="m-0 mt-3 grid list-none gap-2 p-0 text-[14px]">
+              {otros.map((o) => (
+                <li>
+                  <a href={`/proyectos/${o.slug}`} class="inline-flex items-center gap-2 font-semibold text-primary no-underline">
+                    <span>{o.emoji}</span>{o.title}
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <CTA
+    title={`¿Listo para digitalizar tu ${rubro.short}?`}
+    subtitle="Cotización gratis en menos de 24 horas, en soles y con facilidades de pago. Sin compromiso."
+  />
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+</BaseLayout>
+
+<style>
+  .hero-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 14px;
+    color: #cbd5e1;
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  }
+
+  /* Tarjetas problema / solución: barra de color a la izquierda como en producción */
+  .split-card {
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px var(--hairline), 0 4px 6px -1px rgba(0, 0, 0, 0.06);
+  }
+  .split-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+  }
+  .split-card--pain::before { background: var(--color-primary); }
+  .split-card--fix::before { background: #16a34a; }
+</style>

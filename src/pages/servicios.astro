@@ -1,0 +1,483 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Comparativa from '../components/Comparativa.astro';
+import Icono from '../components/Icono.astro';
+import CTA from '../components/CTA.astro';
+import { serviciosTabs, condiciones, waLink } from '../data/site';
+---
+
+<BaseLayout
+  title="Servicios: páginas web, tiendas online, ERPs y apps"
+  description="Página web profesional con dominio y hosting incluidos, tienda online con pasarelas peruanas, ERPs a medida y apps móviles. Cotización clara en soles."
+>
+  <PageHero
+    eyebrow="Servicios"
+    title="Todo lo que incluye, <span class='gradient-text--warm'>sin letra chica</span>"
+    subtitle="50% adelanto y 50% contra entrega. Hasta 3 cuotas sin interés en proyectos grandes. Boleta o factura SUNAT en cada pago."
+  />
+
+  <!-- Selector de servicio -->
+  <section class="surface px-6 pb-12 pt-14">
+    <div class="mx-auto w-full max-w-[1120px]">
+      <div class="tabs-wrap">
+        <div class="tabs-track" role="tablist" aria-label="Servicios">
+          {serviciosTabs.map((t, i) => (
+            <button
+              type="button"
+              role="tab"
+              id={`tab-${t.id}`}
+              aria-controls={t.id}
+              aria-selected={i === 0 ? 'true' : 'false'}
+              data-tab={t.id}
+              class:list={['svc-tab', i === 0 && 'is-active']}
+            >{t.label}</button>
+          ))}
+        </div>
+      </div>
+
+      {serviciosTabs.map((t, i) => (
+        <div id={t.id} role="tabpanel" aria-labelledby={`tab-${t.id}`} class:list={['svc-panel scroll-mt-28', i !== 0 && 'hidden']}>
+          <div class="flip mx-auto mt-10 w-full max-w-[760px]">
+            <div class="flip-inner">
+              <!-- Cara frontal: el servicio -->
+              <div class="flip-face flip-front panel-dark relative overflow-hidden rounded-[28px] p-8 text-white sm:p-9" style="box-shadow:0 30px 60px -30px rgba(14,21,33,0.6)">
+                <div class="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full opacity-30 blur-[70px]" style="background:radial-gradient(circle,#D91023,transparent 70%)"></div>
+
+                <span class="relative mb-5 grid h-12 w-12 place-items-center rounded-[14px]" style="background:rgba(232,163,23,0.14);color:#E8A317">
+                  <Icono name={t.icon} size={22} />
+                </span>
+                <span class="relative block text-[11px] font-bold uppercase tracking-[0.16em] text-accent">{t.tag}</span>
+                <h2 class="relative mt-3 font-display text-[clamp(1.5rem,3vw,2rem)] font-extrabold leading-[1.15] tracking-[-0.02em]">{t.title}</h2>
+                <p class="relative mt-4 max-w-[520px] text-[15px] leading-[1.7] text-slate-400">{t.desc}</p>
+
+                <div class="relative mt-7 grid gap-3 border-t border-white/10 pt-6 sm:grid-cols-2">
+                  <div class="flex items-center gap-3">
+                    <span class="grid h-9 w-9 flex-none place-items-center rounded-[12px]" style="background:rgba(232,163,23,0.14);color:#E8A317">
+                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    </span>
+                    <div>
+                      <div class="text-[11px] font-bold uppercase tracking-[0.1em] text-slate-500">Entrega</div>
+                      <div class="font-display text-[15px] font-bold text-white">{t.time}</div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="grid h-9 w-9 flex-none place-items-center rounded-[12px]" style="background:rgba(43,222,114,0.14);color:#2bde72">
+                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m5 13 4 4L19 7"/></svg>
+                    </span>
+                    <div>
+                      <div class="text-[11px] font-bold uppercase tracking-[0.1em] text-slate-500">Incluido</div>
+                      <div class="font-display text-[15px] font-bold text-white">{t.incluye}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="relative mt-auto flex flex-wrap items-center justify-between gap-3 pt-8">
+                  <a href={waLink(t.wa)} target="_blank" rel="noopener" class="btn btn--whatsapp group !py-3 !pl-[26px] !text-[15px]">
+                    Cotizar este servicio
+                    <span class="btn__icon" aria-hidden="true">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+                    </span>
+                  </a>
+
+                  <!-- Va al extremo inferior derecho; el punto late siempre -->
+                  <button
+                    type="button"
+                    data-flip-to="back"
+                    aria-label={`Ver qué incluye ${t.label}`}
+                    class="flip-controls btn btn--on-dark group relative ml-auto !px-5 !py-3 !text-[15px]"
+                  >
+                    <span class="ping" aria-hidden="true"></span>
+                    Ver
+                    <svg class="flip-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Cara trasera: qué incluye -->
+              <div class="flip-face flip-back rounded-[28px] bg-white p-8 sm:p-9" inert style="box-shadow:inset 0 0 0 1px var(--hairline),0 30px 60px -30px rgba(0,0,0,0.18)">
+                <h3 class="flex items-center gap-3 font-display text-[13px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                  <span class="h-[3px] w-7 rounded-full bg-primary"></span>
+                  Qué incluye · {t.label}
+                </h3>
+
+                <!-- Una sola columna: en dos, el texto se parte en tres líneas
+                     y los renglones pierden el ritmo de lectura. -->
+                <ul class="m-0 mt-5 grid list-none gap-2.5 p-0">
+                  {t.features.map((f, fi) => (
+                    <li class="feat-item flex items-center gap-3.5 rounded-[16px] bg-white px-4 py-3.5" style={`--i:${fi}`}>
+                      <span class="feat-ico grid h-9 w-9 flex-none place-items-center rounded-[11px]">
+                        <Icono name={f.i} size={19} />
+                      </span>
+                      <span class="flex-1 text-[14px] font-medium leading-[1.45] text-slate-700">{f.t}</span>
+                      <span class="grid h-[22px] w-[22px] flex-none place-items-center rounded-full" style="background:rgba(22,163,74,0.1);color:#16a34a">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="m5 13 4 4L19 7"/></svg>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div class="flip-controls mt-auto flex flex-wrap items-center gap-3 pt-8">
+                  <button type="button" data-flip-to="front" class="btn btn--ghost group !px-6 !py-3 !text-[15px]">
+                    <svg class="flip-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v5h5"/>
+                    </svg>
+                    Volver
+                  </button>
+                  <a href={waLink(t.wa)} target="_blank" rel="noopener" class="btn btn--whatsapp group !py-3 !pl-[26px] !text-[15px]">
+                    Cotizar este servicio
+                    <span class="btn__icon" aria-hidden="true">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Condiciones: un solo panel con celdas separadas, no cuatro cajas sueltas -->
+  <section class="surface px-6 pb-20">
+    <div class="reveal mx-auto w-full max-w-[1120px] overflow-hidden rounded-[28px] bg-white" style="box-shadow:inset 0 0 0 1px var(--hairline),0 10px 25px -5px rgba(0,0,0,0.08)">
+      <div class="cond-grid">
+        {condiciones.map((c) => (
+          <div class="cond-cell group flex gap-4 p-6 sm:flex-col sm:gap-0 sm:p-7">
+            <span
+              class="grid h-11 w-11 flex-none place-items-center rounded-[12px] transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:-rotate-6 group-hover:scale-110 sm:mb-4"
+              style={`background:${c.bg};color:${c.color}`}
+            >
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={c.icon} />
+            </span>
+            <div>
+              <h3 class="m-0 font-display text-[16px] font-bold text-dark">{c.title}</h3>
+              <p class="mt-1.5 text-[13.5px] leading-[1.6] text-slate-500">{c.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <Comparativa />
+  <CTA />
+</BaseLayout>
+
+<script>
+  const tabs = document.querySelectorAll<HTMLElement>('.svc-tab');
+  const panels = document.querySelectorAll<HTMLElement>('.svc-panel');
+
+  const activate = (id: string) => {
+    if (!Array.from(panels).some((p) => p.id === id)) return false;
+    panels.forEach((p) => {
+      const on = p.id === id;
+      p.classList.toggle('hidden', !on);
+      // al cambiar de servicio la tarjeta vuelve a mostrar su cara frontal
+      const flip = p.querySelector<HTMLElement>('.flip');
+      if (flip) {
+        flip.classList.remove('is-flipped');
+        const caras = flip.querySelectorAll<HTMLElement>('.flip-face');
+        caras[0]?.removeAttribute('inert');
+        caras[1]?.setAttribute('inert', '');
+      }
+      if (on) {
+        // reinicia la animación de entrada del panel y el escalonado de la lista
+        p.classList.remove('panel-in');
+        void p.offsetWidth;
+        p.classList.add('panel-in');
+      }
+    });
+    tabs.forEach((t) => {
+      const on = t.dataset.tab === id;
+      t.classList.toggle('is-active', on);
+      t.setAttribute('aria-selected', String(on));
+      if (on) t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    });
+    return true;
+  };
+
+  tabs.forEach((t) => {
+    t.addEventListener('click', () => {
+      const id = t.dataset.tab!;
+      activate(id);
+      history.replaceState(null, '', `#${id}`);
+    });
+  });
+
+  // ---- Volteo de la tarjeta (solo hasta 1023px) ----
+  // Desde 1024px las dos caras se ven a la vez, así que ninguna puede quedar
+  // con `inert`: es un atributo del DOM y el CSS no lo puede revertir.
+  const anchas = window.matchMedia('(min-width: 1024px)');
+
+  document.querySelectorAll<HTMLElement>('.flip').forEach((flip) => {
+    const [frente, dorso] = Array.from(flip.querySelectorAll<HTMLElement>('.flip-face'));
+
+    const sincronizar = (mueveFoco = false) => {
+      if (anchas.matches) {
+        flip.classList.remove('is-flipped');
+        frente.removeAttribute('inert');
+        dorso.removeAttribute('inert');
+        return;
+      }
+      const enDorso = flip.classList.contains('is-flipped');
+      frente.toggleAttribute('inert', enDorso);
+      dorso.toggleAttribute('inert', !enDorso);
+      if (mueveFoco) {
+        (enDorso ? dorso : frente).querySelector<HTMLElement>('button, a')?.focus({ preventScroll: true });
+      }
+    };
+
+    const inner = flip.querySelector<HTMLElement>('.flip-inner')!;
+    let limpieza: number;
+
+    // El 3D solo vive mientras dura el giro: al terminar se apaga para que el
+    // navegador vuelva a dibujar texto nítido en vez de una textura escalada.
+    const apagar3D = () => {
+      clearTimeout(limpieza);
+      // Quitar is-animating elimina el rotateY(180deg) del contenedor. Si la
+      // transición sigue viva, el navegador ANIMA ese regreso a 0 y se ve un
+      // segundo giro. Hay que apagarla mientras se hace el cambio.
+      inner.style.transition = 'none';
+      flip.classList.remove('is-animating');
+      void inner.offsetWidth;
+      inner.style.transition = '';
+    };
+    inner.addEventListener('transitionend', (e) => {
+      if (e.propertyName === 'transform') apagar3D();
+    });
+
+    flip.querySelectorAll<HTMLElement>('[data-flip-to]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        clearTimeout(limpieza);
+
+        // Al encender el 3D estando ya volteada, la regla .is-animating.is-flipped
+        // aplica rotateY(180deg) y la transición lo ANIMARÍA de 0 a 180 justo
+        // cuando además quitamos is-flipped: son dos giros peleándose y se ve el
+        // efecto raro. Apagamos la transición para fijar el punto de partida y la
+        // reactivamos recién antes del giro real.
+        inner.style.transition = 'none';
+        flip.classList.add('is-animating');
+        void inner.offsetWidth;
+        inner.style.transition = '';
+
+        flip.classList.toggle('is-flipped', btn.dataset.flipTo === 'back');
+        sincronizar(true);
+        // red de seguridad si transitionend no llega (reduced motion, pestaña oculta)
+        limpieza = window.setTimeout(apagar3D, 900);
+      });
+    });
+
+    anchas.addEventListener('change', () => sincronizar());
+    sincronizar();
+  });
+
+  const fromHash = (scroll = false) => {
+    const id = location.hash.slice(1);
+    if (!id || !activate(id)) return;
+    if (scroll) document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  fromHash(true);
+  addEventListener('hashchange', () => fromHash(true));
+</script>
+
+<style>
+  /* ---- Pestañas: en móvil una sola fila deslizable, nunca partida en dos ---- */
+  .tabs-wrap {
+    margin-inline: -24px;
+    padding-inline: 24px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+  }
+  .tabs-wrap::-webkit-scrollbar { display: none; }
+
+  .tabs-track {
+    display: inline-flex;
+    gap: 6px;
+    padding: 6px;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--hairline);
+  }
+  @media (min-width: 768px) {
+    .tabs-wrap { display: flex; justify-content: center; }
+  }
+
+  .svc-tab {
+    white-space: nowrap;
+    border: 0;
+    cursor: pointer;
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: #475569;
+    background: transparent;
+    transition: color 0.35s var(--ease-fluid), background 0.35s var(--ease-fluid), box-shadow 0.35s var(--ease-fluid);
+  }
+  .svc-tab:hover { color: var(--color-primary); }
+  .svc-tab.is-active {
+    color: #fff;
+    background: var(--gradient-brand);
+    box-shadow: 0 10px 25px -5px rgba(217, 16, 35, 0.45);
+  }
+
+  /* ---- Tarjeta que voltea: solo hasta tablet ----
+     En pantallas chicas las dos mitades no caben lado a lado, así que se
+     apilan en una tarjeta de dos caras. Desde 1024px se muestran juntas. */
+  .flip-inner {
+    display: grid;
+    transition: transform 0.75s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  /* Las dos caras comparten celda: la altura la marca la más alta y la tarjeta
+     no da saltos al voltear. */
+  .flip-face {
+    grid-area: 1 / 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Todo el mecanismo del volteo vive solo bajo 1024px. Acotarlo aquí evita
+     pelearse por especificidad con el layout de escritorio. */
+  @media (max-width: 1023px) {
+    /* En reposo NO hay 3D: sin preserve-3d ni backface, el navegador dibuja el
+       texto como texto y no como una textura reescalada (eso era lo que
+       pixelaba las tarjetas en el celular). Solo se decide qué cara se ve. */
+    .flip:not(.is-animating) .flip-back { visibility: hidden; }
+    .flip.is-flipped:not(.is-animating) .flip-front { visibility: hidden; }
+    .flip.is-flipped:not(.is-animating) .flip-back { visibility: visible; }
+
+    /* El 3D se enciende solo mientras dura el giro y se apaga al terminar */
+    .flip.is-animating { perspective: 1800px; }
+    .flip.is-animating .flip-inner { transform-style: preserve-3d; }
+    .flip.is-animating .flip-face {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .flip.is-animating .flip-back { transform: rotateY(180deg); }
+    .flip.is-animating.is-flipped .flip-inner { transform: rotateY(180deg); }
+  }
+
+  /* El icono de la flecha circular gira al pasar el mouse: anticipa el volteo */
+  .flip-ico { transition: transform 0.6s cubic-bezier(0.32, 0.72, 0, 1); }
+  .btn:hover .flip-ico { transform: rotate(-180deg); }
+
+  /* Punto que late en la esquina del botón: se queda siempre como señal de
+     que ahí se hace clic. */
+  .ping {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    height: 11px;
+    width: 11px;
+    border-radius: 999px;
+    background: var(--color-accent);
+    box-shadow: 0 0 0 3px #10192a;
+  }
+  .ping::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: var(--color-accent);
+    animation: bwPingDot 1.9s cubic-bezier(0.32, 0.72, 0, 1) infinite;
+  }
+
+  @keyframes bwPingDot {
+    0% { transform: scale(1); opacity: 0.85; }
+    70% { transform: scale(2.6); opacity: 0; }
+    100% { transform: scale(2.6); opacity: 0; }
+  }
+
+  /* ---- Escritorio: sin volteo, las dos mitades una al lado de la otra ---- */
+  @media (min-width: 1024px) {
+    .flip { perspective: none; max-width: none; }
+    .flip-inner {
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 2rem;
+      align-items: start;
+      transform: none;
+      transform-style: flat;
+      transition: none;
+    }
+    .flip-face {
+      grid-area: auto;
+      visibility: visible;
+    }
+    /* la lista deja de ser "cara de tarjeta" y vuelve a ser una columna suelta */
+    .flip-back {
+      transform: none;
+      background: transparent;
+      box-shadow: none;
+      padding: 0;
+    }
+    /* los controles de volteo no tienen sentido con todo a la vista */
+    .flip-controls { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .flip-inner { transition: none; }
+    .flip-ico { transition: none; }
+    .ping::before { animation: none; }
+  }
+
+  /* ---- Entrada del panel + escalonado de la lista de features ---- */
+  .svc-panel { animation: panelIn 0.5s var(--ease-fluid) both; }
+  .panel-in { animation: panelIn 0.5s var(--ease-fluid) both; }
+  @keyframes panelIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* Chip del icono: gris neutro, salvo los logotipos de marca que van a color */
+  .feat-ico {
+    color: #475569;
+    background: #f1f5f9;
+    transition: background 0.4s var(--ease-fluid), color 0.4s var(--ease-fluid);
+  }
+  .feat-item:hover .feat-ico {
+    color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 9%, transparent);
+  }
+
+  .feat-item {
+    box-shadow: inset 0 0 0 1px var(--hairline), 0 1px 2px rgba(0, 0, 0, 0.04);
+    animation: featIn 0.45s var(--ease-fluid) both;
+    animation-delay: calc(var(--i) * 60ms + 120ms);
+    transition: transform 0.4s var(--ease-fluid), box-shadow 0.4s var(--ease-fluid);
+  }
+  .feat-item:hover {
+    transform: translateX(3px);
+    box-shadow: inset 0 0 0 1px var(--hairline-strong), 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+  }
+  @keyframes featIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* ---- Condiciones: celdas de un mismo panel, separadas por hairlines ---- */
+  .cond-grid { display: grid; }
+  .cond-cell + .cond-cell { border-top: 1px solid var(--hairline); }
+  @media (min-width: 640px) {
+    .cond-grid { grid-template-columns: repeat(2, 1fr); }
+    .cond-cell + .cond-cell { border-top: 0; }
+    .cond-cell:nth-child(n + 3) { border-top: 1px solid var(--hairline); }
+    .cond-cell:nth-child(even) { border-left: 1px solid var(--hairline); }
+  }
+  @media (min-width: 1024px) {
+    .cond-grid { grid-template-columns: repeat(4, 1fr); }
+    .cond-cell:nth-child(n + 3) { border-top: 0; }
+    .cond-cell + .cond-cell { border-left: 1px solid var(--hairline); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .svc-panel, .panel-in, .feat-item { animation: none; }
+  }
+</style>

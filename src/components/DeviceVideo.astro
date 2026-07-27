@@ -1,0 +1,65 @@
+---
+// Video ligero (MP4 H.264, sin audio) con autoplay+loop+muted para cualquier dispositivo.
+// Poster = frame estático (WebP/JPG) para pintar al instante mientras carga.
+interface Props {
+  variant?: 'h' | 'v';
+  quality?: 'lite' | 'med' | 'hd';
+  alt?: string;
+  class?: string;
+}
+const {
+  variant = 'h',
+  quality = 'hd',
+  alt = 'Tienda peruana de artesanía desarrollada por Bitwise, mostrada en un iMac',
+  class: className = '',
+} = Astro.props;
+
+const base = variant === 'h' ? 'imac-h' : 'imac-v';
+const suffix = quality === 'hd' ? '' : `-${quality}`;
+const src = `${base}${suffix}`;
+const poster = base;
+const ratio = variant === 'h' ? '16 / 9' : '9 / 16';
+---
+
+<div class:list={['dm-video', className]} style={`aspect-ratio:${ratio}`}>
+  <video
+    class="dm-video__el"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+    poster={`/mockup/${poster}.jpg`}
+    aria-label={alt}
+  >
+    <source src={`/mockup/${src}.mp4`} type="video/mp4" />
+  </video>
+</div>
+
+<style>
+  .dm-video {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 22px;
+    box-shadow:
+      0 34px 80px -34px rgba(0, 0, 0, 0.65),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+  }
+  .dm-video__el {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>
+
+<script>
+  // Respeta prefers-reduced-motion: pausa el video y deja el poster.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll<HTMLVideoElement>('.dm-video__el').forEach((v) => {
+      v.removeAttribute('autoplay');
+      v.pause();
+    });
+  }
+</script>

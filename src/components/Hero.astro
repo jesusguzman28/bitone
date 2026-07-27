@@ -1,0 +1,323 @@
+---
+import { hero, heroStats, waLink } from '../data/site';
+---
+
+<section
+  class="hero relative isolate flex min-h-[100svh] flex-col justify-center overflow-hidden px-6 pb-10 pt-[84px] text-white sm:pb-[72px] sm:pt-[110px]"
+  style="background:radial-gradient(120% 78% at 50% 8%,#1c2331 0%,#141b28 46%,#0e1521 100%)"
+>
+  <!-- Fondo móvil: la propia imagen del slide, difuminada, para que el color
+       del fondo acompañe a lo que se está mostrando en la vitrina. -->
+  <div class="absolute inset-0 -z-10 overflow-hidden sm:hidden">
+    {hero.slides.map((s, i) => (
+      <img
+        src={s.msrc}
+        alt=""
+        aria-hidden="true"
+        data-slide={i}
+        loading="lazy"
+        class:list={['hero-slide hero-slide--blur absolute inset-0 h-full w-full object-cover', i === 0 && 'is-active']}
+      />
+    ))}
+    <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(10,15,26,0.78) 0%,rgba(10,15,26,0.88) 45%,rgba(10,15,26,0.95) 100%)"></div>
+    <div class="absolute -left-24 top-8 h-72 w-72 rounded-full opacity-50 blur-[70px]" style="background:radial-gradient(circle,#D91023,transparent 70%)"></div>
+    <div class="absolute -right-24 bottom-16 h-72 w-72 rounded-full opacity-35 blur-[70px]" style="background:radial-gradient(circle,#E8A317,transparent 70%)"></div>
+  </div>
+
+  <!-- Carrusel de fondo a sangre: solo desktop.
+       El encuadre se ancla abajo a la derecha: ahí está el equipo con la
+       pantalla, así que al angostarse la ventana se recorta el ambiente y no
+       el producto. -->
+  <div id="hero-bg" class="absolute inset-x-0 -inset-y-[8%] -z-10 hidden will-change-transform sm:block">
+    {hero.slides.map((s, i) => (
+      <picture>
+        {/* En móvil este bloque está oculto, pero display:none NO evita la
+            descarga. El source con un pixel transparente la corta de raíz. */}
+        <source media="(max-width: 640px)" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+        <img
+          src={s.src}
+          alt=""
+          aria-hidden="true"
+          data-slide={i}
+          loading={i === 0 ? 'eager' : 'lazy'}
+          fetchpriority={i === 0 ? 'high' : undefined}
+          class:list={['hero-slide absolute inset-0 h-full w-full object-cover', i === 0 && 'is-active']}
+          style="object-position:right bottom"
+        />
+      </picture>
+    ))}
+    <div class="absolute inset-0" style="background:linear-gradient(105deg,rgba(5,8,20,0.94) 0%,rgba(5,8,20,0.8) 34%,rgba(5,8,20,0.42) 62%,rgba(5,8,20,0.22) 100%)"></div>
+    <div class="absolute -left-16 top-10 h-[380px] w-[380px] rounded-full opacity-40 blur-[64px]" style="background:radial-gradient(circle,#D91023,transparent 70%)"></div>
+  </div>
+
+  <div class="mx-auto w-full max-w-[1120px]">
+    <!-- Vitrina de dispositivo: solo móvil, encima de la tarjeta -->
+    <div class="relative mb-4 sm:hidden">
+      <div
+        class="pointer-events-none absolute -inset-6 -z-10 opacity-60 blur-3xl"
+        style="background:radial-gradient(60% 55% at 50% 30%,rgba(217,16,35,0.35),transparent 72%)"
+      ></div>
+      <div class="hero-showcase relative overflow-hidden rounded-[20px]" style="box-shadow:0 30px 62px -28px rgba(0,0,0,0.8)">
+        {hero.slides.map((s, i) => (
+          <picture>
+            {/* Espejo del caso anterior: en escritorio esta vitrina no se ve */}
+            <source media="(min-width: 641px)" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+            <img
+              src={s.msrc}
+              alt={s.label}
+              data-slide={i}
+              loading={i === 0 ? 'eager' : 'lazy'}
+              fetchpriority={i === 0 ? 'high' : undefined}
+              class:list={['hero-slide absolute inset-0 h-full w-full object-cover', i === 0 && 'is-active']}
+            />
+          </picture>
+        ))}
+        <div class="pointer-events-none absolute inset-0" style="background:linear-gradient(180deg,rgba(5,8,20,0.28) 0%,transparent 24%,transparent 62%,rgba(5,8,20,0.62) 100%)"></div>
+
+        <!-- Chip de categoría en vivo -->
+        <div
+          class="absolute left-3 top-3 flex items-center gap-2 rounded-full py-1.5 pl-2.5 pr-3.5 text-xs font-semibold text-white"
+          style="background:rgba(8,12,24,0.55);backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1px rgba(255,255,255,0.16)"
+        >
+          <span class="hero-live-dot"></span>
+          <span id="mchip">{hero.slides[0].label}</span>
+        </div>
+
+        <div class="absolute bottom-1 left-1/2 flex -translate-x-1/2 gap-1">
+          {hero.slides.map((s, i) => (
+            <button data-dot={i} aria-label={s.label} class:list={['hero-mdot', i === 0 && 'is-active']}></button>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-[520px]">
+      <div
+        class="rounded-[28px] p-4 sm:p-[clamp(24px,4vw,32px)]"
+        style="background:rgba(11,16,27,0.52);box-shadow:inset 0 1px 1px rgba(255,255,255,0.1),inset 0 0 0 1px rgba(255,255,255,0.14),0 40px 90px -30px rgba(0,0,0,0.9);backdrop-filter:blur(20px) saturate(125%);-webkit-backdrop-filter:blur(20px) saturate(125%)"
+      >
+        <span class="eyebrow eyebrow--dark">
+          <svg width="20" height="13" viewBox="0 0 3 2" aria-hidden="true" style="border-radius:2px;box-shadow:0 0 0 1px rgba(255,255,255,0.15)">
+            <rect width="1" height="2" x="0" fill="#D91023"/><rect width="1" height="2" x="1" fill="#fff"/><rect width="1" height="2" x="2" fill="#D91023"/>
+          </svg>
+          {hero.eyebrow}
+        </span>
+
+        <h1 class="hero-title mt-3.5 font-display text-[clamp(1.7rem,5.2vw,2.5rem)] font-bold leading-[1.12] sm:mt-4">
+          {hero.titleA}<br />
+          <span id="typed" class="gradient-text--warm"></span><span id="cursor" class="typed-cursor">|</span>
+        </h1>
+
+        <p class="mt-2.5 max-w-[400px] text-[15px] leading-[1.6] text-slate-300 sm:mt-3.5 sm:text-base sm:leading-[1.65]">{hero.subtitle}</p>
+
+        <div class="hero-pills mt-3 flex flex-wrap gap-2 sm:mt-4">
+          {hero.pills.map((p) => (
+            <span class="inline-flex items-center gap-1.5 rounded-full py-1.5 pl-2.5 pr-3 text-xs font-medium text-slate-100" style="background:rgba(255,255,255,0.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,0.12)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={p.color} stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={p.icon} />
+              {p.label}
+            </span>
+          ))}
+        </div>
+
+        <div class="mt-3.5 flex flex-wrap gap-2.5 sm:mt-[22px]">
+          <a href={waLink('Hola Bitwise 👋 quiero agendar una reunión para mi negocio')} target="_blank" rel="noopener" class="btn btn--whatsapp group">
+            Agendar reunión
+            <span class="btn__icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+            </span>
+          </a>
+          <a href="/proyectos" class="btn btn--on-dark">Ver proyectos</a>
+        </div>
+      </div>
+
+      <dl class="m-0 mt-2.5 grid max-w-[520px] grid-cols-2 gap-2.5 sm:mt-[18px] sm:gap-3">
+        {heroStats.map((s) => (
+          <div
+            class="flex flex-col items-center rounded-[20px] px-3 py-2 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-[3px] sm:py-3.5"
+            style="background:rgba(8,12,24,0.72);box-shadow:inset 0 1px 0 rgba(255,255,255,0.08),inset 0 0 0 1px rgba(255,255,255,0.1),0 20px 42px -24px rgba(0,0,0,0.7)"
+          >
+            <dt class="text-center text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400">{s.k}</dt>
+            <dd class="m-0 mt-1 flex items-baseline gap-1.5 sm:mt-[7px]">
+              <span class="text-[10px] font-medium uppercase tracking-wide text-slate-500">Desde</span>
+              <span class="font-display text-xl font-bold text-white [font-variant-numeric:tabular-nums] sm:text-2xl">{s.v}</span>
+            </dd>
+            <!-- La nota se omite en móvil: es lo primero que sobra cuando falta alto -->
+            <span class="mt-1 hidden text-center text-[10px] text-slate-400 sm:block">{s.note}</span>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </div>
+
+  <!-- Indicadores de slide: solo desktop. Con el nombre del servicio en vez de
+       puntos, para que se lea qué se está mostrando sin adivinar. -->
+  <div class="absolute bottom-5 left-1/2 z-[5] hidden -translate-x-1/2 flex-wrap items-center justify-center gap-2 sm:flex">
+    {hero.slides.map((s, i) => (
+      <button type="button" data-dot={i} class:list={['hero-tab', i === 0 && 'is-active']}>{s.label}</button>
+    ))}
+  </div>
+</section>
+
+<script define:vars={{ phrases: hero.typed, count: hero.slides.length, labels: hero.slides.map((s) => s.label) }}>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- Máquina de escribir ----
+  const typedEl = document.getElementById('typed');
+  if (typedEl) {
+    if (reduce) {
+      typedEl.textContent = phrases[0];
+    } else {
+      let p = 0, c = 0, deleting = false;
+      const tick = () => {
+        const full = phrases[p];
+        if (!deleting) {
+          c++;
+          typedEl.textContent = full.slice(0, c);
+          if (c === full.length) { deleting = true; setTimeout(tick, 2200); return; }
+        } else {
+          c--;
+          if (c === 0) { deleting = false; p = (p + 1) % phrases.length; }
+          typedEl.textContent = full.slice(0, c);
+        }
+        setTimeout(tick, deleting ? 34 : 62);
+      };
+      setTimeout(tick, 500);
+    }
+  }
+
+  // ---- Carrusel: móvil y desktop comparten índice ----
+  const slides = Array.from(document.querySelectorAll('.hero-slide'));
+  const dots = Array.from(document.querySelectorAll('.hero-tab, .hero-mdot'));
+  const chip = document.getElementById('mchip');
+  let cur = 0, timer;
+  const show = (n) => {
+    cur = (n + count) % count;
+    slides.forEach((s) => s.classList.toggle('is-active', Number(s.dataset.slide) === cur));
+    dots.forEach((d) => d.classList.toggle('is-active', Number(d.dataset.dot) === cur));
+    if (chip) chip.textContent = labels[cur];
+  };
+  const auto = () => { clearInterval(timer); timer = setInterval(() => show(cur + 1), 5200); };
+  dots.forEach((d) => d.addEventListener('click', () => { show(Number(d.dataset.dot)); auto(); }));
+  if (!reduce) auto();
+
+  // ---- Parallax del fondo (solo donde hay fondo a sangre) ----
+  const bg = document.getElementById('hero-bg');
+  if (bg && !reduce) {
+    let ticking = false;
+    addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        bg.style.transform = `translateY(${window.scrollY * 0.3}px)`;
+        ticking = false;
+      });
+    }, { passive: true });
+  }
+</script>
+
+<style>
+  /* Reserva 3 líneas para que el texto que se escribe no mueva el layout */
+  .hero-title { min-height: 3.15em; }
+
+  /* Vitrina móvil con la proporción original (16/11): la captura se ve
+     completa, sin recorte. */
+  .hero-showcase { aspect-ratio: 16 / 11; }
+
+  /* Pantallas bajas (SE, Android chicos): sacrificamos las pastillas, acortamos
+     la reserva del título y encogemos la vitrina antes que empujar los precios
+     fuera de la pantalla. En móviles normales la vitrina queda intacta. */
+  @media (max-height: 760px) {
+    .hero-pills { display: none; }
+    .hero-title { min-height: 2.5em; }
+    .hero-showcase { aspect-ratio: auto; height: 24svh; }
+  }
+
+  .typed-cursor {
+    display: inline-block;
+    width: 2px;
+    margin-left: 2px;
+    color: #E8A317;
+    animation: bwBlink 1s step-end infinite;
+  }
+
+  /* Sin zoom: la imagen se muestra completa y expandida, solo cruza en fundido */
+  .hero-slide {
+    opacity: 0;
+    transition: opacity 1.2s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .hero-slide.is-active { opacity: 1; }
+
+  /* Fondo difuminado móvil: va DESPUÉS de las reglas genéricas de .hero-slide
+     porque comparte especificidad con ellas. */
+  .hero-slide--blur {
+    filter: blur(44px) saturate(1.6);
+    transform: scale(1.3);
+  }
+  .hero-slide--blur.is-active { opacity: 0.55; }
+
+  /* Indicadores desktop: el nombre de cada servicio como pastilla */
+  .hero-tab {
+    border: 0;
+    cursor: pointer;
+    border-radius: 999px;
+    padding: 9px 18px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.65);
+    background: rgba(8, 12, 24, 0.45);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.45s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .hero-tab:hover { color: #fff; background: rgba(8, 12, 24, 0.65); }
+  .hero-tab.is-active {
+    color: #fff;
+    background: linear-gradient(135deg, #D91023, #b00d1c);
+    box-shadow: 0 10px 25px -8px rgba(217, 16, 35, 0.6);
+  }
+
+  /* Indicadores del carrusel móvil: área táctil de 44px, punto visible vía ::before */
+  .hero-mdot {
+    height: 44px;
+    width: 26px;
+    padding-bottom: 6px;
+    display: grid;
+    align-items: end;
+    justify-items: center;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+  .hero-mdot::before {
+    content: "";
+    height: 7px;
+    width: 7px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.45);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+    transition: width 0.4s cubic-bezier(0.32, 0.72, 0, 1), background 0.4s;
+  }
+  .hero-mdot.is-active::before { width: 22px; background: linear-gradient(135deg, #D91023, #E8A317); }
+
+  /* Punto "en vivo" del chip */
+  .hero-live-dot {
+    height: 7px;
+    width: 7px;
+    border-radius: 999px;
+    background: #22c55e;
+    animation: heroLivePulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  @keyframes heroLivePulse {
+    0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.55); }
+    70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .typed-cursor, .hero-live-dot { animation: none; }
+    .hero-slide { transition: none; }
+  }
+</style>

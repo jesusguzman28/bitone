@@ -1,0 +1,213 @@
+---
+import { comparativa, waLink } from '../data/site';
+
+// Puntaje por columna: cuántos criterios cumple cada quién
+const score = comparativa.cols.map((_, col) => comparativa.rows.filter((r) => r.vals[col] === 'si').length);
+const total = comparativa.rows.length;
+---
+
+<section class="section-dark px-6 pb-24 pt-[72px]">
+  <div class="mx-auto w-full max-w-[980px]">
+    <div class="reveal text-center">
+      <span class="eyebrow eyebrow--dark">Comparativa honesta</span>
+      <h2 class="mx-auto mt-5 max-w-[560px] font-display text-[clamp(1.6rem,3.8vw,2.3rem)] font-extrabold leading-[1.15]">
+        ¿Bitwise, un freelance o una agencia grande?
+      </h2>
+      <p class="mx-auto mt-4 max-w-[480px] text-[15px] leading-[1.65] text-slate-400">
+        Los mismos criterios para los tres. Elige con quién comparar y míralo por ti mismo.
+      </p>
+    </div>
+
+    <!-- Selector de rival: en móvil evita la tabla de 3 columnas cortada -->
+    <div class="mt-8 flex justify-center md:hidden">
+      <div class="vs-switch">
+        <button type="button" data-rival="1" class="vs-opt is-active">vs {comparativa.cols[1]}</button>
+        <button type="button" data-rival="2" class="vs-opt">vs {comparativa.cols[2]}</button>
+      </div>
+    </div>
+
+    <div id="cmp" class="cmp reveal is-vs-1 mt-6 overflow-hidden rounded-[20px] md:mt-10" style="--reveal-delay:120ms;background:rgba(255,255,255,0.03);box-shadow:inset 0 0 0 1px rgba(255,255,255,0.1)">
+      <table class="w-full border-collapse text-left">
+        <thead>
+          <tr>
+            <th class="cmp-th-label"><span class="sr-only">Criterio</span></th>
+            <th data-col="0" class="cmp-th cmp-th--bw">
+              <span class="font-display text-[15px] font-bold text-white">{comparativa.cols[0]}</span>
+              <span class="cmp-score cmp-score--bw">{score[0]}/{total}</span>
+            </th>
+            <th data-col="1" class="cmp-th">
+              <span class="text-[14px] font-semibold text-slate-300">{comparativa.cols[1]}</span>
+              <span class="cmp-score">{score[1]}/{total}</span>
+            </th>
+            <th data-col="2" class="cmp-th">
+              <span class="text-[14px] font-semibold text-slate-300">{comparativa.cols[2]}</span>
+              <span class="cmp-score">{score[2]}/{total}</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {comparativa.rows.map((row) => (
+            <tr class="cmp-row">
+              <td class="cmp-label">{row.label}</td>
+              {row.vals.map((v, col) => (
+                <td data-col={col} class:list={['cmp-cell', col === 0 && 'cmp-cell--bw']}>
+                  {v === 'si' && (
+                    <span class="mark mark--yes" title="Sí">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="m5 13 4 4L19 7"/></svg>
+                      <span class="sr-only">Sí</span>
+                    </span>
+                  )}
+                  {v === 'no' && (
+                    <span class="mark mark--no" title="No">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                      <span class="sr-only">No</span>
+                    </span>
+                  )}
+                  {v === 'aveces' && <span class="mark-text">A veces</span>}
+                  {v !== 'si' && v !== 'no' && v !== 'aveces' && <span class="mark-text">{v}</span>}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="reveal mt-11 text-center" style="--reveal-delay:200ms">
+      <a href={waLink()} target="_blank" rel="noopener" class="btn btn--whatsapp group !py-3 !pl-[26px] !text-[15px]">
+        Pedir cotización gratis
+        <span class="btn__icon" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  const cmp = document.getElementById('cmp');
+  const opts = document.querySelectorAll<HTMLElement>('[data-rival]');
+
+  opts.forEach((opt) => {
+    opt.addEventListener('click', () => {
+      const rival = opt.dataset.rival;
+      opts.forEach((o) => o.classList.toggle('is-active', o === opt));
+      cmp?.classList.remove('is-vs-1', 'is-vs-2');
+      cmp?.classList.add(`is-vs-${rival}`);
+      // reinicia la animación de entrada de la columna
+      cmp?.classList.remove('swap');
+      void cmp?.offsetWidth;
+      cmp?.classList.add('swap');
+    });
+  });
+</script>
+
+<style>
+  /* ---- Cabecera ---- */
+  .cmp-th-label {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    width: 46%;
+  }
+  .cmp-th {
+    padding: 16px 14px;
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .cmp-th--bw {
+    background: rgba(217, 16, 35, 0.12);
+    border-bottom: 2px solid #D91023;
+  }
+  .cmp-score {
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #64748b;
+  }
+  .cmp-score--bw { color: #E8A317; }
+
+  /* ---- Filas ---- */
+  .cmp-label {
+    padding: 13px 20px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #cbd5e1;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .cmp-cell {
+    padding: 13px 14px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .cmp-cell--bw { background: rgba(217, 16, 35, 0.07); }
+  .cmp-row { transition: background 0.3s var(--ease-fluid); }
+  .cmp-row:hover { background: rgba(255, 255, 255, 0.03); }
+  .cmp-row:last-child .cmp-label,
+  .cmp-row:last-child .cmp-cell { border-bottom: 0; }
+
+  /* ---- Marcas ---- */
+  .mark {
+    display: inline-grid;
+    place-items: center;
+    height: 24px;
+    width: 24px;
+    border-radius: 999px;
+  }
+  .mark--yes { color: #22c55e; background: rgba(34, 197, 94, 0.14); }
+  .mark--no { color: #64748b; background: rgba(148, 163, 184, 0.12); }
+  .mark-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: #E8A317;
+  }
+
+  /* ---- Móvil: se muestra Bitwise contra el rival elegido ---- */
+  .vs-switch {
+    display: inline-flex;
+    gap: 4px;
+    padding: 5px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  }
+  .vs-opt {
+    border: 0;
+    cursor: pointer;
+    border-radius: 999px;
+    padding: 9px 16px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: #94a3b8;
+    background: transparent;
+    transition: all 0.35s var(--ease-fluid);
+  }
+  .vs-opt.is-active {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+  }
+
+  @media (max-width: 767px) {
+    .cmp.is-vs-1 [data-col="2"] { display: none; }
+    .cmp.is-vs-2 [data-col="1"] { display: none; }
+    .cmp-th-label { width: 52%; }
+    .cmp-label { padding: 12px 14px; font-size: 13px; }
+    .cmp-cell { padding: 12px 8px; }
+    /* la columna visible entra con un fundido al cambiar de rival */
+    .cmp.swap [data-col="1"],
+    .cmp.swap [data-col="2"] { animation: colIn 0.4s var(--ease-fluid) both; }
+  }
+
+  @keyframes colIn {
+    from { opacity: 0; transform: translateX(10px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cmp.swap [data-col] { animation: none; }
+  }
+</style>

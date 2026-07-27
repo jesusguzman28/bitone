@@ -1,0 +1,133 @@
+---
+// Opción B — foto fija del iMac + pantalla HTML viva que scrollea (0 video).
+// Esquinas de la pantalla medidas sobre imac-h.jpg (1280x720):
+// TL(150,57) TR(1068,80) BR(1070,452) BL(152,445)
+interface Props { class?: string; }
+const { class: className = '' } = Astro.props;
+
+const productos = [
+  { t: 'Manta Andina', p: 'S/ 189', g: 'linear-gradient(135deg,#c0392b,#e67e22 55%,#f1c40f)' },
+  { t: 'Chal de Alpaca', p: 'S/ 249', g: 'linear-gradient(135deg,#6d3b6b,#b5533a 60%,#e8a317)' },
+  { t: 'Cerámica Shipibo', p: 'S/ 129', g: 'linear-gradient(135deg,#8a5a2b,#c97b3c)' },
+  { t: 'Collar de Plata', p: 'S/ 320', g: 'linear-gradient(135deg,#7f8c8d,#bdc3c7)' },
+  { t: 'Poncho Cusqueño', p: 'S/ 275', g: 'linear-gradient(135deg,#c0392b,#8e44ad 70%,#2980b9)' },
+  { t: 'Retablo Ayacuchano', p: 'S/ 210', g: 'linear-gradient(135deg,#d35400,#f39c12)' },
+  { t: 'Aríbalo Inca', p: 'S/ 165', g: 'linear-gradient(135deg,#935116,#c97b3c)' },
+  { t: 'Faja Tejida', p: 'S/ 95', g: 'linear-gradient(135deg,#16a085,#c0392b 60%,#f1c40f)' },
+];
+---
+
+<div class:list={['dm-live', className]}>
+  <img src="/mockup/imac-h.webp" width="1280" height="720" alt="Tienda peruana de artesanía hecha por Bitwise, mostrada en un iMac" class="dm-live__bg" loading="lazy" decoding="async" />
+
+  <div class="dm-live__screen" aria-hidden="true">
+    <div class="dm-live__scroll">
+      <!-- barra del navegador -->
+      <div class="br">
+        <span class="br__dot" style="background:#ff5f57"></span>
+        <span class="br__dot" style="background:#febc2e"></span>
+        <span class="br__dot" style="background:#28c840"></span>
+        <span class="br__url">artesaniaperu.pe</span>
+      </div>
+      <!-- header -->
+      <div class="hd">
+        <span class="hd__logo">ARTESANÍA <b>PERÚ</b></span>
+        <span class="hd__nav"><i></i><i></i><i></i><i></i></span>
+        <span class="hd__cart">🛒</span>
+      </div>
+      <!-- hero -->
+      <div class="hero">
+        <div class="hero__txt">
+          <span class="hero__ey">HECHO A MANO</span>
+          <h3>Descubre la magia del arte peruano</h3>
+          <span class="hero__btn">Comprar ahora</span>
+        </div>
+      </div>
+      <!-- grid -->
+      <div class="sec">Los más vendidos</div>
+      <div class="grid">
+        {productos.map((x) => (
+          <div class="card">
+            <div class="card__img" style={`background:${x.g}`}></div>
+            <div class="card__t">{x.t}</div>
+            <div class="card__p">{x.p}</div>
+          </div>
+        ))}
+      </div>
+      <div class="foot">© Artesanía Perú · Envíos a todo el país</div>
+    </div>
+    <span class="dm-live__glare"></span>
+  </div>
+</div>
+
+<style>
+  .dm-live {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 22px;
+    container-type: size;
+    box-shadow: 0 34px 80px -34px rgba(0,0,0,0.65), inset 0 0 0 1px rgba(255,255,255,0.07);
+  }
+  .dm-live__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+
+  /* pantalla: caja + recorte exacto al cuadrilátero del iMac */
+  .dm-live__screen {
+    position: absolute;
+    left: 11.72%; top: 7.9%; width: 71.9%; height: 54.9%;
+    z-index: 2;
+    overflow: hidden;
+    clip-path: polygon(0% 0%, 99.8% 5.8%, 100% 100%, 0.2% 98.2%);
+    background: #fff;
+  }
+  .dm-live__scroll {
+    position: absolute; inset: 0 0 auto 0;
+    display: flex; flex-direction: column;
+    color: #2b2118; font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    animation: dm-browse 16s cubic-bezier(0.5, 0, 0.5, 1) infinite alternate;
+    will-change: transform;
+  }
+  @keyframes dm-browse { from { transform: translateY(0); } to { transform: translateY(-52%); } }
+
+  /* browser bar */
+  .br { display: flex; align-items: center; gap: 1cqw; padding: 1.4cqw 2cqw; background: #ececec; }
+  .br__dot { width: 1.3cqw; height: 1.3cqw; border-radius: 50%; }
+  .br__url { margin-left: 1.4cqw; font-size: 1.7cqw; color: #666; background: #fff; border-radius: 2cqw; padding: 0.4cqw 3cqw; }
+
+  /* header */
+  .hd { display: flex; align-items: center; justify-content: space-between; padding: 1.6cqw 2.4cqw; background: #fff; border-bottom: 1px solid #eee; }
+  .hd__logo { font-size: 2cqw; letter-spacing: 0.15cqw; color: #b5533a; }
+  .hd__logo b { color: #2b2118; }
+  .hd__nav { display: flex; gap: 1.6cqw; }
+  .hd__nav i { width: 4cqw; height: 0.9cqw; background: #d9d2c8; border-radius: 2cqw; display: block; }
+  .hd__cart { font-size: 2.2cqw; }
+
+  /* hero */
+  .hero { height: 26cqw; background: linear-gradient(120deg, #7a2f22, #b5533a 45%, #d99a2b); display: flex; align-items: center; padding: 0 3.4cqw; position: relative; }
+  .hero::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, rgba(255,255,255,0.06) 0 3cqw, transparent 3cqw 6cqw); }
+  .hero__txt { position: relative; z-index: 1; color: #fff; }
+  .hero__ey { font-size: 1.5cqw; letter-spacing: 0.4cqw; opacity: 0.9; }
+  .hero h3 { font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 3.4cqw; line-height: 1.05; margin: 1cqw 0 1.6cqw; max-width: 46cqw; font-weight: 700; }
+  .hero__btn { background: #fff; color: #b5533a; font-size: 1.7cqw; font-weight: 700; padding: 1.1cqw 2.6cqw; border-radius: 5cqw; }
+
+  /* grid */
+  .sec { font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 2.3cqw; font-weight: 700; padding: 2.4cqw 2.4cqw 1.2cqw; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.8cqw; padding: 0 2.4cqw 2.4cqw; }
+  .card { background: #fff; border: 1px solid #f0ece5; border-radius: 2cqw; overflow: hidden; box-shadow: 0 1cqw 2cqw -1cqw rgba(0,0,0,0.12); }
+  .card__img { height: 12cqw; }
+  .card__t { font-size: 1.5cqw; font-weight: 600; padding: 1.2cqw 1.2cqw 0.4cqw; }
+  .card__p { font-size: 1.6cqw; font-weight: 700; color: #b5533a; padding: 0 1.2cqw 1.4cqw; }
+
+  .foot { background: #2b2118; color: #d9cfc2; font-size: 1.5cqw; text-align: center; padding: 2.2cqw; }
+
+  /* reflejo de vidrio */
+  .dm-live__glare {
+    position: absolute; inset: 0; z-index: 3; pointer-events: none; mix-blend-mode: screen;
+    background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.16) 50%, transparent 60%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dm-live__scroll { animation: none; }
+  }
+</style>

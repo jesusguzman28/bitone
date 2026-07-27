@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="Tienda online y e-commerce">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1120"/>
+      <stop offset="1" stop-color="#0f172a"/>
+    </linearGradient>
+    <radialGradient id="orbA" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#E8A317" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#E8A317" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="orbB" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#D91023" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#D91023" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="200" cy="150" r="360" fill="url(#orbA)"/>
+  <circle cx="1030" cy="510" r="380" fill="url(#orbB)"/>
+  <g fill="none" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1">
+    <path d="M0 210 H1200 M0 420 H1200 M300 0 V630 M600 0 V630 M900 0 V630"/>
+  </g>
+  <g transform="translate(600 300)">
+    <circle r="150" fill="none" stroke="#ffffff" stroke-opacity="0.16" stroke-width="2"/>
+    <circle r="150" fill="#ffffff" fill-opacity="0.03"/>
+    <g transform="translate(-66 -60)" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M0 8 H24 L44 92 H120 L138 34 H40"/>
+      <circle cx="54" cy="122" r="12"/>
+      <circle cx="112" cy="122" r="12"/>
+    </g>
+  </g>
+  <text x="600" y="530" text-anchor="middle" font-family="'Space Grotesk','Segoe UI',sans-serif" font-size="34" font-weight="600" letter-spacing="8" fill="#E8A317">E-COMMERCE · VENDE 24/7</text>
+</svg>

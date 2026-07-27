@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import Rubros from '../../components/Rubros.astro';
+import ProyectoMedida from '../../components/ProyectoMedida.astro';
+import MarcasBanner from '../../components/MarcasBanner.astro';
+import CTA from '../../components/CTA.astro';
+---
+
+<BaseLayout
+  title="Soluciones por rubro: pollerías, bodegas, farmacias y más"
+  description="Plataformas web y apps por rubro para pymes peruanas: pollerías, bodegas, farmacias, ferreterías, barberías, veterinarias, gimnasios y más."
+  keywords={[
+    'página web para pollería',
+    'sistema para bodega Perú',
+    'página web para farmacia',
+    'software para barbería Perú',
+    'página web para veterinaria',
+  ]}
+>
+  <PageHero
+    eyebrow="Proyectos"
+    title="Trabajo real, <span class='gradient-text--warm'>con URL en vivo</span>"
+    subtitle="Plataformas en producción y arquitecturas probadas por rubro. Entra, navega y compruébalo tú mismo."
+  />
+
+  <Rubros variant="grid" />
+  <ProyectoMedida />
+  <MarcasBanner />
+  <CTA />
+</BaseLayout>

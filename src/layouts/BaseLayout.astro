@@ -1,0 +1,184 @@
+---
+import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppFab from '../components/WhatsAppFab.astro';
+import { site, seo, nav } from '../data/site';
+
+interface PreloadImage {
+  href: string;
+  media?: string;
+  type?: string;
+}
+
+interface Props {
+  title?: string;
+  description?: string;
+  keywords?: string[];
+  image?: string;
+  noindex?: boolean;
+  breadcrumbLabel?: string;
+  preloadImages?: PreloadImage[];
+}
+
+const {
+  title,
+  description = seo.description,
+  keywords = seo.keywords,
+  image = seo.ogImage,
+  noindex = false,
+  breadcrumbLabel,
+  preloadImages = [],
+} = Astro.props;
+
+const pageTitle = title ? seo.titleTemplate.replace('%s', title) : seo.defaultTitle;
+const canonical = new URL(Astro.url.pathname, site.domain).href;
+const ogImage = new URL(image, site.domain).href;
+const logoUrl = new URL('/og-default.jpg', site.domain).href;
+
+// ---- Breadcrumbs (auto desde la ruta, con etiquetas del nav) ----
+const navLabel = (href: string) => nav.find((n) => n.href === href)?.label;
+const titleCase = (s: string) =>
+  s.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
+const segments = Astro.url.pathname.replace(/\/$/, '').split('/').filter(Boolean);
+const crumbs = [{ name: 'Inicio', url: site.domain + '/' }];
+let acc = '';
+segments.forEach((seg, i) => {
+  acc += '/' + seg;
+  const isLast = i === segments.length - 1;
+  const name = navLabel(acc) ?? (isLast && breadcrumbLabel ? breadcrumbLabel : titleCase(seg));
+  crumbs.push({ name, url: new URL(acc, site.domain).href });
+});
+
+// ---- JSON-LD @graph: Organization + LocalBusiness + WebSite + (Breadcrumb) ----
+const graph: Record<string, unknown>[] = [
+  {
+    '@type': 'Organization',
+    '@id': site.domain + '/#org',
+    name: site.legalName,
+    url: site.domain,
+    logo: { '@type': 'ImageObject', url: logoUrl, width: 1200, height: 630 },
+    sameAs: Object.values(site.socials),
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'sales',
+      telephone: site.phone,
+      email: site.email,
+      areaServed: 'PE',
+      availableLanguage: ['es'],
+    },
+  },
+  {
+    '@type': 'LocalBusiness',
+    '@id': site.domain + '/#business',
+    name: site.legalName,
+    url: site.domain,
+    image: ogImage,
+    description,
+    parentOrganization: { '@id': site.domain + '/#org' },
+    address: { '@type': 'PostalAddress', addressLocality: 'Lima', addressCountry: 'PE' },
+    areaServed: { '@type': 'Country', name: 'Perú' },
+    knowsAbout: seo.keywords,
+    sameAs: Object.values(site.socials),
+  },
+  {
+    '@type': 'WebSite',
+    '@id': site.domain + '/#website',
+    url: site.domain,
+    name: site.name,
+    inLanguage: 'es-PE',
+    publisher: { '@id': site.domain + '/#org' },
+  },
+];
+
+if (crumbs.length > 1) {
+  graph.push({
+    '@type': 'BreadcrumbList',
+    '@id': canonical + '#breadcrumb',
+    itemListElement: crumbs.map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: c.name,
+      item: c.url,
+    })),
+  });
+}
+
+const jsonLd = { '@context': 'https://schema.org', '@graph': graph };
+---
+
+<!doctype html>
+<html lang="es-PE">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+
+    {preloadImages.map((p) => (
+      <link rel="preload" as="image" href={p.href} media={p.media} type={p.type} fetchpriority="high" />
+    ))}
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords.join(', ')} />
+    <meta name="author" content={site.legalName} />
+    {noindex ? <meta name="robots" content="noindex, nofollow" /> : <meta name="robots" content="index, follow" />}
+    <meta name="theme-color" content="#0f172a" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="es_PE" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={pageTitle} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={pageTitle} />
+
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <Navbar />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <WhatsAppFab />
+
+    <script>
+      const els = document.querySelectorAll('.reveal');
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add('is-visible');
+              io.unobserve(e.target);
+            }
+          }
+        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+        els.forEach((el) => io.observe(el));
+      } else {
+        els.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>

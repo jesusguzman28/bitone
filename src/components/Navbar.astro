@@ -1,0 +1,132 @@
+---
+import { nav, waLink } from '../data/site';
+const path = Astro.url.pathname;
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+
+<header class="fixed inset-x-0 top-0 z-[60] flex justify-center px-4 pt-4">
+  <nav
+    id="nav-pill"
+    class="flex w-full max-w-[920px] items-center justify-between gap-4 rounded-full py-2 pl-5 pr-2 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]"
+    style="background:rgba(255,255,255,0.7);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);box-shadow:inset 0 0 0 1px rgba(15,23,42,0.06),0 12px 40px -20px rgba(15,23,42,0.28)"
+  >
+    <a href="/" class="flex items-center gap-[9px] font-display text-[19px] font-bold tracking-tight text-dark no-underline">
+      <span class="grid h-8 w-8 place-items-center rounded-[11px] text-[13px] font-bold text-white" style="background:linear-gradient(135deg,#D91023,#E8A317)">/B</span>
+      Bitwise
+    </a>
+
+    <ul class="nav-desktop m-0 hidden list-none items-center gap-0.5 p-0 md:flex">
+      {nav.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+            class:list={[
+              'inline-block rounded-full px-3.5 py-1.5 text-sm no-underline transition-colors duration-300',
+              isActive(item.href) ? 'nav-active' : 'font-medium text-slate-600 hover:text-dark',
+            ]}
+          >{item.label}</a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="flex items-center gap-2">
+      <a href={waLink()} target="_blank" rel="noopener" class="btn btn--primary group hidden md:inline-flex">
+        Cotizar
+        <span class="btn__icon !h-7 !w-7" aria-hidden="true">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </span>
+      </a>
+
+      <button id="nav-toggle" class="grid h-10 w-10 cursor-pointer place-items-center rounded-full border-0 bg-transparent md:hidden" aria-label="Menú" aria-expanded="false">
+        <span class="relative block h-4 w-5">
+          <span id="bar1" class="absolute left-0 top-0 h-0.5 w-5 rounded bg-dark transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]"></span>
+          <span id="bar2" class="absolute bottom-0 left-0 h-0.5 w-5 rounded bg-dark transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]"></span>
+        </span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<!-- Overlay móvil -->
+<div
+  id="nav-overlay"
+  inert
+  class="pointer-events-none fixed inset-0 z-[55] flex flex-col items-center justify-center gap-2.5 opacity-0 transition-opacity duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] md:hidden"
+  style="background:rgba(255,255,255,0.88);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px)"
+>
+  {nav.map((item, i) => (
+    <a
+      href={item.href}
+      class:list={[
+        'nav-ov-item translate-y-7 font-display text-3xl font-bold no-underline opacity-0 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]',
+        isActive(item.href) ? 'text-primary' : 'text-dark',
+      ]}
+      style={`transition-delay:${i * 60}ms`}
+    >{item.label}</a>
+  ))}
+  <a
+    href={waLink()}
+    target="_blank"
+    rel="noopener"
+    class="nav-ov-item btn btn--primary mt-5 translate-y-7 !px-[26px] !py-[13px] !text-[15px] opacity-0 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]"
+    style={`transition-delay:${nav.length * 60}ms`}
+  >Cotizar por WhatsApp</a>
+</div>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const overlay = document.getElementById('nav-overlay');
+  const bar1 = document.getElementById('bar1');
+  const bar2 = document.getElementById('bar2');
+  const items = document.querySelectorAll('.nav-ov-item');
+  let open = false;
+
+  function setOpen(v: boolean) {
+    open = v;
+    toggle?.setAttribute('aria-expanded', String(v));
+    document.body.style.overflow = v ? 'hidden' : '';
+    if (v) {
+      overlay?.removeAttribute('inert');
+      overlay?.classList.add('opacity-100', 'pointer-events-auto');
+      overlay?.classList.remove('opacity-0', 'pointer-events-none');
+      bar1?.classList.add('nav-x-top');
+      bar2?.classList.add('nav-x-bottom');
+      items.forEach((el) => el.classList.remove('translate-y-7', 'opacity-0'));
+    } else {
+      overlay?.setAttribute('inert', '');
+      overlay?.classList.remove('opacity-100', 'pointer-events-auto');
+      overlay?.classList.add('opacity-0', 'pointer-events-none');
+      bar1?.classList.remove('nav-x-top');
+      bar2?.classList.remove('nav-x-bottom');
+      items.forEach((el) => el.classList.add('translate-y-7', 'opacity-0'));
+    }
+  }
+
+  toggle?.addEventListener('click', () => setOpen(!open));
+  overlay?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && open) { setOpen(false); toggle?.focus(); }
+  });
+
+  const pill = document.getElementById('nav-pill');
+  addEventListener('scroll', () => {
+    if (window.scrollY > 20) pill?.classList.add('scrolled');
+    else pill?.classList.remove('scrolled');
+  }, { passive: true });
+</script>
+
+<style>
+  #nav-pill.scrolled {
+    transform: scale(0.98);
+    background: rgba(255, 255, 255, 0.92) !important;
+    box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.1), 0 14px 44px -18px rgba(15, 23, 42, 0.38) !important;
+  }
+  .nav-active {
+    color: #D91023;
+    background: rgba(217, 16, 35, 0.1);
+    font-weight: 700;
+  }
+  .nav-x-top { top: 50% !important; transform: translateY(-50%) rotate(45deg); }
+  .nav-x-bottom { bottom: 50% !important; transform: translateY(50%) rotate(-45deg); }
+</style>
