@@ -4,7 +4,7 @@ import ContactForm from '../components/ContactForm.astro';
 import Stars from '../components/Stars.astro';
 import CTA from '../components/CTA.astro';
 import { landings, rubroDeLanding, hrefRubro, type Landing } from '../data/landings';
-import { rubros, soles } from '../data/rubros';
+import { rubros, soles, afinesRubro, anchorRubro } from '../data/rubros';
 import { site, waLink } from '../data/site';
 
 export function getStaticPaths() {
@@ -17,7 +17,7 @@ const { landing } = Astro.props;
 const rubro = rubroDeLanding(landing);
 const url = `${site.domain}/paginas-web-para-${landing.param}/`;
 
-const afines = landing.afines
+const afines = (afinesRubro[rubro.slug] ?? [])
   .map((slug) => rubros.find((r) => r.slug === slug))
   .filter((r): r is (typeof rubros)[number] => Boolean(r));
 
@@ -249,7 +249,7 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
               {afines.map((o) => (
                 <li>
                   <a href={hrefRubro(o.slug)} class="inline-flex items-center gap-2 font-semibold text-primary no-underline">
-                    <span>{o.emoji}</span>{o.title}
+                    <span>{o.emoji}</span>{anchorRubro[o.slug]}
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
                   </a>
                 </li>

@@ -7,6 +7,12 @@
 # solicitada del sitio y hasta ahora respondía 404.
 /sitemap.xml    /sitemap-index.xml    301
 
+# /clientes se fusionó con /proyectos en el rediseño 2026. Estaba resuelto en
+# astro.config como meta-refresh, que responde 200 y Google lee como duplicado
+# en vez de como redirección: no pasaba autoridad.
+/clientes     /proyectos/    301
+/clientes/    /proyectos/    301
+
 # Rubros que migraron a una URL con la keyword en el slug. Las rutas viejas
 # estaban en el sitemap y siguen indexadas: ninguna puede terminar en 404.
 # Se listan con y sin barra final porque el sitemap las publicaba con barra y

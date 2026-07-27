@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { blog, site, waLink, catLabel } from '../../data/site';
+import { rubros, anchorRubro } from '../../data/rubros';
+import { hrefRubro } from '../../data/landings';
 
 export function getStaticPaths() {
   return blog.map((post) => ({ params: { slug: post.slug }, props: { post } }));
@@ -10,6 +12,9 @@ const { post } = Astro.props;
 const fmt = (d: string) =>
   new Date(d + 'T12:00:00').toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
 const related = blog.filter((p) => p.slug !== post.slug).slice(0, 2);
+const rubrosDelPost = (post.rubros ?? [])
+  .map((slug) => rubros.find((r) => r.slug === slug))
+  .filter((r): r is (typeof rubros)[number] => Boolean(r));
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -67,6 +72,27 @@ const jsonLd = {
         >Escribir por WhatsApp</a>
       </div>
 
+      <!-- Enlace del artículo a los rubros que menciona. Va antes de "sigue
+           leyendo" para que el lector salte al rubro que le toca mientras el
+           tema todavía está fresco, y para que estas páginas dejen de depender
+           solo de /proyectos para recibir autoridad. -->
+      {rubrosDelPost.length > 0 && (
+        <section class="mt-14">
+          <h2 class="font-display text-xl font-bold text-dark">Cómo se aplica en tu rubro</h2>
+          <ul class="mt-5 grid list-none gap-3 p-0 sm:grid-cols-2">
+            {rubrosDelPost.map((r) => (
+              <li>
+                <a href={hrefRubro(r.slug)} class="post-rubro flex items-center gap-3 rounded-[14px] bg-white p-4 no-underline">
+                  <span class="text-[22px] leading-none" aria-hidden="true">{r.emoji}</span>
+                  <span class="flex-1 font-display text-[14.5px] font-bold leading-[1.3] text-dark">{anchorRubro[r.slug]}</span>
+                  <svg class="shrink-0 text-primary" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <!-- Relacionados -->
       <section class="mt-14">
         <h2 class="font-display text-xl font-bold text-dark">Sigue leyendo</h2>
@@ -90,3 +116,18 @@ const jsonLd = {
 
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 </BaseLayout>
+
+<style>
+  .post-rubro {
+    box-shadow: inset 0 0 0 1px var(--hairline);
+    transition: box-shadow 0.4s var(--ease-fluid), transform 0.4s var(--ease-fluid);
+  }
+  .post-rubro:hover {
+    transform: translateY(-2px);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 45%, transparent),
+      0 14px 30px -12px rgba(217, 16, 35, 0.16);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .post-rubro { transition: none; }
+  }
+</style>

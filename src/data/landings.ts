@@ -40,8 +40,6 @@ export interface Landing {
   funciones: { title: string; intro: string; items: readonly LandingItem[] };
   precio: { title: string; parrafos: readonly string[] };
   faqs: readonly LandingFaq[];
-  /** Slugs de rubros afines, para el enlazado cruzado. */
-  afines: readonly string[];
 }
 
 export const landings: readonly Landing[] = [
@@ -158,7 +156,6 @@ export const landings: readonly Landing[] = [
         a: 'Sí, es la misma carta digital con un QR que imprimes y pones en cada mesa. El cliente escanea con la cámara del celular, sin instalar nada, y ve la carta con fotos y precios actualizados. Cuando cambias un precio en el panel, cambia también en el QR.',
       },
     ],
-    afines: ['panaderias-pastelerias', 'bodegas-minimarkets'],
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -274,7 +271,6 @@ export const landings: readonly Landing[] = [
         a: 'Sí, y en ese caso la web se arma distinto. El catálogo abierto pasa a segundo plano y el peso se lo llevan el cotizador, las cuentas corporativas, el despacho a obra y la facturación. Es la misma base con otro orden de prioridades, y eso se define contigo antes de empezar a desarrollar.',
       },
     ],
-    afines: ['talleres-mecanicos', 'bodegas-minimarkets'],
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -390,7 +386,6 @@ export const landings: readonly Landing[] = [
         a: 'Sí, y de hecho es como arranca la mayoría. Se entrega la web con servicios, equipo, ubicación y reserva de citas, y la tienda queda como un módulo que activas cuando lo decidas. No hay que rehacer nada para sumarla después: se construye desde el inicio pensando en que va a crecer.',
       },
     ],
-    afines: ['clinicas-consultorios', 'farmacias-boticas'],
   },
 ];
 

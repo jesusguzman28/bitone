@@ -554,6 +554,56 @@ export const rubros: readonly Rubro[] = [
 
 export const getRubro = (slug: string) => rubros.find((r) => r.slug === slug);
 
+// ---- Enlazado interno ----
+// Texto de enlace de cada rubro. El anchor es de las señales más fuertes que
+// tiene Google para entender de qué trata la página de destino, así que dice
+// la keyword completa y nunca "ver más" ni "conoce más".
+export const anchorRubro: Record<string, string> = {
+  'pollerias-restaurantes': 'Página web para pollerías',
+  'bodegas-minimarkets': 'Página web para bodegas',
+  'farmacias-boticas': 'Página web para farmacias',
+  'ferreterias': 'Página web para ferreterías',
+  'barberias-salones-belleza': 'Página web para barberías',
+  'veterinarias-petshop': 'Página web para veterinarias',
+  'talleres-mecanicos': 'Página web para talleres mecánicos',
+  'panaderias-pastelerias': 'Página web para panaderías',
+  'gimnasios-crossfit': 'Página web para gimnasios',
+  'clinicas-consultorios': 'Página web para clínicas',
+  'opticas': 'Página web para ópticas',
+  'academias-preuniversitarios': 'Página web para academias',
+};
+
+// Rubros afines para el enlace cruzado. Cruzan categoría a propósito: quien
+// busca web para una pollería es el mismo perfil de dueño que la busca para
+// una panadería o una bodega, aunque el filtro del sitio los separe.
+export const afinesRubro: Record<string, readonly string[]> = {
+  'pollerias-restaurantes': ['panaderias-pastelerias', 'bodegas-minimarkets'],
+  'panaderias-pastelerias': ['pollerias-restaurantes', 'bodegas-minimarkets'],
+  'bodegas-minimarkets': ['pollerias-restaurantes', 'panaderias-pastelerias', 'farmacias-boticas'],
+  'farmacias-boticas': ['bodegas-minimarkets', 'clinicas-consultorios', 'veterinarias-petshop'],
+  'ferreterias': ['talleres-mecanicos', 'bodegas-minimarkets'],
+  'talleres-mecanicos': ['ferreterias', 'barberias-salones-belleza'],
+  'barberias-salones-belleza': ['gimnasios-crossfit', 'clinicas-consultorios'],
+  'veterinarias-petshop': ['clinicas-consultorios', 'farmacias-boticas'],
+  'gimnasios-crossfit': ['barberias-salones-belleza', 'academias-preuniversitarios'],
+  'clinicas-consultorios': ['veterinarias-petshop', 'opticas', 'farmacias-boticas'],
+  'opticas': ['clinicas-consultorios', 'barberias-salones-belleza'],
+  'academias-preuniversitarios': ['gimnasios-crossfit', 'clinicas-consultorios'],
+};
+
+// Guardia de build: un rubro sin anchor o sin afines quedaría fuera del
+// enlazado interno sin que nadie se entere hasta revisar el HTML.
+const sinEnlace = rubros.filter((r) => !anchorRubro[r.slug] || !afinesRubro[r.slug]?.length);
+if (sinEnlace.length > 0) {
+  throw new Error(`Rubros sin anchor o sin afines: ${sinEnlace.map((r) => r.slug).join(', ')}`);
+}
+const afinInexistente = Object.entries(afinesRubro).flatMap(([k, v]) =>
+  v.filter((s) => !rubros.some((r) => r.slug === s)).map((s) => `${k} -> ${s}`),
+);
+if (afinInexistente.length > 0) {
+  throw new Error(`Afines que apuntan a un rubro inexistente: ${afinInexistente.join(', ')}`);
+}
+
 // Guardia de build. Si alguien vuelve a bajar un rubro por debajo del piso, el
 // build falla en vez de publicar un "desde S/1,500" que ya no es verdad.
 const bajoPiso = rubros.filter((r) => r.startingPrice < PRECIO_PISO);
