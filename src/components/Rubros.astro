@@ -1,5 +1,6 @@
 ---
 import { rubros, rubroCats, totalModulos } from '../data/rubros';
+import { hrefRubro } from '../data/landings';
 
 interface Props { variant?: 'marquee' | 'grid'; }
 const { variant = 'marquee' } = Astro.props;
@@ -18,7 +19,7 @@ const countFor = (cat: string) =>
       <div class="marquee flex w-max gap-3">
         {loop.map((r, i) => (
           <a
-            href={`/proyectos/${r.slug}`}
+            href={hrefRubro(r.slug)}
             aria-hidden={i >= rubros.length ? 'true' : undefined}
             tabindex={i >= rubros.length ? -1 : undefined}
             class="chip-rubro inline-flex items-center gap-2 whitespace-nowrap rounded-full px-[18px] py-[9px] text-sm font-semibold text-slate-700 no-underline transition-all duration-300"
@@ -58,7 +59,7 @@ const countFor = (cat: string) =>
       <div id="rubro-grid" class="rubro-track mt-9 gap-5">
         {rubros.map((r) => (
           <a
-            href={`/proyectos/${r.slug}`}
+            href={hrefRubro(r.slug)}
             class="rubro-item rubro-card flex flex-col rounded-[20px] bg-white p-6 no-underline"
             data-cat={r.cat}
           >

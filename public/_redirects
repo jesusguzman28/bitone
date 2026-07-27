@@ -6,3 +6,14 @@
 # rastreadores —sobre todo los de IA— piden /sitemap.xml. Es la ruta más
 # solicitada del sitio y hasta ahora respondía 404.
 /sitemap.xml    /sitemap-index.xml    301
+
+# Rubros que migraron a una URL con la keyword en el slug. Las rutas viejas
+# estaban en el sitemap y siguen indexadas: ninguna puede terminar en 404.
+# Se listan con y sin barra final porque el sitemap las publicaba con barra y
+# los enlaces externos suelen omitirla.
+/proyectos/pollerias-restaurantes     /paginas-web-para-pollerias/     301
+/proyectos/pollerias-restaurantes/    /paginas-web-para-pollerias/     301
+/proyectos/ferreterias                /paginas-web-para-ferreterias/   301
+/proyectos/ferreterias/               /paginas-web-para-ferreterias/   301
+/proyectos/veterinarias-petshop       /paginas-web-para-veterinarias/  301
+/proyectos/veterinarias-petshop/      /paginas-web-para-veterinarias/  301

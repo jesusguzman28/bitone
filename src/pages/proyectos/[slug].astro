@@ -4,10 +4,16 @@ import ContactForm from '../../components/ContactForm.astro';
 import Stars from '../../components/Stars.astro';
 import CTA from '../../components/CTA.astro';
 import { rubros, totalModulos, type Rubro } from '../../data/rubros';
+import { hrefRubro, tieneLanding } from '../../data/landings';
 import { site, waLink } from '../../data/site';
 
+// Los rubros con landing propia NO se generan aquí. Si se generaran, el
+// archivo estático ganaría sobre la regla de _redirects y el 301 de la ruta
+// vieja no llegaría a dispararse nunca.
 export function getStaticPaths() {
-  return rubros.map((rubro) => ({ params: { slug: rubro.slug }, props: { rubro } }));
+  return rubros
+    .filter((rubro) => !tieneLanding(rubro.slug))
+    .map((rubro) => ({ params: { slug: rubro.slug }, props: { rubro } }));
 }
 
 interface Props { rubro: Rubro }
@@ -151,7 +157,7 @@ const jsonLd = {
             <ul class="m-0 mt-3 grid list-none gap-2 p-0 text-[14px]">
               {otros.map((o) => (
                 <li>
-                  <a href={`/proyectos/${o.slug}`} class="inline-flex items-center gap-2 font-semibold text-primary no-underline">
+                  <a href={hrefRubro(o.slug)} class="inline-flex items-center gap-2 font-semibold text-primary no-underline">
                     <span>{o.emoji}</span>{o.title}
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
                   </a>
