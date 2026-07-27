@@ -54,6 +54,11 @@ export const nav = [
 // ---- Hero (home) ----
 export const hero = {
   eyebrow: 'Hecho en Perú',
+  // H1 real de la portada: lleva la keyword principal y sale en el HTML servido.
+  // La frase que se escribe sola quedó como línea secundaria (los rastreadores
+  // de Google y de las IAs no ejecutan JavaScript).
+  h1: 'Páginas web para MYPEs en Perú',
+  h1Destacado: 'desde S/1,700',
   titleA: 'Tu negocio online,',
   typed: [
     'funcionando esta semana.',

@@ -103,12 +103,21 @@ import { hero, heroStats, waLink } from '../data/site';
           {hero.eyebrow}
         </span>
 
-        <h1 class="hero-title mt-3.5 font-display text-[clamp(1.7rem,5.2vw,2.5rem)] font-bold leading-[1.12] sm:mt-4">
-          {hero.titleA}<br />
-          <span id="typed" class="gradient-text--warm"></span><span id="cursor" class="typed-cursor">|</span>
+        <!-- H1 estático: es lo que leen Google y los buscadores con IA -->
+        <h1 class="mt-3 font-display text-[clamp(1.5rem,5vw,2.5rem)] font-bold leading-[1.1] sm:mt-4">
+          {hero.h1}<br />
+          <span class="gradient-text--warm">{hero.h1Destacado}</span>
         </h1>
 
-        <p class="mt-2.5 max-w-[400px] text-[15px] leading-[1.6] text-slate-300 sm:mt-3.5 sm:text-base sm:leading-[1.65]">{hero.subtitle}</p>
+        <!-- La frase que se escribe sola: adorno, no estructura -->
+        <p class="hero-typed mt-2 font-display text-[clamp(0.94rem,3.2vw,1.15rem)] font-semibold leading-[1.25] text-slate-200 sm:mt-3">
+          {hero.titleA} <span id="typed"></span><span id="cursor" class="typed-cursor">|</span>
+        </p>
+
+        {/* En móvil el H1 ya dice "Páginas web para MYPEs en Perú desde S/1,700":
+            este subtítulo repetía la idea y empujaba los precios fuera de pantalla.
+            Se conserva en escritorio, donde sobra espacio. */}
+        <p class="hidden max-w-[400px] text-[13.5px] leading-[1.5] text-slate-400 sm:mt-3 sm:block sm:text-base sm:leading-[1.65]">{hero.subtitle}</p>
 
         <div class="hero-pills mt-3 flex flex-wrap gap-2 sm:mt-4">
           {hero.pills.map((p) => (
@@ -216,8 +225,8 @@ import { hero, heroStats, waLink } from '../data/site';
 </script>
 
 <style>
-  /* Reserva 3 líneas para que el texto que se escribe no mueva el layout */
-  .hero-title { min-height: 3.15em; }
+  /* Reserva 2 líneas para que el texto que se escribe no mueva el layout */
+  .hero-typed { min-height: 2.5em; }
 
   /* Vitrina móvil con la proporción original (16/11): la captura se ve
      completa, sin recorte. */
@@ -228,7 +237,7 @@ import { hero, heroStats, waLink } from '../data/site';
      fuera de la pantalla. En móviles normales la vitrina queda intacta. */
   @media (max-height: 760px) {
     .hero-pills { display: none; }
-    .hero-title { min-height: 2.5em; }
+    .hero-typed { min-height: 1.4em; }
     .hero-showcase { aspect-ratio: auto; height: 24svh; }
   }
 
