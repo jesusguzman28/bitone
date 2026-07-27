@@ -113,11 +113,13 @@ export const heroStats = [
 ] as const;
 
 // ---- Contadores animados (home) ----
+// `derivado` marca las cifras que NO se escriben aquí: las calcula el
+// componente a partir de los datos reales para que no puedan quedar viejas.
 export const homeStats = [
-  { n: 7, suffix: 'días', k: 'Entrega mínima' },
-  { n: 2, prefix: '<', suffix: 'horas', k: 'Respuesta WhatsApp' },
-  { n: 30, suffix: 'días', k: 'Garantía post-entrega' },
-  { n: 100, suffix: '%', tight: true, k: 'Código y dominio tuyos' },
+  { n: 7, suffix: 'días', k: 'Entrega mínima', derivado: 'entregaMinima' },
+  { n: 2, prefix: '<', suffix: 'horas', k: 'Respuesta WhatsApp', derivado: null },
+  { n: 30, suffix: 'días', k: 'Garantía post-entrega', derivado: null },
+  { n: 100, suffix: '%', tight: true, k: 'Código y dominio tuyos', derivado: null },
 ] as const;
 
 // ---- Servicios destacados (home) ----
@@ -185,12 +187,16 @@ export const serviciosHome = [
 // declarado a Google no puedan separarse.
 //
 //   price        precio de entrada en soles; null = no hay precio fijo publicado
+//   rubros       rubros donde ese servicio aplica de verdad. Alimentan el
+//                enlazado interno desde /servicios, que hasta ahora no
+//                enlazaba a ninguna de las 12 páginas de rubro.
 //   ivaIncluido  null cuando el sitio no lo declara. No se supone: un
 //                valueAddedTaxIncluded inventado es una afirmación de precio
 //                falsa en datos estructurados.
 export const serviciosTabs = [
   {
     id: 'web',
+    rubros: ['clinicas-consultorios', 'barberias-salones-belleza', 'talleres-mecanicos'],
     label: 'Página web',
     tag: 'Páginas web',
     icon: 'www',
@@ -217,6 +223,7 @@ export const serviciosTabs = [
   },
   {
     id: 'tienda',
+    rubros: ['ferreterias', 'opticas', 'panaderias-pastelerias'],
     label: 'Tienda online',
     tag: 'E-commerce',
     icon: 'carrito',
@@ -243,6 +250,7 @@ export const serviciosTabs = [
   },
   {
     id: 'erp',
+    rubros: ['talleres-mecanicos', 'farmacias-boticas', 'academias-preuniversitarios'],
     label: 'ERPs y sistemas',
     tag: 'Automatización y sistemas',
     icon: 'tuerca',
@@ -269,6 +277,7 @@ export const serviciosTabs = [
   },
   {
     id: 'apps',
+    rubros: ['gimnasios-crossfit', 'veterinarias-petshop', 'pollerias-restaurantes'],
     label: 'Apps móviles',
     tag: 'Aplicaciones móviles',
     icon: 'celular',

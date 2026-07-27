@@ -41,6 +41,17 @@ export const rubroCats = ["Todos los rubros","Gastronomía","Retail y comercio",
 // Formato de marca: S/1,500 — sin espacio tras la barra, coma de millares.
 export const soles = (n: number) => `S/${n.toLocaleString('en-US')}`;
 
+// Días de entrega, leídos de deliveryTime. La portada anuncia una "entrega
+// mínima" y ese número tiene que salir de los rubros, no de la memoria de
+// quien escribió la portada: si mañana un rubro entrega en menos, la cifra se
+// actualiza sola en vez de quedar desactualizada sin que nadie lo note.
+const diasDeEntrega = (r: Rubro) => {
+  const m = r.deliveryTime.match(/^(\d+)/);
+  if (!m) throw new Error(`deliveryTime de ${r.slug} no empieza con un número: "${r.deliveryTime}"`);
+  return Number(m[1]);
+};
+
+
 export const totalModulos = (r: Rubro) =>
   r.moduleGroups.reduce((acc, g) => acc + g.modules.length, 0);
 
@@ -551,6 +562,8 @@ export const rubros: readonly Rubro[] = [
     ],
   },
 ];
+
+export const entregaMinimaDias = Math.min(...rubros.map(diasDeEntrega));
 
 export const getRubro = (slug: string) => rubros.find((r) => r.slug === slug);
 
