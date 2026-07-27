@@ -4,11 +4,14 @@ import Stars from './Stars.astro';
 interface Props {
   eyebrow: string;
   title: string;
+  /** Frase de entrada bajo el H1. Sirve para que un titular de marca pueda
+   *  convivir con un H1 que lleva la keyword, sin perder el copy. */
+  lead?: string;
   subtitle?: string;
   flag?: boolean;
   compact?: boolean;
 }
-const { eyebrow, title, subtitle, flag = false, compact = false } = Astro.props;
+const { eyebrow, title, lead, subtitle, flag = false, compact = false } = Astro.props;
 ---
 
 <section class:list={['hero-dark relative isolate overflow-hidden px-6 text-center text-white', compact ? 'pb-[66px] pt-[150px]' : 'pb-[70px] pt-[150px]']}>
@@ -23,6 +26,7 @@ const { eyebrow, title, subtitle, flag = false, compact = false } = Astro.props;
     {eyebrow}
   </span>
   <h1 class="mx-auto mt-[18px] max-w-[700px] font-display text-[clamp(1.9rem,5vw,3rem)] font-bold leading-[1.08]" set:html={title} />
+  {lead && <p class="mx-auto mt-4 max-w-[560px] font-display text-[clamp(1.05rem,2.4vw,1.25rem)] font-semibold leading-[1.4] text-slate-100" set:html={lead} />}
   {subtitle && <p class="mx-auto mt-4 max-w-[540px] text-base leading-[1.65] text-slate-300">{subtitle}</p>}
   <slot />
 </section>

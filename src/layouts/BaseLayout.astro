@@ -18,6 +18,11 @@ interface Props {
   noindex?: boolean;
   breadcrumbLabel?: string;
   preloadImages?: PreloadImage[];
+  /** Nodos propios de la página (Service, Offer, FAQPage…) que se suman al
+   *  @graph. Van en el mismo grafo, y no en un <script> aparte, para que las
+   *  referencias por @id —provider, publisher— resuelvan contra los nodos que
+   *  ya declara este layout. */
+  schema?: Record<string, unknown>[];
 }
 
 const {
@@ -27,6 +32,7 @@ const {
   noindex = false,
   breadcrumbLabel,
   preloadImages = [],
+  schema = [],
 } = Astro.props;
 
 const pageTitle = title ? seo.titleTemplate.replace('%s', title) : seo.defaultTitle;
@@ -102,6 +108,8 @@ if (crumbs.length > 1) {
     })),
   });
 }
+
+graph.push(...schema);
 
 const jsonLd = { '@context': 'https://schema.org', '@graph': graph };
 ---

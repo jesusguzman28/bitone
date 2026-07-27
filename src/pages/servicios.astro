@@ -4,16 +4,59 @@ import PageHero from '../components/PageHero.astro';
 import Comparativa from '../components/Comparativa.astro';
 import Icono from '../components/Icono.astro';
 import CTA from '../components/CTA.astro';
-import { serviciosTabs, condiciones, waLink } from '../data/site';
+import { site, serviciosTabs, condiciones, waLink } from '../data/site';
+
+// ---- Un Service con su Offer por cada servicio ----
+// El @id del proveedor apunta a /#org, que es el identificador real que emite
+// BaseLayout. Usar /#organization dejaría la referencia colgando contra un nodo
+// que no existe en ninguna página del sitio.
+const pagina = `${site.domain}/servicios/`;
+
+const schema = serviciosTabs.map((t) => {
+  const priceSpecification: Record<string, unknown> = {
+    '@type': 'PriceSpecification',
+    priceCurrency: 'PEN',
+  };
+  const offers: Record<string, unknown> = {
+    '@type': 'Offer',
+    priceCurrency: 'PEN',
+    availability: 'https://schema.org/InStock',
+    url: `${site.domain}/servicios#${t.id}`,
+  };
+
+  if (t.price === null) {
+    // Sin precio publicado no se declara ninguno: un precio inventado en el
+    // schema es peor que no tenerlo.
+    priceSpecification.description = 'Según alcance';
+  } else {
+    offers.price = String(t.price);
+    priceSpecification.minPrice = String(t.price);
+  }
+  if (t.ivaIncluido !== null) priceSpecification.valueAddedTaxIncluded = t.ivaIncluido;
+  offers.priceSpecification = priceSpecification;
+
+  return {
+    '@type': 'Service',
+    '@id': `${pagina}#${t.schemaId}`,
+    name: t.schemaName,
+    serviceType: t.serviceType,
+    description: t.desc,
+    provider: { '@id': `${site.domain}/#org` },
+    areaServed: { '@type': 'Country', name: 'Perú' },
+    offers,
+  };
+});
 ---
 
 <BaseLayout
   title="Servicios: páginas web, tiendas online, ERPs y apps"
   description="Página web profesional con dominio y hosting incluidos, tienda online con pasarelas peruanas, ERPs a medida y apps móviles. Cotización clara en soles."
+  schema={schema}
 >
   <PageHero
     eyebrow="Servicios"
-    title="Todo lo que incluye, <span class='gradient-text--warm'>sin letra chica</span>"
+    title="Servicios de desarrollo web para <span class='gradient-text--warm'>MYPEs en Perú</span>"
+    lead="Todo lo que incluye, sin letra chica."
     subtitle="50% adelanto y 50% contra entrega. Hasta 3 cuotas sin interés en proyectos grandes. Boleta o factura SUNAT en cada pago."
   />
 
@@ -49,6 +92,16 @@ import { serviciosTabs, condiciones, waLink } from '../data/site';
                 </span>
                 <span class="relative block text-[11px] font-bold uppercase tracking-[0.16em] text-accent">{t.tag}</span>
                 <h2 class="relative mt-3 font-display text-[clamp(1.5rem,3vw,2rem)] font-extrabold leading-[1.15] tracking-[-0.02em]">{t.title}</h2>
+
+                {/* El precio tiene que estar a la vista: Google exige que los
+                    datos estructurados representen contenido visible, y hasta
+                    ahora los precios solo salían en la portada. */}
+                <p class="relative mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                  <span class="text-[11px] font-medium uppercase tracking-wide text-slate-500">{t.price === null ? 'Precio' : 'Desde'}</span>
+                  <span class="font-display text-2xl font-bold text-white [font-variant-numeric:tabular-nums]">{t.priceLabel}</span>
+                  {t.priceNote && <span class="text-[13px] text-slate-400">{t.priceNote}</span>}
+                </p>
+
                 <p class="relative mt-4 max-w-[520px] text-[15px] leading-[1.7] text-slate-400">{t.desc}</p>
 
                 <div class="relative mt-7 grid gap-3 border-t border-white/10 pt-6 sm:grid-cols-2">

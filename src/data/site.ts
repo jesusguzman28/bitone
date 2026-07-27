@@ -175,6 +175,14 @@ export const serviciosHome = [
 ] as const;
 
 // ---- Servicios en detalle (/servicios, pestañas) ----
+// Cada pestaña carga además los datos de su Offer en JSON-LD. Viven aquí, junto
+// al precio que se muestra en pantalla, para que el precio visible y el
+// declarado a Google no puedan separarse.
+//
+//   price        precio de entrada en soles; null = no hay precio fijo publicado
+//   ivaIncluido  null cuando el sitio no lo declara. No se supone: un
+//                valueAddedTaxIncluded inventado es una afirmación de precio
+//                falsa en datos estructurados.
 export const serviciosTabs = [
   {
     id: 'web',
@@ -184,6 +192,13 @@ export const serviciosTabs = [
     title: 'Tu página web profesional',
     incluye: 'Dominio y hosting por 1 año incluidos',
     time: '2 a 4 semanas',
+    price: 1700,
+    ivaIncluido: false,
+    priceLabel: 'S/1,700',
+    priceNote: '+ IGV',
+    schemaId: 'pagina-web',
+    schemaName: 'Diseño y desarrollo de páginas web para MYPEs',
+    serviceType: 'Diseño web',
     desc: 'Sitios rápidos, seguros y optimizados para Google. Con panel administrable y diseño responsive para que tu negocio se vea profesional desde el celular.',
     wa: 'Hola Bitwise 👋 quiero cotizar una página web',
     features: [
@@ -203,6 +218,13 @@ export const serviciosTabs = [
     title: 'Tu tienda online vendiendo 24/7',
     incluye: 'Dominio, hosting y pasarelas peruanas incluidos',
     time: '4 a 6 semanas',
+    price: 3000,
+    ivaIncluido: null,
+    priceLabel: 'S/3,000',
+    priceNote: '',
+    schemaId: 'tienda-online',
+    schemaName: 'Desarrollo de tiendas online para MYPEs',
+    serviceType: 'Comercio electrónico',
     desc: 'Catálogo, carrito y cobro automático con pasarelas peruanas. Tu cliente compra solo, a cualquier hora, y tú despachas con la orden lista.',
     wa: 'Hola Bitwise 👋 quiero cotizar una tienda online',
     features: [
@@ -222,6 +244,13 @@ export const serviciosTabs = [
     title: 'ERPs y software a la medida de tu operación',
     incluye: 'Alcance y módulos definidos contigo',
     time: 'Según alcance',
+    price: null,
+    ivaIncluido: null,
+    priceLabel: 'A consultar',
+    priceNote: 'Según alcance',
+    schemaId: 'erp',
+    schemaName: 'Desarrollo de ERPs y sistemas a medida',
+    serviceType: 'Software a medida',
     desc: 'Sistemas de ventas e inventario, ERPs, chatbots con IA en WhatsApp e integraciones. Cada negocio es distinto: el alcance se arma según lo que necesitas.',
     wa: 'Hola Bitwise 👋 quiero cotizar un sistema / ERP para mi negocio',
     features: [
@@ -241,6 +270,13 @@ export const serviciosTabs = [
     title: 'Tu app móvil en Play Store',
     incluye: 'Publicación en Play Store incluida',
     time: '2 a 5 meses',
+    price: null,
+    ivaIncluido: null,
+    priceLabel: 'A consultar',
+    priceNote: 'Según alcance',
+    schemaId: 'apps-moviles',
+    schemaName: 'Desarrollo de aplicaciones móviles para Android e iOS',
+    serviceType: 'Desarrollo de aplicaciones móviles',
     desc: 'Apps nativas o multiplataforma para Android e iOS, con publicación en tiendas incluida y cuentas de developer a tu nombre.',
     wa: 'Hola Bitwise 👋 quiero cotizar una app móvil',
     features: [
