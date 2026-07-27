@@ -26,7 +26,10 @@ const jsonLd = {
   author: { '@type': 'Organization', name: site.legalName },
   publisher: { '@type': 'Organization', name: site.legalName, url: site.domain },
   mainEntityOfPage: `${site.domain}/blog/${post.slug}`,
-  image: `${site.domain}${post.image}`,
+  // new URL y no concatenación: las portadas del blog son URLs absolutas de
+  // Unsplash, y `${site.domain}${post.image}` producía https://bitwise.pehttps://…
+  // en las siete entradas. Era una imagen inválida en el BlogPosting.
+  image: new URL(post.image, site.domain).href,
   keywords: post.keywords.join(', '),
 };
 ---

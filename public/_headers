@@ -1,0 +1,51 @@
+# Cabeceras servidas por Cloudflare Workers (assets estáticos).
+# Reemplazan a lo que hacía public/.htaccess, que era config de Apache y en
+# Cloudflare no se aplicaba: el sitio llevaba tiempo sin ninguna de estas.
+#
+# HTTPS forzado y www -> non-www NO van aquí: son reglas de hostname y se
+# configuran en el panel de Cloudflare, no en un archivo de rutas.
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=()
+  # Sin includeSubDomains ni preload a propósito: ambos son compromisos de un
+  # año que romperían cualquier subdominio que hoy sirva HTTP. Se pueden sumar
+  # después de verificar qué subdominios existen.
+  Strict-Transport-Security: max-age=31536000
+  # El CSP está derivado del HTML construido, no copiado de una plantilla:
+  #   'unsafe-inline' en script y style es obligatorio hoy — el build emite 97
+  #     scripts en línea (Astro inlina los módulos chicos y los define:vars) y
+  #     el diseño usa atributos style= en todo el sitio.
+  #   fonts.googleapis.com sirve la hoja de Google Fonts; fonts.gstatic.com las
+  #     fuentes; images.unsplash.com las portadas del blog; data: el pixel
+  #     transparente que corta la descarga del carrusel en móvil.
+  #   form-action 'self' es seguro: el formulario hace preventDefault y abre
+  #     wa.me con window.open, así que nunca llega a enviarse.
+  # Lo que esto sí frena: cargar scripts, estilos, fuentes o imágenes desde
+  # cualquier host que no esté en la lista. Lo que no frena, por 'unsafe-inline':
+  # un script inyectado en línea. En un sitio estático sin entrada de usuario
+  # renderizada, ese riesgo es marginal.
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com; connect-src 'self'; upgrade-insecure-requests
+
+# Bundles de Astro: el nombre del archivo lleva el hash del contenido, así que
+# un cambio genera un nombre nuevo. Aquí immutable es seguro.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Medios de public/. El nombre NO lleva hash: si se reemplaza una imagen, el
+# navegador la sigue sirviendo hasta que expire. Por eso una semana y no un
+# año, con revalidación en segundo plano.
+# No se listan /blog/* ni /proyectos/* aunque contengan imágenes: esas rutas
+# también sirven páginas HTML y la regla les aplicaría el mismo caché largo.
+/hero/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=2592000
+/mockup/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=2592000
+/marcas/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=2592000
+/favicon.svg
+  Cache-Control: public, max-age=604800, stale-while-revalidate=2592000
+/og-default.jpg
+  Cache-Control: public, max-age=604800, stale-while-revalidate=2592000
