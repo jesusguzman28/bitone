@@ -731,6 +731,351 @@ export const landings: readonly Landing[] = [
       },
     ],
   },
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    param: 'talleres-mecanicos',
+    rubroSlug: 'talleres-mecanicos',
+    legacy: '/proyectos/talleres-mecanicos',
+    h1: 'Página web para talleres mecánicos en Perú',
+    metaTitle: 'Página web para talleres mecánicos en Perú',
+    metaDescription:
+      'Agenda de servicio en línea, cotización por tipo de vehículo, aprobación digital del presupuesto e historial por placa. Desde S/1,700 + IGV, entrega en 18 días.',
+    breadcrumb: 'Página web para talleres mecánicos',
+    eyebrow: 'Servicios',
+    intro:
+      'La cita reservada sin llamadas, el presupuesto aprobado por escrito y el cliente viendo en qué va su carro sin marcar cinco veces al taller.',
+    problema: {
+      title: 'El taller pierde horas en el teléfono, no en el motor',
+      parrafos: [
+        'La escena se repite todos los días: el cliente llama para preguntar si puede traer el carro mañana, llama otra vez para saber cuánto va a salir, y llama tres veces más para saber si ya está listo. Cada llamada saca a alguien de debajo de un vehículo. En un taller de tres mecánicos, esa interrupción constante cuesta más que cualquier repuesto: cuesta horas facturables que nunca se cobran a nadie.',
+        'Después está la cotización. Se arma de memoria, se dicta por teléfono y se aprueba de palabra. Cuando el cliente viene a recoger y el monto no coincide con lo que él recuerda, no hay nada por escrito que respalde al taller. La discusión se resuelve casi siempre a favor del cliente, porque el taller no puede probar qué autorizó y cuándo. Ese descuento improvisado sale del margen del trabajo.',
+        'Y está el ingreso del vehículo. Si nadie documenta cómo llegó el carro —el rayón del guardafango, el espejo suelto, el kilometraje—, cualquier reclamo posterior es palabra contra palabra. Un solo reclamo mal resuelto por un daño que ya venía cuesta más que digitalizar la recepción completa del taller.',
+      ],
+    },
+    secciones: {
+      title: 'Qué secciones necesita la web de un taller mecánico',
+      intro:
+        'Aquí no se compra por impulso: se busca a alguien confiable a quien dejarle un bien caro. La web tiene que construir esa confianza y quitarte el teléfono de encima.',
+      items: [
+        {
+          title: 'Servicios y especialidad',
+          desc: 'Mantenimiento preventivo, afinamiento, frenos, suspensión, planchado y pintura, diagnóstico electrónico. Con qué marcas trabajas y cuáles no. Filtrar es tan valioso como captar: te ahorra el trabajo que no puedes hacer.',
+        },
+        {
+          title: 'Reserva de cita',
+          desc: 'Día, hora y tipo de servicio, con la carga real del taller. Un cambio de aceite y un trabajo de suspensión no ocupan el mismo espacio ni el mismo elevador, así que la duración se configura por servicio.',
+        },
+        {
+          title: 'Precios referenciales por servicio',
+          desc: 'Desde cuánto sale un afinamiento o un cambio de pastillas, aclarando que el monto final depende del diagnóstico. Publicarlo evita la llamada de tanteo y te posiciona frente a quien no publica nada.',
+        },
+        {
+          title: 'El taller por dentro',
+          desc: 'Fotos del local, los elevadores, el equipo de diagnóstico y los mecánicos trabajando. Quien va a dejar su carro quiere ver dónde lo va a dejar, y esa foto vale más que cualquier frase sobre experiencia.',
+        },
+        {
+          title: 'Ubicación y horario',
+          desc: 'Dirección con referencia clara, horario por día y si hay servicio de grúa o recojo. Un carro varado no llega solo, y esa es la primera pregunta de una emergencia.',
+        },
+        {
+          title: 'Garantía del trabajo',
+          desc: 'Qué cubre, por cuánto tiempo y qué la anula. Es la sección que más pesa cuando el cliente compara dos talleres con precios parecidos, y casi nadie la publica.',
+        },
+      ],
+    },
+    funciones: {
+      title: 'Funcionalidades propias de un taller',
+      intro:
+        'Sobre eso van las funciones que convierten la web en la recepción digital del taller.',
+      items: [
+        {
+          title: 'Cotización por tipo de vehículo',
+          desc: 'El cliente indica marca, modelo y año, y recibe un estimado por servicio en vez de un "depende". El precio se ajusta después del diagnóstico, pero la conversación arranca con un número y no con una llamada.',
+        },
+        {
+          title: 'Ingreso documentado con fotos',
+          desc: 'Al recibir el vehículo se registran fotos del estado inicial, el kilometraje y los daños previos. Protege al taller de reclamos por golpes que ya venían y protege al cliente de que aparezcan nuevos.',
+        },
+        {
+          title: 'Aprobación digital del presupuesto',
+          desc: 'El diagnóstico llega al cliente con detalle de mano de obra y repuestos, y él aprueba desde el celular antes de que alguien toque una llave. Queda registrado quién autorizó qué y a qué hora.',
+        },
+        {
+          title: 'Estado del vehículo en línea',
+          desc: 'El cliente entra y ve en qué va: en diagnóstico, esperando repuesto, en trabajo, listo para retiro. Las cinco llamadas diarias se convierten en cero, sin que nadie tenga que contestar nada.',
+        },
+        {
+          title: 'Historial por placa',
+          desc: 'Cada servicio queda registrado contra la placa del vehículo, no contra el nombre del dueño. Sirve para el próximo mantenimiento, para un reclamo y para el valor de reventa del carro.',
+        },
+        {
+          title: 'Recordatorio de mantenimiento',
+          desc: 'A los kilómetros o los meses que definas, sale el aviso del próximo cambio de aceite o revisión. Es la forma de que el cliente vuelva sin que tengas que salir a buscarlo.',
+        },
+      ],
+    },
+    precio: {
+      title: 'Precio y plazo',
+      parrafos: [
+        'La página web para talleres mecánicos arranca en S/1,700 + IGV, con entrega en 18 días desde que apruebas el diseño. Incluye dominio .com y hosting del primer año, certificado de seguridad, correo corporativo, los servicios con precios referenciales, la reserva de cita y la sección de garantía.',
+        'El ingreso documentado con fotos, la aprobación digital de presupuesto, el panel de estado del vehículo y el historial por placa se suman como módulos. Conviene ordenarlos por lo que más te duele hoy: si el problema son las llamadas, el panel de estado; si son los reclamos, el ingreso con fotos.',
+        'Se paga 50% de adelanto y 50% contra entrega, con boleta o factura electrónica SUNAT. Incluye 2 rondas de cambios de diseño y 30 días de garantía sobre el desarrollo. El dominio y el código quedan a tu nombre.',
+      ],
+    },
+    faqs: [
+      {
+        q: '¿Puedo dar un precio si no he visto el carro?',
+        a: 'Puedes dar un rango, que es lo que el cliente necesita para decidir si te llama. El cotizador pide marca, modelo y año, y devuelve un estimado por servicio con la aclaración de que el monto final depende del diagnóstico. Es más honesto que un precio cerrado y mucho más útil que un "depende" que obliga a llamar.',
+      },
+      {
+        q: '¿Cómo me protege el ingreso con fotos?',
+        a: 'Al recibir el vehículo se registran fotos del estado inicial, el kilometraje y los daños que ya traía, y ese registro queda con fecha y hora. Cuando aparece un reclamo por un rayón, hay evidencia de si estaba antes o no. Es la función que más rápido se paga sola, porque un solo reclamo mal resuelto cuesta más que el módulo completo.',
+      },
+      {
+        q: '¿El cliente puede ver en qué va su carro sin llamar?',
+        a: 'Sí, con el panel de estado. Entra con la placa o con un enlace que le mandas al confirmar el ingreso, y ve el avance: en diagnóstico, esperando repuesto, en trabajo, listo para retiro. Si quieres, cada cambio de estado dispara un aviso por WhatsApp para que ni siquiera tenga que entrar.',
+      },
+      {
+        q: '¿La aprobación del presupuesto tiene validez?',
+        a: 'Queda registrada con fecha, hora y el detalle exacto que se aprobó, lo cual es muchísimo más de lo que respalda una autorización por teléfono. No sustituye a un contrato ni te vamos a decir que lo hace, pero en la práctica cierra la discusión de "yo no autoricé eso" antes de que empiece.',
+      },
+      {
+        q: '¿Sirve si soy un taller chico de dos mecánicos?',
+        a: 'Sí, y probablemente te sirve más que a uno grande: cuando son dos personas, cada llamada atendida es un trabajo detenido. Se puede arrancar solo con los servicios, la reserva de cita y el cotizador, que es lo que corta el teléfono, y sumar el ingreso con fotos y el historial cuando el volumen lo justifique.',
+      },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    param: 'farmacias',
+    rubroSlug: 'farmacias-boticas',
+    legacy: '/proyectos/farmacias-boticas',
+    h1: 'Página web para farmacias y boticas en Perú',
+    metaTitle: 'Página web para farmacias y boticas en Perú',
+    metaDescription:
+      'Buscador por principio activo, catálogo con presentación y laboratorio, delivery por zona y receta enviada por WhatsApp. Desde S/1,700 + IGV, entrega en 18 días.',
+    breadcrumb: 'Página web para farmacias',
+    eyebrow: 'Salud y bienestar',
+    intro:
+      'Que el vecino encuentre su genérico en tu botica antes que en la cadena, y que pueda pedirlo sin salir de casa a las once de la noche.',
+    problema: {
+      title: 'Contra qué compite realmente una botica de barrio',
+      parrafos: [
+        'La botica independiente casi siempre tiene mejor precio que la cadena, sobre todo en genéricos. El problema es que nadie lo sabe. La cadena tiene app, delivery en una hora y aparece primera cuando alguien busca un medicamento por su nombre. Tu ventaja real —el precio y que conoces a tu clientela— no llega a competir, porque la comparación termina antes de que el cliente sepa que existes.',
+        'Al mismo tiempo, la consulta más frecuente que recibe una botica es la peor de contestar: "¿tienes tal cosa?". Llega por teléfono, por WhatsApp, a veces con la foto de una caja. Alguien deja el mostrador, busca en el anaquel, vuelve y contesta. Si en ese rato entró otro cliente, se atendió mal a los dos. Y si el producto no estaba, la consulta no dejó nada.',
+        'Está también el paciente crónico, que es el cliente más valioso del rubro: compra lo mismo todos los meses y no se cambia de botica si lo atienden bien. Pero si nadie le recuerda cuando se le acaba el tratamiento, compra donde le quede a mano ese día. Sin un canal propio para recordarle, esa recurrencia se pierde por pura falta de contacto.',
+      ],
+    },
+    secciones: {
+      title: 'Qué secciones necesita la web de una botica',
+      intro:
+        'Quien busca un medicamento tiene apuro y una pregunta concreta: si lo tienes, cuánto cuesta y qué tan rápido llega. Todo lo demás sobra.',
+      items: [
+        {
+          title: 'Buscador de productos',
+          desc: 'Es la sección principal, no un adorno del encabezado. Tiene que encontrar por nombre comercial, por genérico y por principio activo, porque el paciente llega con cualquiera de los tres según quién se lo recetó.',
+        },
+        {
+          title: 'Ficha del producto',
+          desc: 'Presentación, concentración, laboratorio, precio y disponibilidad. Sin esos datos el cliente no puede confirmar que es lo que le recetaron, y ante la duda va a la cadena en vez de arriesgarse.',
+        },
+        {
+          title: 'Zona de reparto y tiempos',
+          desc: 'Qué distritos cubres, cuánto cuesta el envío y en cuánto llega. Frente a una cadena que promete una hora, tu tiempo real y honesto compite mejor que no decir nada.',
+        },
+        {
+          title: 'Envío de receta',
+          desc: 'Un canal claro para que el paciente mande la foto de su receta y tu químico farmacéutico confirme disponibilidad y precio antes de que salga de casa.',
+        },
+        {
+          title: 'Categorías de venta libre',
+          desc: 'Dermocosmética, cuidado del bebé, ortopedia, vitaminas, higiene. Es donde está el margen y donde el cliente navega sin apuro, a diferencia del medicamento, que se busca y se compra.',
+        },
+        {
+          title: 'Horario y atención',
+          desc: 'Horario por día, si atiendes de madrugada y cómo contactar al químico farmacéutico. En este rubro el horario extendido es una ventaja competitiva concreta y tiene que verse de inmediato.',
+        },
+      ],
+    },
+    funciones: {
+      title: 'Funcionalidades propias de una botica',
+      intro:
+        'Las funciones pensadas para cómo se vende de verdad en una botica peruana.',
+      items: [
+        {
+          title: 'Búsqueda por principio activo',
+          desc: 'El cliente escribe "paracetamol" o el nombre de marca que le recetaron y encuentra las dos cosas, con las presentaciones que tienes. Es la función que convierte tu ventaja de precio en genéricos en una venta concreta.',
+        },
+        {
+          title: 'Equivalencias de genérico',
+          desc: 'Junto al producto de marca aparece el genérico equivalente que tienes en stock, con su precio. El ahorro se ve en pantalla, que es la única forma de que el cliente se entere de que existe.',
+        },
+        {
+          title: 'Receta por WhatsApp',
+          desc: 'El paciente sube la foto de su receta desde la web y llega a tu WhatsApp junto con sus datos de entrega. Tu químico farmacéutico revisa, confirma qué hay y cotiza antes de que el pedido avance.',
+        },
+        {
+          title: 'Delivery por zona con tarifa',
+          desc: 'Cobertura por distrito, costo de envío y monto mínimo definidos por ti. El cliente sabe antes de armar el pedido si le llega y cuánto le cuesta.',
+        },
+        {
+          title: 'Recordatorio de tratamiento crónico',
+          desc: 'Para el paciente que compra lo mismo cada mes, un aviso cuando se le está por acabar. Es la función que asegura la recompra en el cliente más rentable que tiene una botica.',
+        },
+        {
+          title: 'Alerta de vencimiento por lote',
+          desc: 'Control interno de lotes próximos a vencer para liquidarlos a tiempo en vez de perderlos. Es plata que hoy se va al tacho por no tener el dato a la vista.',
+        },
+      ],
+    },
+    precio: {
+      title: 'Precio y plazo',
+      parrafos: [
+        'La página web para farmacias y boticas arranca en S/1,700 + IGV, con entrega en 18 días desde la aprobación del diseño. Incluye dominio .com y hosting del primer año, certificado de seguridad, correo corporativo, el buscador, la estructura del catálogo y el canal de envío de receta.',
+        'La carga del catálogo se cotiza aparte según el archivo con que llegues: no es lo mismo una exportación limpia de tu sistema que una lista suelta. El delivery por zona, los recordatorios de tratamiento y el control de lotes se suman como módulos.',
+        'Una aclaración necesaria: la web es tu canal de catálogo, consulta y coordinación de entrega. Qué se puede vender por internet y bajo qué condiciones lo define la normativa sanitaria y es responsabilidad de tu dirección técnica; nosotros construimos la herramienta para que operes dentro de las reglas que tú manejas, no te asesoramos sobre ellas.',
+        'Se paga 50% de adelanto y 50% contra entrega, con boleta o factura electrónica SUNAT. 2 rondas de cambios de diseño, 30 días de garantía, y el dominio y el código a tu nombre.',
+      ],
+    },
+    faqs: [
+      {
+        q: '¿El buscador encuentra por nombre genérico y por marca?',
+        a: 'Sí, y esa es la función más importante de toda la web. El paciente llega con lo que le dijeron: a veces el nombre de marca, a veces el principio activo, a veces mal escrito. El buscador resuelve las tres entradas y muestra las presentaciones que tienes, con su precio. Sin eso, tu ventaja en genéricos no llega a la pantalla del cliente.',
+      },
+      {
+        q: '¿Puedo recibir recetas por la web?',
+        a: 'Sí, mediante un formulario donde el paciente sube la foto de su receta y sus datos de entrega, y todo llega a tu WhatsApp. Es un canal de consulta y coordinación: tu químico farmacéutico revisa y decide qué corresponde según la receta y la normativa. La herramienta ordena el flujo, la decisión sanitaria sigue siendo tuya.',
+      },
+      {
+        q: '¿Tengo que cargar todo mi inventario?',
+        a: 'No de entrada, y en general conviene no hacerlo. Muchas boticas arrancan publicando lo que más rota y lo de venta libre, que es donde está el margen, y dejan el resto como consulta por WhatsApp. La carga masiva se cotiza aparte según el estado de tu archivo; si tu sistema exporta una lista limpia, es rápido.',
+      },
+      {
+        q: '¿Cómo compito con el delivery en una hora de las cadenas?',
+        a: 'No compitiendo en velocidad, que es donde ellas ganan por estructura. Compites con precio visible, con cercanía real a tu barrio y con atención de una persona que conoce al cliente. La web hace visibles esas tres cosas; el tiempo de entrega lo publicas tal como es, porque prometer una hora y no cumplirla cuesta más que decir dos.',
+      },
+      {
+        q: '¿Sirve para el paciente que compra su medicación todos los meses?',
+        a: 'Es exactamente para él. Con el módulo de recordatorio de tratamiento, el sistema avisa cuando se le está por acabar y le deja el pedido a un clic. Ese paciente es el más rentable del rubro y hoy se pierde por algo tan simple como que nadie le escribió a tiempo.',
+      },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    param: 'panaderias',
+    rubroSlug: 'panaderias-pastelerias',
+    legacy: '/proyectos/panaderias-pastelerias',
+    h1: 'Página web para panaderías y pastelerías en Perú',
+    metaTitle: 'Página web para panaderías y pastelerías en Perú',
+    metaDescription:
+      'Pedido de torta por encargo con todos los datos, catálogo de temporada, seña en línea y puntos de venta. Desde S/1,700 + IGV, entrega en 15 días.',
+    breadcrumb: 'Página web para panaderías',
+    eyebrow: 'Gastronomía',
+    intro:
+      'El pedido de torta con fecha, sabor, tamaño y dedicatoria capturado de una sola vez, y la seña cobrada antes de encender el horno.',
+    problema: {
+      title: 'Un pedido de torta mal tomado cuesta la torta entera',
+      parrafos: [
+        'Un encargo de pastelería se define por seis o siete datos: tamaño, sabor del bizcocho, relleno, cobertura, dedicatoria, tema y fecha exacta de recojo. Cuando eso se toma por WhatsApp entre clientes que entran al mostrador, siempre falta uno. Y el dato que falta no se descubre al tomar el pedido: se descubre el día de la entrega, cuando ya no hay margen para corregir. Una torta rehecha es materia prima, horas de trabajo y un cliente molesto, todo perdido de golpe.',
+        'El segundo problema es la cancelación. Sin seña, un encargo confirmado por WhatsApp no compromete a nadie. Se compran los insumos, se reserva el horno y se bloquea la agenda de un sábado; si el cliente no aparece, la panadería asume todo. En temporada alta —julio, diciembre, el día de la madre— cada espacio de horno que se pierde así es uno que se le negó a alguien que sí habría pagado.',
+        'Y está la temporada, que es donde este rubro se juega el año. Panetón, rosca, torta del día de la madre. Son ventanas de dos o tres semanas en las que hay que anunciar, tomar pedidos con anticipación y cerrar cuando la capacidad del horno se acaba. Hacer eso con historias de Instagram significa repetir el mismo mensaje cincuenta veces y aun así perder pedidos por no contestar a tiempo.',
+      ],
+    },
+    secciones: {
+      title: 'Qué secciones necesita la web de una panadería',
+      intro:
+        'Esta web tiene dos trabajos distintos: vender el pan del día, que es volumen y cercanía, y tomar encargos de pastelería, que es ticket alto y detalle. Las secciones se ordenan según eso.',
+      items: [
+        {
+          title: 'Formulario de torta por encargo',
+          desc: 'Es la sección que justifica la web entera. Tamaño, número de porciones, bizcocho, relleno, cobertura, dedicatoria, tema, fecha y hora de recojo. Todos los campos obligatorios, para que ningún pedido entre incompleto.',
+        },
+        {
+          title: 'Galería de diseños',
+          desc: 'Modelos de torta con su precio según tamaño, y la opción de que el cliente suba su propia referencia. Es lo que hoy vive en Instagram sin orden ni precio, y donde el cliente pasa más tiempo antes de decidir.',
+        },
+        {
+          title: 'Catálogo de temporada',
+          desc: 'Panetón, rosca de reyes, tortas del día de la madre, bocaditos para fiestas. Con fecha de cierre de pedidos, porque en este rubro la venta se concentra en pocas semanas y la capacidad del horno tiene tope.',
+        },
+        {
+          title: 'Panadería del día',
+          desc: 'Pan francés, ciabatta, integral, bollería, empanadas. Con horarios de horneada, que es el dato que decide a qué hora va el cliente y el que nadie publica.',
+        },
+        {
+          title: 'Puntos de venta',
+          desc: 'Dónde te compran además del local: bodegas, cafeterías, ferias. Cada punto con dirección y horario. Sirve para venta y sirve para que otros negocios te encuentren como proveedor.',
+        },
+        {
+          title: 'Anticipación y condiciones',
+          desc: 'Con cuántos días hay que pedir cada tipo de producto, cuánto es la seña y qué pasa si se cancela. Escrito una vez, deja de explicarse cincuenta.',
+        },
+      ],
+    },
+    funciones: {
+      title: 'Funcionalidades propias de una pastelería',
+      intro:
+        'Las funciones que resuelven lo específico de trabajar por encargo y por temporada.',
+      items: [
+        {
+          title: 'Encargo con todos los datos obligatorios',
+          desc: 'El formulario no deja enviar si falta la fecha, el sabor o la dedicatoria. El pedido llega completo a la primera y desaparece la ronda de mensajes para completar lo que faltó.',
+        },
+        {
+          title: 'Calendario de capacidad',
+          desc: 'Defines cuántos encargos aceptas por día. Cuando un sábado se llena, deja de ofrecerse solo. Nadie promete una torta que el horno no va a poder hacer.',
+        },
+        {
+          title: 'Seña en línea al confirmar',
+          desc: 'Un porcentaje del total cobrado por billetera digital o tarjeta al momento de encargar. El pedido pasa a estar comprometido de verdad y las cancelaciones de última hora dejan de salir de tu bolsillo.',
+        },
+        {
+          title: 'Campaña de temporada con cierre',
+          desc: 'El panetón o la torta del día de la madre con su propia página, su fecha límite de pedido y su cupo. Cuando se agota el cupo o pasa la fecha, se cierra sola.',
+        },
+        {
+          title: 'Aviso de recojo',
+          desc: 'Un mensaje automático el día anterior recordando fecha, hora y lugar de recojo, y otro cuando el pedido está listo. Las tortas que se quedan sin recoger se vuelven la excepción.',
+        },
+        {
+          title: 'Suscripción de canasta o desayuno',
+          desc: 'Pedido recurrente semanal de pan, con cobro automático. Convierte al cliente de barrio en ingreso predecible en vez de en una visita que depende de si pasó por la puerta.',
+        },
+      ],
+    },
+    precio: {
+      title: 'Precio y plazo',
+      parrafos: [
+        'La página web para panaderías y pastelerías arranca en S/1,700 + IGV, con entrega en 15 días desde que apruebas el diseño. Incluye dominio .com y hosting del primer año, certificado de seguridad, correo corporativo, la galería de diseños, el catálogo del día y el formulario de encargo con todos sus campos.',
+        'La seña en línea, el calendario de capacidad, las campañas de temporada y la suscripción semanal se suman como módulos. De todos ellos, la seña es el que más rápido se nota: cada encargo que hoy se cae sin costo pasa a estar comprometido con dinero.',
+        'Si tu venta fuerte es diciembre o el día de la madre, cierra el desarrollo con al menos un mes de anticipación a la campaña. Entrar a temporada estrenando web es la peor forma de estrenarla. Se paga 50% de adelanto y 50% contra entrega, con boleta o factura SUNAT, 2 rondas de cambios y 30 días de garantía.',
+      ],
+    },
+    faqs: [
+      {
+        q: '¿El formulario me asegura que no falten datos del pedido?',
+        a: 'Sí, porque los campos que definas como obligatorios bloquean el envío. No entra un encargo sin fecha de recojo, sin tamaño ni sin sabor. Ese es todo el punto: hoy el dato que falta no aparece al tomar el pedido, aparece el día de la entrega, y ahí ya no hay cómo arreglarlo.',
+      },
+      {
+        q: '¿Puedo cobrar una seña por la web?',
+        a: 'Sí, con el módulo de pago. Defines qué porcentaje del total se cobra al confirmar —lo habitual es la mitad— y se cobra por billetera digital o tarjeta en el momento. El pedido queda comprometido y las cancelaciones de última hora, que hoy las pagas tú en insumos y horno reservado, se reducen solas.',
+      },
+      {
+        q: '¿Cómo manejo la temporada de panetón sin quedarme corto?',
+        a: 'Con el calendario de capacidad y la campaña con cierre. Defines cuántas unidades o encargos aceptas por día, la campaña se publica con su fecha límite, y cuando el cupo se llena deja de ofrecerse automáticamente. No prometes lo que el horno no puede hacer y no pierdes pedidos por contestar tarde.',
+      },
+      {
+        q: '¿Sirve si vendo sobre todo pan del día y pocas tortas?',
+        a: 'Sí, pero la web se arma al revés: el peso se lo llevan el catálogo diario con horarios de horneada, los puntos de venta y la suscripción semanal, y el encargo de torta queda como sección secundaria. Es la misma base con otras prioridades, y eso se define contigo antes de empezar a diseñar.',
+      },
+      {
+        q: '¿Puedo vender a bodegas y cafeterías desde la web?',
+        a: 'Sí. Se agrega una sección de venta al por mayor con el pedido mínimo, los plazos de entrega y un formulario aparte para negocios. Muchas panaderías descubren ahí un canal que ya tenían a medias y que nunca habían ordenado ni promocionado.',
+      },
+    ],
+  },
 ];
 
 export const getLanding = (param: string) => landings.find((l) => l.param === param);
