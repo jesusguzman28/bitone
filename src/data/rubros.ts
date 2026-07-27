@@ -30,7 +30,7 @@ export interface Rubro {
   solution: string;
   /** Precio de entrada del rubro, en soles y sin IGV.
    *  Nunca por debajo de PRECIO_PISO: si un solo rubro cotiza menos, el
-   *  "desde S/1,700" de la portada, /servicios y llms.txt deja de ser cierto. */
+   *  "desde S/1,500" de la portada, /servicios y llms.txt deja de ser cierto. */
   startingPrice: number;
   deliveryTime: string;
   moduleGroups: readonly RubroModuleGroup[];
@@ -38,7 +38,7 @@ export interface Rubro {
 
 export const rubroCats = ["Todos los rubros","Gastronomía","Retail y comercio","Salud y bienestar","Belleza","Servicios","Educación"] as const;
 
-// Formato de marca: S/1,700 — sin espacio tras la barra, coma de millares.
+// Formato de marca: S/1,500 — sin espacio tras la barra, coma de millares.
 export const soles = (n: number) => `S/${n.toLocaleString('en-US')}`;
 
 export const totalModulos = (r: Rubro) =>
@@ -555,7 +555,7 @@ export const rubros: readonly Rubro[] = [
 export const getRubro = (slug: string) => rubros.find((r) => r.slug === slug);
 
 // Guardia de build. Si alguien vuelve a bajar un rubro por debajo del piso, el
-// build falla en vez de publicar un "desde S/1,700" que ya no es verdad.
+// build falla en vez de publicar un "desde S/1,500" que ya no es verdad.
 const bajoPiso = rubros.filter((r) => r.startingPrice < PRECIO_PISO);
 if (bajoPiso.length > 0) {
   throw new Error(

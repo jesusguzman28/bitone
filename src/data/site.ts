@@ -23,7 +23,7 @@ export const seo = {
   defaultTitle: 'Páginas web, tiendas online y ERPs para MYPEs | Bitwise Perú',
   titleTemplate: '%s | Bitwise',
   description:
-    'Páginas web desde S/1,700 con dominio y hosting incluidos, tiendas online desde S/3,000 y sistemas a medida para negocios peruanos. Factura SUNAT y WhatsApp directo.',
+    'Páginas web desde S/1,500 con dominio y hosting incluidos, tiendas online desde S/3,000 y sistemas a medida para negocios peruanos. Factura SUNAT y WhatsApp directo.',
   // Temas reales sobre los que trabaja la empresa. Alimentan `knowsAbout` del
   // JSON-LD: son materias de servicio, NO variantes de búsqueda. Las frases
   // tipo "página web barata" son consultas de usuario y no describen a la
@@ -39,10 +39,10 @@ export const seo = {
   ogImage: '/og-default.jpg',
 } as const;
 
-// Piso de precio anunciado en toda la comunicación: "desde S/1,700 + IGV".
+// Piso de precio anunciado en toda la comunicación: "desde S/1,500 + IGV".
 // Solo es cierto si ningún servicio ni rubro cotiza por debajo. Cualquier
 // precio del sitio se valida contra esta constante.
-export const PRECIO_PISO = 1700;
+export const PRECIO_PISO = 1500;
 
 export const waLink = (msg: string = site.whatsappMsg) =>
   `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(msg)}`;
@@ -63,14 +63,19 @@ export const hero = {
   // La frase que se escribe sola quedó como línea secundaria (los rastreadores
   // de Google y de las IAs no ejecutan JavaScript).
   h1: 'Páginas web para MYPEs en Perú',
-  h1Destacado: 'desde S/1,700',
+  h1Destacado: 'desde S/1,500',
   titleA: 'Tu negocio online,',
+  // Adorno, no estructura: esta línea la pinta JavaScript y ningún rastreador
+  // la lee. Por eso puede cambiar sin tocar nada de SEO — la keyword vive en
+  // el H1 estático de arriba.
+  // Cada frase afirma algo que el sitio ya sostiene por escrito; nada de
+  // promesas genéricas que no se puedan respaldar en la cotización.
   typed: [
-    'funcionando esta semana.',
-    'trabajando por ti las 24 horas.',
-    'vendiendo mientras duermes.',
-    'listo para tu próximo cliente.',
-    'creciendo cada día.',
+    'funcionando en semanas, no en meses.',
+    'con dominio y hosting incluidos.',
+    'cobrando por Yape, Plin y tarjeta.',
+    'con factura electrónica SUNAT.',
+    'con el código y el dominio a tu nombre.',
   ],
   subtitle: 'Páginas web, tiendas online y sistemas para que tu pyme venda más.',
   pills: [
@@ -103,7 +108,7 @@ export const hero = {
 } as const;
 
 export const heroStats = [
-  { k: 'Páginas web', v: 'S/1,700', note: 'Dominio y hosting 1 año incluidos' },
+  { k: 'Páginas web', v: 'S/1,500', note: 'Dominio y hosting 1 año incluidos' },
   { k: 'Tiendas online', v: 'S/3,000', note: 'Dominio y hosting incluidos' },
 ] as const;
 
@@ -121,7 +126,7 @@ export const serviciosHome = [
     tag: 'Página web profesional',
     time: '2 a 4 semanas',
     desc: 'Rápida, optimizada para Google y administrable por ti. Con dominio y hosting por 1 año incluidos.',
-    price: 'S/1,700',
+    price: 'S/1,500',
     priceLabel: 'Desde',
     priceNote: ' + IGV',
     href: '/servicios#web',
@@ -192,9 +197,9 @@ export const serviciosTabs = [
     title: 'Tu página web profesional',
     incluye: 'Dominio y hosting por 1 año incluidos',
     time: '2 a 4 semanas',
-    price: 1700,
+    price: 1500,
     ivaIncluido: false,
-    priceLabel: 'S/1,700',
+    priceLabel: 'S/1,500',
     priceNote: '+ IGV',
     schemaId: 'pagina-web',
     schemaName: 'Diseño y desarrollo de páginas web para MYPEs',
@@ -457,7 +462,7 @@ export const contactoExpectativas = [
 // ---- FAQ (home) ----
 export const faqs = [
   { q: '¿Puedo pagar en cuotas o necesito todo al contado?', a: 'Trabajamos con 50% de adelanto y 50% contra entrega. En proyectos grandes puedes dividir en hasta 3 cuotas sin interés. Aceptamos Yape, Plin, transferencia y tarjeta, con boleta o factura electrónica SUNAT en cada pago.' },
-  { q: '¿Qué incluye el precio de S/1,700?', a: 'Diseño, programación, dominio .com por 1 año, hosting por 1 año, SSL, correo corporativo, formulario de contacto, WhatsApp flotante, SEO básico y analítica. El precio es sin IGV; emitimos boleta o factura.' },
+  { q: '¿Qué incluye el precio de S/1,500?', a: 'Diseño, programación, dominio .com por 1 año, hosting por 1 año, SSL, correo corporativo, formulario de contacto, WhatsApp flotante, SEO básico y analítica. El precio es sin IGV; emitimos boleta o factura.' },
   { q: '¿El sitio web, el dominio y el código quedan a mi nombre?', a: 'Sí, 100%. El dominio se registra con tus datos y el código fuente es tuyo desde el primer día. Te entregamos accesos completos. Si mañana quieres migrar a otra agencia, el traspaso es directo.' },
   { q: '¿Qué pasa si no me gusta el diseño?', a: 'Antes de programar te mostramos el diseño y recién con tu aprobación seguimos. Incluimos 2 rondas de cambios sin costo y 30 días de garantía post-entrega.' },
   { q: '¿Yo puedo actualizar textos, fotos y precios sin depender de ustedes?', a: 'Sí. Entregamos la web con un panel de autogestión simple y una capacitación grabada de 30 minutos para que tú o tu equipo cambien contenido sin pagar extra.' },
@@ -534,7 +539,7 @@ export const blog = [
     readTime: '6 min',
     keywords: ['cobrar con Yape en mi web', 'pasarela de pago Perú', 'aceptar pagos online negocio', 'cobrar por internet Perú'],
     body: [
-      'Hoy en Perú, si tu negocio no acepta pagos digitales, estás perdiendo ventas. Las billeteras móviles como Yape y Plin ya son parte del día a día, y cada vez más clientes esperan poder pagar sin efectivo, incluso online. La buena noticia: montar el cobro digital es más fácil y barato de lo que crees.',
+      'Hoy en Perú, si tu negocio no acepta pagos digitales, estás perdiendo ventas. Las billeteras móviles como Yape y Plin ya son parte del día a día, y cada vez más clientes esperan poder pagar sin efectivo, incluso online. La buena noticia: montar el cobro digital es más fácil y económico de lo que crees.',
       'Yape y Plin son ideales para empezar. Son gratuitas, todo el mundo las tiene y el dinero te llega al instante. Para un negocio chico, poner tu QR en el local y en tu web ya te resuelve gran parte de los cobros. La limitación: son pagos manuales, tú confirmas cada uno, y tienen topes de monto.',
       'Cuando tu volumen crece o vendes montos altos, conviene una pasarela de pago (como las que procesan tarjetas Visa y Mastercard). Estas cobran automáticamente en tu web, aceptan tarjetas nacionales e internacionales y te dan un panel con todas tus transacciones. Cobran una comisión por venta, pero a cambio profesionalizas el cobro y no dependes de confirmar a mano.',
       '¿Cuál elegir? Si recién empiezas o vendes montos bajos, arranca con Yape y Plin integrados a tu catálogo web. Si ya tienes tienda online, vendes a otras ciudades o manejas tickets altos, súmale una pasarela de tarjeta. Lo ideal es ofrecer varias opciones: mientras más formas de pago, menos ventas se caen.',
@@ -556,9 +561,9 @@ export const blog = [
     keywords: ['cuánto cuesta una página web en Perú', 'precio página web', 'página web barata Perú'],
     body: [
       'Una de las primeras preguntas que nos llega por WhatsApp es siempre la misma: ¿cuánto cuesta una página web? La respuesta honesta es "depende", pero eso no te sirve de nada. Así que aquí van rangos reales, en soles, sin humo.',
-      'Una landing sencilla para presentar tu negocio y recibir contactos por WhatsApp arranca alrededor de S/800 a S/1,500. Una web profesional con varias secciones, panel administrable y SEO básico está desde S/1,700. Y una tienda online con pasarela de pago, catálogo y facturación electrónica va desde S/3,000 según los módulos.',
-      'Lo importante no es solo el precio, sino qué incluye: dominio, hosting, correo corporativo, SSL, capacitación y garantía. Si una cotización es sospechosamente barata, casi siempre falta algo de eso. En Bitwise te lo detallamos todo por escrito antes de empezar.',
-      '¿Por qué hay tanta diferencia de precios? Porque no es lo mismo una plantilla genérica que un desarrollo pensado para tu rubro. Una web hecha con arquitectura probada carga rápido, se ve bien en el celular y está lista para posicionar en Google. Una plantilla mal armada puede salir "barata" hoy y costarte ventas mañana por lenta o poco confiable.',
+      'Una página web sencilla para presentar tu negocio y recibir contactos por WhatsApp arranca en S/1,500, con dominio y hosting del primer año incluidos. Desde ahí sube según cuántas secciones, funciones y contenido necesites. Y una tienda online con pasarela de pago, catálogo y facturación electrónica va desde S/3,000 según los módulos.',
+      'Lo importante no es solo el precio, sino qué incluye: dominio, hosting, correo corporativo, SSL, capacitación y garantía. Si una cotización es sospechosamente baja, casi siempre falta algo de eso. En Bitwise te lo detallamos todo por escrito antes de empezar.',
+      '¿Por qué hay tanta diferencia de precios? Porque no es lo mismo una plantilla genérica que un desarrollo pensado para tu rubro. Una web hecha con arquitectura probada carga rápido, se ve bien en el celular y está lista para posicionar en Google. Una plantilla mal armada puede salir económica hoy y costarte ventas mañana por lenta o poco confiable.',
       'También pesa el modelo de pago. Nosotros trabajamos con 50% de adelanto y 50% contra entrega, y en proyectos grandes puedes dividir en hasta 3 cuotas sin interés. Así una MYPE puede acceder a una web profesional sin descapitalizarse ni pedir un préstamo.',
       'Nuestro consejo: no elijas solo por el número más bajo. Pide que te detallen por escrito qué incluye, quién queda como dueño del dominio y el código, y qué garantía tienes después de la entrega. Con esa información comparas peras con peras y evitas sorpresas.',
     ],
