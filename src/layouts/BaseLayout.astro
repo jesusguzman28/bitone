@@ -131,6 +131,7 @@ const jsonLd = { '@context': 'https://schema.org', '@graph': graph };
     {/* Sin <meta name="keywords">: Google lo ignora desde 2009 y publicaba
         nuestra estrategia de keywords a cualquiera que abriera el código. */}
     <meta name="author" content={site.legalName} />
+    <meta name="google-site-verification" content={seo.googleSiteVerification} />
     {noindex ? <meta name="robots" content="noindex, nofollow" /> : <meta name="robots" content="index, follow" />}
     <meta name="theme-color" content="#0f172a" />
 

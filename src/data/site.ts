@@ -37,6 +37,10 @@ export const seo = {
     'Chatbots con inteligencia artificial',
   ],
   ogImage: '/og-default.jpg',
+  // Token de verificación de propiedad en Google Search Console. Vive aquí y
+  // no incrustado en el layout para que rotarlo sea cambiar una línea en el
+  // archivo donde ya está el resto de la configuración del sitio.
+  googleSiteVerification: 'pT4-z8d9zSfJdwsOV5p3xuh2UtFTyJATXcMhuTNKEZI',
 } as const;
 
 // Piso de precio anunciado en toda la comunicación: "desde S/1,500 + IGV".
