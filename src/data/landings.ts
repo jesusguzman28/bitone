@@ -229,7 +229,7 @@ export const landings: readonly Landing[] = [
         },
         {
           title: 'Carga masiva del catálogo',
-          desc: 'No cargas tres mil productos a mano: importamos desde tu Excel o desde lo que exporte tu sistema de caja, y a partir de ahí actualizas por lote y no producto por producto.',
+          desc: 'No cargas tres mil productos a mano: se importan desde tu Excel o desde lo que exporte tu sistema de caja, y a partir de ahí actualizas por lote. Revisamos tu archivo y cotizamos la migración antes de empezar.',
         },
         {
           title: 'Ficha técnica descargable',
@@ -245,14 +245,14 @@ export const landings: readonly Landing[] = [
       title: 'Precio y plazo',
       parrafos: [
         'La plataforma web para ferreterías arranca en S/2,499 + IGV y toma alrededor de 25 días desde la aprobación del diseño. Es el más alto de los rubros que trabajamos, y la razón es concreta: el catálogo masivo, la carga inicial de productos y la doble lista de precios son trabajo real, no una plantilla con otro logo.',
-        'El precio incluye dominio .com y hosting del primer año, certificado de seguridad, correo corporativo, la estructura del catálogo y la carga inicial a partir de tu archivo. El cotizador, las cuentas de contratista, el stock por sucursal y la integración con SUNAT se definen como módulos según cómo opere tu ferretería.',
+        'El precio incluye dominio .com y hosting del primer año, certificado de seguridad, correo corporativo y la estructura del catálogo. La migración de tu catálogo se cotiza aparte, según el estado del archivo con que llegues. El cotizador, las cuentas de contratista, el stock por sucursal y la integración con SUNAT se definen como módulos según cómo opere tu ferretería.',
         'Se paga 50% al empezar y 50% contra entrega, con factura electrónica, y en proyectos de este tamaño puedes dividirlo en hasta 3 cuotas sin interés. Garantía de 30 días post-entrega, y el dominio y el código a tu nombre.',
       ],
     },
     faqs: [
       {
         q: '¿Tengo que cargar mis tres mil productos a mano?',
-        a: 'No. La carga inicial la hacemos nosotros a partir del Excel, el CSV o el reporte que exporte tu sistema de caja. Lo que necesitamos de tu lado es que ese archivo traiga código, descripción, unidad y precio; si además tiene marca y medida, mejor todavía. Después tú actualizas por lote desde el panel, sin volver a tocar producto por producto.',
+        a: 'No producto por producto. La carga inicial la cotizamos aparte según el estado de tu archivo: si tienes un Excel o una exportación de tu sistema con código, descripción, unidad y precio, la migración es directa y rápida; si el catálogo está incompleto o en varios archivos sueltos, primero lo revisamos y te decimos qué implica. Una vez cargado, tú actualizas por lote desde el panel.',
       },
       {
         q: '¿Puedo mostrar el precio mayorista solo a mis contratistas?',
@@ -260,7 +260,7 @@ export const landings: readonly Landing[] = [
       },
       {
         q: '¿Se puede ver el stock de cada sucursal por separado?',
-        a: 'Sí, cada producto puede mostrar disponibilidad por local. Qué tan exacto sea depende de si tu sistema de caja permite conectarse: si lo permite, se sincroniza automáticamente; si no, se maneja como stock referencial que tu equipo actualiza por lote. Te decimos cuál de los dos casos aplica al tuyo antes de cotizar, no después de firmar.',
+        a: 'Sí, cada producto puede mostrar disponibilidad por local. La sincronización con tu sistema de caja se evalúa caso por caso: si tu sistema expone una integración, se conecta; si no —que es lo más común en el mercado peruano—, el stock se maneja como referencial y tu equipo lo actualiza por lote. Revisamos tu sistema y te decimos cuál aplica antes de cotizar, no después de firmar.',
       },
       {
         q: '¿Cómo me llega la cotización que arma el cliente?',

@@ -485,7 +485,7 @@ export const catLabel = (slug: string) =>
 export const blog = [
   {
     slug: 'inteligencia-artificial-para-negocios-pequenos-peru',
-    rubros: ['pollerias-restaurantes', 'bodegas-minimarkets', 'barberias-salones-belleza'],
+    rubros: ['clinicas-consultorios', 'academias-preuniversitarios', 'barberias-salones-belleza'],
     title: '5 formas de usar inteligencia artificial en tu negocio pequeño (sin ser experto)',
     excerpt: 'La IA ya no es solo para grandes empresas. Te mostramos cómo una MYPE peruana puede ahorrar horas y vender más usando herramientas de IA hoy mismo.',
     category: 'pymes-peru',
@@ -508,7 +508,7 @@ export const blog = [
   },
   {
     slug: 'chatbot-whatsapp-con-ia-atencion-24-7',
-    rubros: ['pollerias-restaurantes', 'bodegas-minimarkets', 'farmacias-boticas'],
+    rubros: ['pollerias-restaurantes', 'barberias-salones-belleza', 'farmacias-boticas'],
     title: 'Chatbot con IA en WhatsApp: atiende clientes 24/7 sin contratar a nadie',
     excerpt: 'Un asistente automático que responde, toma pedidos y cierra ventas en WhatsApp a cualquier hora. Te explicamos cómo funciona y cuánto puede ayudar a tu MYPE.',
     category: 'seo-marketing',
@@ -530,7 +530,7 @@ export const blog = [
   },
   {
     slug: 'como-cobrar-online-yape-plin-pasarela-de-pago',
-    rubros: ['bodegas-minimarkets', 'pollerias-restaurantes', 'ferreterias'],
+    rubros: ['gimnasios-crossfit', 'ferreterias', 'pollerias-restaurantes'],
     title: 'Cómo cobrar online en tu negocio: Yape, Plin y pasarelas de pago explicadas',
     excerpt: 'Deja de perder ventas por no aceptar pagos digitales. Comparamos Yape, Plin y las pasarelas de tarjeta para que elijas bien según tu tipo de negocio.',
     category: 'ecommerce',
@@ -552,7 +552,7 @@ export const blog = [
   },
   {
     slug: 'cuanto-cuesta-una-pagina-web-en-peru-2026',
-    rubros: ['pollerias-restaurantes', 'ferreterias', 'veterinarias-petshop'],
+    rubros: ['clinicas-consultorios', 'ferreterias', 'veterinarias-petshop'],
     title: '¿Cuánto cuesta una página web en Perú en 2026?',
     excerpt: 'Precios reales en soles según el tipo de web, qué incluye cada rango y cómo elegir sin que te vean la cara. Guía honesta para MYPEs.',
     category: 'pymes-peru',
@@ -574,7 +574,7 @@ export const blog = [
   },
   {
     slug: 'por-que-tu-negocio-necesita-pagina-web',
-    rubros: ['bodegas-minimarkets', 'barberias-salones-belleza', 'veterinarias-petshop'],
+    rubros: ['clinicas-consultorios', 'gimnasios-crossfit', 'veterinarias-petshop'],
     title: 'Por qué tu negocio pequeño necesita una página web (aunque uses redes)',
     excerpt: 'Instagram y WhatsApp no son suficientes. Te explicamos por qué una web propia hace que tu MYPE venda más y se vea más profesional.',
     category: 'desarrollo-web',
@@ -616,7 +616,7 @@ export const blog = [
   },
   {
     slug: 'tienda-online-vs-vender-por-whatsapp',
-    rubros: ['bodegas-minimarkets', 'ferreterias', 'panaderias-pastelerias'],
+    rubros: ['ferreterias', 'panaderias-pastelerias', 'farmacias-boticas'],
     title: 'Tienda online vs. vender por WhatsApp: ¿qué le conviene a tu MYPE?',
     excerpt: 'Comparamos los dos caminos para vender por internet en Perú, con sus costos, ventajas y cuándo conviene cada uno.',
     category: 'ecommerce',

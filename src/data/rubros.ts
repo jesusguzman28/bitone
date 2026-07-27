@@ -576,17 +576,23 @@ export const anchorRubro: Record<string, string> = {
 // Rubros afines para el enlace cruzado. Cruzan categoría a propósito: quien
 // busca web para una pollería es el mismo perfil de dueño que la busca para
 // una panadería o una bodega, aunque el filtro del sitio los separe.
+//
+// El mapa está ponderado por capacidad de pago, no solo por parecido. La
+// autoridad interna es finita: la que entra a un rubro sale de otro. Clínicas,
+// ferreterías y gimnasios reciben más enlaces que bodegas porque una bodega de
+// barrio difícilmente contrata una web de S/1,700, y no tiene sentido que la
+// página peor monetizada sea la más enlazada del sitio.
 export const afinesRubro: Record<string, readonly string[]> = {
   'pollerias-restaurantes': ['panaderias-pastelerias', 'bodegas-minimarkets'],
   'panaderias-pastelerias': ['pollerias-restaurantes', 'bodegas-minimarkets'],
-  'bodegas-minimarkets': ['pollerias-restaurantes', 'panaderias-pastelerias', 'farmacias-boticas'],
-  'farmacias-boticas': ['bodegas-minimarkets', 'clinicas-consultorios', 'veterinarias-petshop'],
+  'bodegas-minimarkets': ['pollerias-restaurantes', 'panaderias-pastelerias', 'ferreterias'],
+  'farmacias-boticas': ['clinicas-consultorios', 'veterinarias-petshop'],
   'ferreterias': ['talleres-mecanicos', 'bodegas-minimarkets'],
   'talleres-mecanicos': ['ferreterias', 'barberias-salones-belleza'],
   'barberias-salones-belleza': ['gimnasios-crossfit', 'clinicas-consultorios'],
   'veterinarias-petshop': ['clinicas-consultorios', 'farmacias-boticas'],
-  'gimnasios-crossfit': ['barberias-salones-belleza', 'academias-preuniversitarios'],
-  'clinicas-consultorios': ['veterinarias-petshop', 'opticas', 'farmacias-boticas'],
+  'gimnasios-crossfit': ['clinicas-consultorios', 'academias-preuniversitarios'],
+  'clinicas-consultorios': ['veterinarias-petshop', 'gimnasios-crossfit', 'opticas'],
   'opticas': ['clinicas-consultorios', 'barberias-salones-belleza'],
   'academias-preuniversitarios': ['gimnasios-crossfit', 'clinicas-consultorios'],
 };
