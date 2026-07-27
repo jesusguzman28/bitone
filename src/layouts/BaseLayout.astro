@@ -14,9 +14,6 @@ interface PreloadImage {
 interface Props {
   title?: string;
   description?: string;
-  /** Intención de búsqueda de la página. Ya no se emite como meta-keywords;
-   *  se conserva para alimentar datos estructurados. */
-  keywords?: string[];
   image?: string;
   noindex?: boolean;
   breadcrumbLabel?: string;
@@ -26,7 +23,6 @@ interface Props {
 const {
   title,
   description = seo.description,
-  keywords = seo.keywords,
   image = seo.ogImage,
   noindex = false,
   breadcrumbLabel,
@@ -81,7 +77,7 @@ const graph: Record<string, unknown>[] = [
     parentOrganization: { '@id': site.domain + '/#org' },
     address: { '@type': 'PostalAddress', addressLocality: 'Lima', addressCountry: 'PE' },
     areaServed: { '@type': 'Country', name: 'Perú' },
-    knowsAbout: seo.keywords,
+    knowsAbout: seo.topics,
     sameAs: Object.values(site.socials),
   },
   {

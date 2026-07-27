@@ -2,6 +2,8 @@
 // en /proyectos/[slug] para posicionar "página web para pollería", etc.
 // Datos portados desde bitwise.pe (producción).
 
+import { PRECIO_PISO } from './site';
+
 export interface RubroModule {
   emoji: string;
   title: string;
@@ -26,6 +28,9 @@ export interface Rubro {
   summary: string;
   pain: string;
   solution: string;
+  /** Precio de entrada del rubro, en soles y sin IGV.
+   *  Nunca por debajo de PRECIO_PISO: si un solo rubro cotiza menos, el
+   *  "desde S/1,700" de la portada, /servicios y llms.txt deja de ser cierto. */
   startingPrice: number;
   deliveryTime: string;
   moduleGroups: readonly RubroModuleGroup[];
@@ -33,7 +38,8 @@ export interface Rubro {
 
 export const rubroCats = ["Todos los rubros","Gastronomía","Retail y comercio","Salud y bienestar","Belleza","Servicios","Educación"] as const;
 
-export const soles = (n: number) => `S/ ${n.toLocaleString('es-PE')}`;
+// Formato de marca: S/1,700 — sin espacio tras la barra, coma de millares.
+export const soles = (n: number) => `S/${n.toLocaleString('en-US')}`;
 
 export const totalModulos = (r: Rubro) =>
   r.moduleGroups.reduce((acc, g) => acc + g.modules.length, 0);
@@ -52,7 +58,7 @@ export const rubros: readonly Rubro[] = [
     summary: "Tu propia plataforma de pedidos: carta QR, delivery propio y reservas — sin comisiones.",
     pain: "Perder 20-30% de margen en cada pedido con apps de delivery externas y no tener la base de datos de tus clientes.",
     solution: "Tu propia carta digital con QR, pedidos por WhatsApp, delivery con zona de cobertura propia y reservas de mesa.",
-    startingPrice: 1299,
+    startingPrice: 1700,
     deliveryTime: "15 días",
     moduleGroups: [
       {
@@ -95,7 +101,7 @@ export const rubros: readonly Rubro[] = [
     summary: "Catálogo WhatsApp con delivery por zona, control de stock y cobros billeteras digitales.",
     pain: "Los vecinos piden por WhatsApp sin precios claros, se pierde stock y no cobras rápido.",
     solution: "Catálogo digital con foto y precio, carrito WhatsApp, delivery por zona y caja con billeteras digitales.",
-    startingPrice: 499,
+    startingPrice: 1700,
     deliveryTime: "7 días",
     moduleGroups: [
       {
@@ -137,7 +143,7 @@ export const rubros: readonly Rubro[] = [
     summary: "Catálogo de medicamentos con búsqueda, delivery 24h, pagos digitales y reportes DIGEMID.",
     pain: "Las grandes cadenas te quitan clientes con su app y su delivery rápido, pero tus precios son mejores.",
     solution: "Tu propia farmacia online con buscador de genéricos, delivery por zona, pagos digitales y cumplimiento DIGEMID.",
-    startingPrice: 1499,
+    startingPrice: 1700,
     deliveryTime: "18 días",
     moduleGroups: [
       {
@@ -221,7 +227,7 @@ export const rubros: readonly Rubro[] = [
     summary: "Agenda online 24/7, recordatorios WhatsApp, pagos anticipados y programa de fidelidad.",
     pain: "Contestas reservas por WhatsApp en tu día libre, los clientes no llegan y pierdes el cupo del día.",
     solution: "Agenda online con cupos, recordatorios automáticos y pago adelantado opcional.",
-    startingPrice: 899,
+    startingPrice: 1700,
     deliveryTime: "12 días",
     moduleGroups: [
       {
@@ -263,7 +269,7 @@ export const rubros: readonly Rubro[] = [
     summary: "Agenda de citas, historial clínico, tienda de alimentos/accesorios y recordatorios de vacunación.",
     pain: "Los dueños olvidan las vacunas anuales y el control, pierdes visitas recurrentes.",
     solution: "Historial clínico por mascota, recordatorios automáticos de vacunas y tienda online de alimentos.",
-    startingPrice: 1299,
+    startingPrice: 1700,
     deliveryTime: "18 días",
     moduleGroups: [
       {
@@ -305,7 +311,7 @@ export const rubros: readonly Rubro[] = [
     summary: "Agenda de citas, ingreso de vehículo con diagnóstico, cotización y seguimiento hasta la entrega.",
     pain: "El cliente llama 5 veces preguntando por su carro, pierdes tiempo y él pierde paciencia.",
     solution: "Panel del cliente donde ve el estado de su vehículo, fotos del diagnóstico y aprueba cotizaciones.",
-    startingPrice: 1299,
+    startingPrice: 1700,
     deliveryTime: "18 días",
     moduleGroups: [
       {
@@ -347,7 +353,7 @@ export const rubros: readonly Rubro[] = [
     summary: "Pedidos de tortas con anticipación, delivery de pan y bollería, y suscripción mensual de canasta.",
     pain: "Los pedidos de tortas se agendan por WhatsApp sin formulario claro y pierdes información clave (fecha, sabor, mensaje).",
     solution: "Formulario online para pedidos personalizados, delivery programado y suscripción de desayuno.",
-    startingPrice: 999,
+    startingPrice: 1700,
     deliveryTime: "15 días",
     moduleGroups: [
       {
@@ -389,7 +395,7 @@ export const rubros: readonly Rubro[] = [
     summary: "Reserva de clases con cupos, membresías online y cobros automáticos mensuales.",
     pain: "Clases llenas sin aviso, membresías gestionadas por Excel y cobros perseguidos por WhatsApp.",
     solution: "Sistema de reservas con cupos, cobros recurrentes automáticos y app del miembro.",
-    startingPrice: 1499,
+    startingPrice: 1700,
     deliveryTime: "20 días",
     moduleGroups: [
       {
@@ -431,7 +437,7 @@ export const rubros: readonly Rubro[] = [
     summary: "Citas online con recordatorios, historia clínica digital y SEO para aparecer en Google Maps.",
     pain: "La recepcionista pierde 50% del día en WhatsApp agendando citas y el 30% no llega porque olvida.",
     solution: "Agenda online 24/7 con confirmación automática, recordatorios por WhatsApp y SEO local.",
-    startingPrice: 1499,
+    startingPrice: 1700,
     deliveryTime: "18 días",
     moduleGroups: [
       {
@@ -473,7 +479,7 @@ export const rubros: readonly Rubro[] = [
     summary: "Catálogo de monturas, examen visual agendado, órdenes con medidas y pagos en cuotas.",
     pain: "El cliente ve la montura en tu Instagram pero no sabe si la tienes en stock ni el precio final con medida.",
     solution: "Catálogo con precio base + simulador de medida, agenda de examen y pago en cuotas.",
-    startingPrice: 1299,
+    startingPrice: 1700,
     deliveryTime: "18 días",
     moduleGroups: [
       {
@@ -547,3 +553,13 @@ export const rubros: readonly Rubro[] = [
 ];
 
 export const getRubro = (slug: string) => rubros.find((r) => r.slug === slug);
+
+// Guardia de build. Si alguien vuelve a bajar un rubro por debajo del piso, el
+// build falla en vez de publicar un "desde S/1,700" que ya no es verdad.
+const bajoPiso = rubros.filter((r) => r.startingPrice < PRECIO_PISO);
+if (bajoPiso.length > 0) {
+  throw new Error(
+    `Rubros por debajo del piso de ${soles(PRECIO_PISO)}: ` +
+      bajoPiso.map((r) => `${r.slug} (${soles(r.startingPrice)})`).join(', '),
+  );
+}

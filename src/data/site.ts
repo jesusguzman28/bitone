@@ -24,20 +24,25 @@ export const seo = {
   titleTemplate: '%s | Bitwise',
   description:
     'Páginas web desde S/1,700 con dominio y hosting incluidos, tiendas online desde S/3,000 y sistemas a medida para negocios peruanos. Factura SUNAT y WhatsApp directo.',
-  keywords: [
-    'página web para negocios pequeños',
-    'página web barata',
-    'página web económica Perú',
-    'página web para mypes',
-    'tienda online Perú',
-    'ERP para mypes Perú',
-    'diseño web económico',
-    'desarrollo web Perú',
-    'aplicaciones móviles Perú',
-    'chatbot WhatsApp Perú',
+  // Temas reales sobre los que trabaja la empresa. Alimentan `knowsAbout` del
+  // JSON-LD: son materias de servicio, NO variantes de búsqueda. Las frases
+  // tipo "página web barata" son consultas de usuario y no describen a la
+  // organización; ahí no van.
+  topics: [
+    'Desarrollo web',
+    'Comercio electrónico',
+    'Sistemas ERP',
+    'Integración con SUNAT',
+    'Aplicaciones móviles',
+    'Chatbots con inteligencia artificial',
   ],
   ogImage: '/og-default.jpg',
 } as const;
+
+// Piso de precio anunciado en toda la comunicación: "desde S/1,700 + IGV".
+// Solo es cierto si ningún servicio ni rubro cotiza por debajo. Cualquier
+// precio del sitio se valida contra esta constante.
+export const PRECIO_PISO = 1700;
 
 export const waLink = (msg: string = site.whatsappMsg) =>
   `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(msg)}`;
