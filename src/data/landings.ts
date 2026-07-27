@@ -1076,6 +1076,350 @@ export const landings: readonly Landing[] = [
       },
     ],
   },
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    param: 'barberias',
+    rubroSlug: 'barberias-salones-belleza',
+    legacy: '/proyectos/barberias-salones-belleza',
+    h1: 'Página web para barberías y salones de belleza en Perú',
+    metaTitle: 'Página web para barberías y salones de belleza en Perú',
+    metaDescription:
+      'Reserva por servicio y por profesional, galería de trabajos, lista de precios y recordatorio por WhatsApp. Desde S/1,700 + IGV, entrega en 12 días.',
+    breadcrumb: 'Página web para barberías',
+    eyebrow: 'Belleza',
+    intro:
+      'La agenda llena sin que contestes WhatsApp en tu día libre, tus cortes en una galería que vende sola y los precios claros antes de que alguien se siente en la silla.',
+    problema: {
+      title: 'Una barbería vende horas, y las horas vacías no se recuperan',
+      parrafos: [
+        'Cada silla tiene un número finito de cupos al día, y el que no se llena no vuelve nunca. El problema es que esos cupos se agendan por WhatsApp, y el WhatsApp lo contesta la misma persona que está cortando. O dejas al cliente esperando con la máquina en la mano, o contestas dos horas después, cuando quien preguntaba ya reservó en la barbería de la otra cuadra.',
+        'El día libre tampoco termina siendo libre. Las reservas del lunes entran el domingo, y si nadie responde se pierden. Terminas revisando el celular en tu día de descanso porque cada mensaje sin contestar es una silla vacía mañana. Es el costo invisible del rubro: no aparece en ninguna cuenta, pero se paga con el único día que tenías.',
+        'Y está el que reservó y no vino. No avisó, y ese bloque de cuarenta minutos quedó muerto en la hora más pedida del sábado. Sin recordatorio ni seña, faltar no le cuesta nada al cliente; el que pierde eres tú, que además le dijiste que no a otro que sí quería ese horario.',
+      ],
+    },
+    secciones: {
+      title: 'Qué secciones necesita la web de una barbería',
+      intro:
+        'Quien entra a la web de una barbería quiere tres cosas en este orden: ver cómo cortan, saber cuánto cuesta y reservar sin hablar con nadie. Todo lo demás es relleno.',
+      items: [
+        {
+          title: 'Lista de precios por servicio',
+          desc: 'Corte, corte y barba, barba sola, diseño, color, alisado, tratamiento. Cada uno con precio y duración. Publicarlo le da seguridad a quien va a venir: nadie quiere preguntar cuánto cuesta ya sentado en la silla.',
+        },
+        {
+          title: 'Reserva por servicio y profesional',
+          desc: 'El cliente elige qué se va a hacer y con quién, y solo ve los horarios reales de ese barbero. Un corte de niño y un color no ocupan el mismo bloque, así que la duración se configura por servicio.',
+        },
+        {
+          title: 'Galería de trabajos',
+          desc: 'Fotos reales de cortes recientes, ordenadas por tipo. Es lo que más se mira antes de reservar y lo que reemplaza a la carpeta de imágenes que hoy vive en Instagram sin orden, sin filtro y sin precio al lado.',
+        },
+        {
+          title: 'El equipo',
+          desc: 'Cada barbero o estilista con foto, especialidad y estilo. En este rubro el cliente es fiel a la persona antes que al local, y ese nombre propio es lo que lo trae de vuelta cada tres semanas.',
+        },
+        {
+          title: 'El local por dentro',
+          desc: 'Fotos del espacio, las sillas, la ambientación. Una barbería también se elige por cómo se siente pasar ahí una hora, y eso no se transmite con texto.',
+        },
+        {
+          title: 'Ubicación y horario',
+          desc: 'Mapa, referencia, horario por día y si hay dónde estacionar. Es un negocio de cercanía: la distancia pesa más que el precio en la decisión final.',
+        },
+      ],
+    },
+    funciones: {
+      title: 'Funcionalidades propias de una barbería',
+      intro:
+        'Las funciones que convierten la web en la agenda del local y te devuelven el celular.',
+      items: [
+        {
+          title: 'Agenda 24/7 sin que contestes',
+          desc: 'El cliente reserva a la hora que sea, incluso a medianoche o en tu día de descanso. Los cupos se bloquean solos y tú abres con la agenda del día ya armada.',
+        },
+        {
+          title: 'Recordatorio por WhatsApp',
+          desc: 'Mensaje el día anterior con hora y profesional, y opción de cancelar. Quien iba a faltar avisa con tiempo, y ese cupo vuelve a estar disponible en vez de morirse.',
+        },
+        {
+          title: 'Seña opcional al reservar',
+          desc: 'Un monto pequeño que se descuenta del servicio, activable solo en los horarios donde más duele la ausencia. Es la forma más directa de que la reserva comprometa a alguien.',
+        },
+        {
+          title: 'Agenda separada por profesional',
+          desc: 'Cada barbero con sus días, su horario y los servicios que hace. Si uno no hace color, el sistema no lo ofrece en su agenda ni por error.',
+        },
+        {
+          title: 'Fidelidad automática',
+          desc: 'Conteo de visitas por cliente para el corte gratis o el descuento cada tantas veces. Sin tarjetita de cartón que se pierde ni discusión sobre cuántas lleva.',
+        },
+        {
+          title: 'Galería que subes desde el celular',
+          desc: 'Terminas un corte, tomas la foto y la publicas en el momento. La sección que más vende deja de depender de que alguien se siente a actualizar la web.',
+        },
+      ],
+    },
+    precio: {
+      title: 'Precio y plazo',
+      parrafos: [
+        'La página web para barberías y salones de belleza arranca en S/1,700 + IGV y se entrega en 12 días desde que apruebas el diseño. Es el plazo más corto de los rubros que trabajamos porque la estructura es acotada: precios, equipo, galería y agenda.',
+        'Incluye dominio .com y hosting del primer año, certificado de seguridad, correo corporativo, la lista de precios, el equipo y la galería administrable. La reserva en línea con agenda por profesional, los recordatorios, la seña al reservar y el programa de fidelidad se suman como módulos.',
+        'Si vas a arrancar por uno solo, que sea la agenda: es la que te devuelve el día libre. Se paga 50% de adelanto y 50% contra entrega, con boleta o factura electrónica SUNAT, 2 rondas de cambios de diseño y 30 días de garantía.',
+      ],
+    },
+    faqs: [
+      {
+        q: '¿Puedo tener una agenda distinta por cada barbero?',
+        a: 'Sí, y es como debería estar armado. Cada profesional tiene sus días, su horario y los servicios que hace: si uno no hace color, el sistema no lo ofrece en su agenda. El cliente elige con quién quiere atenderse y ve solo los cupos reales de esa persona, no un horario genérico del local que después hay que cuadrar a mano.',
+      },
+      {
+        q: '¿Cómo evito que reserven y no vengan?',
+        a: 'Con dos cosas que funcionan mejor juntas. El recordatorio del día anterior con opción de cancelar hace que quien no va a venir avise, y ese cupo se libera para otro. Y en los horarios más pedidos puedes activar una seña pequeña que se descuenta del servicio. No elimina las faltas, pero las baja bastante y no te obliga a cobrar seña siempre.',
+      },
+      {
+        q: '¿Tengo que dejar de usar WhatsApp?',
+        a: 'No, y no conviene. La agenda en línea se lleva las reservas rutinarias, que son la mayoría, y el WhatsApp queda para lo que sí necesita conversación: una consulta de color, un evento, un cliente nuevo con dudas. Lo que cambia es que dejas de usar el celular como sistema de agenda mientras tienes las manos ocupadas.',
+      },
+      {
+        q: '¿La galería la puedo actualizar yo?',
+        a: 'Sí, desde el celular y en el momento. Terminas un corte, tomas la foto y la subes con su categoría. Que sea así importa: la galería es lo primero que mira quien está por reservar, y una llena de fotos de hace ocho meses transmite exactamente lo contrario de lo que quieres transmitir.',
+      },
+      {
+        q: '¿Sirve si soy un solo barbero con una silla?',
+        a: 'Sí, y proporcionalmente te sirve más: cuando trabajas solo, cada mensaje que contestas es un corte detenido. Se puede entregar solo con precios, galería y agenda, sin sección de equipo ni fidelidad, y sumar lo demás el día que abras una segunda silla.',
+      },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    param: 'opticas',
+    rubroSlug: 'opticas',
+    legacy: '/proyectos/opticas',
+    h1: 'Página web para ópticas en Perú',
+    metaTitle: 'Página web para ópticas en Perú',
+    metaDescription:
+      'Catálogo de monturas con filtros y precio, agenda de examen de vista, convenios con seguros y aviso de lentes listos. Desde S/1,700 + IGV, entrega en 18 días.',
+    breadcrumb: 'Página web para ópticas',
+    eyebrow: 'Retail y comercio',
+    intro:
+      'El catálogo de monturas con precio real, el examen de vista agendado en línea y el paciente sabiendo qué le cubre su seguro antes de cruzar la puerta.',
+    problema: {
+      title: 'Una óptica vende dos cosas y suele confundirlas',
+      parrafos: [
+        'Por un lado vende un servicio de salud visual, por otro un producto de moda, y en la comunicación las mezcla. Quien llega por la montura quiere ver estilos, marcas y precios como en cualquier tienda de accesorios. Quien llega por el examen quiere saber si hay optómetra, cuánto cuesta y cuándo puede ir. Si la web pone las dos conversaciones en el mismo lugar, ninguno de los dos encuentra lo que fue a buscar.',
+        'El precio es el otro nudo. Nadie compra "unos lentes": compra una montura más una luna con su medida, su material y sus tratamientos. Como el total depende de la receta, muchas ópticas terminan no publicando nada, y el cliente asume lo peor. La consulta muere en un "¿cuánto sale?" por WhatsApp que no se puede responder sin ver la medida, y ahí se acaba la conversación.',
+        'Y está el seguro. Buena parte de la demanda depende de qué cubre la EPS o el seguro del paciente, y esa información casi nunca está publicada en ningún lado. El cliente llama, pregunta, alguien busca en una carpeta y contesta a medias. La óptica que sí publica sus convenios se lleva a ese paciente sin haber hablado con él ni una vez.',
+      ],
+    },
+    secciones: {
+      title: 'Qué secciones necesita la web de una óptica',
+      intro:
+        'La estructura tiene que separar limpiamente las dos entradas: la del que viene a mirar monturas y la del que viene a medirse la vista.',
+      items: [
+        {
+          title: 'Catálogo de monturas',
+          desc: 'Con filtros por género, material, forma y rango de precio. Es la parte que se navega sin apuro y la que atrae al visitante que todavía no había decidido cambiar de lentes.',
+        },
+        {
+          title: 'Agenda de examen de vista',
+          desc: 'Día, hora y profesional, con la duración real del examen. Va separada del catálogo, porque quien viene a medirse la vista todavía no está comprando y no hay que tratarlo como si lo estuviera.',
+        },
+        {
+          title: 'Tipos de luna y tratamientos',
+          desc: 'Monofocal, bifocal, progresiva; antirreflejo, fotocromático, filtro para pantallas. Qué es cada uno y para quién sirve, explicado en lenguaje que se entienda sin ser óptico.',
+        },
+        {
+          title: 'Convenios y seguros',
+          desc: 'Qué EPS y seguros atiendes y qué cubre cada uno en examen, montura y lunas. Es de las secciones que más consultas ahorra y casi ninguna óptica del país la tiene publicada.',
+        },
+        {
+          title: 'Cómo funciona el proceso',
+          desc: 'Del examen a la entrega: cuántas visitas son, cuánto demora el laboratorio y qué pasa si la medida no acomoda. Baja la ansiedad del cliente primerizo, que es el que más pregunta y el que más duda.',
+        },
+        {
+          title: 'Garantía y ajustes',
+          desc: 'Qué cubre la garantía de la montura y de las lunas, y si los ajustes posteriores tienen costo. Te diferencia de la óptica de galería y publicarlo no cuesta nada.',
+        },
+      ],
+    },
+    funciones: {
+      title: 'Funcionalidades propias de una óptica',
+      intro:
+        'Las funciones que acompañan el ciclo real del rubro: examen, orden, entrega y renovación al año.',
+      items: [
+        {
+          title: 'Catálogo con precio de montura',
+          desc: 'Cada modelo con su precio base y la aclaración de que las lunas se cotizan según la receta. Es más honesto que no publicar nada y desarma la sospecha de que va a salir carísimo.',
+        },
+        {
+          title: 'Reserva de examen con recordatorio',
+          desc: 'El paciente agenda en línea y recibe el aviso el día anterior. El examen es la puerta de entrada a toda la venta, así que cada cita que no se pierde es una venta que no se pierde.',
+        },
+        {
+          title: 'Cobertura consultada al agendar',
+          desc: 'El paciente indica su seguro al reservar y ve qué le cubre. Llega sabiendo aproximadamente cuánto va a poner de su bolsillo, que es la mitad del trabajo de venta ya resuelto.',
+        },
+        {
+          title: 'Orden con medidas guardadas',
+          desc: 'Esfera, cilindro, eje, adición y los tratamientos elegidos, asociados al cliente. Cuando vuelve al año siguiente no se empieza de cero ni hay que buscar en un cuaderno.',
+        },
+        {
+          title: 'Aviso de lentes listos',
+          desc: 'Mensaje automático por WhatsApp cuando el laboratorio entrega. Se acaba la llamada de "¿ya están?" y bajan los días que los lentes pasan guardados sin que nadie los recoja.',
+        },
+        {
+          title: 'Recordatorio de control anual',
+          desc: 'Al año del último examen sale el aviso de revisión. La renovación de medida es la venta recurrente del rubro y hoy depende de que el paciente se acuerde por su cuenta.',
+        },
+      ],
+    },
+    precio: {
+      title: 'Precio y plazo',
+      parrafos: [
+        'La página web para ópticas arranca en S/1,700 + IGV, con entrega en 18 días desde que apruebas el diseño. Incluye dominio .com y hosting del primer año, certificado de seguridad, correo corporativo, el catálogo de monturas con filtros, la sección de tipos de luna y la de convenios.',
+        'La agenda de examen con recordatorio, la consulta de cobertura, el registro de órdenes con medidas y el aviso de lentes listos se suman como módulos. La carga del catálogo depende de cuántos modelos publiques y de si ya tienes las fotos; si hay que fotografiar monturas, esa sesión se cotiza aparte.',
+        'El esquema de pago es 50% al empezar y 50% contra entrega, con boleta o factura electrónica SUNAT. Van incluidas 2 rondas de cambios sobre el diseño y 30 días de garantía tras la entrega, y tanto el dominio como el código quedan registrados a tu nombre.',
+      ],
+    },
+    faqs: [
+      {
+        q: '¿Publico el precio si depende de la receta?',
+        a: 'Publicas el precio de la montura, que sí es fijo, y aclaras que las lunas se cotizan según la medida y los tratamientos. Es lo que hace cualquier óptica seria. No publicar nada no evita la pregunta: solo hace que el cliente asuma que es caro y no llegue nunca a hacerla.',
+      },
+      {
+        q: '¿Puedo mostrar qué cubre cada seguro?',
+        a: 'Sí, y es de lo que más rinde en este rubro. Se lista cada EPS o seguro con qué cubre en examen, montura y lunas. Además, al agendar el paciente indica cuál tiene y ve su cobertura estimada, así que llega sabiendo cuánto va a poner de su bolsillo y la venta no se cae en caja.',
+      },
+      {
+        q: '¿La agenda de examen es distinta de la venta de montura?',
+        a: 'Sí, y conviene que lo sea. El examen tiene duración fija y depende del profesional disponible; ver monturas no necesita cita. Mezclarlas hace que quien solo quería mirar modelos crea que tiene que agendar algo, y ahí se pierde la visita antes de que ocurra.',
+      },
+      {
+        q: '¿Se guarda la medida de cada cliente?',
+        a: 'Con el módulo de órdenes, sí: esfera, cilindro, eje, adición y los tratamientos que eligió, asociados a su ficha. Sirve para el control del año siguiente, para reponer un lente roto sin repetir el examen y para saber a quién toca invitar a renovar y cuándo.',
+      },
+      {
+        q: '¿Tengo que fotografiar todas mis monturas?',
+        a: 'Necesitas foto de cada modelo que quieras publicar, porque sin imagen una montura no vende. Pero no hace falta el inventario completo: lo práctico es empezar por los modelos que más rotan y los de mayor margen, y sumar el resto después. Si no tienes las fotos, la sesión se cotiza aparte y te decimos cuánto antes de empezar.',
+      },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    param: 'bodegas',
+    rubroSlug: 'bodegas-minimarkets',
+    legacy: '/proyectos/bodegas-minimarkets',
+    h1: 'Página web para bodegas y minimarkets en Perú',
+    metaTitle: 'Página web para bodegas y minimarkets en Perú',
+    metaDescription:
+      'Catálogo con precios, carrito que arma el pedido, delivery por zona con monto mínimo y cobro con billeteras digitales. Desde S/1,700 + IGV, entrega en 7 días.',
+    breadcrumb: 'Página web para bodegas',
+    eyebrow: 'Retail y comercio',
+    intro:
+      'El catálogo con precios que el vecino consulta solo, el pedido armado sin diez mensajes de ida y vuelta, y el delivery cobrando lo que corresponde en cada zona.',
+    problema: {
+      title: 'Diez mensajes para vender treinta soles',
+      parrafos: [
+        'El pedido por WhatsApp de una bodega es siempre la misma conversación: "¿tienes leche?", "¿a cuánto?", "¿y el arroz de cinco kilos?", "¿cuánto sale todo?". Diez mensajes para armar una compra de treinta soles. Multiplicado por veinte vecinos al día, eso es el turno completo de una persona contestando el celular en vez de atender el mostrador o reponer la góndola.',
+        'Después está el delivery, que casi siempre se hace perdiendo. Se acepta cualquier pedido a cualquier distancia sin cobrar envío, porque cobrarlo en plena conversación incomoda. Un pedido de quince soles a seis cuadras cuesta más en tiempo del repartidor de lo que deja de margen. Sin monto mínimo ni tarifa por zona, el reparto no es un servicio: es una fuga que no se ve porque nunca se mide.',
+        'Y el precio, que cambia seguido y vive en la memoria de quien esté atendiendo. Cuando cada persona del mostrador dice un número distinto por el mismo producto, el cliente lo nota. En un negocio de barrio, donde todos se conocen y todos comentan, esa inconsistencia cuesta algo más caro que el margen: cuesta confianza.',
+      ],
+    },
+    secciones: {
+      title: 'Qué secciones necesita la web de una bodega',
+      intro:
+        'Aquí no hay que impresionar a nadie: hay que responder rápido qué tienes, a cuánto y si lo llevas. La web se arma alrededor de eso.',
+      items: [
+        {
+          title: 'Catálogo con precio y foto',
+          desc: 'Abarrotes, bebidas, limpieza, cuidado personal, congelados. Cada producto con imagen, presentación y precio al día. Es la sección que reemplaza los diez mensajes por pedido.',
+        },
+        {
+          title: 'Zona de reparto y monto mínimo',
+          desc: 'Qué calles o urbanizaciones cubres, cuánto cobras de envío en cada una y desde qué monto haces delivery. Publicado deja de ser una negociación incómoda en cada pedido.',
+        },
+        {
+          title: 'Ofertas de la semana',
+          desc: 'Los productos con descuento y hasta cuándo. Es lo que hace que el vecino entre a mirar aunque no necesitara nada, que en un negocio de barrio es casi la única forma de generar una visita.',
+        },
+        {
+          title: 'Formas de pago',
+          desc: 'Qué billeteras aceptas, si cobras contra entrega y si emites comprobante. El pago digital ya es lo normal en este rubro y no decirlo genera una duda que no hace falta generar.',
+        },
+        {
+          title: 'Horario real',
+          desc: 'Por día, incluidos domingos y feriados, que es justo cuando más se necesita una bodega y cuando menos claro está quién abre y hasta qué hora.',
+        },
+        {
+          title: 'Productos por encargo',
+          desc: 'Lo que no tienes en anaquel pero puedes conseguir: balón de gas, bidón de agua, marcas específicas. Es venta que hoy se pierde porque nadie sabe que la puedes traer.',
+        },
+      ],
+    },
+    funciones: {
+      title: 'Funcionalidades propias de una bodega',
+      intro:
+        'Funciones simples y directas, porque el margen por pedido es chico y nada puede agregar fricción.',
+      items: [
+        {
+          title: 'Carrito que arma el pedido solo',
+          desc: 'El vecino elige, la web suma, y a tu WhatsApp llega un mensaje con productos, cantidades, total, dirección y forma de pago. La conversación de diez mensajes se convierte en uno.',
+        },
+        {
+          title: 'Tarifa de envío por zona',
+          desc: 'Cada zona con su costo y su monto mínimo, calculado al armar el pedido. Dejas de regalar el reparto por no querer cobrarlo en medio de la conversación.',
+        },
+        {
+          title: 'Precio único y actualizable',
+          desc: 'Cambias el precio desde el celular y todos ven el mismo. Se termina la diferencia entre lo que dice uno y lo que dice otro en el mostrador.',
+        },
+        {
+          title: 'Repetir el último pedido',
+          desc: 'El cliente frecuente vuelve a pedir lo mismo con un toque. En una bodega la compra es repetitiva, y esa función sola sube la frecuencia sin que hagas nada más.',
+        },
+        {
+          title: 'Alerta de quiebre de stock',
+          desc: 'Aviso cuando un producto se está acabando, para reponer antes de que el vecino lo encuentre agotado y se acostumbre a ir al minimarket de la esquina.',
+        },
+        {
+          title: 'Cierre de caja del día',
+          desc: 'Cuánto entró en efectivo, cuánto por billetera y qué pedidos quedaron pendientes. El dato que hoy se arma a mano al cerrar, si es que alguien lo arma.',
+        },
+      ],
+    },
+    precio: {
+      title: 'Precio y plazo',
+      parrafos: [
+        'La página web para bodegas y minimarkets arranca en S/1,700 + IGV y se entrega en 7 días, el plazo más corto de todos los rubros, porque la estructura es simple y el grueso del trabajo es cargar el catálogo.',
+        'Vale decir con claridad para quién tiene sentido, porque no es para toda bodega. Si tu venta es casi toda de mostrador y no haces reparto, una web difícilmente se paga y preferimos decírtelo antes que cobrarte. Donde sí rinde es en el minimarket con reparto propio, en la bodega que ya recibe pedidos por WhatsApp todos los días y en la que atiende un edificio o una urbanización cerrada: ahí el catálogo y la tarifa por zona se recuperan en pocas semanas.',
+        'Incluye dominio .com y hosting del primer año, certificado de seguridad, correo corporativo y el catálogo con carrito a WhatsApp. El delivery por zona, el cobro en línea, el control de stock y el cierre de caja se suman como módulos. Se paga 50% de adelanto y 50% contra entrega, con boleta o factura SUNAT, y con 30 días de garantía.',
+      ],
+    },
+    faqs: [
+      {
+        q: '¿Vale la pena para una bodega chica?',
+        a: 'Depende de si haces delivery. Si tu venta es casi toda del que pasa por la puerta, la web no te va a cambiar el negocio y preferimos decírtelo antes de cobrarte. Donde se paga sola es cuando ya recibes pedidos por WhatsApp a diario, tienes reparto propio o atiendes un edificio o condominio: ahí el ahorro de tiempo y el cobro correcto del envío se notan desde el primer mes.',
+      },
+      {
+        q: '¿Tengo que subir todos mis productos?',
+        a: 'No, y no conviene arrancar así. Lo práctico es publicar entre cien y doscientos: lo que más rota, lo que más te preguntan y lo de mejor margen. El resto se sigue pidiendo por WhatsApp como siempre. Un catálogo corto y actualizado vende bastante más que uno enorme con precios viejos.',
+      },
+      {
+        q: '¿Cómo cobro el delivery sin incomodar al cliente?',
+        a: 'Publicándolo. Defines la tarifa de cada zona y el monto mínimo, y la web lo calcula sola al armar el pedido. El cliente lo ve antes de confirmar, así que no hay que negociarlo en la conversación, que es exactamente lo que hoy hace que muchas bodegas terminen regalando el envío por no incomodar.',
+      },
+      {
+        q: '¿Puedo cobrar por billetera desde la web?',
+        a: 'Sí, de dos maneras. La simple es mostrar tu QR para que el cliente pague y adjunte la constancia al pedido. La otra es integrar una pasarela para que el cobro sea automático. Para el volumen típico de una bodega, arrancar con el QR suele alcanzar y no tiene comisión por transacción.',
+      },
+      {
+        q: '¿Los precios los actualizo yo?',
+        a: 'Sí, desde el celular y sin costo ni límite. Es lo más importante de todo en este rubro: los precios de abarrotes se mueven seguido y un catálogo desactualizado genera reclamos justo en el momento de la entrega. Por eso se entrega con capacitación grabada, para que lo pueda manejar cualquiera de tu familia o de tu personal.',
+      },
+    ],
+  },
 ];
 
 export const getLanding = (param: string) => landings.find((l) => l.param === param);
