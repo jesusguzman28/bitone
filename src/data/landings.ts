@@ -1429,11 +1429,21 @@ const migrados = new Map(landings.map((l) => [l.rubroSlug, `/paginas-web-para-${
 
 export const tieneLanding = (rubroSlug: string) => migrados.has(rubroSlug);
 
-/** URL canónica de un rubro: su landing si ya migró, o su página de /proyectos.
- *  Todo enlace interno a un rubro tiene que pasar por aquí; si no, terminaría
- *  apuntando a una ruta que ahora responde 301. */
-export const hrefRubro = (rubroSlug: string) =>
-  migrados.get(rubroSlug) ?? `/proyectos/${rubroSlug}`;
+/** URL canónica de un rubro. Todo enlace interno tiene que pasar por aquí.
+ *  Ya no hay fallback a /proyectos/[slug]: esa ruta se eliminó cuando los 12
+ *  rubros pasaron a tener landing propia, así que un slug sin landing sería un
+ *  enlace interno a 404. Preferimos romper el build a publicarlo. */
+export const hrefRubro = (rubroSlug: string) => {
+  const href = migrados.get(rubroSlug);
+  if (!href) throw new Error(`El rubro ${rubroSlug} no tiene landing: /proyectos/[slug] ya no existe`);
+  return href;
+};
+
+// Guardia de build: los 12 rubros tienen que tener landing.
+const sinLanding = rubros.filter((r) => !migrados.has(r.slug));
+if (sinLanding.length > 0) {
+  throw new Error(`Rubros sin landing propia: ${sinLanding.map((r) => r.slug).join(', ')}`);
+}
 
 export const rubroDeLanding = (l: Landing) => {
   const r = rubros.find((x) => x.slug === l.rubroSlug);
