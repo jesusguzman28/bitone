@@ -387,6 +387,350 @@ export const landings: readonly Landing[] = [
       },
     ],
   },
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    param: 'clinicas',
+    rubroSlug: 'clinicas-consultorios',
+    legacy: '/proyectos/clinicas-consultorios',
+    h1: 'Página web para clínicas y consultorios en Perú',
+    metaTitle: 'Página web para clínicas y consultorios en Perú',
+    metaDescription:
+      'Citas online por especialidad y por profesional, perfil de cada médico, convenios con seguros y entrega de resultados. Desde S/1,700 + IGV, entrega en 18 días.',
+    breadcrumb: 'Página web para clínicas',
+    eyebrow: 'Salud y bienestar',
+    intro:
+      'Citas que entran sin ocupar a recepción, el perfil de cada profesional visible antes de reservar y los convenios de seguro claros desde el primer clic.',
+    problema: {
+      title: 'Dónde se va el tiempo y la facturación de un consultorio',
+      parrafos: [
+        'En un consultorio, la recepción termina funcionando como un centro de llamadas. Media jornada se va agendando por teléfono y WhatsApp, confirmando, reprogramando y explicando por décima vez si atienden tal seguro. Mientras eso ocurre, el paciente que está parado en el mostrador espera. Es trabajo administrativo que no atiende a nadie y que se paga igual que el que sí.',
+        'El segundo problema es la ausencia. Se agenda una cita, el paciente no llega, y ese bloque queda muerto: no se revende ni se recupera. En una especialidad con lista de espera cuesta el doble, porque además había alguien que sí habría ido. Sin un recordatorio que salga solo, el ausentismo depende de que el paciente se acuerde por su cuenta.',
+        'Y está la búsqueda. Quien tiene dolor de muelas un domingo escribe "dentista de urgencia" y el nombre de su distrito, no el nombre de tu clínica. Si tu presencia digital es una página de Facebook con el horario del año pasado, esa consulta se la lleva quien sí aparece con dirección, especialidades, horario y un botón para reservar ahí mismo.',
+      ],
+    },
+    secciones: {
+      title: 'Qué secciones necesita la web de una clínica',
+      intro:
+        'En salud el visitante llega con una duda concreta y poca paciencia. La web tiene que responderla antes de pedirle nada a cambio. Estas son las secciones, en orden de lo que más se consulta.',
+      items: [
+        {
+          title: 'Especialidades',
+          desc: 'Cada especialidad con qué atiende, qué procedimientos cubre y desde cuánto cuesta la consulta. Es la sección que hoy contesta recepción por teléfono y la que Google usa para entender de qué trata tu clínica.',
+        },
+        {
+          title: 'Perfil de cada profesional',
+          desc: 'Nombre, especialidad, número de colegiatura, formación y foto. En salud la confianza se deposita en la persona antes que en el local: el paciente quiere saber quién lo va a atender antes de reservar.',
+        },
+        {
+          title: 'Reserva de cita',
+          desc: 'Por especialidad y por profesional, sobre la disponibilidad real de cada agenda. Una limpieza dental y una endodoncia no ocupan el mismo bloque, así que la duración se configura por tipo de procedimiento.',
+        },
+        {
+          title: 'Convenios y formas de pago',
+          desc: 'Qué seguros y EPS atiendes, qué cubre cada convenio y qué queda de copago. Es la segunda consulta más frecuente del rubro y evita la conversación incómoda en caja.',
+        },
+        {
+          title: 'Sedes, horarios y urgencias',
+          desc: 'Dirección con referencia, horario por día y qué ocurre fuera de horario. Si atiendes emergencias, va arriba y visible desde el celular sin hacer scroll.',
+        },
+        {
+          title: 'Indicaciones previas',
+          desc: 'Qué traer, si hay que venir en ayunas, cuánto dura el procedimiento y con cuánta anticipación llegar. Reduce las llamadas previas y las citas que se pierden porque el paciente llegó sin cumplir la indicación.',
+        },
+      ],
+    },
+    funciones: {
+      title: 'Funcionalidades propias de una clínica',
+      intro:
+        'Las funciones que sostienen la operación diaria de un consultorio, más allá de la vitrina.',
+      items: [
+        {
+          title: 'Agenda por especialista y procedimiento',
+          desc: 'Cada profesional con su calendario real y cada procedimiento con su duración. La agenda deja de cruzarse y los bloques largos dejan de ocuparse con consultas de quince minutos.',
+        },
+        {
+          title: 'Recordatorio de cita por WhatsApp',
+          desc: 'Mensaje automático el día anterior con fecha, hora y profesional, y opción de confirmar o reprogramar. Si el paciente reprograma, el bloque se libera y otro lo puede tomar.',
+        },
+        {
+          title: 'Ficha de paciente con acceso por rol',
+          desc: 'Datos, antecedentes, alergias y evolución, con permisos separados: recepción ve la agenda, el profesional ve la ficha. Los datos de salud son sensibles bajo la ley peruana de protección de datos personales y eso se diseña desde el inicio, no después.',
+        },
+        {
+          title: 'Entrega de resultados en línea',
+          desc: 'El paciente descarga su informe desde un enlace privado, sin volver al local ni pedirlo por WhatsApp. Menos viajes para él y menos gestión para recepción.',
+        },
+        {
+          title: 'Convenio declarado al reservar',
+          desc: 'El paciente indica su seguro al agendar y ve qué cubre y qué copago le corresponde. La caja deja de ser el lugar donde aparecen las sorpresas.',
+        },
+        {
+          title: 'Presencia local por especialidad',
+          desc: 'Contenido y datos estructurados por especialidad y por distrito, que es exactamente como se busca en salud: "ortodoncista en Surco", no "clínica dental".',
+        },
+      ],
+    },
+    precio: {
+      title: 'Precio y plazo',
+      parrafos: [
+        'La página web para clínicas y consultorios arranca en S/1,700 + IGV, con entrega en 18 días desde que apruebas el diseño. Incluye dominio .com y hosting del primer año, certificado de seguridad, correo corporativo, las especialidades, los perfiles del equipo y la reserva de citas.',
+        'La ficha de paciente con accesos por rol, la entrega de resultados en línea, la declaración de convenio y los recordatorios automáticos se suman como módulos. En este rubro conviene definirlos con calma: cada uno toca datos de paciente, y el alcance se acuerda por escrito antes de escribir código.',
+        'Se paga 50% de adelanto y 50% contra entrega, con boleta o factura electrónica SUNAT. Incluye 2 rondas de cambios de diseño y 30 días de garantía. El dominio y el código fuente quedan a tu nombre.',
+      ],
+    },
+    faqs: [
+      {
+        q: '¿La agenda se puede separar por especialidad y por doctor?',
+        a: 'Sí, y es la base del sistema. Cada profesional tiene su calendario con sus días y horas reales, y cada procedimiento su propia duración: una consulta de control no ocupa lo mismo que una cirugía menor. El paciente elige especialidad, después profesional, y solo ve los bloques que existen de verdad.',
+      },
+      {
+        q: '¿Qué pasa con los datos de los pacientes?',
+        a: 'Los datos de salud son datos sensibles bajo la ley peruana de protección de datos personales, así que el acceso se define por rol y acordamos contigo qué se guarda y qué no antes de desarrollar. Nada del paciente se publica ni se comparte sin su registro. Si prefieres que la ficha clínica siga en tu sistema actual, la web se queda solo con la agenda.',
+      },
+      {
+        q: '¿Puedo mostrar con qué seguros y EPS trabajo?',
+        a: 'Sí, y conviene que sea de lo primero que se vea: es una de las razones más frecuentes por las que un paciente descarta una clínica. Se lista cada convenio con qué cubre y qué queda de copago, y al reservar el paciente declara su seguro para llegar a caja sin sorpresas.',
+      },
+      {
+        q: '¿Los recordatorios reducen las ausencias?',
+        a: 'Ayudan, pero no te vamos a prometer un porcentaje que no podemos garantizar. Lo concreto es que el aviso sale el día anterior con opción de confirmar o reprogramar, y que cuando alguien reprograma el bloque se libera para otro paciente. Ese bloque recuperado es la ganancia medible.',
+      },
+      {
+        q: '¿Puedo entregar resultados por la web?',
+        a: 'Sí, con un enlace privado por paciente desde donde descarga su informe o su imagen. Se define contigo cuánto tiempo queda disponible y quién del equipo puede subirlo. Si prefieres seguir entregando en mostrador, el módulo simplemente no se activa y no lo pagas.',
+      },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    param: 'academias',
+    rubroSlug: 'academias-preuniversitarios',
+    legacy: '/proyectos/academias-preuniversitarios',
+    h1: 'Página web para academias preuniversitarias en Perú',
+    metaTitle: 'Página web para academias preuniversitarias en Perú',
+    metaDescription:
+      'Ciclos y horarios publicados, matrícula en línea con pago en cuotas, vitrina de ingresantes y portal de padres. Desde S/1,999 + IGV, entrega en 25 días.',
+    breadcrumb: 'Página web para academias',
+    eyebrow: 'Educación',
+    intro:
+      'Ciclos y horarios claros, matrícula que se llena sola y tus ingresantes donde los padres los ven antes de decidir.',
+    problema: {
+      title: 'La matrícula se gana en las semanas previas al ciclo',
+      parrafos: [
+        'El negocio de una academia se define en pocas semanas al año. Entre que termina el ciclo escolar y arranca el nuevo, las familias comparan tres o cuatro opciones y eligen. Si en esa ventana tu información no está publicada —qué ciclos abren, qué días, a qué hora, cuánto cuesta y cuándo empieza—, esa comparación la pierdes sin haber hablado con nadie.',
+        'Hoy toda esa información vive en un flyer de WhatsApp y en la cabeza de quien contesta el celular. La matrícula entra por mensaje, el pago llega por billetera sin referencia clara, y alguien anota a mano quién pagó qué cuota. Con doscientos alumnos matriculados esa hoja de cálculo deja de alcanzar, y las cuotas atrasadas terminan persiguiéndose una por una.',
+        'Y falta lo que más pesa en la decisión: los resultados. Los padres quieren ver ingresantes, a qué universidad y en qué proceso. Si esa vitrina no existe en tu web, se quedan con la de la academia de al lado, que sí la publicó. Es el activo más valioso que tienes y en la mayoría de los casos vive solo en un banner impreso en la fachada.',
+      ],
+    },
+    secciones: {
+      title: 'Qué secciones necesita la web de una academia',
+      intro:
+        'Aquí decide un padre, no el alumno, y decide comparando. La web tiene que dejar cerrada la comparación sin que nadie tenga que escribir por WhatsApp.',
+      items: [
+        {
+          title: 'Ciclos abiertos y fechas',
+          desc: 'Qué ciclos hay, cuándo empiezan, cuánto duran y hasta cuándo se matricula. Con la fecha límite visible, porque en este rubro la decisión es estacional y llega con plazo encima.',
+        },
+        {
+          title: 'Horarios por turno',
+          desc: 'Mañana, tarde, noche y fin de semana, con los cursos de cada turno. Es la variable que define si una familia puede inscribirse o no, y hoy se responde de a un mensaje por vez.',
+        },
+        {
+          title: 'Precio y forma de pago',
+          desc: 'Costo del ciclo, matrícula, cuántas cuotas y de cuánto es cada una. Publicarlo le ahorra la consulta a quien sí puede pagar y te ahorra la conversación con quien no.',
+        },
+        {
+          title: 'Ingresantes y resultados',
+          desc: 'Tu vitrina: quiénes ingresaron, a qué universidad y en qué proceso. Es la sección que cierra la decisión del padre y la que más se comparte por WhatsApp entre familias.',
+        },
+        {
+          title: 'Plana docente',
+          desc: 'Quién dicta cada curso y con qué formación. En preuniversitaria el profesor de física con nombre y apellido convence más que cualquier adjetivo sobre la institución.',
+        },
+        {
+          title: 'Inscripción en línea',
+          desc: 'Formulario con los datos del alumno, la carrera objetivo y el turno elegido. Lo que hoy se arma en cinco mensajes de ida y vuelta queda capturado en un solo paso.',
+        },
+      ],
+    },
+    funciones: {
+      title: 'Funcionalidades propias de una academia',
+      intro:
+        'Las funciones que convierten la web en el canal de matrícula y no solo en un folleto con horarios.',
+      items: [
+        {
+          title: 'Matrícula en línea',
+          desc: 'El alumno o el padre completa sus datos, elige ciclo y turno y queda inscrito. Recibes el registro completo en vez de reconstruirlo leyendo una conversación de WhatsApp.',
+        },
+        {
+          title: 'Pago del ciclo en cuotas',
+          desc: 'Cuotas configurables con billetera digital o tarjeta, cada pago asociado al alumno. Se termina el cruce manual entre el comprobante que llegó al celular y la lista de matriculados.',
+        },
+        {
+          title: 'Aviso de cuota por vencer',
+          desc: 'Mensaje automático antes del vencimiento y otro si la cuota no llegó. Perseguir pagos deja de ocupar a alguien del equipo todos los meses.',
+        },
+        {
+          title: 'Vitrina de ingresantes administrable',
+          desc: 'Cargas los resultados de cada proceso desde el panel, con foto, universidad y carrera. Se actualiza el mismo día que salen, no cuando alguien pueda tocar el código.',
+        },
+        {
+          title: 'Página propia por convocatoria',
+          desc: 'Cada ciclo con su página y su fecha de cierre, lista para la campaña de temporada. Cuando la convocatoria vence, se archiva sin que nadie tenga que acordarse de bajarla.',
+        },
+        {
+          title: 'Portal de padres',
+          desc: 'Asistencia, notas de simulacro y estado de pagos en un solo lugar. Reduce las llamadas de "¿cómo va mi hijo?" y hace visible un servicio que ya estás dando gratis.',
+        },
+      ],
+    },
+    precio: {
+      title: 'Precio y plazo',
+      parrafos: [
+        'La plataforma web para academias y preuniversitarios arranca en S/1,999 + IGV y toma alrededor de 25 días desde la aprobación del diseño. Incluye dominio .com y hosting del primer año, certificado de seguridad, correo corporativo, la estructura de ciclos y horarios, la plana docente y la vitrina de ingresantes.',
+        'La matrícula en línea con pago en cuotas, los avisos de cobranza y el portal de padres se cotizan como módulos, porque dependen de cuántos alumnos manejas y de si ya usas algún sistema académico que haya que respetar.',
+        'Conviene arrancar con anticipación: si el ciclo empieza en enero, el desarrollo debería estar cerrado en noviembre para que la campaña de matrícula corra sobre la web y no sobre un flyer. Se paga 50% de adelanto y 50% contra entrega, con hasta 3 cuotas sin interés, factura electrónica, 30 días de garantía y el código a tu nombre.',
+      ],
+    },
+    faqs: [
+      {
+        q: '¿Puedo cobrar la matrícula y las cuotas por la web?',
+        a: 'Sí. Se configura el costo del ciclo, cuántas cuotas y en qué fechas vencen, con cobro por billetera digital o tarjeta. Cada pago queda asociado al alumno, así que dejas de cruzar a mano el comprobante que llegó por WhatsApp contra la lista de matriculados.',
+      },
+      {
+        q: '¿Cómo publico los resultados de ingresantes?',
+        a: 'Desde el panel y tú mismo: foto, nombre, universidad, carrera y proceso. Es la sección que más pesa en la decisión de un padre, así que tiene que poder actualizarse el mismo día que salen los resultados, sin depender de nosotros ni esperar turno.',
+      },
+      {
+        q: 'Abro varios ciclos al año, ¿hay que rehacer la web cada vez?',
+        a: 'No. Cada ciclo se crea desde el panel con sus fechas, turnos y precio, y puede tener su propia página de campaña para pautar. Cuando la convocatoria cierra, se archiva y deja de mostrarse sin que nadie tenga que borrar nada a mano.',
+      },
+      {
+        q: '¿Los padres pueden ver cómo va su hijo?',
+        a: 'Con el módulo de portal de padres, sí: asistencia, notas de simulacro y estado de pagos, y tú decides qué se muestra y qué no. Sin ese módulo la web queda como vitrina y canal de matrícula, que ya resuelve la parte comercial del problema.',
+      },
+      {
+        q: '¿Cuánto antes del ciclo debería tener la web lista?',
+        a: 'El desarrollo toma unos 25 días desde que apruebas el diseño, así que lo sano es empezar dos meses antes del inicio de la campaña de matrícula, no del ciclo. Si llegas justo, se puede priorizar ciclos e inscripción para el lanzamiento y dejar la vitrina y el portal para después del arranque.',
+      },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    param: 'gimnasios',
+    rubroSlug: 'gimnasios-crossfit',
+    legacy: '/proyectos/gimnasios-crossfit',
+    h1: 'Página web para gimnasios en Perú',
+    metaTitle: 'Página web para gimnasios y boxes de CrossFit en Perú',
+    metaDescription:
+      'Horario de clases con cupos, planes y membresías publicados, cobro recurrente automático y perfil de entrenadores. Desde S/1,700 + IGV, entrega en 20 días.',
+    breadcrumb: 'Página web para gimnasios',
+    eyebrow: 'Salud y bienestar',
+    intro:
+      'El horario de clases publicado y al día, los planes claros para quien te está comparando, y la mensualidad cobrándose sola en vez de perseguirse por WhatsApp.',
+    problema: {
+      title: 'Un gimnasio no vive de la venta, vive de la renovación',
+      parrafos: [
+        'La mensualidad se cobra a mano y ahí está el agujero. Alguien revisa quién venció, escribe por WhatsApp, espera el comprobante de la billetera y lo anota. Cada mes se repite y cada mes se escapan algunos. El socio que no recibió el mensaje simplemente deja de venir, y meses después nadie sabe si se fue o si solo nunca le llegó el recordatorio. La cobranza manual no cuesta solo tiempo: pierde socios que no se habían ido.',
+        'Después está la grilla de clases. Si no está publicada, cada interesado pregunta lo mismo: a qué hora hay funcional, si queda cupo, quién la dicta. Y si está publicada en una foto de Instagram de hace tres semanas es peor, porque el socio llega a una clase que ya no existe. Sin cupos en línea, o la sala queda a medio llenar o entran veinte personas a un espacio para doce.',
+        'En captación, además, compites contra la comparación fría. Quien busca "gimnasio en mi distrito" abre tres pestañas y compara precio, horario y ubicación en dos minutos. Si tus planes no están publicados no entras a esa comparación: te descartan antes de escribirte, y ni siquiera te enteras de que existió la oportunidad.',
+      ],
+    },
+    secciones: {
+      title: 'Qué secciones necesita la web de un gimnasio',
+      intro:
+        'Quien entra a la web de un gimnasio ya decidió que quiere entrenar; está eligiendo dónde. La web tiene que ganar esa comparación en menos de dos minutos.',
+      items: [
+        {
+          title: 'Planes y precios',
+          desc: 'Mensual, trimestral, anual, pareja, estudiante. Cada uno con qué incluye y qué no. Es lo primero que compara quien te está evaluando y lo que decide si te escribe o cierra la pestaña.',
+        },
+        {
+          title: 'Horario de clases',
+          desc: 'La grilla de la semana con disciplina, hora, entrenador y cupo. Publicada y al día, porque es la información que más se consulta y la que más rápido queda desactualizada.',
+        },
+        {
+          title: 'Entrenadores',
+          desc: 'Quién dicta cada clase, su especialidad y sus certificaciones. En este rubro el socio elige por el entrenador tanto como por las máquinas, y ese nombre propio es difícil de copiar.',
+        },
+        {
+          title: 'El local por dentro',
+          desc: 'Fotos reales de las máquinas, la sala de clases, los vestidores y el estacionamiento. Quien está por comprometerse a una mensualidad quiere ver el espacio antes de ir a verlo.',
+        },
+        {
+          title: 'Clase de prueba',
+          desc: 'Con formulario y fecha. Es la conversión más fácil del rubro porque no estás vendiendo la membresía todavía: estás vendiendo la primera visita, que es donde se cierra sola.',
+        },
+        {
+          title: 'Ubicación y horario del local',
+          desc: 'Mapa, referencia y horario por día, feriados incluidos. La cercanía es un factor decisivo en gimnasios y tiene que quedar resuelta en la primera pantalla.',
+        },
+      ],
+    },
+    funciones: {
+      title: 'Funcionalidades propias de un gimnasio',
+      intro:
+        'Lo que convierte la web en la operación del gimnasio, y no en un folleto con fotos del local.',
+      items: [
+        {
+          title: 'Cobro recurrente de la membresía',
+          desc: 'La mensualidad se cobra sola a la tarjeta o billetera suscrita, en la fecha que corresponde y con aviso previo. Deja de perseguirse por WhatsApp y deja de perderse por olvido.',
+        },
+        {
+          title: 'Reserva de clase con cupo',
+          desc: 'El socio reserva desde el celular, el cupo se descuenta y al llenarse entra lista de espera. Si alguien cancela, el siguiente recibe el aviso sin que nadie lo gestione.',
+        },
+        {
+          title: 'Pausa de membresía',
+          desc: 'Por viaje, lesión o enfermedad, el socio congela su plan desde su perfil y se reanuda solo. Es la diferencia entre una pausa de un mes y una baja definitiva.',
+        },
+        {
+          title: 'Check-in con QR',
+          desc: 'En la puerta el socio escanea y se valida su asistencia y el estado de su plan. Sin cuaderno de firmas y sin discutir en recepción quién está al día.',
+        },
+        {
+          title: 'Perfil del socio con progreso',
+          desc: 'Peso, medidas y marcas personales guardadas en su cuenta. Es lo que hace que el socio vuelva a abrir la plataforma entre clase y clase, y no solo cuando le toca pagar.',
+        },
+        {
+          title: 'Página por promoción',
+          desc: 'La promoción de enero o el plan de verano con su propia página y su fecha de cierre, lista para pautar. Cuando vence, deja de mostrarse sola.',
+        },
+      ],
+    },
+    precio: {
+      title: 'Precio y plazo',
+      parrafos: [
+        'La página web para gimnasios y boxes de CrossFit arranca en S/1,700 + IGV, con entrega en 20 días desde que apruebas el diseño. Incluye dominio .com y hosting del primer año, certificado de seguridad, correo corporativo, los planes, la grilla de horarios y el perfil de los entrenadores.',
+        'El cobro recurrente, la reserva de clases con cupo, el check-in con QR y el perfil del socio se suman como módulos. El cobro recurrente suele ser el primero que se paga solo: cada renovación que hoy se cae por falta de seguimiento es una mensualidad completa que no vuelve.',
+        'Se paga 50% de adelanto y 50% contra entrega, con boleta o factura electrónica SUNAT. Incluye 2 rondas de cambios de diseño y 30 días de garantía. El dominio y el código quedan a tu nombre.',
+      ],
+    },
+    faqs: [
+      {
+        q: '¿La mensualidad se cobra sola?',
+        a: 'Con el módulo de cobro recurrente, sí: el socio suscribe su tarjeta o billetera una vez y el cargo se hace en la fecha que corresponde, con aviso previo. Si el cobro falla, el sistema reintenta y notifica. Lo que hoy es una tarea manual de fin de mes pasa a ser una excepción que atiendes solo cuando algo no funcionó.',
+      },
+      {
+        q: '¿Puedo poner cupos por clase?',
+        a: 'Sí. Cada clase se configura con disciplina, hora, entrenador y cupo máximo. Cuando se llena entra lista de espera, y si alguien cancela el siguiente recibe el aviso automáticamente. Así dejas de tener veinte personas en una sala pensada para doce, que es el reclamo más común del rubro.',
+      },
+      {
+        q: '¿Qué pasa si un socio se va de viaje un mes?',
+        a: 'Con la pausa de membresía la congela desde su perfil por el plazo máximo que tú definas, y se reanuda sola al vencer. Es la función que evita que una ausencia temporal termine en baja: cuando hay que llamar y pedir permiso para pausar, mucha gente prefiere cancelar y ya.',
+      },
+      {
+        q: '¿Sirve para un box de CrossFit y no solo para un gimnasio de máquinas?',
+        a: 'Sí, y en un box pesa más. Las clases tienen horario fijo, cupo limitado y entrenador asignado, que es exactamente lo que resuelve la reserva con cupos. El perfil del socio además sirve para registrar marcas personales, que en CrossFit es parte de la experiencia y no un extra.',
+      },
+      {
+        q: '¿Tengo que publicar mis precios en la web?',
+        a: 'Obligatorio no es, pero en este rubro conviene. Quien busca gimnasio compara tres opciones en dos minutos y descarta las que no muestran precio, porque asume que es caro o que va a tener que negociar. Si prefieres no publicarlo, se reemplaza por la clase de prueba con formulario, que convierte casi igual y te deja el contacto.',
+      },
+    ],
+  },
 ];
 
 export const getLanding = (param: string) => landings.find((l) => l.param === param);

@@ -1,25 +1,33 @@
 # Redirecciones servidas por Cloudflare Workers (assets estáticos).
 # Formato: [origen] [destino] [código]
 # Solo se evalúan cuando la ruta NO corresponde a un archivo real de dist/.
+# Por eso los rubros migrados dejan de generarse en /proyectos/[slug]: si el
+# archivo existiera, ganaría sobre estas reglas y el 301 nunca se dispararía.
 
 # El sitemap real lo genera @astrojs/sitemap como /sitemap-index.xml, pero los
 # rastreadores —sobre todo los de IA— piden /sitemap.xml. Es la ruta más
 # solicitada del sitio y hasta ahora respondía 404.
-/sitemap.xml    /sitemap-index.xml    301
+/sitemap.xml  /sitemap-index.xml  301
 
 # /clientes se fusionó con /proyectos en el rediseño 2026. Estaba resuelto en
 # astro.config como meta-refresh, que responde 200 y Google lee como duplicado
 # en vez de como redirección: no pasaba autoridad.
-/clientes     /proyectos/    301
-/clientes/    /proyectos/    301
+/clientes  /proyectos/  301
+/clientes/  /proyectos/  301
 
 # Rubros que migraron a una URL con la keyword en el slug. Las rutas viejas
 # estaban en el sitemap y siguen indexadas: ninguna puede terminar en 404.
 # Se listan con y sin barra final porque el sitemap las publicaba con barra y
 # los enlaces externos suelen omitirla.
-/proyectos/pollerias-restaurantes     /paginas-web-para-pollerias/     301
-/proyectos/pollerias-restaurantes/    /paginas-web-para-pollerias/     301
-/proyectos/ferreterias                /paginas-web-para-ferreterias/   301
-/proyectos/ferreterias/               /paginas-web-para-ferreterias/   301
-/proyectos/veterinarias-petshop       /paginas-web-para-veterinarias/  301
-/proyectos/veterinarias-petshop/      /paginas-web-para-veterinarias/  301
+/proyectos/pollerias-restaurantes  /paginas-web-para-pollerias/  301
+/proyectos/pollerias-restaurantes/  /paginas-web-para-pollerias/  301
+/proyectos/ferreterias  /paginas-web-para-ferreterias/  301
+/proyectos/ferreterias/  /paginas-web-para-ferreterias/  301
+/proyectos/veterinarias-petshop  /paginas-web-para-veterinarias/  301
+/proyectos/veterinarias-petshop/  /paginas-web-para-veterinarias/  301
+/proyectos/clinicas-consultorios  /paginas-web-para-clinicas/  301
+/proyectos/clinicas-consultorios/  /paginas-web-para-clinicas/  301
+/proyectos/academias-preuniversitarios  /paginas-web-para-academias/  301
+/proyectos/academias-preuniversitarios/  /paginas-web-para-academias/  301
+/proyectos/gimnasios-crossfit  /paginas-web-para-gimnasios/  301
+/proyectos/gimnasios-crossfit/  /paginas-web-para-gimnasios/  301
