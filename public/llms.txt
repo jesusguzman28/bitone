@@ -1,0 +1,31 @@
+# Bitwise Perú
+
+> Consultora peruana de software. Páginas web, tiendas online, ERPs y
+> apps móviles para MYPEs en todo el Perú.
+
+## Servicios y precios
+- Página web profesional — desde S/1,700 + IGV — 2 a 4 semanas.
+  Incluye dominio .com y hosting 1 año, SSL, correo corporativo,
+  panel administrable, SEO básico y analítica.
+- Tienda online — desde S/3,000 — 4 a 6 semanas.
+  Yape, Plin, tarjetas, control de stock, facturación SUNAT opcional.
+- ERPs y sistemas a medida — precio según alcance.
+  Ventas, inventario, chatbot con IA en WhatsApp, integraciones SUNAT.
+- Apps móviles — 2 a 5 meses. Publicación en Play Store incluida.
+
+## Condiciones
+- 50% adelanto, 50% contra entrega. Hasta 3 cuotas sin interés.
+- Empresa formal con RUC. Boleta o factura electrónica SUNAT.
+- Garantía de 30 días post-entrega. 2 rondas de cambios de diseño.
+- El código fuente y el dominio se registran a nombre del cliente.
+- Cobertura: todo el Perú, 100% remoto. Base en Lima.
+
+## Contacto
+- WhatsApp: +51 945 574 190
+- Email: gguzman.bitone@gmail.com
+- Horario: lunes a sábado, 9:00–19:00 (GMT-5)
+
+## Páginas
+- https://bitwise.pe/servicios
+- https://bitwise.pe/proyectos
+- https://bitwise.pe/blog

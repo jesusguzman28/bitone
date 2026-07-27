@@ -34,10 +34,11 @@ import { hero, heroStats, waLink } from '../data/site';
         {/* En móvil este bloque está oculto, pero display:none NO evita la
             descarga. El source con un pixel transparente la corta de raíz. */}
         <source media="(max-width: 640px)" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+        {/* En escritorio este carrusel es la única imagen real del producto
+            (la vitrina de abajo está oculta), así que aquí va el alt descriptivo */}
         <img
           src={s.src}
-          alt=""
-          aria-hidden="true"
+          alt={s.alt}
           data-slide={i}
           loading={i === 0 ? 'eager' : 'lazy'}
           fetchpriority={i === 0 ? 'high' : undefined}
@@ -64,7 +65,7 @@ import { hero, heroStats, waLink } from '../data/site';
             <source media="(min-width: 641px)" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
             <img
               src={s.msrc}
-              alt={s.label}
+              alt={s.alt}
               data-slide={i}
               loading={i === 0 ? 'eager' : 'lazy'}
               fetchpriority={i === 0 ? 'high' : undefined}

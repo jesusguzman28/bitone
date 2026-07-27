@@ -73,10 +73,27 @@ export const hero = {
     { label: 'Precio justo', color: '#22c55e', icon: '<circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8M12 18V6"/>' },
     { label: 'Profesionales', color: '#818cf8', icon: '<path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/>' },
   ],
+  // `label` es la etiqueta visible del carrusel; `alt` describe lo que se ve en
+  // la foto para lectores de pantalla y para Google Imágenes.
   slides: [
-    { src: '/hero/uno.webp', msrc: '/hero/celular/uno.webp', label: 'Página web' },
-    { src: '/hero/dos.webp', msrc: '/hero/celular/dos.webp', label: 'Aplicaciones móviles' },
-    { src: '/hero/tres.webp', msrc: '/hero/celular/tres.webp', label: 'Tienda virtual' },
+    {
+      src: '/hero/uno.webp',
+      msrc: '/hero/celular/uno.webp',
+      label: 'Página web',
+      alt: 'Página web de una tienda de artesanía peruana abierta en un iMac sobre un escritorio de madera',
+    },
+    {
+      src: '/hero/dos.webp',
+      msrc: '/hero/celular/dos.webp',
+      label: 'Aplicaciones móviles',
+      alt: 'App móvil de una tienda de accesorios mostrando un producto con su precio en soles, sostenida en la mano',
+    },
+    {
+      src: '/hero/tres.webp',
+      msrc: '/hero/celular/tres.webp',
+      label: 'Tienda virtual',
+      alt: 'Tienda virtual con catálogo de textiles peruanos, filtros y botones de añadir al carrito, abierta en una laptop',
+    },
   ],
 } as const;
 

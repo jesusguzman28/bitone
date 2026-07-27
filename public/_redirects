@@ -1,0 +1,8 @@
+# Redirecciones servidas por Cloudflare Workers (assets estáticos).
+# Formato: [origen] [destino] [código]
+# Solo se evalúan cuando la ruta NO corresponde a un archivo real de dist/.
+
+# El sitemap real lo genera @astrojs/sitemap como /sitemap-index.xml, pero los
+# rastreadores —sobre todo los de IA— piden /sitemap.xml. Es la ruta más
+# solicitada del sitio y hasta ahora respondía 404.
+/sitemap.xml    /sitemap-index.xml    301

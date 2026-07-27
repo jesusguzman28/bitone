@@ -49,7 +49,17 @@ const pista = Array.from({ length: REPETICIONES }, () => marcas).flat();
             <use href={`#${sim.id}`} />
           </svg>
         ) : m.logo ? (
-          <img src={m.logo} alt={primeraVuelta ? m.alt : ''} loading="lazy" class="mb-mark h-12 w-12 rounded-[12px] object-cover" />
+          /* La pista repite el set 6 veces. Solo la primera vuelta describe el
+             logo; las copias van con alt="" y aria-hidden para no repetir el
+             mismo nombre 6 veces en el lector de pantalla.
+             Van como dos ramas y no como alt={cond ? x : ''} porque Astro
+             renderiza el string vacío como un atributo `alt` suelto, sin valor,
+             y los auditores lo cuentan como imagen sin alt. */
+          primeraVuelta ? (
+            <img src={m.logo} alt={m.alt} loading="lazy" class="mb-mark h-12 w-12 rounded-[12px] object-cover" />
+          ) : (
+            <img src={m.logo} alt="" aria-hidden="true" loading="lazy" class="mb-mark h-12 w-12 rounded-[12px] object-cover" />
+          )
         ) : (
           <>
             {m.name}
