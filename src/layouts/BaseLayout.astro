@@ -19,9 +19,13 @@ interface Props {
   breadcrumbLabel?: string;
   preloadImages?: PreloadImage[];
   /** Nodos propios de la página (Service, Offer, FAQPage…) que se suman al
-   *  @graph. Van en el mismo grafo, y no en un <script> aparte, para que las
-   *  referencias por @id —provider, publisher— resuelvan contra los nodos que
-   *  ya declara este layout. */
+   *  @graph. Van en el mismo grafo, y no en una etiqueta de script aparte,
+   *  para que las referencias por @id —provider, publisher— resuelvan contra
+   *  los nodos que ya declara este layout.
+   *
+   *  Ojo: aquí no se escribe la etiqueta de script con sus signos de menor y
+   *  mayor. Vite la detecta incluso dentro de un comentario y trata el texto
+   *  que sigue como JavaScript de verdad, lo que tumbaba el servidor. */
   schema?: Record<string, unknown>[];
 }
 
