@@ -3,8 +3,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ContactForm from '../components/ContactForm.astro';
 import Stars from '../components/Stars.astro';
 import CTA from '../components/CTA.astro';
+import Icono from '../components/Icono.astro';
+import MockupWeb from '../components/MockupWeb.astro';
 import { landings, rubroDeLanding, hrefRubro, type Landing } from '../data/landings';
 import { rubros, soles, totalModulos, afinesRubro, anchorRubro } from '../data/rubros';
+import { iconoPara } from '../data/iconos';
 import { site, waLink } from '../data/site';
 
 export function getStaticPaths() {
@@ -71,50 +74,81 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
   breadcrumbLabel={landing.breadcrumb}
   schema={schema}
 >
-  <!-- Hero -->
+  <!-- Hero: texto a la izquierda, esquema de la web a la derecha -->
   <section class="hero-dark relative isolate overflow-hidden px-6 pb-20 pt-[140px] text-white">
     <Stars />
-    <div class="mx-auto w-full max-w-[900px]">
-      <nav aria-label="Ruta" class="mb-8 text-[13px] text-slate-400">
-        <a href="/proyectos" class="text-slate-400 no-underline transition-colors hover:text-white">Proyectos</a>
-        <span class="mx-2 text-slate-600">/</span>
-        <span class="text-slate-300">{landing.breadcrumb}</span>
-      </nav>
+    <div class="mx-auto grid w-full max-w-[1120px] items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+      <div>
+        <nav aria-label="Ruta" class="mb-8 text-[13px] text-slate-400">
+          <a href="/proyectos" class="text-slate-400 no-underline transition-colors hover:text-white">Proyectos</a>
+          <span class="mx-2 text-slate-600">/</span>
+          <span class="text-slate-300">{landing.breadcrumb}</span>
+        </nav>
 
-      <span class="eyebrow eyebrow--dark">{landing.eyebrow}</span>
+        <span class="eyebrow eyebrow--dark">
+          <span class="text-[15px] leading-none" aria-hidden="true">{rubro.emoji}</span>
+          {landing.eyebrow}
+        </span>
 
-      <h1 class="mt-5 max-w-[820px] font-display text-[clamp(2rem,5.5vw,3.25rem)] font-extrabold leading-[1.08]">
-        {landing.h1}
-      </h1>
-      <p class="mt-5 max-w-[620px] text-[17px] leading-[1.65] text-slate-300">{landing.intro}</p>
+        <h1 class="mt-5 font-display text-[clamp(2rem,5vw,3rem)] font-extrabold leading-[1.08]">
+          {landing.h1}
+        </h1>
+        <p class="mt-5 max-w-[560px] text-[17px] leading-[1.65] text-slate-300">{landing.intro}</p>
 
-      <div class="mt-7 flex flex-wrap gap-3">
-        <span class="hero-chip">Desde <strong class="text-accent">{soles(rubro.startingPrice)} + IGV</strong></span>
-        <span class="hero-chip">Entrega en <strong class="text-accent">{rubro.deliveryTime}</strong></span>
-        <span class="hero-chip">Dominio y hosting <strong class="text-accent">incluidos</strong></span>
-      </div>
-
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a href={waLink(waMsg)} target="_blank" rel="noopener" class="btn btn--whatsapp group !py-3 !pl-[26px] !text-[15px]">
-          Cotizar por WhatsApp
-          <span class="btn__icon" aria-hidden="true">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <span class="hero-chip">
+            <Icono name="etiqueta" size={15} />
+            Desde <strong class="text-accent">{soles(rubro.startingPrice)} + IGV</strong>
           </span>
-        </a>
-        <a href="#formulario" class="btn btn--on-dark !px-[26px] !py-3 !text-[15px]">Formulario de contacto</a>
+          <span class="hero-chip">
+            <Icono name="reloj" size={15} />
+            Entrega en <strong class="text-accent">{rubro.deliveryTime}</strong>
+          </span>
+          <span class="hero-chip">
+            <Icono name="www" size={15} />
+            Dominio y hosting <strong class="text-accent">incluidos</strong>
+          </span>
+        </div>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href={waLink(waMsg)} target="_blank" rel="noopener" class="btn btn--whatsapp group !py-3 !pl-[26px] !text-[15px]">
+            Cotizar por WhatsApp
+            <span class="btn__icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+            </span>
+          </a>
+          <a href="#formulario" class="btn btn--on-dark !px-[26px] !py-3 !text-[15px]">Formulario de contacto</a>
+        </div>
       </div>
+
+      <MockupWeb
+        emoji={rubro.emoji}
+        titulo={landing.secciones.items[0]?.title ?? rubro.title}
+        secciones={landing.secciones.items.map((s) => s.title)}
+        ruta={`tu-${rubro.short.replace(/\s+/g, '')}.com`}
+      />
     </div>
   </section>
 
   <!-- 1. El problema -->
   <section class="surface px-6 py-20">
-    <div class="mx-auto w-full max-w-[760px]">
-      <h2 class="reveal font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
-        {landing.problema.title}
-      </h2>
-      <div class="mt-6 grid gap-5">
-        {landing.problema.parrafos.map((p) => (
-          <p class="reveal m-0 text-[16.5px] leading-[1.75] text-slate-600 [text-wrap:pretty]">{p}</p>
+    <div class="mx-auto w-full max-w-[900px]">
+      <div class="reveal flex items-start gap-4">
+        <span class="prob-ico grid h-12 w-12 flex-none place-items-center rounded-[14px]">
+          <Icono name="campanaAlerta" size={22} />
+        </span>
+        <h2 class="m-0 pt-1 font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
+          {landing.problema.title}
+        </h2>
+      </div>
+
+      <!-- Cada párrafo como bloque con guía a la izquierda: el muro de texto
+           corrido era lo que hacía que nadie leyera esta parte. -->
+      <div class="mt-8 grid gap-4">
+        {landing.problema.parrafos.map((p, i) => (
+          <p class="reveal prob-parrafo m-0 rounded-[16px] bg-white p-6 text-[16.5px] leading-[1.75] text-slate-600 [text-wrap:pretty]" style={`--reveal-delay:${i * 90}ms`}>
+            {p}
+          </p>
         ))}
       </div>
     </div>
@@ -132,8 +166,15 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
 
       <ol class="mt-10 grid list-none gap-4 p-0" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">
         {landing.secciones.items.map((s, i) => (
-          <li class="reveal card rounded-[20px] p-6" style={`--reveal-delay:${(i % 3) * 90}ms`}>
-            <span class="grid h-8 w-8 place-items-center rounded-[10px] font-display text-[14px] font-bold" style="background:rgba(217,16,35,0.08);color:#D91023">{i + 1}</span>
+          <li class="reveal seccion-card rounded-[20px] bg-white p-6" style={`--reveal-delay:${(i % 3) * 90}ms`}>
+            <div class="flex items-center justify-between">
+              <span class="seccion-ico grid h-11 w-11 place-items-center rounded-[13px]">
+                <Icono name={iconoPara(s.title)} size={20} />
+              </span>
+              <span class="font-display text-[26px] font-extrabold leading-none text-slate-100 [font-variant-numeric:tabular-nums]">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+            </div>
             <h3 class="mt-4 font-display text-[17px] font-bold leading-[1.3] text-dark">{s.title}</h3>
             <p class="mt-2 text-[14.5px] leading-[1.65] text-slate-500">{s.desc}</p>
           </li>
@@ -154,12 +195,16 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
 
       <div class="mt-10 grid gap-4" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">
         {landing.funciones.items.map((f, i) => (
-          <div class="reveal card card--lift rounded-[20px] p-6" style={`--reveal-delay:${(i % 3) * 90}ms`}>
-            <span class="grid h-9 w-9 place-items-center rounded-[11px]" style="background:rgba(22,163,74,0.1);color:#16a34a">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="m5 13 4 4L19 7"/></svg>
-            </span>
-            <h3 class="mt-4 font-display text-[17px] font-bold leading-[1.3] text-dark">{f.title}</h3>
-            <p class="mt-2 text-[14.5px] leading-[1.65] text-slate-500">{f.desc}</p>
+          <div class="reveal func-card rounded-[20px] bg-white p-6" style={`--reveal-delay:${(i % 3) * 90}ms`}>
+            <div class="flex items-start gap-3.5">
+              {/* Icono según lo que hace la función: antes las seis tarjetas
+                  llevaban el mismo check verde y no se distinguían de un vistazo. */}
+              <span class="func-ico grid h-11 w-11 flex-none place-items-center rounded-[13px]">
+                <Icono name={iconoPara(f.title)} size={20} />
+              </span>
+              <h3 class="m-0 pt-2 font-display text-[17px] font-bold leading-[1.3] text-dark">{f.title}</h3>
+            </div>
+            <p class="mt-3 text-[14.5px] leading-[1.65] text-slate-500">{f.desc}</p>
           </div>
         ))}
       </div>
@@ -314,13 +359,75 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
   .hero-chip {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     border-radius: 12px;
     padding: 10px 16px;
     font-size: 14px;
     color: #cbd5e1;
     background: rgba(255, 255, 255, 0.06);
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  }
+  .hero-chip :global(svg) { color: #94a3b8; }
+
+  /* ---- El problema ---- */
+  .prob-ico {
+    color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 9%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 18%, transparent);
+  }
+  .prob-parrafo {
+    position: relative;
+    overflow: hidden;
+    padding-left: 28px;
+    box-shadow: inset 0 0 0 1px var(--hairline);
+  }
+  /* Guía de color: marca dónde empieza cada idea sin usar viñetas */
+  .prob-parrafo::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--color-primary), var(--color-accent));
+    opacity: 0.55;
+  }
+
+  /* ---- Secciones numeradas ---- */
+  .seccion-card {
+    box-shadow: inset 0 0 0 1px var(--hairline);
+    transition: transform 0.45s var(--ease-fluid), box-shadow 0.45s var(--ease-fluid);
+  }
+  .seccion-card:hover {
+    transform: translateY(-4px);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 40%, transparent),
+      0 20px 40px -20px rgba(217, 16, 35, 0.18);
+  }
+  .seccion-ico {
+    color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+    transition: transform 0.45s var(--ease-fluid);
+  }
+  .seccion-card:hover .seccion-ico { transform: scale(1.08) rotate(-6deg); }
+
+  /* ---- Funcionalidades ---- */
+  .func-card {
+    box-shadow: inset 0 0 0 1px var(--hairline);
+    transition: transform 0.45s var(--ease-fluid), box-shadow 0.45s var(--ease-fluid);
+  }
+  .func-card:hover {
+    transform: translateY(-4px);
+    box-shadow: inset 0 0 0 1px var(--hairline-strong), 0 20px 40px -20px rgba(0, 0, 0, 0.14);
+  }
+  .func-ico {
+    color: #16a34a;
+    background: rgba(22, 163, 74, 0.1);
+    transition: transform 0.45s var(--ease-fluid);
+  }
+  .func-card:hover .func-ico { transform: scale(1.08); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .seccion-card, .func-card, .seccion-ico, .func-ico { transition: none; }
   }
 
   /* Las preguntas van en <details>: el contenido queda en el HTML servido, así

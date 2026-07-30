@@ -34,6 +34,26 @@ export const iconos: Record<string, Icono> = {
   tienda: { d: '<path d="M3 9 4.5 4h15L21 9"/><path d="M3 9h18v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9Z"/><path d="M9 21v-6h6v6"/>' },
   escudo: { d: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/>' },
 
+  // ---- Ampliación para las landings por rubro ----
+  // El icono de cada punto se elige por lo que dice su título (ver iconoPara),
+  // así que aquí hay que cubrir el vocabulario real de esos textos.
+  calendario: { d: '<rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/>' },
+  reloj: { d: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>' },
+  mapa: { d: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>' },
+  estrella: { d: '<path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6-5.4-2.9-5.4 2.9 1-6L3.2 9.4l6.1-.9L12 3Z"/>' },
+  chat: { d: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/><path d="M8 9h8M8 13h5"/>' },
+  usuarios: { d: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/>' },
+  buscar: { d: '<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>' },
+  foto: { d: '<rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="9" cy="11" r="2"/><path d="m21 17-5-5-4 4-2-2-4 4"/>' },
+  moto: { d: '<circle cx="5.5" cy="17" r="3.5"/><circle cx="18.5" cy="17" r="3.5"/><path d="M5.5 17h6l4-8h3M12 9h4M9 9h3l3 8"/>' },
+  etiqueta: { d: '<path d="M12 2H2v10l9.3 9.3a1 1 0 0 0 1.4 0l8.3-8.3a1 1 0 0 0 0-1.4L12 2Z"/><path d="M7 7h.01"/>' },
+  campanaAlerta: { d: '<path d="M12 2v3M4.2 6.2 6.3 8.3M2 14h3M19 14h3M17.7 8.3l2.1-2.1"/><path d="M8 20a4 4 0 0 0 8 0"/><path d="M6 14a6 6 0 0 1 12 0v6H6Z"/>' },
+  caja: { d: '<path d="M21 16V8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/>' },
+  candado: { d: '<rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>' },
+  libro: { d: '<path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v18H6.5A2.5 2.5 0 0 0 4 22.5Z"/><path d="M8 7h8M8 11h6"/>' },
+  corazon: { d: '<path d="M20.8 5.6a5 5 0 0 0-7.1 0L12 7.3l-1.7-1.7a5 5 0 1 0-7.1 7.1L12 21.5l8.8-8.8a5 5 0 0 0 0-7.1Z"/>' },
+  llamada: { d: '<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/>' },
+
   // ---- Logotipos de marca (color propio) ----
   google: {
     brand: true,
@@ -50,3 +70,50 @@ export const iconos: Record<string, Icono> = {
 };
 
 export const getIcono = (nombre: string): Icono | undefined => iconos[nombre];
+
+// ---------------------------------------------------------------------------
+// Elección de icono a partir del texto del punto.
+//
+// Las landings por rubro tienen ~150 puntos entre secciones y funcionalidades.
+// Etiquetar cada uno a mano en los datos era ruido puro y quedaba desactualizado
+// al primer cambio de copy, así que el icono se deduce de lo que dice el título.
+// El orden importa: gana la primera coincidencia, y las reglas más específicas
+// van antes que las genéricas ("carta digital" antes que "digital").
+// ---------------------------------------------------------------------------
+const REGLAS: readonly (readonly [RegExp, string])[] = [
+  [/whatsapp/i, 'whatsapp'],
+  [/google|buscador|seo|posicion/i, 'google'],
+  [/urgencia|emergencia|alerta|aviso|recordatorio|notificaci/i, 'campanaAlerta'],
+  [/cita|reserva|agenda|turno|horario|calendario|ciclo|fecha|check-?in|anticipaci|capacidad/i, 'calendario'],
+  [/delivery|reparto|env[íi]o|zona|moto/i, 'moto'],
+  [/pago|cobro|yape|plin|tarjeta|pasarela|checkout|caja|se[ñn]a/i, 'tarjeta'],
+  [/factur|boleta|sunat|comprobante|convenio|seguro|formulario/i, 'documento'],
+  [/b[úu]squeda|busca|filtro|equivalencia|gen[ée]rico|estado del|seguimiento/i, 'buscar'],
+  [/cat[áa]logo|producto|carta|men[úu]|stock|inventario|tienda|lista de compra|del d[íi]a/i, 'carrito'],
+  [/foto|galer[íi]a|imagen/i, 'foto'],
+  [/rese[ñn]a|opini[óo]n|testimoni|estrella|valoraci/i, 'estrella'],
+  [/reporte|venta|estad[íi]stica|m[ée]trica|resultado|ingresante/i, 'grafico'],
+  [/panel|administrable|autogesti|editar|portal/i, 'tablero'],
+  [/ubicaci|mapa|direcci|sede|sucursal|local\b/i, 'mapa'],
+  [/cliente|paciente|alumno|miembro|socio|equipo|profesional|entrenador|docente|plana|padre/i, 'usuarios'],
+  [/llamada|tel[ée]fono|contacto directo/i, 'llamada'],
+  [/seguridad|ssl|certificado|privacidad|dato/i, 'candado'],
+  [/qr\b|m[óo]vil|celular|responsive/i, 'celular'],
+  [/cotizad|cotizaci|presupuesto|precio/i, 'etiqueta'],
+  [/paquete|pedido|orden|encargo/i, 'caja'],
+  [/historia|ficha|registro|expediente|curso|clase|matr[íi]cula|inscripci|especialidad|servicio|tratamiento|indicaci|luna/i, 'libro'],
+  [/fidelid|promoci|descuento|cup[óo]n|membres|suscripci|oferta|campa[ñn]a|temporada/i, 'corazon'],
+  [/garant[íi]a/i, 'escudo'],
+  [/tiempo|plazo|24|horario de atenci/i, 'reloj'],
+  [/correo|email|mail/i, 'correo'],
+  [/web|sitio|p[áa]gina|dominio|hosting/i, 'www'],
+  [/sistema|integraci|api|automatiza|ajuste/i, 'tuerca'],
+];
+
+/** Devuelve el nombre de icono que mejor describe un título. */
+export function iconoPara(texto: string, respaldo = 'escudo'): string {
+  for (const [patron, icono] of REGLAS) {
+    if (patron.test(texto)) return icono;
+  }
+  return respaldo;
+}
