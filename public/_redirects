@@ -43,3 +43,10 @@
 /proyectos/opticas/  /paginas-web-para-opticas/  301
 /proyectos/bodegas-minimarkets  /paginas-web-para-bodegas/  301
 /proyectos/bodegas-minimarkets/  /paginas-web-para-bodegas/  301
+
+# La guía de precios del blog y la landing /cuanto-cuesta-una-pagina-web-en-peru
+# respondían a la misma búsqueda con el mismo título. Dos URLs propias
+# compitiendo por una keyword se reparten la autoridad y ninguna sube: se
+# consolida en la landing, que es la más completa y la que lleva Offer y FAQPage.
+/blog/cuanto-cuesta-una-pagina-web-en-peru-2026  /cuanto-cuesta-una-pagina-web-en-peru/  301
+/blog/cuanto-cuesta-una-pagina-web-en-peru-2026/  /cuanto-cuesta-una-pagina-web-en-peru/  301

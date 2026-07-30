@@ -1,4 +1,74 @@
+# Bitwise Perú — https://bitwise.pe
+
+# Buscadores tradicionales
 User-agent: *
 Allow: /
+
+# ---------------------------------------------------------------------------
+# Rastreadores de buscadores con IA.
+#
+# Van con Allow explícito porque queremos que nos citen como fuente cuando
+# alguien pregunta por precios de páginas web en Perú. Sin una regla propia
+# algunos operadores asumen que no hay permiso, y varios distinguen entre el
+# bot que entrena el modelo y el que responde búsquedas en vivo: los dos
+# aparecen aquí porque en ambos casos nos interesa estar.
+# ---------------------------------------------------------------------------
+
+# OpenAI — ChatGPT
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic — Claude
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# Google — Gemini y las respuestas con IA del buscador
+User-agent: Google-Extended
+Allow: /
+
+# Microsoft — Copilot
+User-agent: Bingbot
+Allow: /
+
+# Apple Intelligence
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Common Crawl: alimenta a varios modelos abiertos
+User-agent: CCBot
+Allow: /
+
+# Meta AI
+User-agent: meta-externalagent
+Allow: /
+
+# Amazon
+User-agent: Amazonbot
+Allow: /
+
+# Resumen del negocio en texto plano para modelos de lenguaje:
+# https://bitwise.pe/llms.txt
 
 Sitemap: https://bitwise.pe/sitemap-index.xml
