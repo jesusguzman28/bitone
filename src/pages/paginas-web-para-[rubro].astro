@@ -8,6 +8,7 @@ import MockupWeb from '../components/MockupWeb.astro';
 import { landings, rubroDeLanding, hrefRubro, type Landing } from '../data/landings';
 import { rubros, soles, totalModulos, afinesRubro, anchorRubro } from '../data/rubros';
 import { iconoPara } from '../data/iconos';
+import { fotoDeRubro } from '../data/fotos';
 import { site, waLink } from '../data/site';
 
 export function getStaticPaths() {
@@ -19,6 +20,10 @@ const { landing } = Astro.props;
 
 const rubro = rubroDeLanding(landing);
 const url = `${site.domain}/paginas-web-para-${landing.param}/`;
+
+// Si un rubro nuevo todavía no tiene foto, la sección cae al layout de una
+// columna en vez de dejar un hueco.
+const foto = fotoDeRubro(landing.param);
 
 const afines = (afinesRubro[rubro.slug] ?? [])
   .map((slug) => rubros.find((r) => r.slug === slug))
@@ -132,24 +137,46 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
 
   <!-- 1. El problema -->
   <section class="surface px-6 py-20">
-    <div class="mx-auto w-full max-w-[900px]">
-      <div class="reveal flex items-start gap-4">
-        <span class="prob-ico grid h-12 w-12 flex-none place-items-center rounded-[14px]">
-          <Icono name="campanaAlerta" size={22} />
-        </span>
-        <h2 class="m-0 pt-1 font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
-          {landing.problema.title}
-        </h2>
-      </div>
+    <div class={`mx-auto w-full ${foto ? 'max-w-[1120px] lg:grid lg:grid-cols-[0.8fr_1fr] lg:items-start lg:gap-12' : 'max-w-[900px]'}`}>
+      {foto && (
+        // Foto de ambiente del rubro. Se queda fija mientras se leen los
+        // párrafos: da contexto sin robarle sitio al texto, que es lo que
+        // indexa Google. Es una escena del rubro, no un trabajo nuestro.
+        <figure class="reveal foto-rubro m-0 mb-10 lg:mb-0">
+          <picture>
+            <source media="(max-width: 1023px)" srcset={`/rubros/${landing.param}-sm.webp`} width="560" height="380" />
+            <img
+              src={`/rubros/${landing.param}.webp`}
+              width="880"
+              height="600"
+              alt={foto.alt}
+              loading="lazy"
+              decoding="async"
+              class="block h-full w-full object-cover"
+            />
+          </picture>
+        </figure>
+      )}
 
-      <!-- Cada párrafo como bloque con guía a la izquierda: el muro de texto
-           corrido era lo que hacía que nadie leyera esta parte. -->
-      <div class="mt-8 grid gap-4">
-        {landing.problema.parrafos.map((p, i) => (
-          <p class="reveal prob-parrafo m-0 rounded-[16px] bg-white p-6 text-[16.5px] leading-[1.75] text-slate-600 [text-wrap:pretty]" style={`--reveal-delay:${i * 90}ms`}>
-            {p}
-          </p>
-        ))}
+      <div>
+        <div class="reveal flex items-start gap-4">
+          <span class="prob-ico grid h-12 w-12 flex-none place-items-center rounded-[14px]">
+            <Icono name="campanaAlerta" size={22} />
+          </span>
+          <h2 class="m-0 pt-1 font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
+            {landing.problema.title}
+          </h2>
+        </div>
+
+        <!-- Cada párrafo como bloque con guía a la izquierda: el muro de texto
+             corrido era lo que hacía que nadie leyera esta parte. -->
+        <div class="mt-8 grid gap-4">
+          {landing.problema.parrafos.map((p, i) => (
+            <p class="reveal prob-parrafo m-0 rounded-[16px] bg-white p-6 text-[16.5px] leading-[1.75] text-slate-600 [text-wrap:pretty]" style={`--reveal-delay:${i * 90}ms`}>
+              {p}
+            </p>
+          ))}
+        </div>
       </div>
     </div>
   </section>
@@ -368,6 +395,46 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
   }
   .hero-chip :global(svg) { color: #94a3b8; }
+
+  /* ---- Foto de ambiente del rubro ---- */
+  .foto-rubro {
+    position: relative;
+    overflow: hidden;
+    border-radius: 22px;
+    /* Alto fijo por proporción: reserva el espacio antes de que cargue y evita
+       que la foto empuje el texto al terminar de descargar. */
+    aspect-ratio: 4 / 3;
+    box-shadow:
+      inset 0 0 0 1px var(--hairline),
+      0 30px 60px -35px rgba(15, 23, 42, 0.45);
+  }
+  /* Velo de marca: iguala doce fotos de fuentes distintas para que la página
+     no parezca un collage de stock. */
+  .foto-rubro::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--color-primary) 14%, transparent),
+      transparent 55%
+    );
+    pointer-events: none;
+  }
+  .foto-rubro picture { display: block; height: 100%; }
+
+  /* El sticky va aquí y no como clase lg:sticky porque el `position: relative`
+     de arriba (necesario para el velo ::after) gana por orden de hoja. */
+  @media (min-width: 1024px) {
+    .foto-rubro {
+      position: sticky;
+      top: 112px;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .foto-rubro { aspect-ratio: 3 / 2; }
+  }
 
   /* ---- El problema ---- */
   .prob-ico {

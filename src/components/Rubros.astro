@@ -1,9 +1,13 @@
 ---
 import { rubros, rubroCats, totalModulos } from '../data/rubros';
 import { hrefRubro } from '../data/landings';
+import { fotoDeSlug } from '../data/fotos';
 
 interface Props { variant?: 'marquee' | 'grid'; }
 const { variant = 'marquee' } = Astro.props;
+
+// Se resuelve una vez por rubro en vez de tres veces dentro del map.
+const fotos = new Map(rubros.map((r) => [r.slug, fotoDeSlug(r.slug)]));
 
 const loop = [...rubros, ...rubros];
 const countFor = (cat: string) =>
@@ -60,19 +64,37 @@ const countFor = (cat: string) =>
         {rubros.map((r) => (
           <a
             href={hrefRubro(r.slug)}
-            class="rubro-item rubro-card flex flex-col rounded-[20px] bg-white p-6 no-underline"
+            class="rubro-item rubro-card flex flex-col overflow-hidden rounded-[20px] bg-white no-underline"
             data-cat={r.cat}
           >
-            <span class="text-[38px] leading-none">{r.emoji}</span>
-            <h3 class="mt-4 font-display text-[20px] font-bold leading-[1.25] text-dark">{r.title}</h3>
-            <p class="mt-2 text-[14.5px] leading-[1.55] text-slate-500">{r.tagline}</p>
+            {fotos.get(r.slug) ? (
+              // Foto de ambiente del rubro con el emoji encima a modo de sello.
+              // Antes la tarjeta era solo emoji y texto y las doce se veían
+              // iguales de lejos.
+              <span class="rubro-foto">
+                <img
+                  src={`/rubros/${fotos.get(r.slug)!.param}-sm.webp`}
+                  width="560"
+                  height="380"
+                  alt={fotos.get(r.slug)!.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span class="rubro-sello">{r.emoji}</span>
+              </span>
+            ) : (
+              <span class="block px-6 pt-6 text-[38px] leading-none">{r.emoji}</span>
+            )}
 
-            <div class="mt-4 flex flex-wrap gap-2">
+            <h3 class="mt-4 px-6 font-display text-[20px] font-bold leading-[1.25] text-dark">{r.title}</h3>
+            <p class="mt-2 px-6 text-[14.5px] leading-[1.55] text-slate-500">{r.tagline}</p>
+
+            <div class="mt-4 flex flex-wrap gap-2 px-6">
               <span class="tag tag--time">Entrega en {r.deliveryTime}</span>
               <span class="tag tag--mods">{totalModulos(r)} módulos</span>
             </div>
 
-            <div class="mt-5 flex items-center justify-between border-t border-dashed border-slate-200 pt-4">
+            <div class="mt-5 mb-6 flex items-center justify-between border-t border-dashed border-slate-200 px-6 pt-4">
               <span class="text-sm font-semibold text-primary">Ver módulos</span>
               <svg class="rubro-arrow text-primary" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
             </div>
@@ -195,6 +217,46 @@ const countFor = (cat: string) =>
       padding-block: 2px;
     }
     .cat-pill { white-space: nowrap; }
+  }
+
+  /* ---- Foto de cabecera de la tarjeta ---- */
+  .rubro-foto {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: #eef1f6; /* placeholder mientras carga, sin salto de layout */
+  }
+  .rubro-foto img {
+    display: block;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    transition: transform 0.7s var(--ease-fluid);
+  }
+  .rubro-card:hover .rubro-foto img { transform: scale(1.05); }
+  /* Degradado inferior: el emoji tiene que leerse sobre fotos claras y oscuras */
+  .rubro-foto::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 60%;
+    background: linear-gradient(180deg, transparent, rgba(15, 23, 42, 0.55));
+  }
+  .rubro-sello {
+    position: absolute;
+    left: 14px;
+    bottom: 12px;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    height: 40px;
+    width: 40px;
+    border-radius: 12px;
+    font-size: 20px;
+    line-height: 1;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 8px 20px -8px rgba(15, 23, 42, 0.6);
   }
 
   /* ---- Tarjeta de rubro ---- */
