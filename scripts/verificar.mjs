@@ -1,0 +1,219 @@
+// Revisión previa al despliegue.
+//
+// Existe por un error concreto: un comentario del layout tenía escrita la
+// etiqueta de script con sus signos de menor y mayor. Vite la detectaba aunque
+// estuviera comentada y trataba el texto en español como JavaScript, así que
+// el servidor de desarrollo se caía al arrancar. Pero `astro build` pasaba sin
+// quejarse, porque ese escaneo solo corre en modo desarrollo. Es decir: la
+// compilación sola NO alcanza para saber si el sitio está sano.
+//
+// Por eso este script revisa las dos cosas:
+//
+//   1. Que compile, y que el resultado tenga las páginas y el contenido que
+//      debe tener (no basta con que el comando termine sin error: también
+//      revisa que no se hayan quedado páginas vacías o sin título).
+//   2. Que el servidor de desarrollo arranque de verdad y responda, mirando
+//      además su salida por si escupe errores mientras sigue en pie.
+//
+// Se usa así, antes de subir a producción:
+//
+//     npm run verificar
+//
+// Devuelve código 0 si todo está bien y 1 si algo falló, para que sea difícil
+// desplegar sin querer una versión rota.
+
+import { spawn } from 'node:child_process';
+import { readFile, readdir, stat } from 'node:fs/promises';
+import { join } from 'node:path';
+
+// Rutas que siempre tienen que existir y responder. Si se agrega una página
+// importante al sitio, va aquí.
+const RUTAS = [
+  '/',
+  '/servicios/',
+  '/proyectos/',
+  '/nosotros/',
+  '/contacto/',
+  '/blog/',
+  '/cuanto-cuesta-una-pagina-web-en-peru/',
+  '/paginas-web-para-pollerias/',
+  '/paginas-web-para-bodegas/',
+];
+
+// Frases que delatan un problema aunque el proceso siga vivo.
+const SENALES_DE_ERROR = [
+  'Failed to scan for dependencies',
+  'Pre-transform error',
+  '[vite] Internal server error',
+  'Cannot find module',
+  'is not exported by',
+];
+
+const PUERTO = 4321;
+const raiz = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
+
+let fallos = 0;
+const bien = (m) => console.log(`  ok    ${m}`);
+const mal = (m) => { fallos++; console.log(`  FALLA ${m}`); };
+const titulo = (m) => console.log(`\n${m}`);
+
+/** Corre un comando y devuelve su salida junta. */
+function correr(cmd) {
+  return new Promise((resolve) => {
+    // El comando va como una sola cadena a propósito: pasarlo partido en
+    // argumentos junto con shell activo hace que Node avise de un riesgo de
+    // seguridad, porque los argumentos se concatenan sin escapar.
+    const p = spawn(cmd, { cwd: raiz, shell: true });
+    let salida = '';
+    p.stdout.on('data', (d) => (salida += d));
+    p.stderr.on('data', (d) => (salida += d));
+    p.on('close', (codigo) => resolve({ codigo, salida }));
+  });
+}
+
+// ---------------------------------------------------------------- 1. compilar
+
+titulo('1. Compilando el sitio');
+
+const build = await correr('npm run build');
+if (build.codigo !== 0) {
+  mal('la compilación terminó con error:');
+  console.log(build.salida.split('\n').slice(-25).join('\n'));
+} else {
+  const paginas = (build.salida.match(/(\d+) page\(s\) built/) ?? [])[1];
+  bien(`compila sin errores (${paginas ?? '?'} páginas)`);
+}
+
+// ------------------------------------------- 2. revisar lo que quedó compilado
+
+titulo('2. Revisando el resultado de la compilación');
+
+const dist = join(raiz, 'dist');
+
+async function paginasCompiladas(dir, acc = []) {
+  for (const entrada of await readdir(dir, { withFileTypes: true })) {
+    const ruta = join(dir, entrada.name);
+    if (entrada.isDirectory()) await paginasCompiladas(ruta, acc);
+    else if (entrada.name === 'index.html') acc.push(ruta);
+  }
+  return acc;
+}
+
+try {
+  const htmls = await paginasCompiladas(dist);
+  bien(`${htmls.length} páginas generadas`);
+
+  // Una página que compila pero sale vacía o sin título es un fallo silencioso:
+  // el comando no se queja y el problema recién se ve en Google, tarde.
+  const vacias = [];
+  const sinTitulo = [];
+  for (const h of htmls) {
+    const contenido = await readFile(h, 'utf8');
+    const relativa = h.slice(dist.length).replace(/\\/g, '/');
+    if ((await stat(h)).size < 2048) vacias.push(relativa);
+    if (!/<title>[^<]{5,}<\/title>/.test(contenido)) sinTitulo.push(relativa);
+  }
+  vacias.length ? mal(`páginas sospechosamente vacías: ${vacias.join(', ')}`)
+                : bien('ninguna página quedó vacía');
+  sinTitulo.length ? mal(`páginas sin título: ${sinTitulo.join(', ')}`)
+                   : bien('todas tienen título');
+
+  // Las redirecciones y las reglas de cabeceras solo funcionan si los archivos
+  // llegan a dist. Es fácil que se queden en public y nadie lo note.
+  for (const archivo of ['_redirects', '_headers', 'robots.txt', 'sitemap-index.xml']) {
+    try {
+      await stat(join(dist, archivo));
+      bien(`${archivo} llegó a dist`);
+    } catch {
+      mal(`${archivo} NO llegó a dist`);
+    }
+  }
+} catch (e) {
+  mal(`no se pudo revisar dist: ${e.message}`);
+}
+
+// --------------------------------------- 3. el servidor de desarrollo arranca
+
+titulo('3. Levantando el servidor de desarrollo');
+
+const dev = spawn('npm run dev', { cwd: raiz, shell: true });
+let logDev = '';
+dev.stdout.on('data', (d) => (logDev += d));
+dev.stderr.on('data', (d) => (logDev += d));
+
+/** Espera a que el puerto conteste, hasta agotar el tiempo. */
+async function esperarPuerto(segundos) {
+  for (let i = 0; i < segundos * 2; i++) {
+    if (dev.exitCode !== null) return false; // se murió durante el arranque
+    try {
+      const r = await fetch(`http://localhost:${PUERTO}/`, { signal: AbortSignal.timeout(2000) });
+      if (r.ok) return true;
+    } catch { /* todavía no levanta */ }
+    await new Promise((r) => setTimeout(r, 500));
+  }
+  return false;
+}
+
+if (!(await esperarPuerto(45))) {
+  mal('el servidor de desarrollo no llegó a responder');
+  console.log(logDev.split('\n').slice(-25).join('\n'));
+} else {
+  bien('arranca y responde');
+
+  for (const ruta of RUTAS) {
+    try {
+      const r = await fetch(`http://localhost:${PUERTO}${ruta}`, { signal: AbortSignal.timeout(15000) });
+      r.ok ? bien(`${ruta} responde ${r.status}`) : mal(`${ruta} responde ${r.status}`);
+    } catch (e) {
+      mal(`${ruta} no responde (${e.message})`);
+    }
+  }
+
+  // Se revisa aparte si el proceso murió: puede contestar la primera petición
+  // y caerse enseguida, que es justo lo que hacía el error del comentario con
+  // la etiqueta de script. Sin esto el resumen decía "no reportó errores".
+  if (dev.exitCode !== null) {
+    mal(`el servidor se cayó mientras corría (código ${dev.exitCode})`);
+  } else {
+    bien('sigue en pie al terminar la revisión');
+  }
+
+  const encontradas = SENALES_DE_ERROR.filter((s) => logDev.includes(s));
+  encontradas.length
+    ? mal(`el servidor reportó errores: ${encontradas.join(' / ')}`)
+    : bien('no reportó errores mientras corría');
+
+  if (encontradas.length || dev.exitCode !== null) {
+    console.log(
+      logDev
+        .split('\n')
+        .filter((l) => /error/i.test(l))
+        .slice(0, 15)
+        .join('\n')
+    );
+  }
+}
+
+// En Windows el proceso que arrancamos es el shell, no el servidor: matarlo a
+// secas deja al Node hijo vivo ocupando el puerto 4321, y el siguiente arranque
+// falla con "puerto en uso". Hay que bajar el árbol completo.
+await new Promise((resolve) => {
+  if (dev.exitCode !== null) return resolve();
+  if (process.platform === 'win32') {
+    spawn(`taskkill /pid ${dev.pid} /T /F`, { shell: true, stdio: 'ignore' }).on('close', resolve);
+  } else {
+    dev.kill('SIGTERM');
+    resolve();
+  }
+});
+
+// ------------------------------------------------------------------ resultado
+
+titulo('─'.repeat(52));
+if (fallos === 0) {
+  console.log('TODO EN ORDEN. El sitio se puede desplegar.\n');
+  process.exit(0);
+} else {
+  console.log(`${fallos} problema(s). NO despliegues hasta arreglarlos.\n`);
+  process.exit(1);
+}
