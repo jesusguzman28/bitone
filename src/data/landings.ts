@@ -514,7 +514,7 @@ export const landings: readonly Landing[] = [
     breadcrumb: 'Página web para academias',
     eyebrow: 'Educación',
     intro:
-      'Ciclos y horarios claros, matrícula que se llena sola y tus ingresantes donde los padres los ven antes de decidir.',
+      'Ciclos y horarios claros, matrícula que se llena sola y tu vitrina de ingresantes a San Marcos, UNI, Villarreal o Católica donde los padres la ven antes de decidir.',
     problema: {
       title: 'La matrícula se gana en las semanas previas al ciclo',
       parrafos: [

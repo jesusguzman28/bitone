@@ -9,7 +9,7 @@ import { landings, rubroDeLanding, hrefRubro, type Landing } from '../data/landi
 import { rubros, soles, totalModulos, afinesRubro, anchorRubro } from '../data/rubros';
 import { iconoPara } from '../data/iconos';
 import { fotoDeRubro } from '../data/fotos';
-import { preguntasProblema } from '../data/preguntasProblema';
+import { flashcardsProblema } from '../data/preguntasProblema';
 import { site, waLink } from '../data/site';
 
 export function getStaticPaths() {
@@ -26,9 +26,10 @@ const url = `${site.domain}/paginas-web-para-${landing.param}/`;
 // columna en vez de dejar un hueco.
 const foto = fotoDeRubro(landing.param);
 
-// Preguntas de cabecera de las tarjetas del problema, en el mismo orden que
-// los párrafos. Si el rubro aún no las tiene, la tarjeta usa un rótulo neutro.
-const preguntas = preguntasProblema[landing.param] ?? [];
+// Flashcards del problema (pregunta + respuesta corta), en el mismo orden que
+// los párrafos. Si el rubro aún no las tiene, la tarjeta muestra un rótulo
+// neutro al frente y el párrafo completo al dorso.
+const cartas = flashcardsProblema[landing.param] ?? [];
 
 const afines = (afinesRubro[rubro.slug] ?? [])
   .map((slug) => rubros.find((r) => r.slug === slug))
@@ -140,23 +141,13 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
     </div>
   </section>
 
-  <!-- 1. El problema, como tarjetas de pregunta y respuesta -->
+  <!-- 1. El problema, en flashcards que se voltean -->
   <section class="surface px-6 py-20">
-    <div class="mx-auto w-full max-w-[960px]">
-      <div class="reveal flex items-start gap-4">
-        <span class="prob-ico grid h-12 w-12 flex-none place-items-center rounded-[14px]">
-          <Icono name="campanaAlerta" size={22} />
-        </span>
-        <h2 class="m-0 pt-1 font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
-          {landing.problema.title}
-        </h2>
-      </div>
-
+    <div class="mx-auto w-full max-w-[1020px]">
       {foto && (
-        // Banda ancha en vez de columna lateral: la escena se ve completa sin
-        // pelear altura con el texto. Es ambiente del rubro, no un trabajo
-        // entregado por nosotros.
-        <figure class="reveal foto-rubro m-0 mt-8">
+        // La foto abre la sección: banda panorámica con la escena del rubro.
+        // Es ambiente, no un trabajo entregado por nosotros.
+        <figure class="reveal foto-rubro m-0 mb-8">
           <picture>
             <source media="(max-width: 1023px)" srcset={`/rubros/${landing.param}-sm.webp`} width="560" height="380" />
             <img
@@ -172,25 +163,56 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
         </figure>
       )}
 
-      <!-- Una tarjeta por idea: pregunta arriba, respuesta abajo, y se pasa a
-           la siguiente con el botón o deslizando. Todo el texto está en el
-           HTML desde el inicio: para Google no hay nada oculto. -->
+      <div class="reveal flex items-start gap-4">
+        <span class="prob-ico grid h-12 w-12 flex-none place-items-center rounded-[14px]">
+          <Icono name="campanaAlerta" size={22} />
+        </span>
+        <h2 class="m-0 pt-1 font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
+          {landing.problema.title}
+        </h2>
+      </div>
+
+      <!-- Flashcards: la pregunta al frente, la tarjeta se voltea con
+           animación y al dorso está la respuesta corta. En escritorio se ven
+           las tres a la vez; en móvil se pasan deslizando. -->
       <div class="reveal mt-8">
         <div class="fc-track" data-fc-track>
           {landing.problema.parrafos.map((p, i) => (
-            <article class="fc-card rounded-[20px] bg-white">
-              <header class="flex items-start gap-3.5">
-                <span class="fc-num">{String(i + 1).padStart(2, '0')}</span>
-                <h3 class="m-0 pt-1.5 font-display text-[17.5px] font-extrabold leading-[1.3] text-dark [text-wrap:balance]">
-                  {preguntas[i] ?? `El problema, parte ${i + 1}`}
-                </h3>
-              </header>
-              <p class="m-0 mt-4 text-[15.5px] leading-[1.75] text-slate-600 [text-wrap:pretty]">{p}</p>
+            <article class="fc-flip" data-fc-flip>
+              <div class="fc-inner">
+                <div class="fc-face fc-front rounded-[20px] bg-white">
+                  <span class="fc-num">{String(i + 1).padStart(2, '0')}</span>
+                  <h3 class="m-0 mt-4 font-display text-[18px] font-extrabold leading-[1.35] text-dark [text-wrap:balance]">
+                    {cartas[i]?.q ?? `El problema, parte ${i + 1}`}
+                  </h3>
+                  <button type="button" data-fc-voltear class="fc-voltear mt-auto pt-6">
+                    <span class="fc-voltear__ico" aria-hidden="true">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg>
+                    </span>
+                    Ver la respuesta
+                  </button>
+                </div>
+
+                <div class="fc-face fc-back rounded-[20px]" inert>
+                  <span class="text-[11px] font-bold uppercase tracking-[0.14em] text-accent">Respuesta</span>
+                  <p class="m-0 mt-3 text-[14.5px] leading-[1.7] text-slate-300 [text-wrap:pretty]">
+                    {cartas[i]?.r ?? p}
+                  </p>
+                  <button type="button" data-fc-voltear class="fc-voltear fc-voltear--claro mt-auto pt-5">
+                    <span class="fc-voltear__ico" aria-hidden="true">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v5h5"/></svg>
+                    </span>
+                    Volver a la pregunta
+                  </button>
+                </div>
+              </div>
             </article>
           ))}
         </div>
 
-        <div class="mt-5 flex items-center justify-between gap-4">
+        <!-- Navegación del carril: solo tiene sentido en móvil, donde las
+             tarjetas se pasan de una en una. -->
+        <div class="fc-nav mt-5 flex items-center justify-between gap-4 lg:hidden">
           <div class="flex gap-2" data-fc-dots aria-hidden="true"></div>
           <div class="flex gap-2">
             <button type="button" data-fc-prev aria-label="Tarjeta anterior" class="fc-btn">
@@ -203,6 +225,20 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
           </div>
         </div>
       </div>
+
+      <!-- El texto completo de los tres problemas, desplegable. Aquí vive el
+           contenido largo que indexa Google; las flashcards son el resumen. -->
+      <details class="fc-detalle reveal mt-6 overflow-hidden rounded-[16px] bg-white">
+        <summary class="flex cursor-pointer items-center justify-between gap-4 p-5 font-display text-[15px] font-bold text-dark">
+          Lee el detalle completo de estos tres problemas
+          <svg class="fc-detalle__ico shrink-0 text-primary" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="grid gap-4 px-5 pb-5">
+          {landing.problema.parrafos.map((p) => (
+            <p class="m-0 text-[15.5px] leading-[1.75] text-slate-600 [text-wrap:pretty]">{p}</p>
+          ))}
+        </div>
+      </details>
     </div>
   </section>
 
@@ -508,6 +544,46 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
     track.addEventListener('scroll', () => { idx = actual(); pintar(); }, { passive: true });
     pintar();
   }
+
+  // Volteo de cada flashcard. El 3D se enciende solo mientras dura el giro y
+  // se apaga al terminar, para que el texto vuelva a dibujarse nítido; y al
+  // apagarlo se corta la transición un instante, porque quitar la clase con la
+  // transición viva animaba un segundo giro de regreso.
+  document.querySelectorAll<HTMLElement>('[data-fc-flip]').forEach((flip) => {
+    const inner = flip.querySelector<HTMLElement>('.fc-inner')!;
+    const [frente, dorso] = Array.from(flip.querySelectorAll<HTMLElement>('.fc-face'));
+    let limpieza = 0;
+
+    const apagar3D = () => {
+      clearTimeout(limpieza);
+      inner.style.transition = 'none';
+      flip.classList.remove('is-animating');
+      void inner.offsetWidth;
+      inner.style.transition = '';
+    };
+    inner.addEventListener('transitionend', (e) => {
+      if (e.propertyName === 'transform') apagar3D();
+    });
+
+    flip.querySelectorAll<HTMLElement>('[data-fc-voltear]').forEach((btn) =>
+      btn.addEventListener('click', () => {
+        clearTimeout(limpieza);
+        // Fija el punto de partida sin animarlo antes del giro real
+        inner.style.transition = 'none';
+        flip.classList.add('is-animating');
+        void inner.offsetWidth;
+        inner.style.transition = '';
+
+        const alDorso = !flip.classList.contains('is-flipped');
+        flip.classList.toggle('is-flipped', alDorso);
+        // La cara oculta queda inerte: sin foco ni clics fantasma
+        frente.toggleAttribute('inert', alDorso);
+        dorso.toggleAttribute('inert', !alDorso);
+        // Red de seguridad si transitionend no llega (reduced motion, pestaña oculta)
+        limpieza = window.setTimeout(apagar3D, 900);
+      })
+    );
+  });
 </script>
 
 <style>
@@ -574,16 +650,95 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
   }
   .fc-track::-webkit-scrollbar { display: none; }
 
-  .fc-card {
+  .fc-flip {
     flex: none;
     width: calc(100% - 44px); /* deja asomar la siguiente */
     scroll-snap-align: start;
-    padding: 26px;
-    box-shadow: inset 0 0 0 1px var(--hairline), 0 1px 2px rgba(0, 0, 0, 0.05);
   }
-  @media (min-width: 768px) {
-    .fc-card { width: 78%; padding: 30px; }
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .fc-flip { width: 62%; }
   }
+  /* En escritorio caben las tres a la vez: el carril se vuelve grilla y la
+     navegación de móvil se oculta (lg:hidden en el HTML). */
+  @media (min-width: 1024px) {
+    .fc-track {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      overflow: visible;
+    }
+    .fc-flip { width: auto; }
+  }
+
+  /* Las dos caras comparten celda: la altura la marca la más alta y la
+     tarjeta no salta al voltear. */
+  .fc-inner {
+    display: grid;
+    height: 100%;
+    transition: transform 0.7s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .fc-face {
+    grid-area: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+  }
+  .fc-front { box-shadow: inset 0 0 0 1px var(--hairline), 0 1px 2px rgba(0, 0, 0, 0.05); }
+  .fc-back {
+    color: #fff;
+    background: linear-gradient(160deg, #131c2e, #0b111d);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 20px 40px -25px rgba(14, 21, 33, 0.7);
+  }
+
+  /* El 3D vive solo mientras dura el giro: en reposo el navegador dibuja el
+     texto como texto y no como una textura reescalada (lo que pixelaba otras
+     tarjetas en el celular). En reposo solo se decide qué cara se ve. */
+  .fc-flip:not(.is-animating) .fc-back { visibility: hidden; }
+  .fc-flip.is-flipped:not(.is-animating) .fc-front { visibility: hidden; }
+  .fc-flip.is-flipped:not(.is-animating) .fc-back { visibility: visible; }
+
+  .fc-flip.is-animating { perspective: 1400px; }
+  .fc-flip.is-animating .fc-inner { transform-style: preserve-3d; }
+  .fc-flip.is-animating .fc-face {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  .fc-flip.is-animating .fc-back { transform: rotateY(180deg); }
+  .fc-flip.is-animating.is-flipped .fc-inner { transform: rotateY(180deg); }
+
+  /* Botón que voltea la tarjeta */
+  .fc-voltear {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    align-self: flex-start;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    background: none;
+    font-family: var(--font-sans);
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+  .fc-voltear--claro { color: var(--color-accent); }
+  .fc-voltear__ico {
+    display: grid;
+    place-items: center;
+    height: 26px;
+    width: 26px;
+    border-radius: 999px;
+    background: color-mix(in srgb, currentColor 12%, transparent);
+    transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .fc-voltear:hover .fc-voltear__ico { transform: rotate(-180deg); }
+
+  /* Desplegable con el texto completo */
+  .fc-detalle {
+    box-shadow: inset 0 0 0 1px var(--hairline);
+  }
+  .fc-detalle summary::-webkit-details-marker { display: none; }
+  .fc-detalle__ico { transition: transform 0.4s var(--ease-fluid); }
+  .fc-detalle[open] .fc-detalle__ico { transform: rotate(180deg); }
 
   .fc-num {
     display: grid;
@@ -732,6 +887,7 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
 
   @media (prefers-reduced-motion: reduce) {
     .seccion-card, .func-card, .seccion-ico, .func-ico { transition: none; }
+    .fc-inner, .fc-voltear__ico, .fc-detalle__ico { transition: none; }
   }
 
   /* Las preguntas van en <details>: el contenido queda en el HTML servido, así

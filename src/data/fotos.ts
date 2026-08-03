@@ -26,8 +26,8 @@ export interface FotoRubro {
 
 export const fotosRubro: Record<string, FotoRubro> = {
   pollerias: {
-    alt: 'Presas de pollo broaster doradas recién salidas de la freidora, sobre una tabla de madera',
-    unsplash: '1626082927389-6cd097cdc6ec',
+    alt: 'Pollo a la brasa entero girando en el espetón sobre la parrilla',
+    unsplash: '1712579733874-c3a79f0f9d12',
   },
   bodegas: {
     alt: 'Pasillo de una bodega con los productos ordenados y colgados por categoría',
@@ -70,8 +70,8 @@ export const fotosRubro: Record<string, FotoRubro> = {
     unsplash: '1621446113284-53ca198c7fa7',
   },
   academias: {
-    alt: 'Aula vacía con las carpetas ordenadas en filas frente a la pizarra',
-    unsplash: '1580582932707-520aed937b7b',
+    alt: 'Sala de lectura de una biblioteca universitaria llena de estudiantes, vista desde arriba',
+    unsplash: '1719954327693-929becbbf207',
   },
 };
 
