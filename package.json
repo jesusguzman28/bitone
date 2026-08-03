@@ -10,7 +10,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "verificar": "node scripts/verificar.mjs",
-    "desplegar": "npm run verificar && wrangler deploy"
+    "desplegar": "npm run verificar && wrangler deploy",
+    "revisar-produccion": "node scripts/revisar-produccion.mjs"
   },
   "dependencies": {
     "astro": "^5.13.0",
