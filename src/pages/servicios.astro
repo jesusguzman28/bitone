@@ -7,6 +7,7 @@ import CTA from '../components/CTA.astro';
 import { site, serviciosTabs, condiciones, waLink } from '../data/site';
 import { rubros, anchorRubro } from '../data/rubros';
 import { hrefRubro } from '../data/landings';
+import { servicioDeTab, hrefServicio } from '../data/servicios';
 
 // ---- Un Service con su Offer por cada servicio ----
 // El @id del proveedor apunta a /#org, que es el identificador real que emite
@@ -126,6 +127,26 @@ const schema = serviciosTabs.map((t) => {
                     </div>
                   </div>
                 </div>
+
+                {/* Enlace a la página propia del servicio. Aparece solo en los
+                    que ya la tienen: es el camino por el que Google y el
+                    visitante llegan al contenido largo de ese servicio. */}
+                {servicioDeTab(t.id) && (
+                  <a
+                    href={hrefServicio(servicioDeTab(t.id)!.slug)}
+                    class="detalle-link relative mt-6 flex items-center justify-between gap-4 rounded-[16px] px-5 py-4 no-underline"
+                  >
+                    <span>
+                      <span class="block font-display text-[15px] font-bold text-white">
+                        Ver todo sobre {t.label.toLowerCase()}
+                      </span>
+                      <span class="mt-0.5 block text-[13px] text-slate-400">
+                        Cómo funciona, qué incluye y preguntas frecuentes
+                      </span>
+                    </span>
+                    <svg class="detalle-flecha flex-none text-accent" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  </a>
+                )}
 
                 <div class="relative mt-auto flex flex-wrap items-center justify-between gap-3 pt-8">
                   <a href={waLink(t.wa)} target="_blank" rel="noopener" class="btn btn--whatsapp group !py-3 !pl-[26px] !text-[15px]">
@@ -456,6 +477,19 @@ const schema = serviciosTabs.map((t) => {
     .flip.is-animating .flip-back { transform: rotateY(180deg); }
     .flip.is-animating.is-flipped .flip-inner { transform: rotateY(180deg); }
   }
+
+  /* ---- Enlace a la página propia del servicio ---- */
+  .detalle-link {
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    transition: background 0.4s var(--ease-fluid), box-shadow 0.4s var(--ease-fluid);
+  }
+  .detalle-link:hover {
+    background: rgba(255, 255, 255, 0.09);
+    box-shadow: inset 0 0 0 1px rgba(232, 163, 23, 0.45);
+  }
+  .detalle-flecha { transition: transform 0.4s var(--ease-fluid); }
+  .detalle-link:hover .detalle-flecha { transform: translateX(4px); }
 
   /* El icono de la flecha circular gira al pasar el mouse: anticipa el volteo */
   .flip-ico { transition: transform 0.6s cubic-bezier(0.32, 0.72, 0, 1); }

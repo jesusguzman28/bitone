@@ -1,0 +1,512 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import Stars from '../../components/Stars.astro';
+import CTA from '../../components/CTA.astro';
+import Icono from '../../components/Icono.astro';
+import { servicios, type Servicio } from '../../data/servicios';
+import { site, serviciosTabs, waLink } from '../../data/site';
+import { rubros, anchorRubro } from '../../data/rubros';
+import { hrefRubro } from '../../data/landings';
+import { fotoDeSlug } from '../../data/fotos';
+
+// Una página por servicio. Al sumar un servicio a servicios.ts, su página se
+// genera sola con esta misma estructura.
+export function getStaticPaths() {
+  return servicios.map((servicio) => ({ params: { servicio: servicio.slug }, props: { servicio } }));
+}
+
+interface Props { servicio: Servicio }
+const { servicio } = Astro.props;
+
+// El precio, el plazo y la lista de lo que incluye salen de serviciosTabs, que
+// es la misma fuente que alimenta el índice de /servicios. Así no puede pasar
+// que el índice diga un precio y la página del servicio diga otro.
+const tab = serviciosTabs.find((t) => t.id === servicio.tabId)!;
+
+const url = `${site.domain}/servicios/${servicio.slug}/`;
+
+const rubrosRelacionados = tab.rubros
+  .map((slug) => rubros.find((r) => r.slug === slug))
+  .filter((r): r is (typeof rubros)[number] => Boolean(r));
+
+const offers: Record<string, unknown> = {
+  '@type': 'Offer',
+  priceCurrency: 'PEN',
+  availability: 'https://schema.org/InStock',
+  url,
+};
+if (tab.price !== null) {
+  offers.price = String(tab.price);
+  offers.priceSpecification = {
+    '@type': 'PriceSpecification',
+    priceCurrency: 'PEN',
+    minPrice: String(tab.price),
+    ...(tab.ivaIncluido !== null ? { valueAddedTaxIncluded: tab.ivaIncluido } : {}),
+  };
+}
+
+const schema = [
+  {
+    '@type': 'Service',
+    '@id': `${url}#servicio`,
+    name: tab.schemaName,
+    serviceType: tab.serviceType,
+    description: servicio.metaDescription,
+    provider: { '@id': `${site.domain}/#org` },
+    areaServed: { '@type': 'Country', name: 'Perú' },
+    offers,
+  },
+  {
+    '@type': 'FAQPage',
+    '@id': `${url}#faq`,
+    mainEntity: servicio.faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+---
+
+<BaseLayout
+  title={servicio.metaTitle}
+  description={servicio.metaDescription}
+  breadcrumbLabel={servicio.breadcrumb}
+  schema={schema}
+>
+  <!-- 1. Portada: texto a la izquierda, foto del servicio a la derecha -->
+  <section class="hero-dark relative isolate overflow-hidden px-6 pb-20 pt-[140px] text-white">
+    <Stars />
+    <div class="mx-auto grid w-full max-w-[1120px] items-center gap-12 lg:grid-cols-[1.02fr_0.98fr]">
+      <div>
+        <nav aria-label="Ruta" class="mb-8 text-[13px] text-slate-400">
+          <a href="/servicios" class="text-slate-400 no-underline transition-colors hover:text-white">Servicios</a>
+          <span class="mx-2 text-slate-600">/</span>
+          <span class="text-slate-300">{servicio.breadcrumb}</span>
+        </nav>
+
+        <span class="eyebrow eyebrow--dark">
+          <Icono name={tab.icon} size={15} />
+          {servicio.eyebrow}
+        </span>
+
+        <h1 class="mt-5 font-display text-[clamp(2rem,5vw,3rem)] font-extrabold leading-[1.08]">
+          {servicio.h1}
+        </h1>
+        <p class="mt-5 max-w-[560px] text-[17px] leading-[1.65] text-slate-300">{servicio.intro}</p>
+
+        <div class="mt-7 flex flex-wrap gap-3">
+          <span class="hero-chip">
+            <Icono name="etiqueta" size={15} />
+            {tab.price === null ? 'Precio' : 'Desde'}
+            <strong class="text-accent">{tab.priceLabel}{tab.priceNote ? ` ${tab.priceNote}` : ''}</strong>
+          </span>
+          <span class="hero-chip">
+            <Icono name="reloj" size={15} />
+            Entrega en <strong class="text-accent">{tab.time}</strong>
+          </span>
+          <span class="hero-chip">
+            <Icono name="escudo" size={15} />
+            <strong class="text-accent">{tab.incluye}</strong>
+          </span>
+        </div>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href={waLink(tab.wa)} target="_blank" rel="noopener" class="btn btn--whatsapp group !py-3 !pl-[26px] !text-[15px]">
+            Cotizar por WhatsApp
+            <span class="btn__icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+            </span>
+          </a>
+          <a href="#formulario" class="btn btn--on-dark !px-[26px] !py-3 !text-[15px]">Formulario de contacto</a>
+        </div>
+      </div>
+
+      <figure class="foto-hero m-0">
+        <picture>
+          <source media="(max-width: 1023px)" srcset={`/servicios/${servicio.hero}-sm.webp`} width="620" height="420" />
+          <img
+            src={`/servicios/${servicio.hero}.webp`}
+            width="1000"
+            height="680"
+            alt={servicio.heroAlt}
+            fetchpriority="high"
+            decoding="async"
+            class="block h-full w-full object-cover"
+          />
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 2. El problema que resuelve -->
+  <section class="surface px-6 py-20">
+    <div class="mx-auto w-full max-w-[900px]">
+      <div class="reveal flex items-start gap-4">
+        <span class="prob-ico grid h-12 w-12 flex-none place-items-center rounded-[14px]">
+          <Icono name="campanaAlerta" size={22} />
+        </span>
+        <h2 class="m-0 pt-1 font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
+          {servicio.problema.title}
+        </h2>
+      </div>
+
+      <div class="mt-8 grid gap-4">
+        {servicio.problema.parrafos.map((p, i) => (
+          <p class="reveal prob-parrafo m-0 rounded-[16px] bg-white p-6 text-[16.5px] leading-[1.75] text-slate-600 [text-wrap:pretty]" style={`--reveal-delay:${i * 90}ms`}>
+            {p}
+          </p>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Cómo funciona: un paso por bloque, con su foto -->
+  <section class="surface--alt px-6 py-20">
+    <div class="mx-auto w-full max-w-[1120px]">
+      <div class="reveal mx-auto max-w-[760px]">
+        <h2 class="font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
+          {servicio.comoFunciona.title}
+        </h2>
+        <p class="mt-5 text-[16.5px] leading-[1.75] text-slate-600 [text-wrap:pretty]">{servicio.comoFunciona.intro}</p>
+      </div>
+
+      <!-- Los pasos alternan lado en escritorio para que la lectura no caiga
+           siempre en la misma columna. En móvil quedan uno debajo de otro,
+           siempre foto arriba y texto abajo. -->
+      <ol class="m-0 mt-12 grid list-none gap-12 p-0">
+        {servicio.comoFunciona.pasos.map((paso, i) => (
+          <li class={`paso reveal grid items-center gap-8 lg:grid-cols-2 ${i % 2 === 1 ? 'paso--invertido' : ''}`}>
+            {paso.foto && (
+              <figure class="paso-foto m-0">
+                <picture>
+                  <source media="(max-width: 1023px)" srcset={`/servicios/${paso.foto}-sm.webp`} width="420" height="300" />
+                  <img
+                    src={`/servicios/${paso.foto}.webp`}
+                    width="560"
+                    height="400"
+                    alt={paso.alt}
+                    loading="lazy"
+                    decoding="async"
+                    class="block h-full w-full object-cover"
+                  />
+                </picture>
+              </figure>
+            )}
+
+            <div class="paso-texto">
+              <div class="flex items-center gap-3">
+                <span class="paso-ico grid h-11 w-11 flex-none place-items-center rounded-[13px]">
+                  <Icono name={paso.icono} size={20} />
+                </span>
+                <span class="font-display text-[13px] font-bold uppercase tracking-[0.14em] text-slate-400">
+                  Paso {i + 1} de {servicio.comoFunciona.pasos.length}
+                </span>
+              </div>
+              <h3 class="mt-4 font-display text-[clamp(1.15rem,2.4vw,1.5rem)] font-extrabold leading-[1.25] text-dark">
+                {paso.titulo}
+              </h3>
+              <p class="mt-3 text-[16px] leading-[1.7] text-slate-600 [text-wrap:pretty]">{paso.desc}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- 4. Qué incluye -->
+  <section class="surface px-6 py-20">
+    <div class="mx-auto w-full max-w-[1120px]">
+      <div class="reveal mx-auto max-w-[760px]">
+        <h2 class="font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
+          Qué incluye
+        </h2>
+        <p class="mt-5 text-[16.5px] leading-[1.75] text-slate-600 [text-wrap:pretty]">
+          Todo esto entra en el precio de {tab.priceLabel}{tab.priceNote ? ` ${tab.priceNote}` : ''}. Lo que se cotiza aparte se dice antes, nunca a mitad del proyecto.
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-4" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))">
+        {tab.features.map((f, i) => (
+          <div class="reveal inc-card flex items-start gap-3.5 rounded-[18px] bg-white p-5" style={`--reveal-delay:${(i % 3) * 90}ms`}>
+            <span class="inc-ico grid h-11 w-11 flex-none place-items-center rounded-[13px]">
+              <Icono name={f.i} size={20} />
+            </span>
+            <span class="flex-1 pt-2 text-[15px] font-medium leading-[1.5] text-slate-700">{f.t}</span>
+            <span class="mt-2 grid h-[22px] w-[22px] flex-none place-items-center rounded-full" style="background:rgba(22,163,74,0.1);color:#16a34a">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="m5 13 4 4L19 7"/></svg>
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Precio y plazo -->
+  <section class="surface--alt px-6 py-20">
+    <div class="mx-auto w-full max-w-[760px]">
+      <h2 class="reveal font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
+        {servicio.precio.title}
+      </h2>
+
+      <div class="reveal mt-7 flex flex-wrap items-baseline gap-x-3 gap-y-1 rounded-[20px] bg-white p-6" style="box-shadow:inset 0 0 0 1px var(--hairline)">
+        <span class="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">{tab.price === null ? 'Precio' : 'Desde'}</span>
+        <span class="font-display text-[2rem] font-extrabold text-dark [font-variant-numeric:tabular-nums]">{tab.priceLabel}</span>
+        <span class="text-[14px] text-slate-500">{tab.priceNote ? `${tab.priceNote} · ` : ''}entrega en {tab.time}</span>
+      </div>
+
+      <div class="mt-6 grid gap-5">
+        {servicio.precio.parrafos.map((p) => (
+          <p class="reveal m-0 text-[16.5px] leading-[1.75] text-slate-600 [text-wrap:pretty]">{p}</p>
+        ))}
+      </div>
+
+      <p class="reveal mt-6 text-[15px] leading-[1.7] text-slate-600">
+        Si quieres comparar con los otros servicios, están todos en
+        <a href="/servicios" class="font-semibold text-primary">la página de servicios</a>, y el detalle de precios del mercado peruano en
+        <a href="/cuanto-cuesta-una-pagina-web-en-peru/" class="font-semibold text-primary">cuánto cuesta una página web en Perú</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- 6. Rubros donde más se pide -->
+  {rubrosRelacionados.length > 0 && (
+    <section class="surface px-6 py-20">
+      <div class="mx-auto w-full max-w-[1120px]">
+        <div class="reveal mx-auto max-w-[720px] text-center">
+          <span class="eyebrow eyebrow--light">Dónde lo aplicamos</span>
+          <h2 class="mt-5 font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
+            Rubros que más piden este servicio
+          </h2>
+          <p class="mt-4 text-[15px] leading-[1.65] text-slate-500 [text-wrap:pretty]">
+            Cada uno tiene su propia página, con lo que incluye, su precio y su plazo.
+          </p>
+        </div>
+
+        <div class="mt-10 grid gap-5" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+          {rubrosRelacionados.map((r, i) => {
+            const foto = fotoDeSlug(r.slug);
+            return (
+              <a href={hrefRubro(r.slug)} class="reveal rubro-mini flex flex-col overflow-hidden rounded-[20px] bg-white no-underline" style={`--reveal-delay:${i * 90}ms`}>
+                {foto && (
+                  <span class="rubro-mini__foto">
+                    <img src={`/rubros/${foto.param}-sm.webp`} width="560" height="380" alt={foto.alt} loading="lazy" decoding="async" />
+                    <span class="rubro-mini__sello">{r.emoji}</span>
+                  </span>
+                )}
+                <span class="flex flex-1 flex-col p-5">
+                  <span class="font-display text-[17px] font-bold leading-[1.3] text-dark">{anchorRubro[r.slug]}</span>
+                  <span class="mt-2 text-[14px] leading-[1.55] text-slate-500">{r.tagline}</span>
+                  <span class="mt-4 inline-flex items-center gap-2 text-[14px] font-semibold text-primary">
+                    Ver detalle
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  </span>
+                </span>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- 7. Preguntas frecuentes -->
+  <section class="surface--alt px-6 py-20">
+    <div class="mx-auto w-full max-w-[760px]">
+      <h2 class="reveal font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
+        Preguntas frecuentes
+      </h2>
+
+      <div class="mt-8 grid gap-3">
+        {servicio.faqs.map((f) => (
+          <details class="lp-faq reveal rounded-[16px] bg-white p-5">
+            <summary class="flex cursor-pointer items-center justify-between gap-4 font-display text-[16px] font-bold text-dark">
+              {f.q}
+              <svg class="lp-faq__ico shrink-0 text-primary" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            </summary>
+            <p class="mt-3 text-[15px] leading-[1.7] text-slate-600 [text-wrap:pretty]">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Formulario -->
+  <section id="formulario" class="surface scroll-mt-24 px-6 py-20">
+    <div class="mx-auto w-full max-w-[760px]">
+      <ContactForm
+        id="servicio-form"
+        context={servicio.breadcrumb.toLowerCase()}
+        title={`¿Hablamos de tu ${servicio.breadcrumb.toLowerCase()}?`}
+        subtitle="Déjanos tu nombre, celular y tu pregunta. Te respondemos en menos de 2 horas hábiles."
+      />
+    </div>
+  </section>
+
+  <CTA
+    title={`¿Listo para tu ${servicio.breadcrumb.toLowerCase()}?`}
+    subtitle="Cotización gratis en menos de 24 horas, en soles y con facilidades de pago. Sin compromiso."
+  />
+</BaseLayout>
+
+<style>
+  .hero-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 14px;
+    color: #cbd5e1;
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  }
+  .hero-chip :global(svg) { color: #94a3b8; }
+
+  /* ---- Foto de la portada ---- */
+  .foto-hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    aspect-ratio: 3 / 2;
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+      0 40px 80px -40px rgba(0, 0, 0, 0.9);
+  }
+  /* Velo del color de marca: iguala fotos de fuentes distintas y las integra
+     con el fondo oscuro de la portada. */
+  .foto-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(150deg, rgba(217, 16, 35, 0.22), transparent 58%);
+    pointer-events: none;
+  }
+  .foto-hero picture { display: block; height: 100%; }
+
+  /* ---- El problema ---- */
+  .prob-ico {
+    color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 9%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 18%, transparent);
+  }
+  .prob-parrafo {
+    position: relative;
+    overflow: hidden;
+    padding-left: 28px;
+    box-shadow: inset 0 0 0 1px var(--hairline);
+  }
+  .prob-parrafo::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--color-primary), var(--color-accent));
+    opacity: 0.55;
+  }
+
+  /* ---- Pasos ---- */
+  .paso-foto {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    aspect-ratio: 7 / 5;
+    background: #eef1f6;
+    box-shadow:
+      inset 0 0 0 1px var(--hairline),
+      0 30px 60px -35px rgba(15, 23, 42, 0.45);
+  }
+  .paso-foto picture { display: block; height: 100%; }
+
+  .paso-ico {
+    color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 9%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 18%, transparent);
+  }
+
+  /* En escritorio los pasos pares invierten el orden de las columnas. En móvil
+     el orden lo marca el HTML: foto arriba, texto abajo, siempre igual. */
+  @media (min-width: 1024px) {
+    .paso--invertido .paso-foto { order: 2; }
+    .paso--invertido .paso-texto { order: 1; }
+  }
+
+  /* ---- Qué incluye ---- */
+  .inc-card {
+    box-shadow: inset 0 0 0 1px var(--hairline);
+    transition: transform 0.45s var(--ease-fluid), box-shadow 0.45s var(--ease-fluid);
+  }
+  .inc-card:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 35%, transparent),
+      0 20px 40px -20px rgba(217, 16, 35, 0.16);
+  }
+  .inc-ico {
+    color: #475569;
+    background: #f1f5f9;
+    transition: color 0.4s var(--ease-fluid), background 0.4s var(--ease-fluid);
+  }
+  .inc-card:hover .inc-ico {
+    color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 9%, transparent);
+  }
+
+  /* ---- Tarjetas de rubro ---- */
+  .rubro-mini {
+    box-shadow: inset 0 0 0 1px var(--hairline), 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: transform 0.5s var(--ease-fluid), box-shadow 0.5s var(--ease-fluid);
+  }
+  .rubro-mini:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 45%, transparent),
+      0 25px 50px -12px rgba(217, 16, 35, 0.16);
+  }
+  .rubro-mini__foto {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: #eef1f6;
+  }
+  .rubro-mini__foto img {
+    display: block;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    transition: transform 0.7s var(--ease-fluid);
+  }
+  .rubro-mini:hover .rubro-mini__foto img { transform: scale(1.05); }
+  .rubro-mini__foto::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 55%;
+    background: linear-gradient(180deg, transparent, rgba(15, 23, 42, 0.5));
+  }
+  .rubro-mini__sello {
+    position: absolute;
+    left: 12px;
+    bottom: 10px;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    height: 36px;
+    width: 36px;
+    border-radius: 11px;
+    font-size: 18px;
+    line-height: 1;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 8px 20px -8px rgba(15, 23, 42, 0.6);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rubro-mini__foto img,
+    .inc-card,
+    .rubro-mini { transition: none; }
+  }
+</style>
