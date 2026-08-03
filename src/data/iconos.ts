@@ -89,7 +89,9 @@ const REGLAS: readonly (readonly [RegExp, string])[] = [
   [/pago|cobro|yape|plin|tarjeta|pasarela|checkout|caja|se[ñn]a/i, 'tarjeta'],
   [/factur|boleta|sunat|comprobante|convenio|seguro|formulario/i, 'documento'],
   [/b[úu]squeda|busca|filtro|equivalencia|gen[ée]rico|estado del|seguimiento/i, 'buscar'],
-  [/cat[áa]logo|producto|carta|men[úu]|stock|inventario|tienda|lista de compra|del d[íi]a/i, 'carrito'],
+  // La carta o el menú es un impreso que se hojea: libro, no carrito.
+  [/carta|men[úu]/i, 'libro'],
+  [/cat[áa]logo|producto|stock|inventario|tienda|lista de compra|del d[íi]a/i, 'carrito'],
   [/foto|galer[íi]a|imagen/i, 'foto'],
   [/rese[ñn]a|opini[óo]n|testimoni|estrella|valoraci/i, 'estrella'],
   [/reporte|venta|estad[íi]stica|m[ée]trica|resultado|ingresante/i, 'grafico'],
@@ -102,7 +104,10 @@ const REGLAS: readonly (readonly [RegExp, string])[] = [
   [/cotizad|cotizaci|presupuesto|precio/i, 'etiqueta'],
   [/paquete|pedido|orden|encargo/i, 'caja'],
   [/historia|ficha|registro|expediente|curso|clase|matr[íi]cula|inscripci|especialidad|servicio|tratamiento|indicaci|luna/i, 'libro'],
-  [/fidelid|promoci|descuento|cup[óo]n|membres|suscripci|oferta|campa[ñn]a|temporada/i, 'corazon'],
+  // Una promoción es un precio especial: etiqueta. El corazón queda para lo
+  // que sí es relación con el cliente (fidelidad, membresías).
+  [/promoci|descuento|cup[óo]n|oferta|combo|campa[ñn]a|temporada/i, 'etiqueta'],
+  [/fidelid|membres|suscripci/i, 'corazon'],
   [/garant[íi]a/i, 'escudo'],
   [/tiempo|plazo|24|horario de atenci/i, 'reloj'],
   [/correo|email|mail/i, 'correo'],

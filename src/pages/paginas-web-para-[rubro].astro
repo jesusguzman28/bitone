@@ -9,6 +9,7 @@ import { landings, rubroDeLanding, hrefRubro, type Landing } from '../data/landi
 import { rubros, soles, totalModulos, afinesRubro, anchorRubro } from '../data/rubros';
 import { iconoPara } from '../data/iconos';
 import { fotoDeRubro } from '../data/fotos';
+import { preguntasProblema } from '../data/preguntasProblema';
 import { site, waLink } from '../data/site';
 
 export function getStaticPaths() {
@@ -24,6 +25,10 @@ const url = `${site.domain}/paginas-web-para-${landing.param}/`;
 // Si un rubro nuevo todavía no tiene foto, la sección cae al layout de una
 // columna en vez de dejar un hueco.
 const foto = fotoDeRubro(landing.param);
+
+// Preguntas de cabecera de las tarjetas del problema, en el mismo orden que
+// los párrafos. Si el rubro aún no las tiene, la tarjeta usa un rótulo neutro.
+const preguntas = preguntasProblema[landing.param] ?? [];
 
 const afines = (afinesRubro[rubro.slug] ?? [])
   .map((slug) => rubros.find((r) => r.slug === slug))
@@ -135,14 +140,23 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
     </div>
   </section>
 
-  <!-- 1. El problema -->
+  <!-- 1. El problema, como tarjetas de pregunta y respuesta -->
   <section class="surface px-6 py-20">
-    <div class={`mx-auto w-full ${foto ? 'max-w-[1120px] lg:grid lg:grid-cols-[0.8fr_1fr] lg:items-start lg:gap-12' : 'max-w-[900px]'}`}>
+    <div class="mx-auto w-full max-w-[960px]">
+      <div class="reveal flex items-start gap-4">
+        <span class="prob-ico grid h-12 w-12 flex-none place-items-center rounded-[14px]">
+          <Icono name="campanaAlerta" size={22} />
+        </span>
+        <h2 class="m-0 pt-1 font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
+          {landing.problema.title}
+        </h2>
+      </div>
+
       {foto && (
-        // Foto de ambiente del rubro. Se queda fija mientras se leen los
-        // párrafos: da contexto sin robarle sitio al texto, que es lo que
-        // indexa Google. Es una escena del rubro, no un trabajo nuestro.
-        <figure class="reveal foto-rubro m-0 mb-10 lg:mb-0">
+        // Banda ancha en vez de columna lateral: la escena se ve completa sin
+        // pelear altura con el texto. Es ambiente del rubro, no un trabajo
+        // entregado por nosotros.
+        <figure class="reveal foto-rubro m-0 mt-8">
           <picture>
             <source media="(max-width: 1023px)" srcset={`/rubros/${landing.param}-sm.webp`} width="560" height="380" />
             <img
@@ -158,24 +172,35 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
         </figure>
       )}
 
-      <div>
-        <div class="reveal flex items-start gap-4">
-          <span class="prob-ico grid h-12 w-12 flex-none place-items-center rounded-[14px]">
-            <Icono name="campanaAlerta" size={22} />
-          </span>
-          <h2 class="m-0 pt-1 font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
-            {landing.problema.title}
-          </h2>
+      <!-- Una tarjeta por idea: pregunta arriba, respuesta abajo, y se pasa a
+           la siguiente con el botón o deslizando. Todo el texto está en el
+           HTML desde el inicio: para Google no hay nada oculto. -->
+      <div class="reveal mt-8">
+        <div class="fc-track" data-fc-track>
+          {landing.problema.parrafos.map((p, i) => (
+            <article class="fc-card rounded-[20px] bg-white">
+              <header class="flex items-start gap-3.5">
+                <span class="fc-num">{String(i + 1).padStart(2, '0')}</span>
+                <h3 class="m-0 pt-1.5 font-display text-[17.5px] font-extrabold leading-[1.3] text-dark [text-wrap:balance]">
+                  {preguntas[i] ?? `El problema, parte ${i + 1}`}
+                </h3>
+              </header>
+              <p class="m-0 mt-4 text-[15.5px] leading-[1.75] text-slate-600 [text-wrap:pretty]">{p}</p>
+            </article>
+          ))}
         </div>
 
-        <!-- Cada párrafo como bloque con guía a la izquierda: el muro de texto
-             corrido era lo que hacía que nadie leyera esta parte. -->
-        <div class="mt-8 grid gap-4">
-          {landing.problema.parrafos.map((p, i) => (
-            <p class="reveal prob-parrafo m-0 rounded-[16px] bg-white p-6 text-[16.5px] leading-[1.75] text-slate-600 [text-wrap:pretty]" style={`--reveal-delay:${i * 90}ms`}>
-              {p}
-            </p>
-          ))}
+        <div class="mt-5 flex items-center justify-between gap-4">
+          <div class="flex gap-2" data-fc-dots aria-hidden="true"></div>
+          <div class="flex gap-2">
+            <button type="button" data-fc-prev aria-label="Tarjeta anterior" class="fc-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M19 12H5m6 6-6-6 6-6"/></svg>
+            </button>
+            <button type="button" data-fc-next aria-label="Siguiente tarjeta" class="fc-btn fc-btn--primario">
+              Siguiente
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -198,12 +223,15 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
               <span class="seccion-ico grid h-11 w-11 place-items-center rounded-[13px]">
                 <Icono name={iconoPara(s.title)} size={20} />
               </span>
-              <span class="font-display text-[26px] font-extrabold leading-none text-slate-100 [font-variant-numeric:tabular-nums]">
-                {String(i + 1).padStart(2, '0')}
-              </span>
+              {/* El número en insignia: en gris claro sobre blanco directamente
+                  no se veía. */}
+              <span class="seccion-num">{String(i + 1).padStart(2, '0')}</span>
             </div>
             <h3 class="mt-4 font-display text-[17px] font-bold leading-[1.3] text-dark">{s.title}</h3>
-            <p class="mt-2 text-[14.5px] leading-[1.65] text-slate-500">{s.desc}</p>
+            {/* El texto completo queda en el HTML (es contenido que indexa);
+                visualmente se recorta a cuatro líneas para que la grilla
+                respire y las tarjetas midan parecido. */}
+            <p class="seccion-desc mt-2 text-[13.5px] leading-[1.6] text-slate-500">{s.desc}</p>
           </li>
         ))}
       </ol>
@@ -245,10 +273,28 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
         {landing.precio.title}
       </h2>
 
-      <div class="reveal mt-7 flex flex-wrap items-baseline gap-x-3 gap-y-1 rounded-[20px] bg-white p-6" style="box-shadow:inset 0 0 0 1px var(--hairline)">
-        <span class="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">Desde</span>
-        <span class="font-display text-[2rem] font-extrabold text-dark [font-variant-numeric:tabular-nums]">{soles(rubro.startingPrice)}</span>
-        <span class="text-[14px] text-slate-500">+ IGV · entrega en {rubro.deliveryTime}</span>
+      <div class="reveal mt-7 rounded-[20px] bg-white p-6" style="box-shadow:inset 0 0 0 1px var(--hairline)">
+        <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <span class="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">Desde</span>
+          <span class="font-display text-[2rem] font-extrabold text-dark [font-variant-numeric:tabular-nums]">{soles(rubro.startingPrice)}</span>
+          <span class="text-[14px] text-slate-500">+ IGV</span>
+        </div>
+
+        {/* Lo que ese precio ya trae, de un vistazo y con su icono. El detalle
+            en texto sigue abajo: esto es el resumen, no el reemplazo. */}
+        <div class="mt-5 flex flex-wrap gap-2.5 border-t border-dashed border-slate-200 pt-5">
+          {[
+            { icono: 'reloj', texto: `Entrega en ${rubro.deliveryTime}` },
+            { icono: 'www', texto: 'Dominio y hosting 1 año' },
+            { icono: 'candado', texto: 'Certificado de seguridad' },
+            { icono: 'tarjeta', texto: '50% inicio · 50% entrega' },
+          ].map((c) => (
+            <span class="precio-chip">
+              <Icono name={c.icono} size={15} />
+              {c.texto}
+            </span>
+          ))}
+        </div>
       </div>
 
       <div class="mt-6 grid gap-5">
@@ -263,6 +309,37 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
         <a href="/contacto" class="font-semibold text-primary">escribirnos por el formulario</a>
         para recibir una cotización por escrito en 24 horas.
       </p>
+    </div>
+  </section>
+
+  <!-- 4a. Por qué Bitwise. Solo condiciones reales que ya están publicadas en
+       el resto del sitio (pago, garantía, entrega): nada de clientes ni cifras
+       inventadas. Panel oscuro para que se distinga del bloque de precio. -->
+  <section class="surface--alt px-6 pb-20">
+    <div class="reveal panel-dark mx-auto w-full max-w-[1120px] overflow-hidden rounded-[28px] p-8 text-white sm:p-10" style="box-shadow:0 30px 60px -30px rgba(14,21,33,0.55)">
+      <span class="eyebrow eyebrow--dark">Por qué elegir Bitwise</span>
+      <h2 class="mt-4 max-w-[560px] font-display text-[clamp(1.4rem,3vw,1.9rem)] font-extrabold leading-[1.2]">
+        Condiciones claras antes de empezar, no sobre la marcha
+      </h2>
+
+      <div class="mt-8 grid gap-4" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))">
+        {[
+          { icono: 'documento', titulo: 'Cotización cerrada por escrito', desc: 'El alcance y el precio quedan en un documento antes de arrancar. Lo que no está ahí, no se cobra después.' },
+          { icono: 'tarjeta', titulo: 'Pagas en dos partes', desc: '50% para empezar y 50% contra entrega, con boleta o factura SUNAT en cada pago. Hasta 3 cuotas sin interés en proyectos grandes.' },
+          { icono: 'reloj', titulo: `Entrega en ${rubro.deliveryTime}`, desc: 'El plazo corre desde que apruebas el diseño, y lo conoces antes de dar el adelanto.' },
+          { icono: 'candado', titulo: 'El dominio y el código son tuyos', desc: 'Todo queda registrado a tu nombre. Si mañana trabajas con otra empresa, te llevas tu web completa.' },
+          { icono: 'escudo', titulo: '30 días de garantía', desc: 'Después de la entrega, cualquier error se corrige sin costo. El soporte va por WhatsApp, sin mesa de ayuda.' },
+          { icono: 'tablero', titulo: 'No dependes de nosotros', desc: 'Panel administrable y capacitación grabada: tus textos, fotos y precios los cambias tú, cuando quieras.' },
+        ].map((v, i) => (
+          <div class="porque-item rounded-[18px] p-5" style={`--reveal-delay:${(i % 3) * 80}ms`}>
+            <span class="porque-ico grid h-11 w-11 place-items-center rounded-[13px]">
+              <Icono name={v.icono} size={20} />
+            </span>
+            <h3 class="mt-4 font-display text-[15.5px] font-bold leading-[1.3] text-white">{v.titulo}</h3>
+            <p class="mt-2 text-[13.5px] leading-[1.6] text-slate-400">{v.desc}</p>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -382,6 +459,57 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
   />
 </BaseLayout>
 
+<script>
+  // Tarjetas del problema: los botones mueven el carril y los puntos marcan en
+  // cuál se está. El carril es scroll nativo, así que en el celular también se
+  // pasa deslizando con el dedo sin que este código intervenga.
+  const track = document.querySelector<HTMLElement>('[data-fc-track]');
+  if (track) {
+    const cards = Array.from(track.children) as HTMLElement[];
+    const dotsWrap = document.querySelector<HTMLElement>('[data-fc-dots]')!;
+    const prev = document.querySelector<HTMLButtonElement>('[data-fc-prev]')!;
+    const next = document.querySelector<HTMLButtonElement>('[data-fc-next]')!;
+
+    const dots = cards.map((_, i) => {
+      const d = document.createElement('span');
+      d.className = 'fc-dot' + (i === 0 ? ' is-on' : '');
+      dotsWrap.append(d);
+      return d;
+    });
+
+    // La tarjeta activa se deduce del desplazamiento real del carril, no de un
+    // contador propio: así deslizar con el dedo y usar los botones no se
+    // desincronizan nunca.
+    const actual = () => {
+      const paso = cards[0].offsetWidth + 14; // ancho + gap
+      return Math.min(cards.length - 1, Math.round(track.scrollLeft / paso));
+    };
+
+    // El índice vive en una variable y no se deduce del scroll al hacer clic:
+    // dos clics rápidos leerían el desplazamiento a mitad de la animación y el
+    // segundo repetiría la misma tarjeta.
+    let idx = 0;
+
+    const pintar = () => {
+      dots.forEach((d, di) => d.classList.toggle('is-on', di === idx));
+      prev.toggleAttribute('disabled', idx === 0);
+      next.toggleAttribute('disabled', idx === cards.length - 1);
+    };
+
+    const irA = (i: number) => {
+      idx = Math.max(0, Math.min(cards.length - 1, i));
+      track.scrollTo({ left: idx * (cards[0].offsetWidth + 14), behavior: 'smooth' });
+      pintar();
+    };
+
+    prev.addEventListener('click', () => irA(idx - 1));
+    next.addEventListener('click', () => irA(idx + 1));
+    // Al deslizar con el dedo, el índice se recalcula del scroll real
+    track.addEventListener('scroll', () => { idx = actual(); pintar(); }, { passive: true });
+    pintar();
+  }
+</script>
+
 <style>
   .hero-chip {
     display: inline-flex;
@@ -396,14 +524,14 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
   }
   .hero-chip :global(svg) { color: #94a3b8; }
 
-  /* ---- Foto de ambiente del rubro ---- */
+  /* ---- Foto de ambiente del rubro: banda ancha ----
+     La proporción panorámica reserva el alto antes de cargar y muestra la
+     escena entera; la versión en columna la recortaba raro. */
   .foto-rubro {
     position: relative;
     overflow: hidden;
     border-radius: 22px;
-    /* Alto fijo por proporción: reserva el espacio antes de que cargue y evita
-       que la foto empuje el texto al terminar de descargar. */
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 21 / 9;
     box-shadow:
       inset 0 0 0 1px var(--hairline),
       0 30px 60px -35px rgba(15, 23, 42, 0.45);
@@ -423,18 +551,90 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
   }
   .foto-rubro picture { display: block; height: 100%; }
 
-  /* El sticky va aquí y no como clase lg:sticky porque el `position: relative`
-     de arriba (necesario para el velo ::after) gana por orden de hoja. */
-  @media (min-width: 1024px) {
-    .foto-rubro {
-      position: sticky;
-      top: 112px;
-    }
+  @media (max-width: 767px) {
+    .foto-rubro { aspect-ratio: 16 / 10; }
   }
 
-  @media (max-width: 1023px) {
-    .foto-rubro { aspect-ratio: 3 / 2; }
+  /* ---- Tarjetas del problema (pregunta y respuesta) ----
+     Carril horizontal con imán por tarjeta: se pasa con los botones o
+     deslizando con el dedo. La siguiente asoma por el borde como invitación. */
+  .fc-track {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    /* overflow-x:auto fuerza el eje Y a auto y aparece un scroll vertical
+       fantasma de 1-2px: se apaga explícito. */
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    touch-action: pan-x pan-y;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    padding: 2px;
   }
+  .fc-track::-webkit-scrollbar { display: none; }
+
+  .fc-card {
+    flex: none;
+    width: calc(100% - 44px); /* deja asomar la siguiente */
+    scroll-snap-align: start;
+    padding: 26px;
+    box-shadow: inset 0 0 0 1px var(--hairline), 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  @media (min-width: 768px) {
+    .fc-card { width: 78%; padding: 30px; }
+  }
+
+  .fc-num {
+    display: grid;
+    place-items: center;
+    height: 34px;
+    min-width: 34px;
+    flex: none;
+    border-radius: 10px;
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 9%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 18%, transparent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .fc-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 0;
+    cursor: pointer;
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 700;
+    color: #475569;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--hairline);
+    transition: all 0.35s var(--ease-fluid);
+  }
+  .fc-btn:hover { color: var(--color-primary); }
+  .fc-btn--primario {
+    padding-inline: 20px;
+    color: #fff;
+    background: var(--gradient-brand);
+    box-shadow: 0 10px 25px -5px rgba(217, 16, 35, 0.4);
+  }
+  .fc-btn--primario:hover { color: #fff; filter: brightness(1.06); }
+  .fc-btn[disabled] { opacity: 0.35; pointer-events: none; }
+
+  .fc-dot {
+    height: 7px;
+    width: 7px;
+    border-radius: 999px;
+    background: #cbd5e1;
+    transition: all 0.35s var(--ease-fluid);
+  }
+  .fc-dot.is-on { width: 22px; background: var(--color-primary); }
 
   /* ---- El problema ---- */
   .prob-ico {
@@ -442,22 +642,59 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
     background: color-mix(in srgb, var(--color-primary) 9%, transparent);
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 18%, transparent);
   }
-  .prob-parrafo {
-    position: relative;
+  /* ---- Insignia numérica de las secciones ---- */
+  .seccion-num {
+    display: grid;
+    place-items: center;
+    height: 30px;
+    min-width: 38px;
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 16%, transparent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* El texto entero queda en el documento; el recorte es solo visual */
+  .seccion-desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    padding-left: 28px;
+  }
+
+  /* ---- Chips del bloque de precio ---- */
+  .precio-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    background: #f8fafc;
     box-shadow: inset 0 0 0 1px var(--hairline);
   }
-  /* Guía de color: marca dónde empieza cada idea sin usar viñetas */
-  .prob-parrafo::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: linear-gradient(180deg, var(--color-primary), var(--color-accent));
-    opacity: 0.55;
+  .precio-chip :global(svg) { color: var(--color-primary); }
+
+  /* ---- Por qué Bitwise ---- */
+  .porque-item {
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    transition: background 0.4s var(--ease-fluid), box-shadow 0.4s var(--ease-fluid);
+  }
+  .porque-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(232, 163, 23, 0.4);
+  }
+  .porque-ico {
+    color: #e8a317;
+    background: rgba(232, 163, 23, 0.13);
+    box-shadow: inset 0 0 0 1px rgba(232, 163, 23, 0.25);
   }
 
   /* ---- Secciones numeradas ---- */
