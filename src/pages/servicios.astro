@@ -133,36 +133,11 @@ const schema = serviciosTabs.map((t) => {
                   </div>
                 </div>
 
-                {/* Enlace a la página propia del servicio. Estuvo quitado un
-                    tiempo: cuando solo tienda online tenía página, salía en una
-                    tarjeta y en las otras tres no, y descuadraba la fila. Ahora
-                    los cuatro servicios tienen la suya, así que sale en los
-                    cuatro y vuelve a estar parejo.
-
-                    No es adorno: es el camino por el que Google y el visitante
-                    llegan al contenido largo de cada servicio. Sin él, esas
-                    cuatro páginas quedan sin ningún enlace interno y se rastrean
-                    mucho menos. */}
-                {servicioDeTab(t.id) && (
-                  <a
-                    href={hrefServicio(servicioDeTab(t.id)!.slug)}
-                    class="detalle-link relative mt-6 flex items-center justify-between gap-4 rounded-[16px] px-5 py-4 text-left no-underline"
-                  >
-                    <span>
-                      {/* El label va tal cual, sin pasarlo a minúsculas: así
-                          salía "Ver todo sobre erps y sistemas", con las siglas
-                          rotas. Que empiece en mayúscula a mitad de frase se
-                          lee bien porque es el nombre del servicio. */}
-                      <span class="block font-display text-[15px] font-bold text-white">
-                        Ver todo sobre {t.label}
-                      </span>
-                      <span class="mt-0.5 block text-[13px] text-slate-400">
-                        Cómo funciona, qué incluye y preguntas frecuentes
-                      </span>
-                    </span>
-                    <svg class="detalle-flecha flex-none text-accent" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-                  </a>
-                )}
+                {/* Sin enlace a la página del servicio aquí dentro. Estuvo,
+                    metido entre el bloque de entrega y los botones, y quedaba
+                    como un cajón de más dentro de una tarjeta que ya tenía
+                    bastante. El enlace vive ahora en las tarjetas de "Qué entra
+                    en cada servicio", más abajo, con un "Ver más" por servicio. */}
 
                 <div class="relative mt-auto flex flex-wrap items-center justify-center gap-3 pt-8">
                   <a href={waLink(t.wa)} target="_blank" rel="noopener" class="btn btn--whatsapp group !py-3 !pl-[26px] !text-[15px]">
@@ -237,13 +212,60 @@ const schema = serviciosTabs.map((t) => {
     </div>
   </section>
 
-  {/* Aquí hubo una sección "Qué entra en cada servicio" con los tipos de trabajo
-      en cuatro tarjetas. Se movió: eran cuatro cajas grandes con cuatro renglones
-      dentro, todas estiradas al alto de la más larga, y se veían vacías.
+  {/* Los tipos de trabajo de cada servicio, y el camino a su página propia.
 
-      Ahora esa lista vive en la página propia de cada servicio, dentro de "Qué
-      incluye" y en pastillas. Ahí valen más: quien entra a /servicios/pagina-web
-      ya eligió el servicio y lo que necesita saber es si su caso entra o no. */}
+      El "Ver más" va aquí y no dentro de la tarjeta oscura de arriba. Allí era
+      un cajón de más en una tarjeta que ya tenía icono, título, precio, plazo y
+      dos botones. Aquí cierra la tarjeta: primero lees qué trabajos entran, y si
+      el tuyo está, el enlace te lleva al detalle completo.
+
+      Es además el único enlace interno hacia las cuatro páginas de servicio. Sin
+      él se rastrean mucho menos. */}
+  <section class="surface--alt px-6 py-20" aria-labelledby="trabajos-servicios">
+    <div class="mx-auto w-full max-w-[1120px]">
+      <div class="reveal mx-auto max-w-[640px] text-center">
+        <span class="eyebrow eyebrow--light">Tipos de trabajo</span>
+        <h2 id="trabajos-servicios" class="mt-5 font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
+          Qué entra en cada servicio
+        </h2>
+        <p class="mt-4 text-[15px] leading-[1.65] text-slate-500 [text-wrap:pretty]">
+          El precio va por el trabajo que hay que hacer, no por el rubro de tu negocio.
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-5" style="grid-template-columns:repeat(auto-fit,minmax(250px,1fr))">
+        {serviciosTabs.map((t, i) => {
+          const servicio = servicioDeTab(t.id);
+          return (
+            /* Columna con el enlace pegado abajo (`mt-auto`). Las cuatro tarjetas
+               miden lo mismo porque la rejilla las estira, y antes eso dejaba un
+               hueco blanco al final de las más cortas. Con el "Ver más" anclado
+               al pie, ese hueco pasa a ser el aire que separa la lista del
+               enlace, y las cuatro terminan en la misma línea. */
+            <div class="reveal flex flex-col rounded-[20px] bg-white p-6" style={`--reveal-delay:${(i % 4) * 70}ms;box-shadow:inset 0 0 0 1px var(--hairline)`}>
+              <a href={`#${t.id}`} class="font-display text-[15px] font-bold text-dark no-underline">{t.label}</a>
+              <ul class="m-0 mt-4 grid list-none gap-2.5 p-0">
+                {t.trabajos.map((trabajo) => (
+                  <li class="flex items-start gap-2.5 text-[14px] leading-[1.45] text-slate-600">
+                    <span class="mt-[7px] h-1.5 w-1.5 flex-none rounded-full bg-primary" aria-hidden="true"></span>
+                    {trabajo}
+                  </li>
+                ))}
+              </ul>
+
+              {servicio && (
+                <a href={hrefServicio(servicio.slug)} class="ver-mas mt-auto flex items-center gap-1.5 pt-5 text-[14px] font-bold text-primary no-underline">
+                  Ver más
+                  <svg class="ver-mas__flecha" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  <span class="sr-only">sobre {t.label}</span>
+                </a>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
 
 
   {/* Aquí iba la banda de condiciones: pago 50/50, factura SUNAT, garantía de
@@ -458,18 +480,9 @@ const schema = serviciosTabs.map((t) => {
     .flip.is-animating.is-flipped .flip-inner { transform: rotateY(180deg); }
   }
 
-  /* ---- Enlace a la página propia del servicio ---- */
-  .detalle-link {
-    background: rgba(255, 255, 255, 0.05);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
-    transition: background 0.4s var(--ease-fluid), box-shadow 0.4s var(--ease-fluid);
-  }
-  .detalle-link:hover {
-    background: rgba(255, 255, 255, 0.09);
-    box-shadow: inset 0 0 0 1px rgba(232, 163, 23, 0.45);
-  }
-  .detalle-flecha { transition: transform 0.4s var(--ease-fluid); }
-  .detalle-link:hover .detalle-flecha { transform: translateX(4px); }
+  /* ---- "Ver más" al pie de cada tarjeta de tipos de trabajo ---- */
+  .ver-mas__flecha { transition: transform 0.4s var(--ease-fluid); }
+  .ver-mas:hover .ver-mas__flecha { transform: translateX(4px); }
 
   /* El icono de la flecha circular gira al pasar el mouse: anticipa el volteo */
   .flip-ico { transition: transform 0.6s cubic-bezier(0.32, 0.72, 0, 1); }
