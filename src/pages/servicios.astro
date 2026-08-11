@@ -237,48 +237,14 @@ const schema = serviciosTabs.map((t) => {
     </div>
   </section>
 
-  <!-- Antes esta sección listaba tres rubros bajo cada servicio, enlazando a sus
-       landings. Se cambió por el tipo de trabajo: colgar rubros de un servicio
-       daba a entender que el precio depende del giro del negocio, y no es así
-       —una pollería y una barbería pagan lo mismo por la misma página—. Lo que
-       mueve el precio es el trabajo que hay detrás, y es lo que se enseña ahora.
+  {/* Aquí hubo una sección "Qué entra en cada servicio" con los tipos de trabajo
+      en cuatro tarjetas. Se movió: eran cuatro cajas grandes con cuatro renglones
+      dentro, todas estiradas al alto de la más larga, y se veían vacías.
 
-       Las doce landings de rubro no quedan huérfanas: la portada las enlaza a
-       todas en "Soluciones por tipo de negocio". Lo que se pierde aquí son doce
-       enlaces internos con contexto, que ayudaban a esas páginas. Si más
-       adelante se quiere recuperar ese empuje, el sitio para hacerlo es un
-       bloque propio, no colgándolos de un servicio. -->
-  <section class="surface--alt px-6 py-20" aria-labelledby="trabajos-servicios">
-    <div class="mx-auto w-full max-w-[1120px]">
-      <div class="reveal mx-auto max-w-[640px] text-center">
-        <span class="eyebrow eyebrow--light">Tipos de trabajo</span>
-        <h2 id="trabajos-servicios" class="mt-5 font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
-          Qué entra en cada servicio
-        </h2>
-        <p class="mt-4 text-[15px] leading-[1.65] text-slate-500 [text-wrap:pretty]">
-          El precio va por el trabajo que hay que hacer, no por el rubro de tu negocio.
-        </p>
-      </div>
+      Ahora esa lista vive en la página propia de cada servicio, dentro de "Qué
+      incluye" y en pastillas. Ahí valen más: quien entra a /servicios/pagina-web
+      ya eligió el servicio y lo que necesita saber es si su caso entra o no. */}
 
-      <div class="mt-10 grid gap-5" style="grid-template-columns:repeat(auto-fit,minmax(250px,1fr))">
-        {serviciosTabs.map((t, i) => (
-          <div class="reveal rounded-[20px] bg-white p-6" style={`--reveal-delay:${(i % 4) * 70}ms;box-shadow:inset 0 0 0 1px var(--hairline)`}>
-            <a href={`#${t.id}`} class="font-display text-[15px] font-bold text-dark no-underline">{t.label}</a>
-            <ul class="m-0 mt-4 grid list-none gap-2.5 p-0">
-              {t.trabajos.map((trabajo) => (
-                <li class="flex items-start gap-2.5 text-[14px] leading-[1.45] text-slate-600">
-                  {/* Punto y no emoji: los emojis de rubro sugerían "esto es para
-                      tu tipo de negocio", que es justo lo que se quiso quitar. */}
-                  <span class="mt-[7px] h-1.5 w-1.5 flex-none rounded-full bg-primary" aria-hidden="true"></span>
-                  {trabajo}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
 
   {/* Aquí iba la banda de condiciones: pago 50/50, factura SUNAT, garantía de
       30 días y código y dominio a tu nombre. Se quitó a pedido.

@@ -249,6 +249,28 @@ const schema = [
           </div>
         ))}
       </div>
+
+      {/* Los tipos de trabajo que caben en este servicio. Estuvieron un rato en
+          /servicios como una sección aparte con cuatro tarjetas, pero ahí eran
+          cuatro cajas grandes con cuatro renglones dentro y se veían vacías.
+          Aquí valen más: quien llega a esta página ya eligió el servicio y lo
+          que necesita saber es si su caso entra o no.
+
+          En pastillas y no en tarjetas a propósito: son etiquetas cortas, no
+          contenido con jerarquía propia. Ocupan lo que ocupa su texto. */}
+      <div class="reveal mx-auto mt-8 max-w-[760px] rounded-[20px] bg-white p-6 sm:p-7" style="box-shadow:inset 0 0 0 1px var(--hairline)">
+        <h3 class="m-0 font-display text-[15px] font-bold text-dark">
+          Qué trabajos entran aquí
+        </h3>
+        <p class="mt-1.5 text-[14px] leading-[1.6] text-slate-500">
+          El precio va por el trabajo que hay que hacer, no por el rubro de tu negocio.
+        </p>
+        <ul class="m-0 mt-4 flex list-none flex-wrap gap-2 p-0">
+          {tab.trabajos.map((trabajo) => (
+            <li class="trabajo-chip">{trabajo}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -441,6 +463,20 @@ const schema = [
   @media (min-width: 1024px) {
     .paso--invertido .paso-foto { order: 2; }
     .paso--invertido .paso-texto { order: 1; }
+  }
+
+  /* Pastillas de "qué trabajos entran aquí". Sin caja ni icono: son etiquetas,
+     y en cuanto se les pone marco propio compiten con las tarjetas de arriba. */
+  .trabajo-chip {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #475569;
+    background: #f1f5f9;
+    box-shadow: inset 0 0 0 1px var(--hairline);
   }
 
   /* ---- Qué incluye ---- */
