@@ -75,10 +75,17 @@ const schema = [
   breadcrumbLabel={servicio.breadcrumb}
   schema={schema}
 >
-  <!-- 1. Portada: texto a la izquierda, foto del servicio a la derecha -->
+  {/* 1. Portada: texto a la izquierda, foto del servicio a la derecha. Sin foto
+       el texto pasa a una sola columna centrada, que se ve entero en vez de
+       dejar media portada vacía esperando una imagen que aún no existe. */}
   <section class="hero-dark relative isolate overflow-hidden px-6 pb-20 pt-[140px] text-white">
     <Stars />
-    <div class="mx-auto grid w-full max-w-[1120px] items-center gap-12 lg:grid-cols-[1.02fr_0.98fr]">
+    <div
+      class:list={[
+        'mx-auto grid w-full items-center gap-12',
+        servicio.hero ? 'max-w-[1120px] lg:grid-cols-[1.02fr_0.98fr]' : 'max-w-[760px] text-center',
+      ]}
+    >
       <div>
         <nav aria-label="Ruta" class="mb-8 text-[13px] text-slate-400">
           <a href="/servicios" class="text-slate-400 no-underline transition-colors hover:text-white">Servicios</a>
@@ -94,9 +101,9 @@ const schema = [
         <h1 class="mt-5 font-display text-[clamp(2rem,5vw,3rem)] font-extrabold leading-[1.08]">
           {servicio.h1}
         </h1>
-        <p class="mt-5 max-w-[560px] text-[17px] leading-[1.65] text-slate-300">{servicio.intro}</p>
+        <p class:list={['mt-5 max-w-[560px] text-[17px] leading-[1.65] text-slate-300', !servicio.hero && 'mx-auto']}>{servicio.intro}</p>
 
-        <div class="mt-7 flex flex-wrap gap-3">
+        <div class:list={['mt-7 flex flex-wrap gap-3', !servicio.hero && 'justify-center']}>
           <span class="hero-chip">
             <Icono name="etiqueta" size={15} />
             {tab.price === null ? 'Precio' : 'Desde'}
@@ -112,7 +119,7 @@ const schema = [
           </span>
         </div>
 
-        <div class="mt-8 flex flex-wrap gap-3">
+        <div class:list={['mt-8 flex flex-wrap gap-3', !servicio.hero && 'justify-center']}>
           <a href={waLink(tab.wa)} target="_blank" rel="noopener" class="btn btn--whatsapp group !py-3 !pl-[26px] !text-[15px]">
             Cotizar por WhatsApp
             <span class="btn__icon" aria-hidden="true">
@@ -123,20 +130,22 @@ const schema = [
         </div>
       </div>
 
-      <figure class="foto-hero m-0">
-        <picture>
-          <source media="(max-width: 1023px)" srcset={`/servicios/${servicio.hero}-sm.webp`} width="620" height="420" />
-          <img
-            src={`/servicios/${servicio.hero}.webp`}
-            width="1000"
-            height="680"
-            alt={servicio.heroAlt}
-            fetchpriority="high"
-            decoding="async"
-            class="block h-full w-full object-cover"
-          />
-        </picture>
-      </figure>
+      {servicio.hero && (
+        <figure class="foto-hero m-0">
+          <picture>
+            <source media="(max-width: 1023px)" srcset={`/servicios/${servicio.hero}-sm.webp`} width="620" height="420" />
+            <img
+              src={`/servicios/${servicio.hero}.webp`}
+              width="1000"
+              height="680"
+              alt={servicio.heroAlt}
+              fetchpriority="high"
+              decoding="async"
+              class="block h-full w-full object-cover"
+            />
+          </picture>
+        </figure>
+      )}
     </div>
   </section>
 
@@ -337,15 +346,15 @@ const schema = [
     <div class="mx-auto w-full max-w-[760px]">
       <ContactForm
         id="servicio-form"
-        context={servicio.breadcrumb.toLowerCase()}
-        title={`¿Hablamos de tu ${servicio.breadcrumb.toLowerCase()}?`}
+        context={servicio.enFrase}
+        title={`¿Hablamos de tu ${servicio.enFrase}?`}
         subtitle="Déjanos tu nombre, celular y tu pregunta. Te respondemos en menos de 2 horas hábiles."
       />
     </div>
   </section>
 
   <CTA
-    title={`¿Listo para tu ${servicio.breadcrumb.toLowerCase()}?`}
+    title={`¿Listo para tu ${servicio.enFrase}?`}
     subtitle="Cotización gratis en menos de 24 horas, en soles y con facilidades de pago. Sin compromiso."
   />
 </BaseLayout>
