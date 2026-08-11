@@ -10,9 +10,12 @@ import Icono from './Icono.astro';
       <h2 class="mx-auto mt-4 max-w-[620px] font-display text-[clamp(1.7rem,4vw,2.5rem)] font-bold leading-[1.08] text-dark">
         Lo que tu negocio necesita, <span class="gradient-text">a precio claro</span>
       </h2>
-      <p class="mx-auto mt-3.5 max-w-[520px] text-base leading-[1.65] text-slate-500 [text-wrap:pretty]">
-        Precios en soles, sin letra chica. 50% adelanto, 50% contra entrega y hasta 3 cuotas sin interés.
-      </p>
+      {/* Sin bajada. Decía "Precios en soles, sin letra chica. 50% adelanto,
+          50% contra entrega y hasta 3 cuotas sin interés", que es justo lo que
+          repiten después las tarjetas de condiciones de /servicios y el propio
+          precio de cada tarjeta de aquí abajo. El titular ya dice "a precio
+          claro"; la línea solo alargaba el bloque antes de llegar a lo que
+          importa. */}
     </div>
 
     <!-- La aparición va en el riel, no en cada tarjeta: dentro de un carrusel

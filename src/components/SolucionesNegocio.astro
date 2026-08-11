@@ -23,13 +23,17 @@ import { hrefRubro } from '../data/landings';
       >
         Soluciones por <span class="gradient-text">tipo de negocio</span>
       </h2>
-      <p class="mx-auto mt-4 text-[15px] leading-[1.65] text-slate-500 [text-wrap:pretty]">
-        Cada rubro tiene su propia página, con las secciones y funciones que ese negocio
-        necesita de verdad. Entra al tuyo y mira qué incluye.
-      </p>
+      {/* Sin bajada. Decía "Cada rubro tiene su propia página, con las secciones
+          y funciones que ese negocio necesita de verdad. Entra al tuyo y mira
+          qué incluye": tres renglones para explicar lo que la propia lista de
+          abajo enseña de un vistazo, y encima con la línea de cierre repitiendo
+          la misma invitación. */}
     </div>
 
-    <ul class="mt-10 grid list-none gap-3 p-0" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">
+    {/* Al quitar la bajada, el titular quedaba encima de la lista casi pegado.
+        Se recupera parte de ese aire aquí para que el bloque respire igual que
+        antes. */}
+    <ul class="mt-12 grid list-none gap-3 p-0" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">
       {rubros.map((r, i) => (
         <li class="reveal" style={`--reveal-delay:${(i % 4) * 70}ms`}>
           <a href={hrefRubro(r.slug)} class="sn-card flex items-center gap-3 rounded-[16px] bg-white p-4 no-underline">
