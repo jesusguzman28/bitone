@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { hero, waLink, heroStats } from '../data/site';
+import { hero, waLink, heroPrecios } from '../data/site';
 
 const pills = [
   { label: 'Rápidas', color: '#f59e0b', icon: '<path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>' },
@@ -57,10 +57,15 @@ const pills = [
               {hero.eyebrow}
             </span>
             <h1 class="mt-5 font-display text-[clamp(2.55rem,7.2vw,3.8rem)] font-bold leading-[1.05]" style="min-height:calc(3 * 1.05em)">
-              {hero.titleA}<br />
+              {hero.h1}<br />
               <span id="typed" class="typed-text"></span><span id="cursor" class="typed-cursor">|</span>
             </h1>
-            <p class="mx-auto mt-5 max-w-lg text-base leading-relaxed text-slate-300 sm:mx-0 sm:text-lg">{hero.subtitle}</p>
+            {/* Esta prueba interna usaba `hero.titleA`, `hero.subtitle` y
+                `hero.h1Destacado`, que desaparecieron cuando el titular del hero
+                pasó a ser una línea fija más una frase que se escribe y se
+                borra. Se queda con el H1 y esa frase, que es lo que hay ahora en
+                la portada de verdad. */}
+            <p class="mx-auto mt-5 max-w-lg text-base leading-relaxed text-slate-300 sm:mx-0 sm:text-lg">{hero.typed[0]}</p>
 
             <div class="mt-5 flex flex-wrap justify-center gap-2 sm:justify-start">
               {pills.map((p) => (
@@ -84,7 +89,7 @@ const pills = [
         </div>
 
         <dl class="mx-auto mt-8 grid max-w-md grid-cols-2 gap-4 text-center sm:mx-0">
-          {heroStats.map((s) => {
+          {heroPrecios.map((s) => {
             const price = s.v.replace(/^Desde\s*/i, '');
             return (
               <div class="group flex flex-col items-center rounded-2xl px-5 py-4" style="background:rgba(8,12,24,0.72);box-shadow:inset 0 1px 0 rgba(255,255,255,0.08),inset 0 0 0 1px rgba(255,255,255,0.1),0 20px 42px -24px rgba(0,0,0,0.7)">

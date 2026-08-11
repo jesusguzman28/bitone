@@ -25,6 +25,7 @@
 import { spawn } from 'node:child_process';
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // Rutas que siempre tienen que existir y responder. Si se agrega una página
 // importante al sitio, va aquí.
@@ -50,7 +51,11 @@ const SENALES_DE_ERROR = [
 ];
 
 const PUERTO = 4321;
-const raiz = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
+// Se convierte con fileURLToPath y no leyendo .pathname a mano: el pathname
+// viene con los espacios escritos como %20, así que en una carpeta con espacios
+// en el nombre la ruta resultante no existe y todo el script moría con un
+// "spawn cmd.exe ENOENT" que no decía nada sobre la causa real.
+const raiz = fileURLToPath(new URL('..', import.meta.url));
 
 let fallos = 0;
 const bien = (m) => console.log(`  ok    ${m}`);

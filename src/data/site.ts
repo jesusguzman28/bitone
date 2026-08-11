@@ -63,25 +63,41 @@ export const nav = [
 // ---- Hero (home) ----
 export const hero = {
   eyebrow: 'Hecho en Perú',
-  // H1 real de la portada: lleva la keyword principal y sale en el HTML servido.
-  // La frase que se escribe sola quedó como línea secundaria (los rastreadores
-  // de Google y de las IAs no ejecutan JavaScript).
-  h1: 'Páginas web para MYPEs en Perú',
-  h1Destacado: 'desde S/1,500',
-  titleA: 'Tu negocio online,',
-  // Adorno, no estructura: esta línea la pinta JavaScript y ningún rastreador
-  // la lee. Por eso puede cambiar sin tocar nada de SEO — la keyword vive en
-  // el H1 estático de arriba.
-  // Cada frase afirma algo que el sitio ya sostiene por escrito; nada de
-  // promesas genéricas que no se puedan respaldar en la cotización.
+  // Arranque fijo del titular, en grande. Lleva la keyword principal y no se
+  // anima: es lo que leen Google y los buscadores con IA, que no ejecutan
+  // JavaScript. Un H1 pintado por JavaScript equivale a una página sin título.
+  h1: 'Páginas web y tiendas online',
+  // El final del titular, también en grande, y esto sí se escribe y se borra.
+  //
+  // Las tres frases completan la línea de arriba, así que se leen seguidas:
+  // "Páginas web y tiendas online / para MYPEs en Perú". Son cortas a propósito:
+  // a este tamaño de letra, una frase larga ocupa cuatro renglones en un celular
+  // y empuja el botón y los precios fuera de la pantalla.
+  //
+  // El orden importa. La primera es la que lleva la keyword y es la que se pinta
+  // en el HTML servido, así que el titular que lee Google sigue diciendo
+  // exactamente "Páginas web y tiendas online para MYPEs en Perú" aunque el
+  // JavaScript no llegue a correr. Las otras dos son el adorno.
+  //
+  // Cada una afirma algo que el sitio ya sostiene por escrito en otra página
+  // —plazo de entrega, pasarelas peruanas—; nada de promesas genéricas que
+  // después no se puedan respaldar en la cotización.
+  // Las tres miden lo mismo (27 caracteres) y eso no es casualidad: completan la
+  // misma línea de arriba, así que si una fuera más corta el titular ocuparía un
+  // renglón menos y el bloque se vería encogido cada vez que le tocara el turno.
+  // Con largos parejos, el titular corta igual siempre. Al cambiar una frase hay
+  // que mantenerle el largo.
+  //
+  // Ninguna promete un plazo. Hubo una que decía "listas en semanas, no meses" y
+  // se quitó: un proyecto grande puede tomar meses de verdad, y una frase así en
+  // el titular se convierte en un reclamo el día que no se cumple. Los plazos
+  // están en /servicios, donde van por servicio y con su rango. Aquí solo van
+  // hechos que se cumplen siempre, sin depender del tamaño del encargo.
   typed: [
-    'funcionando en semanas, no en meses.',
-    'con dominio y hosting incluidos.',
-    'cobrando por Yape, Plin y tarjeta.',
-    'con factura electrónica SUNAT.',
-    'con el código y el dominio a tu nombre.',
+    'para MYPEs en todo el Perú.',
+    'con el dominio a tu nombre.',
+    'que cobran por Yape y Plin.',
   ],
-  subtitle: 'Páginas web, tiendas online y sistemas para que tu pyme venda más.',
   pills: [
     { label: 'Rápidas', color: '#f59e0b', icon: '<path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>' },
     { label: 'Precio justo', color: '#22c55e', icon: '<circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8M12 18V6"/>' },
@@ -111,9 +127,48 @@ export const hero = {
   ],
 } as const;
 
-export const heroStats = [
-  { k: 'Páginas web', v: 'S/1,500', note: 'Dominio y hosting 1 año incluidos' },
-  { k: 'Tiendas online', v: 'S/3,000', note: 'Dominio y hosting incluidos' },
+// ---- Tira de precios del hero ----
+// Los dos puntos de entrada del catálogo, que son las dos preguntas con las que
+// llega todo el mundo: "cuánto cuesta una web" y "cuánto cuesta vender online".
+// Van con "Desde" delante porque son pisos, no precios cerrados: la cotización
+// real sube según el alcance, y prometer una cifra exacta aquí obliga después a
+// explicar por qué subió.
+//
+// `S/1,500` tiene que coincidir con PRECIO_PISO. Si algún día se mueve el piso,
+// se mueven los dos: el guardia de rubros.ts valida los rubros contra la
+// constante, pero no puede ver este texto.
+//
+// Cada tarjeta lleva su color, y el color va aquí y no suelto en la plantilla
+// para que la cifra, el borde y el fondo no puedan quedar de tonos distintos.
+// Azul para la web y morado para la tienda: son los dos únicos sitios del hero
+// con estos tonos, así que se leen como dos opciones a elegir y no se confunden
+// con el rojo y el dorado de la marca, que aquí visten los botones y el titular.
+//   `de`/`a`  → extremos del degradado de la cifra
+//   `tinte`   → relleno de la tarjeta
+//   `borde`   → filo de 1px
+//
+// Sin línea de detalle bajo el precio. La tenía solo en escritorio ("+ IGV ·
+// dominio y hosting incluidos" y "Con pasarela de pagos peruana") y hacía que
+// la misma tarjeta se leyera distinta según el aparato. Aquí la tarjeta responde
+// una sola pregunta —cuánto cuesta empezar—; el "+ IGV" y todo lo que incluye
+// están en las tarjetas de /servicios, que es donde se va a comparar de verdad.
+export const heroPrecios = [
+  {
+    k: 'Páginas web',
+    v: 'S/1,500',
+    de: '#60a5fa',
+    a: '#22d3ee',
+    tinte: 'rgba(56,132,246,0.13)',
+    borde: 'rgba(96,165,250,0.32)',
+  },
+  {
+    k: 'Tiendas online',
+    v: 'S/3,000',
+    de: '#c084fc',
+    a: '#8b7bf7',
+    tinte: 'rgba(139,92,246,0.15)',
+    borde: 'rgba(192,132,252,0.32)',
+  },
 ] as const;
 
 // ---- Contadores animados (home) ----
@@ -131,7 +186,7 @@ export const serviciosHome = [
   {
     tag: 'Página web profesional',
     time: '2 a 4 semanas',
-    desc: 'Rápida, optimizada para Google y administrable por ti. Con dominio y hosting por 1 año incluidos.',
+    desc: 'Rápida, lista para salir en Google y con los textos en tus manos. Dominio y hosting del primer año incluidos.',
     price: 'S/1,500',
     priceLabel: 'Desde',
     priceNote: ' + IGV',
@@ -140,16 +195,16 @@ export const serviciosHome = [
     iconName: 'www',
     iconColor: '#D91023',
     features: [
-      'Diseño responsive mobile-first',
-      'Panel administrable',
-      'SEO básico y analítica',
-      'WhatsApp integrado',
+      'Se ve bien en el celular',
+      'Cambias textos y fotos tú mismo',
+      'Preparada para salir en Google',
+      'Botón de WhatsApp',
     ],
   },
   {
     tag: 'Tienda online',
     time: '4 a 6 semanas',
-    desc: 'Catálogo, carrito y cobro automático 24/7 con pasarelas peruanas. Dominio y hosting incluidos.',
+    desc: 'Tu cliente elige, paga y tú recibes el pedido listo, a cualquier hora. Dominio y hosting incluidos.',
     price: 'S/3,000',
     priceLabel: 'Desde',
     priceNote: '',
@@ -159,16 +214,16 @@ export const serviciosHome = [
     iconName: 'carrito',
     iconColor: '#E8A317',
     features: [
-      'Yape, Plin y tarjetas',
+      'Cobras por Yape, Plin y tarjeta',
       'Catálogo y control de stock',
       'Pedidos por WhatsApp',
-      'Facturación SUNAT opcional',
+      'Boleta y factura SUNAT',
     ],
   },
   {
     tag: 'ERPs y sistemas a medida',
-    time: 'Según alcance',
-    desc: 'Ventas, inventario, chatbots con IA e integraciones hechas para tu operación exacta.',
+    time: 'Según el tamaño',
+    desc: 'Para llevar ventas, stock y caja sin cuadernos ni Excel. Hecho a la medida de tu negocio.',
     price: 'A consultar',
     priceLabel: 'Precio',
     priceNote: '',
@@ -177,10 +232,10 @@ export const serviciosHome = [
     iconName: 'tuerca',
     iconColor: '#6366f1',
     features: [
-      'Ventas, inventario y ERP',
+      'Control de ventas, stock y caja',
       'Chatbot con IA en WhatsApp',
-      'Integraciones SUNAT y billeteras',
-      'Paneles y reportes a medida',
+      'Se conecta con SUNAT y billeteras',
+      'Reportes hechos a tu medida',
     ],
   },
 ] as const;
@@ -214,25 +269,30 @@ export const serviciosTabs = [
     schemaId: 'pagina-web',
     schemaName: 'Diseño y desarrollo de páginas web para MYPEs',
     serviceType: 'Diseño web',
-    desc: 'Sitios rápidos, seguros y optimizados para Google. Con panel administrable y diseño responsive para que tu negocio se vea profesional desde el celular.',
+    desc: 'Rápida, segura y lista para salir en Google. Se ve bien en el celular y los textos los cambias tú.',
     wa: 'Hola Bitwise 👋 quiero cotizar una página web',
+    // `c` es el color del icono en la lista de "qué incluye". Uno por fila y no
+    // uno por servicio: seis chips del mismo tono se leen como un bloque gris y
+    // la vista los salta. Con colores distintos cada fila se distingue de un
+    // vistazo. Los tonos van a juego con lo que dice la fila —verde para cobros,
+    // azul para el celular— y los logos de marca llevan el suyo propio.
     features: [
-      { t: 'Diseño responsive mobile-first', i: 'celular' },
-      { t: 'Panel administrable (subes tus textos y fotos)', i: 'tablero' },
-      { t: 'Dominio .com y hosting por 1 año', i: 'www' },
-      { t: 'Certificado de seguridad y correo corporativo', i: 'correo' },
-      { t: 'SEO básico y analítica web', i: 'google' },
-      { t: 'WhatsApp flotante y formulario de contacto', i: 'whatsapp' },
+      { t: 'Se ve bien en el celular', i: 'celular', c: '#2563eb' },
+      { t: 'Cambias textos y fotos tú mismo', i: 'tablero', c: '#7c3aed' },
+      { t: 'Dominio .com y hosting por 1 año', i: 'www', c: '#0891b2' },
+      { t: 'Candado de seguridad y correo propio', i: 'correo', c: '#db2777' },
+      { t: 'Preparada para salir en Google', i: 'google', c: '#ea4335' },
+      { t: 'Botón de WhatsApp y formulario', i: 'whatsapp', c: '#25d366' },
     ],
   },
   {
     id: 'tienda',
     rubros: ['ferreterias', 'opticas', 'panaderias-pastelerias'],
     label: 'Tienda online',
-    tag: 'E-commerce',
+    tag: 'Tiendas online',
     icon: 'carrito',
-    title: 'Tu tienda online vendiendo 24/7',
-    incluye: 'Dominio, hosting y pasarelas peruanas incluidos',
+    title: 'Tu tienda vendiendo sola',
+    incluye: 'Dominio, hosting y medios de pago',
     time: '4 a 6 semanas',
     price: 3000,
     ivaIncluido: null,
@@ -241,26 +301,26 @@ export const serviciosTabs = [
     schemaId: 'tienda-online',
     schemaName: 'Desarrollo de tiendas online para MYPEs',
     serviceType: 'Comercio electrónico',
-    desc: 'Catálogo, carrito y cobro automático con pasarelas peruanas. Tu cliente compra solo, a cualquier hora, y tú despachas con la orden lista.',
+    desc: 'Tu cliente elige, paga y tú recibes el pedido listo. A cualquier hora, sin que tengas que contestar.',
     wa: 'Hola Bitwise 👋 quiero cotizar una tienda online',
     features: [
-      { t: 'Catálogo de productos con control de stock', i: 'carrito' },
-      { t: 'Yape, Plin, tarjetas y transferencia', i: 'tarjeta' },
-      { t: 'Checkout automático + pedidos por WhatsApp', i: 'whatsapp' },
-      { t: 'Facturación electrónica SUNAT (opcional)', i: 'documento' },
-      { t: 'Panel de ventas y reportes', i: 'grafico' },
-      { t: 'Capacitación grabada para autogestión', i: 'video' },
+      { t: 'Catálogo con control de stock', i: 'carrito', c: '#d97706' },
+      { t: 'Cobras por Yape, Plin y tarjeta', i: 'tarjeta', c: '#059669' },
+      { t: 'Pago automático y pedidos por WhatsApp', i: 'whatsapp', c: '#25d366' },
+      { t: 'Boleta y factura SUNAT (opcional)', i: 'documento', c: '#2563eb' },
+      { t: 'Panel de ventas y reportes', i: 'grafico', c: '#7c3aed' },
+      { t: 'Video para que lo manejes tú', i: 'video', c: '#e11d48' },
     ],
   },
   {
     id: 'erp',
     rubros: ['talleres-mecanicos', 'farmacias-boticas', 'academias-preuniversitarios'],
     label: 'ERPs y sistemas',
-    tag: 'Automatización y sistemas',
+    tag: 'Sistemas a medida',
     icon: 'tuerca',
-    title: 'ERPs y software a la medida de tu operación',
-    incluye: 'Alcance y módulos definidos contigo',
-    time: 'Según alcance',
+    title: 'Un sistema hecho para tu negocio',
+    incluye: 'Definimos contigo qué va a hacer',
+    time: 'Según el tamaño',
     price: null,
     ivaIncluido: null,
     priceLabel: 'A consultar',
@@ -268,15 +328,15 @@ export const serviciosTabs = [
     schemaId: 'erp',
     schemaName: 'Desarrollo de ERPs y sistemas a medida',
     serviceType: 'Software a medida',
-    desc: 'Sistemas de ventas e inventario, ERPs, chatbots con IA en WhatsApp e integraciones. Cada negocio es distinto: el alcance se arma según lo que necesitas.',
+    desc: 'Para llevar ventas, stock y caja sin cuadernos ni Excel. Se arma según lo que tu negocio necesita.',
     wa: 'Hola Bitwise 👋 quiero cotizar un sistema / ERP para mi negocio',
     features: [
-      { t: 'Sistemas de ventas, inventario y ERP', i: 'cajas' },
-      { t: 'Chatbot con IA en WhatsApp', i: 'whatsapp' },
-      { t: 'Integraciones (SUNAT, billeteras, APIs)', i: 'enchufe' },
-      { t: 'Automatización de procesos repetitivos', i: 'tuerca' },
-      { t: 'Paneles y reportes a medida', i: 'grafico' },
-      { t: 'Soporte y evolución continua', i: 'soporte' },
+      { t: 'Control de ventas, stock y caja', i: 'cajas', c: '#d97706' },
+      { t: 'Chatbot con IA en WhatsApp', i: 'whatsapp', c: '#25d366' },
+      { t: 'Se conecta con SUNAT y billeteras', i: 'enchufe', c: '#0891b2' },
+      { t: 'Hace solo las tareas repetitivas', i: 'tuerca', c: '#4f46e5' },
+      { t: 'Reportes hechos a tu medida', i: 'grafico', c: '#7c3aed' },
+      { t: 'Soporte y mejoras continuas', i: 'soporte', c: '#0284c7' },
     ],
   },
   {
@@ -285,8 +345,8 @@ export const serviciosTabs = [
     label: 'Apps móviles',
     tag: 'Aplicaciones móviles',
     icon: 'celular',
-    title: 'Tu app móvil en Play Store',
-    incluye: 'Publicación en Play Store incluida',
+    title: 'Tu app en el celular de tus clientes',
+    incluye: 'La publicamos en Play Store',
     time: '2 a 5 meses',
     price: null,
     ivaIncluido: null,
@@ -295,15 +355,15 @@ export const serviciosTabs = [
     schemaId: 'apps-moviles',
     schemaName: 'Desarrollo de aplicaciones móviles para Android e iOS',
     serviceType: 'Desarrollo de aplicaciones móviles',
-    desc: 'Apps nativas o multiplataforma para Android e iOS, con publicación en tiendas incluida y cuentas de developer a tu nombre.',
+    desc: 'Una app que tus clientes descargan e instalan. Funciona en Android y en iPhone, y la publicamos nosotros.',
     wa: 'Hola Bitwise 👋 quiero cotizar una app móvil',
     features: [
-      { t: 'React Native, Flutter o nativo', i: 'codigo' },
-      { t: 'Publicación en Play Store (App Store opcional)', i: 'tienda' },
-      { t: 'Push notifications y analítica', i: 'campana' },
-      { t: 'Panel administrable web', i: 'tablero' },
-      { t: 'Cuentas de developer a tu nombre', i: 'llave' },
-      { t: 'Soporte post-launch', i: 'soporte' },
+      { t: 'Funciona en Android y en iPhone', i: 'codigo', c: '#7c3aed' },
+      { t: 'La publicamos en Play Store', i: 'tienda', c: '#059669' },
+      { t: 'Avisos al celular y estadísticas', i: 'campana', c: '#d97706' },
+      { t: 'Panel web para administrarla', i: 'tablero', c: '#2563eb' },
+      { t: 'Las cuentas quedan a tu nombre', i: 'llave', c: '#ca8a04' },
+      { t: 'Soporte después de publicarla', i: 'soporte', c: '#0284c7' },
     ],
   },
 ] as const;
@@ -312,28 +372,28 @@ export const serviciosTabs = [
 export const condiciones = [
   {
     title: 'Pago 50 / 50',
-    desc: '50% para empezar, 50% contra entrega. Hasta 3 cuotas sin interés en proyectos grandes.',
+    desc: 'Mitad al empezar y mitad al recibir. Hasta 3 cuotas sin interés.',
     color: '#16a34a',
     bg: 'rgba(22,163,74,0.1)',
     icon: '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
   },
   {
     title: 'Factura SUNAT',
-    desc: 'Empresa formal con RUC. Boleta o factura electrónica en cada pago.',
+    desc: 'Empresa formal con RUC. Boleta o factura en cada pago.',
     color: '#D91023',
     bg: 'rgba(217,16,35,0.09)',
     icon: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4M8 13h8M8 17h8"/>',
   },
   {
     title: 'Garantía 30 días',
-    desc: 'Corrección de bugs y ajustes menores sin costo después de la entrega.',
+    desc: 'Arreglamos errores y ajustes chicos sin costo.',
     color: '#c98a12',
     bg: 'rgba(232,163,23,0.14)',
     icon: '<path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"/><path d="m9 12 2 2 4-4"/>',
   },
   {
     title: 'Código y dominio tuyos',
-    desc: 'Todo se registra a tu nombre. Si quieres migrar mañana, el traspaso es directo.',
+    desc: 'Todo queda a tu nombre. Si te quieres llevar la web, te la llevas.',
     color: '#6366f1',
     bg: 'rgba(129,140,248,0.12)',
     icon: '<path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/>',

@@ -48,8 +48,19 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* El menú va fijo arriba y ocupa 76px en escritorio y 68px en el celular.
+       Sin esta reserva, cualquier salto a una sección —un enlace del menú, un
+       ancla del blog, una pestaña de /servicios, el botón "volver arriba" del
+       navegador— dejaba el título de esa sección escondido detrás del menú y
+       había que subir a mano para leerlo.
+       Se pide un poco más que el alto del menú para que la sección no arranque
+       pegada al borde: baja de más a propósito. */
+    scroll-padding-top: 6.5rem;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+  }
+  @media (max-width: 767px) {
+    html { scroll-padding-top: 5.75rem; }
   }
 
   body {

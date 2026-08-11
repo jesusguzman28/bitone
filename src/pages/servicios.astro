@@ -82,15 +82,23 @@ const schema = serviciosTabs.map((t) => {
         </div>
       </div>
 
+      {/* Los cuatro paneles se apilan en la misma celda de una rejilla, así que
+          la fila mide lo que mida el más alto y las cuatro tarjetas salen del
+          mismo tamaño. El panel que no toca se esconde con `visibility`, no con
+          `display:none`: si desapareciera del todo dejaría de contar para la
+          altura y volveríamos a tener una tarjeta distinta por pestaña.
+          `inert` lo saca del orden de tabulación y del lector de pantalla, que
+          es lo que `display:none` hacía gratis. */}
+      <div class="svc-panels">
       {serviciosTabs.map((t, i) => (
-        <div id={t.id} role="tabpanel" aria-labelledby={`tab-${t.id}`} class:list={['svc-panel scroll-mt-28', i !== 0 && 'hidden']}>
+        <div id={t.id} role="tabpanel" aria-labelledby={`tab-${t.id}`} inert={i !== 0} class:list={['svc-panel', i !== 0 && 'svc-panel--off']}>
           <div class="flip mx-auto mt-10 w-full max-w-[760px]">
             <div class="flip-inner">
               <!-- Cara frontal: el servicio -->
-              <div class="flip-face flip-front panel-dark relative overflow-hidden rounded-[28px] p-8 text-white sm:p-9" style="box-shadow:0 30px 60px -30px rgba(14,21,33,0.6)">
+              <div class="flip-face flip-front panel-dark relative overflow-hidden rounded-[28px] p-8 text-center text-white sm:p-9" style="box-shadow:0 30px 60px -30px rgba(14,21,33,0.6)">
                 <div class="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full opacity-30 blur-[70px]" style="background:radial-gradient(circle,#D91023,transparent 70%)"></div>
 
-                <span class="relative mb-5 grid h-12 w-12 place-items-center rounded-[14px]" style="background:rgba(232,163,23,0.14);color:#E8A317">
+                <span class="relative mx-auto mb-5 grid h-12 w-12 place-items-center rounded-[14px]" style="background:rgba(232,163,23,0.14);color:#E8A317">
                   <Icono name={t.icon} size={22} />
                 </span>
                 <span class="relative block text-[11px] font-bold uppercase tracking-[0.16em] text-accent">{t.tag}</span>
@@ -99,16 +107,16 @@ const schema = serviciosTabs.map((t) => {
                 {/* El precio tiene que estar a la vista: Google exige que los
                     datos estructurados representen contenido visible, y hasta
                     ahora los precios solo salían en la portada. */}
-                <p class="relative mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                <p class="relative mt-4 flex flex-wrap items-baseline justify-center gap-x-2 gap-y-1">
                   <span class="text-[11px] font-medium uppercase tracking-wide text-slate-500">{t.price === null ? 'Precio' : 'Desde'}</span>
                   <span class="font-display text-2xl font-bold text-white [font-variant-numeric:tabular-nums]">{t.priceLabel}</span>
                   {t.priceNote && <span class="text-[13px] text-slate-400">{t.priceNote}</span>}
                 </p>
 
-                <p class="relative mt-4 max-w-[520px] text-[15px] leading-[1.7] text-slate-400">{t.desc}</p>
+                <p class="relative mx-auto mt-4 max-w-[520px] text-[15px] leading-[1.7] text-slate-400">{t.desc}</p>
 
                 <div class="relative mt-7 grid gap-3 border-t border-white/10 pt-6 sm:grid-cols-2">
-                  <div class="flex items-center gap-3">
+                  <div class="flex items-center justify-center gap-3">
                     <span class="grid h-9 w-9 flex-none place-items-center rounded-[12px]" style="background:rgba(232,163,23,0.14);color:#E8A317">
                       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                     </span>
@@ -117,7 +125,7 @@ const schema = serviciosTabs.map((t) => {
                       <div class="font-display text-[15px] font-bold text-white">{t.time}</div>
                     </div>
                   </div>
-                  <div class="flex items-center gap-3">
+                  <div class="flex items-center justify-center gap-3">
                     <span class="grid h-9 w-9 flex-none place-items-center rounded-[12px]" style="background:rgba(43,222,114,0.14);color:#2bde72">
                       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m5 13 4 4L19 7"/></svg>
                     </span>
@@ -148,7 +156,7 @@ const schema = serviciosTabs.map((t) => {
                   </a>
                 )}
 
-                <div class="relative mt-auto flex flex-wrap items-center justify-between gap-3 pt-8">
+                <div class="relative mt-auto flex flex-wrap items-center justify-center gap-3 pt-8">
                   <a href={waLink(t.wa)} target="_blank" rel="noopener" class="btn btn--whatsapp group !py-3 !pl-[26px] !text-[15px]">
                     Cotizar este servicio
                     <span class="btn__icon" aria-hidden="true">
@@ -161,7 +169,7 @@ const schema = serviciosTabs.map((t) => {
                     type="button"
                     data-flip-to="back"
                     aria-label={`Ver qué incluye ${t.label}`}
-                    class="flip-controls btn btn--on-dark group relative ml-auto !px-5 !py-3 !text-[15px]"
+                    class="flip-controls btn btn--on-dark group relative !px-5 !py-3 !text-[15px]"
                   >
                     <span class="ping" aria-hidden="true"></span>
                     Ver
@@ -174,7 +182,7 @@ const schema = serviciosTabs.map((t) => {
 
               <!-- Cara trasera: qué incluye -->
               <div class="flip-face flip-back rounded-[28px] bg-white p-8 sm:p-9" inert style="box-shadow:inset 0 0 0 1px var(--hairline),0 30px 60px -30px rgba(0,0,0,0.18)">
-                <h3 class="flex items-center gap-3 font-display text-[13px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                <h3 class="flex items-center justify-center gap-3 font-display text-[13px] font-bold uppercase tracking-[0.14em] text-slate-500">
                   <span class="h-[3px] w-7 rounded-full bg-primary"></span>
                   Qué incluye · {t.label}
                 </h3>
@@ -184,7 +192,10 @@ const schema = serviciosTabs.map((t) => {
                 <ul class="m-0 mt-5 grid list-none gap-2.5 p-0">
                   {t.features.map((f, fi) => (
                     <li class="feat-item flex items-center gap-3.5 rounded-[16px] bg-white px-4 py-3.5" style={`--i:${fi}`}>
-                      <span class="feat-ico grid h-9 w-9 flex-none place-items-center rounded-[11px]">
+                      <span
+                        class="feat-ico grid h-9 w-9 flex-none place-items-center rounded-[11px]"
+                        style={`color:${f.c};background:color-mix(in srgb, ${f.c} 13%, transparent)`}
+                      >
                         <Icono name={f.i} size={19} />
                       </span>
                       <span class="flex-1 text-[14px] font-medium leading-[1.45] text-slate-700">{f.t}</span>
@@ -214,12 +225,13 @@ const schema = serviciosTabs.map((t) => {
           </div>
         </div>
       ))}
+      </div>
     </div>
   </section>
 
   <!-- Enlazado a los rubros. Va fuera de las pestañas a propósito: dentro,
-       tres de los cuatro paneles quedan en display:none y esos enlaces
-       cuentan mucho menos. Aquí los doce están visibles de una. -->
+       tres de los cuatro paneles quedan escondidos y esos enlaces cuentan
+       mucho menos. Aquí los doce están visibles de una. -->
   <section class="surface--alt px-6 py-20" aria-labelledby="rubros-servicios">
     <div class="mx-auto w-full max-w-[1120px]">
       <div class="reveal mx-auto max-w-[640px] text-center">
@@ -288,7 +300,8 @@ const schema = serviciosTabs.map((t) => {
     if (!Array.from(panels).some((p) => p.id === id)) return false;
     panels.forEach((p) => {
       const on = p.id === id;
-      p.classList.toggle('hidden', !on);
+      p.classList.toggle('svc-panel--off', !on);
+      p.toggleAttribute('inert', !on);
       // al cambiar de servicio la tarjeta vuelve a mostrar su cara frontal
       const flip = p.querySelector<HTMLElement>('.flip');
       if (flip) {
@@ -525,18 +538,30 @@ const schema = serviciosTabs.map((t) => {
   /* ---- Escritorio: sin volteo, las dos mitades una al lado de la otra ---- */
   @media (min-width: 1024px) {
     .flip { perspective: none; max-width: none; }
+    /* `stretch` y no `start`: la tarjeta oscura se estira hasta el alto de la
+       columna de la derecha. Esa columna son siempre 6 filas, en los cuatro
+       servicios, así que mide lo mismo en todos — y al colgarse de ella, las
+       cuatro tarjetas quedan del mismo tamaño sin fijar ninguna altura a mano.
+       Antes cada tarjeta medía lo que midiera su texto y se veían desparejas:
+       la de tienda online, que además lleva el enlace a su página propia,
+       sacaba casi cien píxeles a la de apps. */
     .flip-inner {
       grid-template-columns: 0.95fr 1.05fr;
       gap: 2rem;
-      align-items: start;
+      align-items: stretch;
       transform: none;
       transform-style: flat;
       transition: none;
     }
-    .flip-face {
-      grid-area: auto;
-      visibility: visible;
-    }
+    /* Sin `visibility: visible` aquí. Estaba, para deshacer las reglas del
+       volteo, pero esas viven en `max-width: 1023px` y en escritorio no llegan
+       a aplicarse: sobraba. Y hacía daño: `visibility` se hereda, pero un hijo
+       que la vuelve a poner en `visible` gana sobre el padre escondido. Al
+       apilar los cuatro paneles, los tres que debían estar ocultos seguían
+       dibujándose encima del bueno — de ahí el titulo "QUÉ INCLUYE" con las
+       cuatro etiquetas superpuestas y la sensación de que la pestaña no
+       cambiaba nada. */
+    .flip-face { grid-area: auto; }
     /* la lista deja de ser "cara de tarjeta" y vuelve a ser una columna suelta */
     .flip-back {
       transform: none;
@@ -554,6 +579,32 @@ const schema = serviciosTabs.map((t) => {
     .ping::before { animation: none; }
   }
 
+  /* ---- Paneles apilados: todos ocupan la misma celda ----
+     Solo en escritorio, que es donde las cuatro tarjetas se comparan al saltar
+     de pestaña. En móvil el panel que no toca se quita del todo: apilarlos ahí
+     dejaría un vacío del alto del panel más grande debajo de los más chicos.
+
+     La altura tiene que bajar por toda la cadena —panel, tarjeta, rejilla
+     interna— o el recuadro oscuro se queda midiendo su propio texto y el
+     apilado no sirve de nada. */
+  @media (min-width: 1024px) {
+    .svc-panels { display: grid; }
+    .svc-panel {
+      grid-area: 1 / 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .svc-panel--off {
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .svc-panel > .flip { flex: 1; }
+    .flip-inner { height: 100%; }
+  }
+  @media (max-width: 1023px) {
+    .svc-panel--off { display: none; }
+  }
+
   /* ---- Entrada del panel + escalonado de la lista de features ---- */
   .svc-panel { animation: panelIn 0.5s var(--ease-fluid) both; }
   .panel-in { animation: panelIn 0.5s var(--ease-fluid) both; }
@@ -562,15 +613,17 @@ const schema = serviciosTabs.map((t) => {
     to { opacity: 1; transform: none; }
   }
 
-  /* Chip del icono: gris neutro, salvo los logotipos de marca que van a color */
+  /* Chip del icono. El color lo pone cada fila desde los datos (`c`), aquí solo
+     queda cómo se comporta. Antes eran todos del mismo gris y las seis filas se
+     leían como un bloque plano.
+     Al pasar el ratón se refuerza su propio color en vez de virar todos al rojo
+     de la marca: virar borraba justo lo que distingue una fila de otra. */
   .feat-ico {
-    color: #475569;
-    background: #f1f5f9;
-    transition: background 0.4s var(--ease-fluid), color 0.4s var(--ease-fluid);
+    transition: filter 0.4s var(--ease-fluid), transform 0.4s var(--ease-fluid);
   }
   .feat-item:hover .feat-ico {
-    color: var(--color-primary);
-    background: color-mix(in srgb, var(--color-primary) 9%, transparent);
+    filter: saturate(1.25);
+    transform: scale(1.06);
   }
 
   .feat-item {
