@@ -9,6 +9,9 @@ import { proyectos } from '../data/proyectos';
       <h2 id="proyectos-lista" class="mt-5 font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
         Algunos de nuestros trabajos
       </h2>
+      <p class="mt-4 text-[15px] leading-[1.65] text-slate-500 [text-wrap:pretty]">
+        Están en línea ahora mismo. Entra y compruébalo.
+      </p>
     </div>
 
     {/* 250px y no 280: con 280 los cuatro no entraban en la fila —4x280 más los
@@ -22,18 +25,19 @@ import { proyectos } from '../data/proyectos';
               icono roto: se pinta una banda con el nombre del rubro, que se lee
               como una portada a propósito y no como un fallo de carga. */}
           {p.imagen ? (
-            <picture>
-              <source media="(max-width: 640px)" srcset={`/proyectos/${p.imagen}-sm.webp`} width="560" height="380" />
-              <img
-                src={`/proyectos/${p.imagen}.webp`}
-                width="800"
-                height="540"
-                alt={p.alt}
-                loading="lazy"
-                decoding="async"
-                class="proy-card__img block w-full object-cover"
-              />
-            </picture>
+            /* Un solo archivo y no un <picture> con versión chica: estas
+               capturas en WebP pesan 35–45 KB, menos que muchas miniaturas, así
+               que partirlas en dos tamaños añadiría archivos que mantener sin
+               ahorrar nada. Si algún día entra una captura pesada, ahí sí. */
+            <img
+              src={`/proyectos/${p.imagen}.webp`}
+              width="1152"
+              height="778"
+              alt={p.alt}
+              loading="lazy"
+              decoding="async"
+              class="proy-card__img block w-full object-cover"
+            />
           ) : (
             <div class="proy-card__vacio grid place-items-center" aria-hidden="true">
               <span class="font-display text-[13px] font-bold uppercase tracking-[0.16em] text-slate-400">{p.rubro}</span>

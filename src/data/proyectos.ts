@@ -33,46 +33,44 @@ export interface Proyecto {
   esMarcador: boolean;
 }
 
+// Lo que se escribe aquí de cada proyecto sale de su propio sitio, no de lo que
+// nos gustaría decir. Nada de cifras de resultados ("subimos las ventas un X%")
+// mientras no haya con qué respaldarlas.
 export const proyectos: readonly Proyecto[] = [
   {
-    nombre: 'Proyecto A',
-    rubro: 'Pollería',
-    resumen: 'Carta en línea con pedidos por WhatsApp y la misma información en Google.',
-    entregado: ['Página web', 'Carta administrable', 'Pedidos por WhatsApp'],
-    url: null,
+    nombre: 'ApuraY',
+    rubro: 'Mototaxi y delivery',
+    resumen:
+      'App para pedir mototaxi, comida, mercado y envíos en Coracora, Ayacucho. Con su página web y publicada en Google Play.',
+    entregado: ['App móvil', 'Página web', 'Publicada en Google Play'],
+    url: 'https://apuray.pe',
+    // Sin captura todavía. La tarjeta dibuja la banda con el rubro, del mismo
+    // alto que tendrá la foto, así que al llegar no se mueve nada.
     imagen: null,
     alt: '',
-    esMarcador: true,
+    esMarcador: false,
   },
   {
-    nombre: 'Proyecto B',
-    rubro: 'Ferretería',
-    resumen: 'Tienda en línea con catálogo grande, control de stock y cobro automático.',
-    entregado: ['Tienda online', 'Control de stock', 'Yape, Plin y tarjeta'],
-    url: null,
-    imagen: null,
-    alt: '',
-    esMarcador: true,
+    nombre: 'Quipuy',
+    rubro: 'Educación',
+    resumen:
+      'Plataforma para postulantes a la universidad: mide cuánto te falta para el puntaje de corte y te hace practicar hasta cerrarlo.',
+    entregado: ['App móvil', 'Página web', 'Publicada en Google Play'],
+    url: 'https://quipuy.pe',
+    imagen: 'quipuy-home',
+    alt: 'Portada de Quipuy mostrando el puntaje del postulante frente al puntaje de corte de su universidad',
+    esMarcador: false,
   },
   {
-    nombre: 'Proyecto C',
-    rubro: 'Clínica',
-    resumen: 'Reserva de citas por especialidad, con recordatorio al paciente.',
-    entregado: ['Página web', 'Reserva de citas', 'Recordatorios'],
-    url: null,
-    imagen: null,
-    alt: '',
-    esMarcador: true,
-  },
-  {
-    nombre: 'Proyecto D',
-    rubro: 'Distribuidora',
-    resumen: 'Sistema de ventas, stock y caja para reemplazar los archivos de Excel.',
-    entregado: ['Sistema a medida', 'Stock y caja', 'Reportes'],
-    url: null,
-    imagen: null,
-    alt: '',
-    esMarcador: true,
+    nombre: 'MindBlock',
+    rubro: 'Educación',
+    resumen:
+      'Plataforma de robótica y programación para niños de 6 a 14 años, con juegos por bloques y su robot educativo.',
+    entregado: ['Plataforma web', 'Juegos interactivos', 'Cuentas de alumno'],
+    url: 'https://mindblock.io',
+    imagen: 'mindblock-home',
+    alt: 'Portada de MindBlock con su editor de programación por bloques y un juego de robótica',
+    esMarcador: false,
   },
 ];
 

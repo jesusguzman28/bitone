@@ -2,7 +2,6 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ContactForm from '../../components/ContactForm.astro';
 import Stars from '../../components/Stars.astro';
-import CTA from '../../components/CTA.astro';
 import Icono from '../../components/Icono.astro';
 import { servicios, type Servicio } from '../../data/servicios';
 import { site, serviciosTabs, waLink } from '../../data/site';
@@ -375,10 +374,14 @@ const schema = [
     </div>
   </section>
 
-  <CTA
-    title={`¿Listo para tu ${servicio.enFrase}?`}
-    subtitle="Cotización gratis en menos de 24 horas, en soles y con facilidades de pago. Sin compromiso."
-  />
+  {/* Sin banda de cierre después del formulario. Había una, y la página
+      terminaba con "¿Hablamos de tu página web?" seguido de "¿Listo para tu
+      página web?": dos veces la misma pregunta, una encima de la otra, con dos
+      botones que llevan al mismo WhatsApp.
+
+      Cuando todo pide lo mismo, deja de pedirse nada. El formulario es el mejor
+      cierre porque además deja el contacto por escrito, y el botón flotante de
+      WhatsApp sigue ahí para quien prefiera escribir directo. */}
 </BaseLayout>
 
 <style>

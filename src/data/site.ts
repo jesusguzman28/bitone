@@ -444,8 +444,18 @@ export const condiciones = [
 ] as const;
 
 // ---- Comparativa (/servicios) ----
+// La columna del medio decía "Freelance" y marcaba "no" en RUC y en factura
+// SUNAT. Eso es generalizar sobre un oficio entero: hay muchos freelancers
+// formales que facturan, y a un cliente que trabajó bien con uno la tabla le
+// suena injusta. Además le da munición a cualquiera que quiera desmentirnos.
+//
+// Ahora la columna es la situación, no la persona: "Trabajo informal" es
+// contratar sin contrato, sin RUC y sin factura, que es el riesgo real del que
+// queremos hablar. Con ese título, cada "no" de esa columna es cierto por
+// definición y no acusa a nadie. Un freelance formal cae en la primera columna
+// junto con nosotros, y así debe ser.
 export const comparativa = {
-  cols: ['Bitwise', 'Freelance', 'Agencia grande'],
+  cols: ['Bitwise', 'Trabajo informal', 'Agencia grande'],
   rows: [
     { label: 'Cotización por escrito en 24 h', vals: ['si', 'aveces', 'no'] },
     { label: 'Empresa formal con RUC', vals: ['si', 'no', 'si'] },
