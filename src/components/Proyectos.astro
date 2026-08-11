@@ -39,8 +39,13 @@ import { proyectos } from '../data/proyectos';
               class="proy-card__img block w-full object-cover"
             />
           ) : (
-            <div class="proy-card__vacio grid place-items-center" aria-hidden="true">
-              <span class="font-display text-[13px] font-bold uppercase tracking-[0.16em] text-slate-400">{p.rubro}</span>
+            /* Portada de color con el nombre, para los que aún no tienen
+               captura. Antes era una banda gris con el rubro en letra chica y
+               parecía una imagen que no cargó. Con el color del propio proyecto
+               y su nombre en grande se lee como una portada hecha a propósito, y
+               la fila no se ve coja al lado de las que sí tienen foto. */
+            <div class="proy-card__portada grid place-items-center" style={`--c:${p.color}`} aria-hidden="true">
+              <span class="font-display text-[26px] font-extrabold tracking-[-0.02em]" style={`color:${p.color}`}>{p.nombre}</span>
             </div>
           )}
 
@@ -94,11 +99,11 @@ import { proyectos } from '../data/proyectos';
 
   /* Mismo alto que tendrá la captura, para que al llegar las fotos reales la
      tarjeta no cambie de tamaño y la fila no se reacomode. */
-  .proy-card__vacio {
+  .proy-card__portada {
     aspect-ratio: 40 / 27;
     background:
-      linear-gradient(135deg, rgba(217, 16, 35, 0.05), rgba(232, 163, 23, 0.05)),
-      #f8fafc;
+      radial-gradient(120% 90% at 30% 20%, color-mix(in srgb, var(--c) 16%, transparent), transparent 70%),
+      color-mix(in srgb, var(--c) 7%, #ffffff);
     box-shadow: inset 0 -1px 0 var(--hairline);
   }
 

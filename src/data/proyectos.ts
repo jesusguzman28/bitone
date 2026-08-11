@@ -25,9 +25,14 @@ export interface Proyecto {
   entregado: readonly string[];
   /** Dirección en vivo. `null` mientras no exista: la tarjeta oculta el botón. */
   url: string | null;
-  /** Archivo en public/proyectos/ sin extensión, o null si aún no hay captura. */
+  /** Archivo en public/proyectos/ sin extensión, o null si aún no hay captura.
+   *  Sin captura la tarjeta dibuja una portada de color con el nombre, que se
+   *  ve intencionada; antes quedaba una banda gris que parecía un fallo. */
   imagen: string | null;
   alt: string;
+  /** Color de la portada cuando no hay captura. Se toma del propio proyecto
+   *  para que la tarjeta se parezca a lo que verá quien entre al enlace. */
+  color: string;
   /** Marca el contenido de relleno. La tarjeta lo señala en pantalla para que
    *  no se publique por descuido creyendo que es un caso real. */
   esMarcador: boolean;
@@ -40,36 +45,53 @@ export const proyectos: readonly Proyecto[] = [
   {
     nombre: 'ApuraY',
     rubro: 'Mototaxi y delivery',
-    resumen:
-      'App para pedir mototaxi, comida, mercado y envíos en Coracora, Ayacucho. Con su página web y publicada en Google Play.',
-    entregado: ['App móvil', 'Página web', 'Publicada en Google Play'],
+    // Una frase. La descripción larga se leía como un párrafo de catálogo; aquí
+    // lo único que hace falta es entender de qué va antes de decidir si entras.
+    resumen: 'Pide mototaxi, comida y envíos en Coracora, Ayacucho.',
+    entregado: ['App móvil', 'Página web'],
     url: 'https://apuray.pe',
-    // Sin captura todavía. La tarjeta dibuja la banda con el rubro, del mismo
-    // alto que tendrá la foto, así que al llegar no se mueve nada.
     imagen: null,
     alt: '',
+    color: '#0077B6',
     esMarcador: false,
   },
   {
     nombre: 'Quipuy',
     rubro: 'Educación',
-    resumen:
-      'Plataforma para postulantes a la universidad: mide cuánto te falta para el puntaje de corte y te hace practicar hasta cerrarlo.',
-    entregado: ['App móvil', 'Página web', 'Publicada en Google Play'],
+    resumen: 'Mide cuánto te falta para ingresar a tu universidad.',
+    entregado: ['App móvil', 'Página web'],
     url: 'https://quipuy.pe',
     imagen: 'quipuy-home',
     alt: 'Portada de Quipuy mostrando el puntaje del postulante frente al puntaje de corte de su universidad',
+    color: '#5B4CF0',
     esMarcador: false,
   },
   {
     nombre: 'MindBlock',
     rubro: 'Educación',
-    resumen:
-      'Plataforma de robótica y programación para niños de 6 a 14 años, con juegos por bloques y su robot educativo.',
-    entregado: ['Plataforma web', 'Juegos interactivos', 'Cuentas de alumno'],
+    resumen: 'Robótica y programación para niños, jugando.',
+    entregado: ['Plataforma web', 'Cuentas de alumno'],
     url: 'https://mindblock.io',
     imagen: 'mindblock-home',
     alt: 'Portada de MindBlock con su editor de programación por bloques y un juego de robótica',
+    color: '#F97316',
+    esMarcador: false,
+  },
+  {
+    // Sin enlace a propósito. La dirección que nos pasaron, ajosycebollas.pe, no
+    // existe: no tiene registro DNS. La que sí responde es ajosycebollas.com.pe,
+    // y lo que abre es una pantalla de inicio de sesión, no un sitio público.
+    // Mandar a un visitante a un login desde una vitrina de trabajos es peor que
+    // no poner enlace, así que la tarjeta se queda sin botón hasta saber cuál es
+    // la dirección buena.
+    nombre: 'AjosyCebollas',
+    rubro: 'Sistema a medida',
+    resumen: 'Sistema de gestión con cuenta de acceso para cada usuario.',
+    entregado: ['Sistema a medida', 'Cuentas de acceso'],
+    url: null,
+    imagen: null,
+    alt: '',
+    color: '#16A34A',
     esMarcador: false,
   },
 ];
