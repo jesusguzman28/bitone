@@ -140,61 +140,6 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
     </div>
   </section>
 
-  {/* El precio va aquí arriba, no a mitad de página.
-
-      Medido antes de moverlo: en un celular esta landing son 17,5 pantallas de
-      scroll y el precio caía en la pantalla 7,2, al 41% de la página. Quien
-      busca "página web para pollería" viene a saber cuánto cuesta; hacerlo bajar
-      siete pantallas para averiguarlo es la forma más cara de perderlo.
-
-      No cuesta nada en posicionamiento: el H2, el texto y los datos
-      estructurados son los mismos, solo cambian de sitio. */}
-  <section class="surface--alt px-6 py-20">
-    <div class="mx-auto w-full max-w-[760px]">
-      <h2 class="reveal font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
-        {landing.precio.title}
-      </h2>
-
-      <div class="reveal mt-7 rounded-[20px] bg-white p-6" style="box-shadow:inset 0 0 0 1px var(--hairline)">
-        <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <span class="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">Desde</span>
-          <span class="font-display text-[2rem] font-extrabold text-dark [font-variant-numeric:tabular-nums]">{soles(rubro.startingPrice)}</span>
-          <span class="text-[14px] text-slate-500">+ IGV</span>
-        </div>
-
-        {/* Lo que ese precio ya trae, de un vistazo y con su icono. El detalle
-            en texto sigue abajo: esto es el resumen, no el reemplazo. */}
-        <div class="mt-5 flex flex-wrap gap-2.5 border-t border-dashed border-slate-200 pt-5">
-          {[
-            { icono: 'reloj', texto: `Entrega en ${rubro.deliveryTime}` },
-            { icono: 'www', texto: 'Dominio y hosting 1 año' },
-            { icono: 'candado', texto: 'Certificado de seguridad' },
-            { icono: 'tarjeta', texto: '50% inicio · 50% entrega' },
-          ].map((c) => (
-            <span class="precio-chip">
-              <Icono name={c.icono} size={15} />
-              {c.texto}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      <div class="mt-6 grid gap-5">
-        {landing.precio.parrafos.map((p) => (
-          <p class="reveal m-0 text-[16.5px] leading-[1.75] text-slate-600 [text-wrap:pretty]">{p}</p>
-        ))}
-      </div>
-
-      <p class="reveal mt-6 text-[15px] leading-[1.7] text-slate-600">
-        Puedes ver el detalle completo de lo que incluye cada servicio en
-        <a href="/servicios" class="font-semibold text-primary">nuestra página de servicios</a>, o
-        <a href="/contacto" class="font-semibold text-primary">escribirnos por el formulario</a>
-        para recibir una cotización por escrito en 24 horas.
-      </p>
-    </div>
-  </section>
-
-
   <!-- 1. El problema, en flashcards que se voltean -->
   <section class="surface px-6 py-20">
     <div class="mx-auto w-full max-w-[1020px]">
@@ -355,6 +300,65 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
       </div>
     </div>
   </section>
+
+  {/* Precio y plazo, con el detalle.
+
+      Estuvo un rato justo debajo de la portada, por una medición mal hecha: se
+      midió dónde caía el H2 "Precio y plazo", no dónde se veía el precio. El
+      precio ya está en la portada, en la primera pantalla, en la pastilla
+      "Desde S/… + IGV". Subir esta sección solo consiguió decir la misma cifra
+      dos veces en dos pantallas seguidas.
+
+      Aquí abajo es donde corresponde: primero se entiende qué se compra —el
+      problema, las secciones, las funciones del rubro— y recién entonces cuánto
+      cuesta y cómo se paga. Esta sección no repite la cifra: la explica. */}
+  <section class="surface--alt px-6 py-20">
+    <div class="mx-auto w-full max-w-[760px]">
+      <h2 class="reveal font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
+        {landing.precio.title}
+      </h2>
+
+      <div class="reveal mt-7 rounded-[20px] bg-white p-6" style="box-shadow:inset 0 0 0 1px var(--hairline)">
+        <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <span class="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">Desde</span>
+          <span class="font-display text-[2rem] font-extrabold text-dark [font-variant-numeric:tabular-nums]">{soles(rubro.startingPrice)}</span>
+          <span class="text-[14px] text-slate-500">+ IGV</span>
+        </div>
+
+        {/* Solo lo que la portada NO dice ya. Arriba, en la primera pantalla,
+            las pastillas del titular anuncian el plazo de entrega y que el
+            dominio y el hosting van incluidos; repetirlos aquí abajo no informa
+            de nada, solo llena. Quedan las dos cosas nuevas: el certificado y
+            cómo se reparte el pago. */}
+        <div class="mt-5 flex flex-wrap gap-2.5 border-t border-dashed border-slate-200 pt-5">
+          {[
+            { icono: 'candado', texto: 'Certificado de seguridad' },
+            { icono: 'tarjeta', texto: '50% inicio · 50% entrega' },
+          ].map((c) => (
+            <span class="precio-chip">
+              <Icono name={c.icono} size={15} />
+              {c.texto}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div class="mt-6 grid gap-5">
+        {landing.precio.parrafos.map((p) => (
+          <p class="reveal m-0 text-[16.5px] leading-[1.75] text-slate-600 [text-wrap:pretty]">{p}</p>
+        ))}
+      </div>
+
+      <p class="reveal mt-6 text-[15px] leading-[1.7] text-slate-600">
+        Puedes ver el detalle completo de lo que incluye cada servicio en
+        <a href="/servicios" class="font-semibold text-primary">nuestra página de servicios</a>, o
+        <a href="/contacto" class="font-semibold text-primary">escribirnos por el formulario</a>
+        para recibir una cotización por escrito en 24 horas.
+      </p>
+    </div>
+  </section>
+
+
 
   {/* Condiciones, en una tira compacta.
 
