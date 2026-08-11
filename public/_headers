@@ -23,6 +23,13 @@
   #     transparente que corta la descarga del carrusel en móvil.
   #   form-action 'self' es seguro: el formulario hace preventDefault y abre
   #     wa.me con window.open, así que nunca llega a enviarse.
+  #   connect-src 'self': el formulario puede mandar una copia por correo a un
+  #     endpoint externo (ver `formulario` en src/data/site.ts). Ese endpoint
+  #     está vacío por ahora, así que no se hace ninguna petición. AL ACTIVARLO
+  #     hay que sumar su dominio aquí, p. ej.:
+  #       connect-src 'self' https://api.web3forms.com
+  #     Si no se suma, el navegador bloquea el envío y el respaldo no funciona,
+  #     sin ningún aviso visible para el visitante.
   # Lo que esto sí frena: cargar scripts, estilos, fuentes o imágenes desde
   # cualquier host que no esté en la lista. Lo que no frena, por 'unsafe-inline':
   # un script inyectado en línea. En un sitio estático sin entrada de usuario

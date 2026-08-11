@@ -1,5 +1,5 @@
 ---
-import { site } from '../data/site';
+import { site, formulario } from '../data/site';
 
 interface Props {
   /** Contexto que se añade al mensaje de WhatsApp (ej. el rubro). */
@@ -57,7 +57,7 @@ const {
   </form>
 </div>
 
-<script define:vars={{ waBase: `https://wa.me/${site.whatsapp}`, formId: id }}>
+<script define:vars={{ waBase: `https://wa.me/${site.whatsapp}`, formId: id, endpoint: formulario.endpoint, accessKey: formulario.accessKey }}>
   const form = document.getElementById(formId);
   form?.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -71,7 +71,29 @@ const {
     if (context) parts.push(`Tengo ${context}.`);
     if (pregunta) parts.push(pregunta);
     if (celular) parts.push(`Mi celular: ${celular}.`);
+    const mensaje = parts.join(' ');
 
-    window.open(`${waBase}?text=${encodeURIComponent(parts.join(' '))}`, '_blank', 'noopener');
+    // Copia por correo, si hay dónde mandarla. Va ANTES de abrir WhatsApp y sin
+    // esperar respuesta: si el envío falla o tarda, el visitante no se entera y
+    // WhatsApp se abre igual. Nunca se le bloquea el camino por el respaldo.
+    //
+    // `keepalive` es lo que hace que la petición sobreviva aunque el navegador
+    // cambie de pestaña al abrir WhatsApp; sin eso, la mitad de los envíos se
+    // cortarían a medio camino.
+    if (endpoint) {
+      const cuerpo = { nombre, celular, pregunta, contexto: context || '', pagina: location.pathname, mensaje };
+      if (accessKey) cuerpo.access_key = accessKey;
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(cuerpo),
+        keepalive: true,
+      }).catch(() => {
+        // Silencio a propósito: el visitante ya se fue a WhatsApp y avisarle de
+        // un fallo del respaldo solo lo asustaría. El contacto no se pierde.
+      });
+    }
+
+    window.open(`${waBase}?text=${encodeURIComponent(mensaje)}`, '_blank', 'noopener');
   });
 </script>

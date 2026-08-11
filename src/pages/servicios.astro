@@ -4,7 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import Comparativa from '../components/Comparativa.astro';
 import Icono from '../components/Icono.astro';
 import CTA from '../components/CTA.astro';
-import { site, serviciosTabs, waLink } from '../data/site';
+import { site, serviciosTabs, condiciones, waLink } from '../data/site';
 import { servicioDeTab, hrefServicio } from '../data/servicios';
 
 // ---- Un Service con su Offer por cada servicio ----
@@ -268,14 +268,30 @@ const schema = serviciosTabs.map((t) => {
   </section>
 
 
-  {/* Aquí iba la banda de condiciones: pago 50/50, factura SUNAT, garantía de
-      30 días y código y dominio a tu nombre. Se quitó a pedido.
+  {/* Las condiciones comerciales, en una línea.
 
-      Vale la pena tenerlo presente: con esto fuera, /servicios ya no dice en
-      ninguna parte cómo se paga, que hay boleta o factura, ni que el código
-      queda a nombre del cliente. Los datos siguen en `condiciones` (site.ts) por
-      si se quieren recolocar, y "código y dominio tuyos" sobrevive en el
-      contador de la portada. */}
+      Estuvieron como una banda de cuatro tarjetas con icono, y se quitó porque
+      pesaba demasiado para lo que dice. Pero al sacarla, esta página dejó de
+      decir cómo se paga, que hay boleta o factura y que el código queda a nombre
+      del cliente: justo los cuatro miedos de quien contrata a una empresa chica
+      y no la conoce. Callarlos no los borra, solo los deja sin responder.
+
+      Vuelven en el peso que les toca: un renglón bajo los servicios, con los
+      cuatro títulos separados por puntos. Los textos largos siguen en
+      `condiciones` (site.ts) por si alguna vez se quieren desarrollar. */}
+  <section class="surface--alt px-6 pb-16">
+    <p class="reveal mx-auto flex max-w-[900px] flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center text-[14px] font-medium text-slate-600">
+      {condiciones.map((c, i) => (
+        <>
+          {i > 0 && <span class="text-slate-300" aria-hidden="true">·</span>}
+          <span class="inline-flex items-center gap-1.5">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="m5 13 4 4L19 7"/></svg>
+            {c.title}
+          </span>
+        </>
+      ))}
+    </p>
+  </section>
 
   <Comparativa />
   <CTA />

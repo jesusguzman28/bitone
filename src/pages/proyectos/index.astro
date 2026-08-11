@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
+import Proyectos from '../../components/Proyectos.astro';
+import Resenas from '../../components/Resenas.astro';
 import Rubros from '../../components/Rubros.astro';
 import ProyectoMedida from '../../components/ProyectoMedida.astro';
 import MarcasBanner from '../../components/MarcasBanner.astro';
@@ -8,15 +10,24 @@ import CTA from '../../components/CTA.astro';
 ---
 
 <BaseLayout
-  title="Soluciones por rubro: pollerías, bodegas, farmacias y más"
-  description="Plataformas web y apps por rubro para pymes peruanas: pollerías, bodegas, farmacias, ferreterías, barberías, veterinarias, gimnasios y más."
+  title="Proyectos: páginas web y tiendas online para MYPEs"
+  description="Trabajos entregados a negocios peruanos: páginas web, tiendas online y sistemas a medida, por rubro."
 >
+  {/* El titular decía "Trabajo real, con URL en vivo" y remataba con "entra,
+      navega y compruébalo tú mismo", pero debajo no había ni un proyecto: solo
+      la parrilla de rubros, que son páginas de venta. Invitar a comprobar algo
+      que no se puede comprobar cuesta más credibilidad de la que da.
+
+      Ahora el titular dice lo que la página enseña, y los trabajos van en la
+      sección de abajo. Vuelve a prometer "URL en vivo" cuando haya direcciones
+      reales que enseñar. */}
   <PageHero
-    eyebrow="Proyectos"
-    title="Trabajo real, <span class='gradient-text--warm'>con URL en vivo</span>"
-    subtitle="Plataformas en producción y arquitecturas probadas por rubro. Entra, navega y compruébalo tú mismo."
+    title="Proyectos que <span class='gradient-text--warm'>ya están trabajando</span>"
+    subtitle="Lo que hemos entregado a negocios peruanos, por rubro."
   />
 
+  <Proyectos />
+  <Resenas />
   <Rubros variant="grid" />
   <ProyectoMedida />
   <MarcasBanner />

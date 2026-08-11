@@ -1,0 +1,69 @@
+---
+// Sección de reseñas. Si no hay ninguna cargada, no dibuja nada: un bloque
+// "Lo que dicen nuestros clientes" vacío, o con textos de relleno, resta más
+// credibilidad de la que suma. En cuanto se agregue la primera en resenas.ts,
+// la sección aparece sola.
+import { resenas } from '../data/resenas';
+---
+
+{resenas.length > 0 && (
+  <section class="surface--alt px-6 py-20" aria-labelledby="resenas">
+    <div class="mx-auto w-full max-w-[1120px]">
+      <div class="reveal mx-auto max-w-[640px] text-center">
+        <span class="eyebrow eyebrow--light">Clientes</span>
+        <h2 id="resenas" class="mt-5 font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
+          Lo que dicen los que ya trabajaron con nosotros
+        </h2>
+      </div>
+
+      <div class="mt-10 grid gap-5" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+        {resenas.map((r, i) => (
+          <figure class="resena reveal m-0 flex flex-col rounded-[20px] bg-white p-6" style={`--reveal-delay:${(i % 3) * 80}ms`}>
+            <svg class="resena__comilla" width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M7.5 6C5 6 3 8 3 10.5S5 15 7.5 15c.3 0 .6 0 .9-.1-.5 1.7-2 3-3.9 3.3v2.6c4.4-.4 7.5-4 7.5-8.8V10.5C12 8 10 6 7.5 6Zm9 0C14 6 12 8 12 10.5S14 15 16.5 15c.3 0 .6 0 .9-.1-.5 1.7-2 3-3.9 3.3v2.6c4.4-.4 7.5-4 7.5-8.8V10.5C21 8 19 6 16.5 6Z"/>
+            </svg>
+
+            {/* La cita va en <blockquote> y la firma en <figcaption>: así un
+                lector de pantalla sabe dónde termina lo que dijo el cliente y
+                dónde empieza quién lo dijo. */}
+            <blockquote class="m-0 mt-3 text-[15px] leading-[1.7] text-slate-700 [text-wrap:pretty]">
+              {r.texto}
+            </blockquote>
+
+            <figcaption class="mt-auto pt-5">
+              <span class="block font-display text-[15px] font-bold text-dark">{r.autor}</span>
+              <span class="mt-0.5 block text-[13px] text-slate-500">{r.negocio}</span>
+              <span class="resena__servicio mt-2.5 inline-block">{r.servicio}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .resena {
+    box-shadow: inset 0 0 0 1px var(--hairline);
+    transition: transform 0.45s var(--ease-fluid), box-shadow 0.45s var(--ease-fluid);
+  }
+  .resena:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 28%, transparent),
+      0 20px 40px -20px rgba(217, 16, 35, 0.14);
+  }
+  .resena__comilla { color: color-mix(in srgb, var(--color-primary) 28%, transparent); }
+  .resena__servicio {
+    border-radius: 999px;
+    padding: 4px 11px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #475569;
+    background: #f1f5f9;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .resena { transition: none; }
+  }
+</style>

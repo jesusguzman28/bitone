@@ -93,7 +93,7 @@ export const rubros: readonly Rubro[] = [
         name: "Gestión & Clientes",
         modules: [
           { emoji: "📊", title: "Reportes de ventas", desc: "Conoce tu plato estrella, horas pico y ventas por día desde tu celular." },
-          { emoji: "⭐", title: "Programa de fidelidad", desc: "Cada 10 pollos, el siguiente con descuento. Tracking automático por cliente." },
+          { emoji: "⭐", title: "Programa de fidelidad", desc: "Cada 10 pollos, el siguiente con descuento. La cuenta la lleva el sistema." },
           { emoji: "📍", title: "SEO local + Google Maps", desc: "Aparece cuando buscan \"pollería cerca de mí\" en Lima o provincias." },
         ],
       },
@@ -187,14 +187,14 @@ export const rubros: readonly Rubro[] = [
     slug: "ferreterias",
     emoji: "🔧",
     title: "Ferreterías y Construcción",
-    tagline: "Catálogo de miles de SKUs sin volverte loco",
+    tagline: "Miles de productos ordenados sin volverte loco",
     cat: "Retail y comercio",
     short: "ferretería",
     keyword: "ecommerce ferretería Perú",
     metaTitle: "Ecommerce para Ferreterías en Perú | Bitwise",
     metaDescription: "Tiendas online para ferreterías con catálogo masivo, precios mayorista/minorista, facturación SUNAT y despacho a obra.",
     summary: "Ecommerce con catálogo masivo, precios mayorista/minorista, facturación electrónica y despacho a obra.",
-    pain: "Tienes 3,000 SKUs en stock pero los contratistas te piden cotización por WhatsApp con foto borrosa.",
+    pain: "Tienes 3,000 productos en stock pero los contratistas te piden cotización por WhatsApp con foto borrosa.",
     solution: "Ecommerce con buscador por rubro, precios diferenciados por tipo de cliente y cotización automática.",
     startingPrice: 2499,
     deliveryTime: "25 días",
@@ -219,8 +219,8 @@ export const rubros: readonly Rubro[] = [
         name: "Inventario",
         modules: [
           { emoji: "📦", title: "Stock en tiempo real", desc: "Sincronización con tu caja física para que no vendas lo que no tienes." },
-          { emoji: "🚚", title: "Integración con proveedores", desc: "Pedidos a Promart/Sodimac mayorista con un solo clic." },
-          { emoji: "📊", title: "Reportes de productos estrella", desc: "Sabes cuál es tu SKU más rentable y cuál no rota." },
+          { emoji: "🚚", title: "Conectado con tus proveedores", desc: "Pedidos a Promart/Sodimac mayorista con un solo clic." },
+          { emoji: "📊", title: "Reportes de productos estrella", desc: "Sabes cuál es tu producto más rentable y cuál no rota." },
         ],
       },
     ],
@@ -260,7 +260,7 @@ export const rubros: readonly Rubro[] = [
       {
         name: "Fidelización",
         modules: [
-          { emoji: "⭐", title: "\"Cada 5 cortes, 1 gratis\"", desc: "Tracking automático por cliente. Sistema de puntos configurable." },
+          { emoji: "⭐", title: "\"Cada 5 cortes, 1 gratis\"", desc: "La cuenta la lleva el sistema. Los puntos los defines tú." },
           { emoji: "🎂", title: "Descuento de cumpleaños", desc: "Cupón automático en el mes del cumpleaños del cliente." },
           { emoji: "⭐", title: "Reseñas de clientes", desc: "Calificaciones después de cada corte para destacar a tus estrellas." },
         ],
@@ -428,7 +428,7 @@ export const rubros: readonly Rubro[] = [
       {
         name: "App del miembro",
         modules: [
-          { emoji: "📊", title: "Tracking de progreso", desc: "Peso, medidas, PR de CrossFit (back squat, deadlift) registrados en su perfil." },
+          { emoji: "📊", title: "Avance de cada alumno", desc: "Peso, medidas, PR de CrossFit (back squat, deadlift) registrados en su perfil." },
           { emoji: "🥗", title: "Plan nutricional", desc: "El nutricionista envía el plan semanal al miembro desde el panel." },
           { emoji: "🏆", title: "Ranking del box", desc: "Leaderboard mensual para motivar competencia sana entre miembros." },
         ],

@@ -10,8 +10,11 @@ export default defineConfig({
   // Google es una página duplicada, no una redirección, y no transfiere
   // autoridad. Las redirecciones reales viven en public/_redirects, que
   // Cloudflare sirve como 301 de verdad.
-  // Las páginas /mockup-* son pruebas internas: fuera del sitemap
-  integrations: [sitemap({ filter: (page) => !page.includes('/mockup-') })],
+  // Ya no hace falta filtrar /mockup-*: esas dos páginas de prueba se borraron.
+  // Estaban publicadas y respondían 200 en bitwise.pe —fuera del sitemap, pero
+  // accesibles para cualquiera con el enlace—, enseñando trabajo interno a medio
+  // hacer. Si vuelven a hacer falta, están en el historial de git.
+  integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()],
   },

@@ -19,6 +19,34 @@ export const site = {
   },
 } as const;
 
+// Dónde se guarda una copia de cada formulario enviado.
+//
+// El formulario abre WhatsApp con el mensaje armado, y eso funciona bien desde
+// el celular. Pero desde una computadora sin WhatsApp Web, o si la persona
+// cierra la ventana antes de darle enviar, ese contacto se pierde y no queda
+// registro en ninguna parte. Este endpoint es la red de seguridad: se manda una
+// copia por detrás y WhatsApp se abre igual.
+//
+// Está vacío a propósito. Mientras lo esté, el formulario se comporta como
+// siempre —solo WhatsApp— y no se hace ninguna petición a ningún sitio.
+//
+// Para activarlo hace falta una dirección que reciba el envío y te lo mande al
+// correo. Dos caminos, los dos gratis para el volumen de una MYPE:
+//
+//   1. web3forms.com — pides una clave con tu correo, no hay que crear cuenta.
+//      El endpoint queda así:  https://api.web3forms.com/submit
+//      y la clave se pone en `formAccessKey`.
+//   2. formspree.io — creas cuenta y te da una dirección propia. En ese caso
+//      `formAccessKey` se deja vacío.
+//
+// IMPORTANTE: al poner una dirección aquí hay que sumar ese dominio a
+// `connect-src` en public/_headers, o el navegador bloqueará el envío por la
+// política de seguridad del sitio. Está anotado también allí.
+export const formulario = {
+  endpoint: '',
+  accessKey: '',
+} as const;
+
 export const seo = {
   defaultTitle: 'Páginas web, tiendas online y ERPs para MYPEs | Bitwise Perú',
   titleTemplate: '%s | Bitwise',
@@ -427,7 +455,7 @@ export const comparativa = {
     { label: 'Código fuente entregado', vals: ['si', 'aveces', 'Extra'] },
     { label: 'Garantía de 30 días', vals: ['si', 'no', 'si'] },
     { label: 'Pagos en cuotas sin interés', vals: ['si', 'no', 'no'] },
-    { label: 'Integraciones peruanas (SUNAT, billeteras)', vals: ['si', 'aveces', 'si'] },
+    { label: 'Se conecta con SUNAT y billeteras', vals: ['si', 'aveces', 'si'] },
   ],
 } as const;
 
@@ -550,10 +578,10 @@ export const contactoExpectativas = [
 // ---- FAQ (home) ----
 export const faqs = [
   { q: '¿Puedo pagar en cuotas o necesito todo al contado?', a: 'Trabajamos con 50% de adelanto y 50% contra entrega. En proyectos grandes puedes dividir en hasta 3 cuotas sin interés. Aceptamos Yape, Plin, transferencia y tarjeta, con boleta o factura electrónica SUNAT en cada pago.' },
-  { q: '¿Qué incluye el precio de S/1,500?', a: 'Diseño, programación, dominio .com por 1 año, hosting por 1 año, SSL, correo corporativo, formulario de contacto, WhatsApp flotante, SEO básico y analítica. El precio es sin IGV; emitimos boleta o factura.' },
+  { q: '¿Qué incluye el precio de S/1,500?', a: 'El diseño y la programación, tu dominio .com y el hosting del primer año, el candado de seguridad, el correo con tu dominio, el formulario de contacto, el botón de WhatsApp y dejarla preparada para salir en Google, con estadísticas de visitas. El precio es sin IGV; emitimos boleta o factura.' },
   { q: '¿El sitio web, el dominio y el código quedan a mi nombre?', a: 'Sí, 100%. El dominio se registra con tus datos y el código fuente es tuyo desde el primer día. Te entregamos accesos completos. Si mañana quieres migrar a otra agencia, el traspaso es directo.' },
   { q: '¿Qué pasa si no me gusta el diseño?', a: 'Antes de programar te mostramos el diseño y recién con tu aprobación seguimos. Incluimos 2 rondas de cambios sin costo y 30 días de garantía post-entrega.' },
-  { q: '¿Yo puedo actualizar textos, fotos y precios sin depender de ustedes?', a: 'Sí. Entregamos la web con un panel de autogestión simple y una capacitación grabada de 30 minutos para que tú o tu equipo cambien contenido sin pagar extra.' },
+  { q: '¿Yo puedo actualizar textos, fotos y precios sin depender de ustedes?', a: 'Sí. Entregamos la web con un panel simple para que lo manejes tú y una capacitación grabada de 30 minutos para que tú o tu equipo cambien contenido sin pagar extra.' },
   { q: '¿Trabajan con empresas fuera de Lima?', a: 'Sí. Atendemos MYPEs en todo el Perú, 100% remoto por Zoom y WhatsApp. Mismo precio, misma calidad, sin cargo extra por ubicación.' },
 ] as const;
 
@@ -562,8 +590,8 @@ export const faqs = [
 export const blogCats = [
   { slug: 'pymes-peru', label: 'Pymes Perú' },
   { slug: 'desarrollo-web', label: 'Desarrollo Web' },
-  { slug: 'ecommerce', label: 'E-commerce' },
-  { slug: 'seo-marketing', label: 'SEO & Marketing' },
+  { slug: 'ecommerce', label: 'Tiendas online' },
+  { slug: 'seo-marketing', label: 'Salir en Google' },
   { slug: 'apps-moviles', label: 'Apps Móviles' },
 ] as const;
 
@@ -692,13 +720,13 @@ export const blog = [
     featured: false,
     date: '2026-06-20',
     readTime: '6 min',
-    keywords: ['tienda online Perú', 'vender por WhatsApp', 'e-commerce para negocios pequeños'],
+    keywords: ['tienda online Perú', 'vender por WhatsApp', 'tienda virtual para negocios pequeños'],
     body: [
       'Vender por WhatsApp es rápido y sin costo, perfecto para empezar. Pero cuando tu volumen crece, contestar pedidos uno por uno te consume el día y pierdes ventas por no responder a tiempo.',
       'Una tienda online resuelve eso: tu cliente ve el catálogo, arma su pedido y paga solo, a cualquier hora. Tú recibes la orden lista con el comprobante. Se integra igual con WhatsApp para coordinar la entrega, así que no pierdes ese canal.',
       'Hay un costo oculto de vender solo por WhatsApp: los errores. Pedidos mal apuntados, precios que cambias de memoria, stock que ya no tienes. Una tienda online mantiene todo ordenado —catálogo, precios y stock en un solo lugar— y reduce esos errores que te cuestan plata y reputación.',
-      'Otra ventaja: la tienda cobra igual mientras duermes. Muchas ventas se pierden porque el cliente quiere comprar a las 11 de la noche y nadie contesta. Con checkout automático, esa venta entra sola y tú la despachas al día siguiente.',
-      'Nuestra recomendación: empieza con un catálogo web conectado a WhatsApp y, cuando el volumen lo justifique, súmale la pasarela de pago y el checkout automático. Creces por módulos, sin gastar de más al inicio.',
+      'Otra ventaja: la tienda cobra igual mientras duermes. Muchas ventas se pierden porque el cliente quiere comprar a las 11 de la noche y nadie contesta. Con pago automátict automático, esa venta entra sola y tú la despachas al día siguiente.',
+      'Nuestra recomendación: empieza con un catálogo web conectado a WhatsApp y, cuando el volumen lo justifique, súmale la pasarela de pago y el cobro automático. Creces por módulos, sin gastar de más al inicio.',
     ],
   },
 ] as const;

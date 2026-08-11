@@ -102,7 +102,7 @@ export const servicios: readonly Servicio[] = [
         {
           titulo: 'Preparada para que Google la encuentre',
           desc:
-            'Cada página lleva su título, su descripción y su dirección propia, que es lo que Google lee para decidir cuándo mostrarte. Se entrega conectada a Google Search Console y con analítica, así puedes ver por qué búsquedas llega la gente.',
+            'Cada página lleva su título, su descripción y su dirección propia, que es lo que Google lee para decidir cuándo mostrarte. Se entrega conectada a Google Search Console y con estadísticas de visitas, así puedes ver por qué búsquedas llega la gente.',
           icono: 'google',
           foto: null,
           alt: '',
@@ -218,7 +218,7 @@ export const servicios: readonly Servicio[] = [
       title: 'Precio y plazo',
       parrafos: [
         'Una tienda online parte en S/3,000 y se entrega entre 4 y 6 semanas. Ese precio incluye el diseño, el catálogo cargado, las pasarelas de pago configuradas, el dominio y el hosting del primer año, y una capacitación grabada para que puedas administrarla tú.',
-        'Lo que mueve el precio hacia arriba es el tamaño del catálogo y lo que tenga que hacer la tienda además de vender: facturación electrónica SUNAT, integración con un sistema que ya uses, o reglas de despacho por zona. Eso se conversa antes y queda por escrito en la cotización, no aparece a mitad del proyecto.',
+        'Lo que mueve el precio hacia arriba es el tamaño del catálogo y lo que tenga que hacer la tienda además de vender: facturación electrónica SUNAT, conectarla con un sistema que ya uses, o reglas de despacho por zona. Eso se conversa antes y queda por escrito en la cotización, no aparece a mitad del proyecto.',
         'El pago va 50% al empezar y 50% contra entrega, con boleta o factura en cada uno. En proyectos grandes se puede dividir hasta en tres cuotas sin interés.',
       ],
     },
