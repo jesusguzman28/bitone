@@ -256,6 +256,12 @@ export const serviciosTabs = [
   {
     id: 'web',
     rubros: ['clinicas-consultorios', 'barberias-salones-belleza', 'talleres-mecanicos'],
+    // Tipos de trabajo que entran en este servicio. Sustituyen a la lista de
+    // rubros que había en /servicios, que daba a entender que el precio cambia
+    // según el giro del negocio. No cambia: una pollería y una barbería pagan lo
+    // mismo por la misma página. Lo que mueve el precio es el trabajo que hay
+    // detrás, y eso es lo que se enseña aquí.
+    trabajos: ['Página de presentación', 'Catálogo sin venta online', 'Página para una campaña', 'Web con blog y noticias'],
     label: 'Página web',
     tag: 'Páginas web',
     icon: 'www',
@@ -288,6 +294,10 @@ export const serviciosTabs = [
   {
     id: 'tienda',
     rubros: ['ferreterias', 'opticas', 'panaderias-pastelerias'],
+    // Aquí sí van ejemplos de negocio, porque en una tienda lo que se vende
+    // cambia el trabajo de verdad: no es lo mismo un catálogo de ropa con tallas
+    // y colores que una carta con horarios de reparto o una agenda con pago.
+    trabajos: ['Tienda de ropa con tallas y colores', 'Restaurante con pedidos y reparto', 'Minimarket y abarrotes', 'Reservas y citas con pago'],
     label: 'Tienda online',
     tag: 'Tiendas online',
     icon: 'carrito',
@@ -315,6 +325,7 @@ export const serviciosTabs = [
   {
     id: 'erp',
     rubros: ['talleres-mecanicos', 'farmacias-boticas', 'academias-preuniversitarios'],
+    trabajos: ['Control de stock y almacén', 'Automatizar tareas repetitivas', 'Facturación y caja', 'Reportes de ventas'],
     label: 'ERPs y sistemas',
     tag: 'Sistemas a medida',
     icon: 'tuerca',
@@ -342,6 +353,10 @@ export const serviciosTabs = [
   {
     id: 'apps',
     rubros: ['gimnasios-crossfit', 'veterinarias-petshop', 'pollerias-restaurantes'],
+    // La app no es un producto cerrado: es llevar al celular algo que ya existe.
+    // Por eso los cuatro empiezan igual, "tu ... en el celular", y el último deja
+    // dicho que se arma según lo que haga falta.
+    trabajos: ['Tu sistema en el celular', 'Tu tienda en el celular', 'App de pedidos para tu equipo', 'A medida, según lo que necesites'],
     label: 'Apps móviles',
     tag: 'Aplicaciones móviles',
     icon: 'celular',

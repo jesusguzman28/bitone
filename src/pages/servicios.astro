@@ -4,9 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import Comparativa from '../components/Comparativa.astro';
 import Icono from '../components/Icono.astro';
 import CTA from '../components/CTA.astro';
-import { site, serviciosTabs, condiciones, waLink } from '../data/site';
-import { rubros, anchorRubro } from '../data/rubros';
-import { hrefRubro } from '../data/landings';
+import { site, serviciosTabs, waLink } from '../data/site';
 
 // ---- Un Service con su Offer por cada servicio ----
 // El @id del proveedor apunta a /#org, que es el identificador real que emite
@@ -58,8 +56,7 @@ const schema = serviciosTabs.map((t) => {
   {/* Solo el titular. Se quitaron tres cosas que sobraban antes de llegar a los
       servicios: el rótulo "Servicios", que repetía lo que ya marca el menú de
       arriba; la línea "Todo lo que incluye, sin letra chica"; y el detalle de
-      pagos, que está entero y con su icono en las tarjetas de condiciones más
-      abajo en esta misma página. */}
+      pagos 50/50, que también se quitó de más abajo en esta misma página. */}
   <PageHero title="Servicios de desarrollo web para <span class='gradient-text--warm'>MYPEs en Perú</span>" />
 
   <!-- Selector de servicio -->
@@ -220,18 +217,26 @@ const schema = serviciosTabs.map((t) => {
     </div>
   </section>
 
-  <!-- Enlazado a los rubros. Va fuera de las pestañas a propósito: dentro,
-       tres de los cuatro paneles quedan escondidos y esos enlaces cuentan
-       mucho menos. Aquí los doce están visibles de una. -->
-  <section class="surface--alt px-6 py-20" aria-labelledby="rubros-servicios">
+  <!-- Antes esta sección listaba tres rubros bajo cada servicio, enlazando a sus
+       landings. Se cambió por el tipo de trabajo: colgar rubros de un servicio
+       daba a entender que el precio depende del giro del negocio, y no es así
+       —una pollería y una barbería pagan lo mismo por la misma página—. Lo que
+       mueve el precio es el trabajo que hay detrás, y es lo que se enseña ahora.
+
+       Las doce landings de rubro no quedan huérfanas: la portada las enlaza a
+       todas en "Soluciones por tipo de negocio". Lo que se pierde aquí son doce
+       enlaces internos con contexto, que ayudaban a esas páginas. Si más
+       adelante se quiere recuperar ese empuje, el sitio para hacerlo es un
+       bloque propio, no colgándolos de un servicio. -->
+  <section class="surface--alt px-6 py-20" aria-labelledby="trabajos-servicios">
     <div class="mx-auto w-full max-w-[1120px]">
       <div class="reveal mx-auto max-w-[640px] text-center">
-        <span class="eyebrow eyebrow--light">Dónde lo aplicamos</span>
-        <h2 id="rubros-servicios" class="mt-5 font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
-          Cada servicio, en los rubros que más lo piden
+        <span class="eyebrow eyebrow--light">Tipos de trabajo</span>
+        <h2 id="trabajos-servicios" class="mt-5 font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
+          Qué entra en cada servicio
         </h2>
         <p class="mt-4 text-[15px] leading-[1.65] text-slate-500 [text-wrap:pretty]">
-          Entra al rubro de tu negocio y mira qué incluye su web, con precio y plazo propios.
+          El precio va por el trabajo que hay que hacer, no por el rubro de tu negocio.
         </p>
       </div>
 
@@ -240,16 +245,14 @@ const schema = serviciosTabs.map((t) => {
           <div class="reveal rounded-[20px] bg-white p-6" style={`--reveal-delay:${(i % 4) * 70}ms;box-shadow:inset 0 0 0 1px var(--hairline)`}>
             <a href={`#${t.id}`} class="font-display text-[15px] font-bold text-dark no-underline">{t.label}</a>
             <ul class="m-0 mt-4 grid list-none gap-2.5 p-0">
-              {t.rubros.map((slug) => {
-                const r = rubros.find((x) => x.slug === slug);
-                return r ? (
-                  <li>
-                    <a href={hrefRubro(r.slug)} class="inline-flex items-center gap-2 text-[14px] font-semibold text-primary no-underline">
-                      <span aria-hidden="true">{r.emoji}</span>{anchorRubro[r.slug]}
-                    </a>
-                  </li>
-                ) : null;
-              })}
+              {t.trabajos.map((trabajo) => (
+                <li class="flex items-start gap-2.5 text-[14px] leading-[1.45] text-slate-600">
+                  {/* Punto y no emoji: los emojis de rubro sugerían "esto es para
+                      tu tipo de negocio", que es justo lo que se quiso quitar. */}
+                  <span class="mt-[7px] h-1.5 w-1.5 flex-none rounded-full bg-primary" aria-hidden="true"></span>
+                  {trabajo}
+                </li>
+              ))}
             </ul>
           </div>
         ))}
@@ -257,27 +260,14 @@ const schema = serviciosTabs.map((t) => {
     </div>
   </section>
 
-  <!-- Condiciones: un solo panel con celdas separadas, no cuatro cajas sueltas -->
-  <section class="surface px-6 pb-20">
-    <div class="reveal mx-auto w-full max-w-[1120px] overflow-hidden rounded-[28px] bg-white" style="box-shadow:inset 0 0 0 1px var(--hairline),0 10px 25px -5px rgba(0,0,0,0.08)">
-      <div class="cond-grid">
-        {condiciones.map((c) => (
-          <div class="cond-cell group flex gap-4 p-6 sm:flex-col sm:gap-0 sm:p-7">
-            <span
-              class="grid h-11 w-11 flex-none place-items-center rounded-[12px] transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:-rotate-6 group-hover:scale-110 sm:mb-4"
-              style={`background:${c.bg};color:${c.color}`}
-            >
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={c.icon} />
-            </span>
-            <div>
-              <h3 class="m-0 font-display text-[16px] font-bold text-dark">{c.title}</h3>
-              <p class="mt-1.5 text-[13.5px] leading-[1.6] text-slate-500">{c.desc}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
+  {/* Aquí iba la banda de condiciones: pago 50/50, factura SUNAT, garantía de
+      30 días y código y dominio a tu nombre. Se quitó a pedido.
+
+      Vale la pena tenerlo presente: con esto fuera, /servicios ya no dice en
+      ninguna parte cómo se paga, que hay boleta o factura, ni que el código
+      queda a nombre del cliente. Los datos siguen en `condiciones` (site.ts) por
+      si se quieren recolocar, y "código y dominio tuyos" sobrevive en el
+      contador de la portada. */}
 
   <Comparativa />
   <CTA />
@@ -623,21 +613,6 @@ const schema = serviciosTabs.map((t) => {
   @keyframes featIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: none; }
-  }
-
-  /* ---- Condiciones: celdas de un mismo panel, separadas por hairlines ---- */
-  .cond-grid { display: grid; }
-  .cond-cell + .cond-cell { border-top: 1px solid var(--hairline); }
-  @media (min-width: 640px) {
-    .cond-grid { grid-template-columns: repeat(2, 1fr); }
-    .cond-cell + .cond-cell { border-top: 0; }
-    .cond-cell:nth-child(n + 3) { border-top: 1px solid var(--hairline); }
-    .cond-cell:nth-child(even) { border-left: 1px solid var(--hairline); }
-  }
-  @media (min-width: 1024px) {
-    .cond-grid { grid-template-columns: repeat(4, 1fr); }
-    .cond-cell:nth-child(n + 3) { border-top: 0; }
-    .cond-cell + .cond-cell { border-left: 1px solid var(--hairline); }
   }
 
   @media (prefers-reduced-motion: reduce) {
