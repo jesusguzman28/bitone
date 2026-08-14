@@ -7,8 +7,24 @@ export const site = {
   domain: 'https://bitwise.pe',
   whatsapp: '51945574190',
   whatsappMsg: 'Hola Bitwise 👋 quiero una cotización para mi negocio',
+  // El correo sale en el pie, en /contacto y en el JSON-LD que lee Google.
+  //
+  // Está en un Gmail personal y conviene cambiarlo por uno del dominio. El sitio
+  // vende "correo corporativo con tu dominio" en todas las landings; escribir
+  // desde gmail.com le quita fuerza a esa frase justo donde más se nota.
+  // Al crear la casilla, aquí se cambia esta línea y queda actualizado en todo
+  // el sitio de una vez. No lo cambiamos antes de que exista: un correo que
+  // rebota pierde clientes en silencio.
   email: 'gguzman.bitone@gmail.com',
   phone: '+51 945 574 190',
+  // RUC de la empresa. Vacío = no se muestra en ninguna parte.
+  //
+  // Importa más de lo que parece: el sitio afirma "empresa formal con RUC" cinco
+  // veces, y la comparativa lo marca como la diferencia frente al trabajo
+  // informal. Decirlo sin enseñarlo es justo lo que un cliente desconfiado
+  // nota. En cuanto se escriba aquí, sale en el pie, en /contacto y en el
+  // JSON-LD de la organización, que es de donde Google lo lee.
+  ruc: '',
   city: 'Lima, Perú',
   hours: 'Lun – Sáb: 9:00 – 19:00',
   socials: {

@@ -67,6 +67,10 @@ const graph: Record<string, unknown>[] = [
     name: site.legalName,
     url: site.domain,
     logo: { '@type': 'ImageObject', url: logoUrl, width: 1200, height: 630 },
+    // El RUC es el identificador fiscal de la empresa. Google lo entiende como
+    // `taxID` y lo usa para reconocer que detrás del sitio hay una entidad real,
+    // que es justo lo que separa a un negocio formal de una página cualquiera.
+    ...(site.ruc ? { taxID: site.ruc } : {}),
     sameAs: Object.values(site.socials),
     contactPoint: {
       '@type': 'ContactPoint',

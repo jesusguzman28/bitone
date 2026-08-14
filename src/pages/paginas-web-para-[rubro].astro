@@ -4,7 +4,7 @@ import ContactForm from '../components/ContactForm.astro';
 import Stars from '../components/Stars.astro';
 import Icono from '../components/Icono.astro';
 import { landings, rubroDeLanding, hrefRubro, type Landing } from '../data/landings';
-import { rubros, soles, totalModulos, afinesRubro, anchorRubro } from '../data/rubros';
+import { rubros, soles, afinesRubro, anchorRubro } from '../data/rubros';
 import { iconoPara } from '../data/iconos';
 import { fotoDeRubro } from '../data/fotos';
 import { flashcardsProblema } from '../data/preguntasProblema';
@@ -72,7 +72,54 @@ const schema = [
   },
 ];
 
-const modulos = totalModulos(rubro);
+// ---- Módulos: solo los que NO vienen ya incluidos ----
+//
+// El catálogo de `rubros.ts` se escribió aparte de las listas de secciones y
+// funciones, y acabaron describiendo lo mismo. La página quedaba diciendo
+// "tu web tendrá galería de trabajos" arriba y "galería de trabajos es un
+// módulo que se suma" tres pantallas después. Medido en las doce landings: 59
+// módulos repetían algo ya prometido. En bodegas eran 8 de 9.
+//
+// Eso no es texto de sobra, es una contradicción de precio: el cliente llega a
+// la reunión creyendo que pagó por algo que se cobra aparte. Aquí se filtra:
+// "módulo" pasa a significar lo único que puede significar, algo que todavía no
+// está incluido.
+//
+// El emparejado va por palabras con carga: se tiran las vacías ("online", "de",
+// "por"…) y basta con que compartan una para considerarlos lo mismo. Es
+// deliberadamente generoso: ante la duda preferimos NO ofrecer como extra algo
+// que quizá ya prometimos, porque ese error se paga en la reunión de venta y el
+// contrario solo cuesta una viñeta menos.
+const VACIAS = new Set([
+  'online', 'digital', 'digitales', 'web', 'para', 'con', 'por', 'del', 'los', 'las',
+  'que', 'una', 'uno', 'tus', 'tu', 'the', 'and', 'sin', 'más', 'mas', 'cada', 'opcional',
+]);
+const carga = (t: string) =>
+  new Set(
+    t
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z ]/g, ' ')
+      .split(' ')
+      .filter((w) => w.length > 4 && !VACIAS.has(w)),
+  );
+
+const yaIncluido = [
+  ...landing.secciones.items.map((s) => s.title),
+  ...landing.funciones.items.map((f) => f.title),
+].map(carga);
+
+const esNuevo = (titulo: string) => {
+  const t = carga(titulo);
+  return !yaIncluido.some((inc) => [...t].some((w) => inc.has(w)));
+};
+
+const gruposExtra = rubro.moduleGroups
+  .map((g) => ({ ...g, modules: g.modules.filter((m) => esNuevo(m.title)) }))
+  .filter((g) => g.modules.length > 0);
+
+const modulos = gruposExtra.reduce((n, g) => n + g.modules.length, 0);
 
 const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.short}`;
 ---
@@ -423,7 +470,7 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
         </p>
       </div>
 
-      {rubro.moduleGroups.map((group) => (
+      {gruposExtra.map((group) => (
         <div class="mt-9">
           <h3 class="reveal flex items-center gap-3 font-display text-[13px] font-bold uppercase tracking-[0.12em] text-slate-500">
             <span class="h-px w-8 bg-primary"></span>
@@ -446,7 +493,7 @@ const waMsg = `Hola Bitwise 👋 quiero cotizar una página web para mi ${rubro.
           <svg class="detalle-plegado__ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
         </summary>
         <div class="grid gap-3.5 px-5 pb-5">
-          {rubro.moduleGroups.flatMap((g) => g.modules).map((m) => (
+          {gruposExtra.flatMap((g) => g.modules).map((m) => (
             <p class="m-0 text-[14.5px] leading-[1.7] text-slate-600">
               <strong class="text-dark">{m.emoji} {m.title}.</strong> {m.desc}
             </p>
