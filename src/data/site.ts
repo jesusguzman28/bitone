@@ -3,7 +3,15 @@
 
 export const site = {
   name: 'Bitwise',
-  legalName: 'Bitwise Perú',
+  // Nombre comercial: el que la gente conoce y el que se enseña en pantalla.
+  // Antes este campo se llamaba `legalName` y decía "Bitwise Perú", que no es el
+  // nombre legal de nada: la empresa registrada es Bitone E.I.R.L. Se separaron
+  // porque son cosas distintas y Google las lee por separado —`name` es la marca
+  // y `legalName` la razón social—; tenerlas mezcladas hacía que el sitio
+  // declarara como razón social una marca que no está inscrita así.
+  marca: 'Bitwise Perú',
+  // Razón social y RUC de la empresa que factura.
+  razonSocial: 'Bitone E.I.R.L.',
   domain: 'https://bitwise.pe',
   whatsapp: '51945574190',
   whatsappMsg: 'Hola Bitwise 👋 quiero una cotización para mi negocio',
@@ -22,9 +30,12 @@ export const site = {
   // Importa más de lo que parece: el sitio afirma "empresa formal con RUC" cinco
   // veces, y la comparativa lo marca como la diferencia frente al trabajo
   // informal. Decirlo sin enseñarlo es justo lo que un cliente desconfiado
-  // nota. En cuanto se escriba aquí, sale en el pie, en /contacto y en el
-  // JSON-LD de la organización, que es de donde Google lo lee.
-  ruc: '',
+  // nota. Sale en el pie, en /contacto y en el `taxID` del JSON-LD, que es de
+  // donde Google reconoce que detrás del sitio hay una entidad real.
+  //
+  // Verificado con el dígito de control de SUNAT antes de publicarlo: 11
+  // dígitos, empieza en 20 (persona jurídica) y el verificador cuadra.
+  ruc: '20615736261',
   city: 'Lima, Perú',
   hours: 'Lun – Sáb: 9:00 – 19:00',
   socials: {

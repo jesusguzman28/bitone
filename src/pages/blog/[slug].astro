@@ -23,8 +23,8 @@ const jsonLd = {
   description: post.excerpt,
   datePublished: post.date,
   dateModified: post.date,
-  author: { '@type': 'Organization', name: site.legalName },
-  publisher: { '@type': 'Organization', name: site.legalName, url: site.domain },
+  author: { '@type': 'Organization', name: site.marca },
+  publisher: { '@type': 'Organization', name: site.marca, url: site.domain },
   mainEntityOfPage: `${site.domain}/blog/${post.slug}`,
   // new URL y no concatenación: las portadas del blog son URLs absolutas de
   // Unsplash, y `${site.domain}${post.image}` producía https://bitwise.pehttps://…

@@ -75,7 +75,11 @@ import { site, contactoExpectativas } from '../data/site';
             </span>
             <div>
               <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-400">Empresa formal</div>
-              <div class="mt-1 font-display text-base font-bold text-dark">{site.legalName} · RUC {site.ruc}</div>
+              {/* Aquí va la razón social, no la marca: quien busca este dato lo
+                  va a contrastar en SUNAT, y en SUNAT la empresa figura como
+                  Bitone E.I.R.L. Poner "Bitwise Perú" junto a un RUC que no
+                  devuelve ese nombre haría dudar justo a quien vino a confiar. */}
+              <div class="mt-1 font-display text-base font-bold text-dark">{site.razonSocial} · RUC {site.ruc}</div>
               <div class="mt-0.5 text-[12.5px] text-slate-500">Emitimos boleta y factura electrónica</div>
             </div>
           </div>
