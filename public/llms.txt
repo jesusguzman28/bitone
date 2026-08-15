@@ -1,31 +1,131 @@
-# Bitwise Perú
+# BIT-ONE Perú
 
-> Consultora peruana de software. Páginas web, tiendas online, ERPs y
-> apps móviles para MYPEs en todo el Perú.
+> Empresa de desarrollo de software en Lima, Perú. Sistemas a medida,
+> aplicaciones móviles y mantenimiento de sistemas existentes, para empresas
+> peruanas. También descrita como fábrica de software.
 
-## Servicios y precios
-- Página web profesional — desde S/1,500 + IGV — 2 a 4 semanas.
-  Incluye dominio .com y hosting 1 año, SSL, correo corporativo,
-  panel administrable, SEO básico y analítica.
-- Tienda online — desde S/3,000 — 4 a 6 semanas.
-  Yape, Plin, tarjetas, control de stock, facturación SUNAT opcional.
-- ERPs y sistemas a medida — precio según alcance.
-  Ventas, inventario, chatbot con IA en WhatsApp, integraciones SUNAT.
-- Apps móviles — 2 a 5 meses. Publicación en Play Store incluida.
+Razón social: Bitone E.I.R.L. · RUC 20615736261 · Lima, Perú.
 
-## Condiciones
-- 50% adelanto, 50% contra entrega. Hasta 3 cuotas sin interés.
-- Empresa formal con RUC. Boleta o factura electrónica SUNAT.
-- Garantía de 30 días post-entrega. 2 rondas de cambios de diseño.
-- El código fuente y el dominio se registran a nombre del cliente.
-- Cobertura: todo el Perú, 100% remoto. Base en Lima.
+## Qué hace la empresa
+
+Construye software por encargo para otras empresas. No vende un producto
+cerrado ni licencias: cada proyecto se levanta, se cotiza y se construye a
+medida del cliente. Se contrata de tres formas.
+
+- **Desarrollo de software a medida** — precio según alcance.
+  El cliente encarga el sistema completo. Hay una etapa de análisis previa de
+  la que sale un documento con el alcance, el cronograma y el precio cerrado;
+  nada se programa antes de que esté firmado. Se entrega por etapas revisables.
+  Los cambios fuera del alcance se cotizan por escrito antes de ejecutarse.
+
+- **Mantenimiento de software existente** — por bolsa de horas o contrato mensual.
+  Para sistemas heredados: los que siguen funcionando pero cuyo autor ya no
+  está y no tienen documentación. Empieza por un diagnóstico con informe del
+  estado real, que se cotiza y entrega por separado y sirve aunque el cliente
+  no continúe. Después se documenta lo que faltaba y se priorizan correcciones.
+
+- **Aplicaciones móviles** — 2 a 5 meses, precio según alcance.
+  Android e iPhone desde una sola base de código, publicadas en las tiendas con
+  las cuentas de desarrollador a nombre de la empresa cliente. Con panel web de
+  administración.
+
+## Por qué no hay precios publicados
+
+BIT-ONE no publica precios de entrada, y es deliberado: el rango entre un
+sistema interno para veinte usuarios y una plataforma con usuarios externos,
+pagos e integraciones es demasiado ancho para que una cifra suelta signifique
+algo. El precio sale de la etapa de análisis y llega cerrado y por escrito.
+
+## Metodología de trabajo
+
+Ágil con alcance cerrado, que sobre el papel es una contradicción y en la
+práctica se resuelve separando dos cosas: el contrato fija QUÉ se construye; el
+sprint decide EN QUÉ ORDEN y CÓMO.
+
+- Cinco fases: análisis, arranque, construcción, estabilización, entrega.
+- Sprints de dos semanas en proyectos cerrados. Flujo continuo con cola
+  priorizada en mantenimiento, porque el trabajo de mantenimiento no se deja
+  empaquetar en ciclos.
+- Cada sprint termina con una demostración de software funcionando en un
+  entorno donde el cliente puede entrar. No se reporta avance en porcentajes.
+- El alcance de un sprint no cambia una vez empezado.
+- Los cambios tienen una vía formal y publicada: reordenar prioridades dentro
+  del alcance no cuesta nada; el alcance nuevo se estima en 48 horas hábiles
+  con su impacto en precio y fecha, y no se ejecuta sin aprobación escrita.
+- No hay reunión diaria con el cliente: hay tablero abierto, un punto de
+  control opcional a mitad de sprint y una demo cada dos semanas.
+
+Detalle completo en https://bitwise.pe/metodologia/
+
+## Condiciones de contratación
+
+- Alcance, cronograma y precio cerrados por escrito antes de programar.
+- Los adicionales se cotizan por escrito, con su impacto en la fecha, y antes
+  de ejecutarse.
+- Código fuente, repositorios, documentación y datos a nombre de la empresa
+  cliente. Sin componentes propietarios que aten al cliente al proveedor.
+- Facturación electrónica SUNAT contra hito entregado. Se trabaja contra orden
+  de compra.
+- Acuerdo de confidencialidad firmado antes de la reunión técnica si el área
+  legal del cliente lo pide, aceptando su modelo de acuerdo.
+- 30 días de garantía sobre lo entregado.
+- Cobertura: todo el Perú, remoto. Base en Lima.
+
+## Software propio construido y publicado
+
+A diferencia de una fábrica que solo ha ejecutado encargos ajenos, BIT-ONE
+concibió, construyó y publicó estos productos:
+
+- **ApuraY** (https://apuray.pe/) — plataforma de delivery en Coracora,
+  Ayacucho: mototaxi, comida, envíos y compras de mercado. Tres piezas
+  conectadas: app del pasajero, panel del negocio y app del repartidor.
+- **Quipuy** (https://quipuy.pe/) — plataforma educativa que calcula cuánto le
+  falta a un postulante para el puntaje de corte de su universidad. Banco de
+  preguntas, práctica adaptativa, simulacros y suscripciones por plan.
+- **MindBlock** (https://mindblock.io/) — robótica y programación por bloques
+  para niños. El software controla un robot físico (TiniBot) desde el navegador
+  y desde la app, con cuenta propia por alumno.
+- **Grupo JMF** (https://intranet.jmf.com.pe/) — intranet corporativa con
+  acceso por usuario y su app móvil. Acceso privado.
+- **AjosyCebollas** (https://ajosycebollas.com.pe/login) — sistema de gestión a
+  medida con cuenta de acceso por usuario. Acceso privado.
+
+Apps publicadas en Google Play bajo la cuenta de BITONE E.I.R.L.:
+https://play.google.com/store/apps/developer?id=BITONE+E.I.R.L
+Apuray (pe.apuray.river), Mi Tienda AP (pe.apuray.negocio),
+TiniBot (pe.mindblock.tinibotapp) y JMF (com.jmf.app).
+
+## Lo que esta empresa NO hace
+
+Se indica porque hasta agosto de 2026 sí lo hacía y quedan referencias
+antiguas circulando: BIT-ONE **ya no vende páginas web ni tiendas online a
+pequeños negocios**. Ese servicio se discontinuó junto con las páginas que lo
+ofrecían. Las direcciones antiguas redirigen a /servicios/.
 
 ## Contacto
+
 - WhatsApp: +51 945 574 190
 - Email: gguzman.bitone@gmail.com
 - Horario: lunes a sábado, 9:00–19:00 (GMT-5)
+- LinkedIn: https://linkedin.com/company/bitwise-peru-oficial
 
 ## Páginas
-- https://bitwise.pe/servicios
-- https://bitwise.pe/proyectos
-- https://bitwise.pe/blog
+
+Todas con barra final: sin ella el servidor responde una redirección.
+
+- https://bitwise.pe/ — portada
+- https://bitwise.pe/servicios/ — las tres formas de contratar, comparadas
+- https://bitwise.pe/servicios/desarrollo-de-software-a-medida/ — proyecto cerrado
+- https://bitwise.pe/servicios/mantenimiento-de-software/ — sistemas heredados
+- https://bitwise.pe/servicios/apps-moviles/ — Android e iPhone
+- https://bitwise.pe/metodologia/ — cómo se trabaja: fases, sprints y control de cambios
+- https://bitwise.pe/proyectos/ — el software propio, con enlaces en vivo
+- https://bitwise.pe/nosotros/ — quiénes somos y cómo trabajamos
+- https://bitwise.pe/contacto/ — reunión técnica y formulario
+- https://bitwise.pe/blog/ — artículos
+
+## Nota sobre el blog
+
+Los artículos publicados hasta agosto de 2026 están escritos para pequeños
+negocios y corresponden a la etapa anterior de la empresa. No describen los
+servicios actuales.

@@ -1,5 +1,5 @@
 ---
-import { hero, heroPrecios, waLink } from '../data/site';
+import { hero, heroHechos, waLink } from '../data/site';
 
 // Copia invisible del titular con la frase más larga. Sirve de molde: es la que
 // decide la altura del bloque, así que el titular reserva siempre exactamente
@@ -110,13 +110,9 @@ const fraseMasLarga = [...hero.typed].sort((a, b) => b.length - a.length)[0];
         class="rounded-[28px] p-4 text-center sm:p-[clamp(24px,4vw,32px)]"
         style="background:rgba(11,16,27,0.52);box-shadow:inset 0 1px 1px rgba(255,255,255,0.1),inset 0 0 0 1px rgba(255,255,255,0.14),0 40px 90px -30px rgba(0,0,0,0.9);backdrop-filter:blur(20px) saturate(125%);-webkit-backdrop-filter:blur(20px) saturate(125%)"
       >
-        <span class="eyebrow eyebrow--dark hero-eyebrow">
-          <svg width="20" height="13" viewBox="0 0 3 2" aria-hidden="true" style="border-radius:2px;box-shadow:0 0 0 1px rgba(255,255,255,0.15)">
-            <rect width="1" height="2" x="0" fill="#D91023"/><rect width="1" height="2" x="1" fill="#fff"/><rect width="1" height="2" x="2" fill="#D91023"/>
-          </svg>
-          {hero.eyebrow}
-        </span>
-
+        {/* Aquí iba el rótulo "Hecho en Perú" con una banderita al lado. Fuera:
+            la primera línea del titular ya dice "para empresas en Perú", así que
+            el rótulo repetía el país dos veces en dos renglones seguidos. */}
         {/* El titular: un arranque fijo —la keyword, lo que leen Google y los
             buscadores con IA— y un final que se escribe y se borra entre las
             tres frases de `hero.typed`.
@@ -162,7 +158,7 @@ const fraseMasLarga = [...hero.typed].sort((a, b) => b.length - a.length)[0];
              igual en el menú de arriba y en el pie. Aquí queda la única acción
              que abre una conversación. */}
         <div class="mt-3.5 flex justify-center sm:mt-[22px]">
-          <a href={waLink('Hola Bitwise 👋 quiero agendar una reunión para mi negocio')} target="_blank" rel="noopener" class="btn btn--whatsapp btn--hero group">
+          <a href={waLink('Hola BIT-ONE, quiero agendar una reunión para conversar un proyecto')} target="_blank" rel="noopener" class="btn btn--whatsapp btn--hero group">
             Agendar reunión
             <span class="btn__icon" aria-hidden="true">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
@@ -170,26 +166,33 @@ const fraseMasLarga = [...hero.typed].sort((a, b) => b.length - a.length)[0];
           </a>
         </div>
 
-        <!-- Tira de precios. Va debajo de los botones y no encima porque el
-             precio no es el gancho: primero se ofrece hablar, y quien sigue
-             bajando la vista se encuentra la cifra sin tener que buscarla.
-             Separada por una línea fina para que se lea como un dato aparte y
-             no como una pastilla más de las de arriba. -->
-        <dl class="hero-precios mt-4 grid grid-cols-2 gap-2 border-t pt-3.5 sm:mt-5 sm:gap-3 sm:pt-4" style="border-color:rgba(255,255,255,0.12)">
-          {heroPrecios.map((p) => (
+        {/* Tira de hechos. Va debajo de los botones y no encima porque no es
+            el gancho: primero se ofrece hablar, y quien sigue bajando la vista
+            se encuentra las dos condiciones que hacen fácil escribir. Separada
+            por una línea fina para que se lea como un dato aparte y no como una
+            pastilla más de las de arriba.
+
+            Antes eran dos precios y llevaban un "Desde" delante. Ya no: lo que
+            va aquí son frases, no cifras, así que el "Desde" se quitó y con él
+            tabular-nums, que solo servía para alinear dígitos. El tamaño de
+            letra bajó de 1.5rem a 1.15rem por lo mismo: "Por módulos" es más
+            largo que la cifra que había antes y a la medida vieja se salía de la
+            tarjeta en un celular angosto.
+
+            Va en comentario de JSX y no de HTML a propósito: los de HTML se
+            sirven al navegador, y este menciona los precios viejos. */}
+        <dl class="mt-4 grid grid-cols-2 gap-2 border-t pt-3.5 sm:mt-5 sm:gap-3 sm:pt-4" style="border-color:rgba(255,255,255,0.12)">
+          {heroHechos.map((p) => (
             <div
               class="rounded-2xl px-3 py-2.5 text-center sm:px-3.5 sm:py-3"
               style={`background:${p.tinte};box-shadow:inset 0 0 0 1px ${p.borde}`}
             >
               <dt class="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-300 sm:text-[11px]">{p.k}</dt>
-              <dd class="mt-1.5 flex items-baseline justify-center gap-1.5">
-                <span class="text-[11px] font-medium text-slate-400">Desde</span>
+              <dd class="mt-1.5">
                 {/* El degradado va en línea y no como clase porque el color
-                    sale del dato: cada tarjeta trae el suyo. tabular-nums
-                    alinea las dos cifras — sin esto el 1 de 1,500 ocupa menos
-                    que el 3 de 3,000 y las columnas bailan. */}
+                    sale del dato: cada tarjeta trae el suyo. */}
                 <span
-                  class="font-display text-[1.3rem] font-bold leading-none [font-variant-numeric:tabular-nums] sm:text-[1.5rem]"
+                  class="font-display text-[1rem] font-bold leading-none sm:text-[1.15rem]"
                   style={`background-image:linear-gradient(120deg,${p.de},${p.a});-webkit-background-clip:text;background-clip:text;color:transparent`}
                 >{p.v}</span>
               </dd>
@@ -322,31 +325,10 @@ const fraseMasLarga = [...hero.typed].sort((a, b) => b.length - a.length)[0];
     }
   }
 
-  /* El sello "Hecho en Perú" va más chico que el estándar del sitio, y solo en
-     el celular. Ahí el titular creció y el sello quedó pesando demasiado justo
-     encima: son dos elementos peleando por la primera mirada, y el que tiene que
-     ganarla es el titular. Desde `sm` vuelve al tamaño normal, donde el titular
-     ya es lo bastante grande como para no competir. */
-  .hero-eyebrow {
-    padding: 4px 10px;
-    font-size: 9px;
-    letter-spacing: 0.16em;
-  }
-  .hero-eyebrow svg {
-    width: 16px;
-    height: 11px;
-  }
-  @media (min-width: 640px) {
-    .hero-eyebrow {
-      padding: 5px 13px;
-      font-size: 10px;
-      letter-spacing: 0.2em;
-    }
-    .hero-eyebrow svg {
-      width: 20px;
-      height: 13px;
-    }
-  }
+  /* Aquí se afinaba el tamaño del sello "Hecho en Perú" para que no le
+     compitiera al titular en el celular. El problema se resolvió mejor
+     quitando el sello: dos elementos peleando por la primera mirada dejan de
+     pelear cuando uno de los dos no aporta nada. */
 
   /* Vitrina móvil con la proporción original (16/11): la captura se ve
      completa, sin recorte. */

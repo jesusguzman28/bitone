@@ -1,20 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
-import { nosotros, site } from '../data/site';
+import { nosotros, fundadores, site } from '../data/site';
 ---
 
 <BaseLayout
-  title="Nosotros: peruanos impulsando negocios peruanos"
-  description="Bitwise nació en Lima para que las MYPEs peruanas accedan a tecnología de primer nivel a precio justo, con trato directo y sin letra chica."
+  title="Nosotros: construimos productos, no solo encargos"
+  description="BIT-ONE es la marca de Bitone E.I.R.L., empresa de desarrollo en Lima. Antes de construir para otros publicamos productos propios: ApuraY, Quipuy y MindBlock."
 >
-  <PageHero eyebrow={nosotros.eyebrow} title={nosotros.title} subtitle={nosotros.intro} flag />
+  <PageHero title={nosotros.title} subtitle={nosotros.intro} />
 
   <!-- Historia + Misión / Visión -->
   <section class="surface px-6 py-[88px]">
     <div class="mx-auto grid w-full max-w-[1120px] items-start gap-11" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
       <div class="reveal">
-        <span class="eyebrow eyebrow--light">Nuestra historia</span>
         <h2 class="mt-4 font-display text-[clamp(1.5rem,3.4vw,2.1rem)] font-bold leading-[1.1] text-dark">{nosotros.historiaTitle}</h2>
         {nosotros.historia.map((p, i) => (
           <p class:list={['text-[15px] leading-[1.75] text-slate-600 [text-wrap:pretty]', i === 0 ? 'mt-[18px]' : 'mt-4']}>{p}</p>
@@ -41,11 +40,52 @@ import { nosotros, site } from '../data/site';
     </div>
   </section>
 
+  {/* Los fundadores.
+      Va justo después de la historia y antes de las promesas, y ese sitio no es
+      casual: la historia cuenta qué construimos, esto dice quién lo construyó, y
+      solo entonces tienen peso las promesas de cómo trabajamos. En una venta a
+      empresas se compra gente antes que método.
+
+      Cada nombre lleva su perfil de LinkedIn, que es lo que convierte
+      "ingenieros de ESAN" en algo comprobable en un clic. Misma regla que el RUC
+      del pie y que la cuenta de desarrollador de la sección de apps. */}
+  <section class="surface--alt px-6 pb-[72px] pt-[72px]">
+    <div class="mx-auto w-full max-w-[860px]">
+      <div class="reveal text-center">
+        <h2 class="mx-auto max-w-[520px] font-display text-[clamp(1.6rem,3.8vw,2.3rem)] font-bold leading-[1.1] text-dark">
+          Quiénes lo construyen
+        </h2>
+      </div>
+
+      <ul class="fundadores mt-9 grid list-none gap-4 p-0">
+        {fundadores.map((f, i) => (
+          <li class="reveal" style={`--reveal-delay:${i * 90}ms`}>
+            <a href={f.linkedin} target="_blank" rel="noopener" class="fundador flex items-center gap-4 no-underline">
+              {/* Iniciales y no una foto: no tenemos retratos que publicar, y una
+                  silueta genérica de banco de imágenes en la sección donde se
+                  presenta a las personas reales es peor que no poner cara. */}
+              <span class="fundador__ini" aria-hidden="true">
+                {f.nombre.split(' ').slice(0, 2).map((p) => p.charAt(0)).join('')}
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="fundador__nombre">{f.nombre}</span>
+                <span class="fundador__rol">{f.rol}</span>
+              </span>
+              <span class="fundador__in">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4V9h4v1.5A6 6 0 0 1 16 8zM2 9h4v12H2zM4 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/></svg>
+                <span class="sr-only">Perfil de {f.nombre} en LinkedIn</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
   <!-- Valores -->
   <section class="surface--alt px-6 pb-24 pt-[72px]">
     <div class="mx-auto w-full max-w-[1120px]">
       <div class="reveal text-center">
-        <span class="eyebrow eyebrow--light">Valores</span>
         <h2 class="mx-auto mt-4 max-w-[520px] font-display text-[clamp(1.6rem,3.8vw,2.3rem)] font-bold leading-[1.1] text-dark">
           Cómo trabajamos, en 6 promesas
         </h2>
@@ -98,7 +138,70 @@ import { nosotros, site } from '../data/site';
     e.preventDefault();
     const nombre = (document.getElementById('nos-nombre')).value.trim();
     const msg = (document.getElementById('nos-msg')).value.trim();
-    const text = `Hola Bitwise 👋${nombre ? ' soy ' + nombre + ',' : ''} quiero conversar sobre mi proyecto.${msg ? ' ' + msg : ''}`;
+    const text = `Hola BIT-ONE${nombre ? ' soy ' + nombre + ',' : ''} quiero conversar sobre mi proyecto.${msg ? ' ' + msg : ''}`;
     window.open(`${waBase}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
   });
 </script>
+
+<style>
+  .fundadores { grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .fundadores { grid-template-columns: repeat(2, 1fr); } }
+
+  .fundador {
+    border-radius: 18px;
+    padding: 16px 18px;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--hairline);
+    transition: transform 0.4s var(--ease-fluid), box-shadow 0.4s var(--ease-fluid);
+  }
+  .fundador:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, #0A66C2 40%, transparent),
+      0 18px 34px -20px rgba(10, 102, 194, 0.45);
+  }
+  .fundador:focus-visible { outline: 2px solid #0A66C2; outline-offset: 3px; }
+
+  .fundador__ini {
+    display: grid;
+    place-items: center;
+    height: 48px;
+    width: 48px;
+    flex: none;
+    border-radius: 14px;
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: #fff;
+    background: var(--gradient-brand);
+  }
+  .fundador__nombre {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--color-dark);
+  }
+  .fundador__rol {
+    display: block;
+    margin-top: 3px;
+    font-size: 12.5px;
+    color: #64748b;
+  }
+  /* El azul oficial de LinkedIn. Es de las pocas veces que un color de marca
+     ajena vale la pena: se reconoce antes de leer nada y dice a dónde lleva. */
+  .fundador__in {
+    display: grid;
+    place-items: center;
+    height: 34px;
+    width: 34px;
+    flex: none;
+    border-radius: 10px;
+    color: #0A66C2;
+    background: rgba(10, 102, 194, 0.09);
+  }
+
+  @media (prefers-reduced-motion: reduce) { .fundador { transition: none; } }
+</style>

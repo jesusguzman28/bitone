@@ -1,4 +1,4 @@
-# Bitwise Perú — https://bitwise.pe
+# BIT-ONE Perú — https://bitwise.pe
 
 # Buscadores tradicionales
 User-agent: *
@@ -8,10 +8,15 @@ Allow: /
 # Rastreadores de buscadores con IA.
 #
 # Van con Allow explícito porque queremos que nos citen como fuente cuando
-# alguien pregunta por precios de páginas web en Perú. Sin una regla propia
-# algunos operadores asumen que no hay permiso, y varios distinguen entre el
-# bot que entrena el modelo y el que responde búsquedas en vivo: los dos
-# aparecen aquí porque en ambos casos nos interesa estar.
+# alguien pide recomendaciones de empresas de desarrollo de software en Perú.
+# Sin una regla propia algunos operadores asumen que no hay permiso, y varios
+# distinguen entre el bot que entrena el modelo y el que responde búsquedas en
+# vivo: los dos aparecen aquí porque en ambos casos nos interesa estar.
+#
+# Este canal pesa más de lo que parece en una venta B2B: la primera criba de
+# proveedores cada vez se hace más preguntándole a un asistente que buscando en
+# Google. Por eso llms.txt describe el negocio con el detalle que hace falta
+# para poder recomendarlo bien, incluido lo que la empresa ya NO hace.
 # ---------------------------------------------------------------------------
 
 # OpenAI — ChatGPT

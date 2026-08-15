@@ -22,12 +22,18 @@ SEMI = "C:/Windows/Fonts/seguisb.ttf"
 REG = "C:/Windows/Fonts/segoeui.ttf"
 
 # --- brand wordmark ---
-d.text((72, 66), "Bitwise", font=font(BOLD, 46), fill=(255, 255, 255))
-# red dot accent
-d.ellipse([210, 78, 232, 100], fill=(217, 16, 35))
+# El punto rojo se coloca a partir del ancho medido del nombre, no en una
+# coordenada fija. Estaba clavado en x=210, que era la medida de "Bitwise": con
+# la marca nueva —más ancha, por las mayúsculas y el guion— el punto caía encima
+# de la última letra. Medido, cualquier cambio de nombre lo recoloca solo.
+marca = "BIT-ONE"
+mf = font(BOLD, 46)
+d.text((72, 66), marca, font=mf, fill=(255, 255, 255))
+mb = d.textbbox((72, 66), marca, font=mf)
+d.ellipse([mb[2] + 8, 78, mb[2] + 30, 100], fill=(217, 16, 35))
 
 # eyebrow pill
-eb = "HECHO EN PERU"
+eb = "HECHO EN PERÚ"
 ebf = font(SEMI, 22)
 bb = d.textbbox((0, 0), eb, font=ebf)
 pw, ph = bb[2] - bb[0], bb[3] - bb[1]
@@ -37,15 +43,19 @@ d.text((72 + 22, 200 + 13), eb, font=ebf, fill=(252, 165, 176))
 
 # headline
 hf = font(BOLD, 76)
-d.text((72, 270), "Paginas web para", font=hf, fill=(255, 255, 255))
+d.text((72, 270), "Páginas web para", font=hf, fill=(255, 255, 255))
 # second line with accent word gradient-ish (amber)
 d.text((72, 356), "tu ", font=hf, fill=(255, 255, 255))
 w_tu = d.textbbox((72, 356), "tu ", font=hf)[2]
 d.text((w_tu, 356), "negocio.", font=hf, fill=(232, 163, 23))
 
 # subtitle
+# El precio tiene que ser el mismo piso que anuncia todo el sitio (PRECIO_PISO
+# en src/data/site.ts). Decía "desde S/499", que no existe en ninguna otra
+# pantalla: era la cifra que veía quien recibía el enlace por WhatsApp, justo
+# antes de entrar y encontrarse con S/1,500.
 sf = font(REG, 34)
-d.text((72, 470), "MYPEs y pymes  -  desde S/499  -  factura SUNAT", font=sf, fill=(148, 163, 184))
+d.text((72, 470), "MYPEs y pymes  -  desde S/1,500  -  factura SUNAT", font=sf, fill=(148, 163, 184))
 
 # domain bottom-right
 df = font(SEMI, 30)

@@ -1,21 +1,19 @@
 ---
 import { faqs } from '../data/site';
 
-const faqJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faqs.map((f) => ({
-    '@type': 'Question',
-    name: f.q,
-    acceptedAnswer: { '@type': 'Answer', text: f.a },
-  })),
-};
+// Aquí ya no se escribe JSON-LD.
+//
+// Este componente emitía su propio FAQPage en una etiqueta de script aparte, y
+// la portada terminaba con dos bloques de datos estructurados: el @graph del
+// layout —con la organización, el negocio y el sitio, todos enlazados por @id—
+// y este suelto, sin conexión con ninguno de ellos. El nodo se arma ahora en
+// index.astro y entra en el mismo grafo, igual que hacen /servicios, las doce
+// landings de rubro y las entradas del blog. Un solo bloque por página.
 ---
 
 <section class="surface px-6 pb-24 pt-16">
   <div class="mx-auto w-full max-w-[860px]">
     <div class="reveal text-center">
-      <span class="eyebrow eyebrow--light">Preguntas frecuentes</span>
       <h2 class="mx-auto mt-5 max-w-[620px] font-display text-[clamp(1.75rem,4vw,2.6rem)] font-extrabold leading-[1.15] text-dark">
         Resolvemos tus dudas antes de<br /><span class="gradient-text">empezar tu proyecto</span>
       </h2>
@@ -44,9 +42,16 @@ const faqJsonLd = {
         </div>
       ))}
     </div>
-  </div>
 
-  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+    {/* Aquí iba el enlace a la guía de precios de páginas web, que se borró con
+        el cambio de negocio. El hueco no se deja vacío: quien termina de leer
+        estas preguntas ya entendió cómo trabajamos y lo siguiente que quiere
+        es ver qué hemos construido, no cuánto cuesta. */}
+    <p class="reveal mt-8 text-center text-[15px] text-slate-500" style="--reveal-delay:200ms">
+      ¿Quieres ver lo que hemos construido?
+      <a href="/proyectos/" class="font-semibold text-primary">Proyectos en producción →</a>
+    </p>
+  </div>
 </section>
 
 <script>

@@ -3,7 +3,7 @@ import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import WhatsAppFab from '../components/WhatsAppFab.astro';
-import { site, seo, nav } from '../data/site';
+import { site, seo, nav, analitica, fundadores } from '../data/site';
 
 interface PreloadImage {
   href: string;
@@ -15,6 +15,12 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
+  /** Medidas reales de `image`. Las declara la etiqueta og:image:width/height,
+   *  que Facebook, LinkedIn y WhatsApp usan para reservar el hueco de la
+   *  tarjeta antes de descargar la foto. Estaban fijas en 1200x630 —las de
+   *  og-default.jpg—, así que cualquier página que pasara una imagen propia
+   *  mentía sobre su tamaño y la tarjeta salía deformada. */
+  imageSize?: { width: number; height: number };
   noindex?: boolean;
   breadcrumbLabel?: string;
   preloadImages?: PreloadImage[];
@@ -27,16 +33,26 @@ interface Props {
    *  mayor. Vite la detecta incluso dentro de un comentario y trata el texto
    *  que sigue como JavaScript de verdad, lo que tumbaba el servidor. */
   schema?: Record<string, unknown>[];
+  /** Datos del artículo cuando la página es una entrada del blog.
+   *
+   *  Sin esto, las seis entradas se anunciaban en redes y buscadores como
+   *  `og:type="website"`, igual que la portada: nada decía que fueran artículos
+   *  ni cuándo se publicaron. Con `article` y su fecha, Facebook y LinkedIn
+   *  arman la tarjeta de artículo y Google tiene la fecha en un sitio más
+   *  además del JSON-LD. */
+  article?: { publishedTime: string; modifiedTime?: string; section?: string; tags?: readonly string[] };
 }
 
 const {
   title,
   description = seo.description,
   image = seo.ogImage,
+  imageSize = { width: 1200, height: 630 },
   noindex = false,
   breadcrumbLabel,
   preloadImages = [],
   schema = [],
+  article,
 } = Astro.props;
 
 const pageTitle = title ? seo.titleTemplate.replace('%s', title) : seo.defaultTitle;
@@ -49,11 +65,23 @@ const navLabel = (href: string) => nav.find((n) => n.href === href)?.label;
 const titleCase = (s: string) =>
   s.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 
+// `acc` se acumula CON barra final, y eso arregla dos cosas de una:
+//
+//   1. La dirección declarada. Salía "bitwise.pe/servicios" en las 15 páginas,
+//      contra la regla que el propio sitio documenta en site.ts: todas las
+//      direcciones internas llevan barra, porque el canonical la lleva y sin
+//      ella Cloudflare responde una redirección temporal.
+//   2. El nombre de cada miga. `navLabel` busca la ruta dentro de `nav`, y las
+//      del menú están escritas con barra: al comparar "/servicios" contra
+//      "/servicios/" no acertaba nunca, así que ninguna miga usaba jamás su
+//      etiqueta del menú y todas caían en el titleCase de respaldo. Se notaba
+//      poco porque para /servicios el respaldo da "Servicios" igual, pero
+//      cualquier ruta cuya etiqueta no sea su slug capitalizado salía mal.
 const segments = Astro.url.pathname.replace(/\/$/, '').split('/').filter(Boolean);
 const crumbs = [{ name: 'Inicio', url: site.domain + '/' }];
-let acc = '';
+let acc = '/';
 segments.forEach((seg, i) => {
-  acc += '/' + seg;
+  acc += seg + '/';
   const isLast = i === segments.length - 1;
   const name = navLabel(acc) ?? (isLast && breadcrumbLabel ? breadcrumbLabel : titleCase(seg));
   crumbs.push({ name, url: new URL(acc, site.domain).href });
@@ -66,7 +94,7 @@ const graph: Record<string, unknown>[] = [
     '@id': site.domain + '/#org',
     // `name` es la marca —lo que Google enseña— y `legalName` la razón social
     // inscrita. Van separados a propósito: si aquí pusiéramos la razón social,
-    // los resultados de búsqueda dirían "Bitone E.I.R.L." en vez de "Bitwise".
+    // los resultados de búsqueda dirían "Bitone E.I.R.L." en vez de "BIT-ONE".
     name: site.marca,
     legalName: site.razonSocial,
     url: site.domain,
@@ -95,6 +123,53 @@ const graph: Record<string, unknown>[] = [
     parentOrganization: { '@id': site.domain + '/#org' },
     address: { '@type': 'PostalAddress', addressLocality: 'Lima', addressCountry: 'PE' },
     areaServed: { '@type': 'Country', name: 'Perú' },
+    // Los tres campos que Google pide para una ficha de negocio y que faltaban.
+    // Sin teléfono ni horario, el nodo era un LocalBusiness a medias: declaraba
+    // ser un negocio local sin ninguno de los datos que hacen falta para
+    // aparecer como tal.
+    telephone: site.phone,
+    email: site.email,
+    // Sin `priceRange`, a propósito.
+    //
+    // Decía "Desde S/1,500", que era el piso de las páginas web cuando eso era
+    // lo que anunciaba el sitio. Ya no lo es: lo que se vende ahora son
+    // sistemas, y un sistema no tiene precio de entrada publicable. Dejar la
+    // cifra vieja le declararía a Google un rango de precios que ninguna página
+    // del sitio sostiene, que es peor que no declarar nada: el campo es
+    // opcional y Google no penaliza su ausencia.
+    //
+    // Si algún día se publica un piso para los sistemas, vuelve aquí leyéndolo
+    // de una constante, nunca escrito a mano en dos sitios.
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: site.horario.dias,
+        opens: site.horario.abre,
+        closes: site.horario.cierra,
+      },
+    ],
+    // Los fundadores, como personas del grafo y no como texto suelto.
+    //
+    // `founder` es una propiedad real de schema.org y hace un trabajo concreto:
+    // ata la organización a dos perfiles de LinkedIn a través de `sameAs`. Para
+    // Google, una empresa nueva sin historial de enlaces es una entidad difícil
+    // de creer; dos personas identificables detrás es de las señales más
+    // baratas que existen para sostenerla.
+    //
+    // Va aquí, en el layout, y no solo en /nosotros/, porque el nodo de la
+    // organización se emite en las 17 páginas y se referencia por @id desde
+    // todas: si los fundadores vivieran solo en una, el resto del sitio
+    // apuntaría a una organización a medio describir.
+    // Sin `alumniOf` ni `knowsAbout`. Declaraban la carrera y la universidad de
+    // los fundadores, y eso salió de la página: un dato estructurado tiene que
+    // representar contenido visible, así que declararlo cuando ya no se enseña
+    // en ningún sitio es justo lo que Google marca como marcado engañoso.
+    founder: fundadores.map((f) => ({
+      '@type': 'Person',
+      name: f.nombre,
+      jobTitle: f.rol,
+      sameAs: f.linkedin,
+    })),
     knowsAbout: seo.topics,
     sameAs: Object.values(site.socials),
   },
@@ -144,20 +219,35 @@ const jsonLd = { '@context': 'https://schema.org', '@graph': graph };
         nuestra estrategia de keywords a cualquiera que abriera el código. */}
     <meta name="author" content={site.marca} />
     <meta name="google-site-verification" content={seo.googleSiteVerification} />
-    {noindex ? <meta name="robots" content="noindex, nofollow" /> : <meta name="robots" content="index, follow" />}
+    {/* `noindex, follow` y no `noindex, nofollow`.
+        La diferencia importa: nofollow le dice a Google que no siga ninguno de
+        los enlaces de la página, así que una entrada de blog apartada del
+        índice dejaría además de pasar autoridad a /servicios/ y /proyectos/,
+        que es justo lo que queremos que siga haciendo. Lo que se pide es que la
+        página no compita en resultados, no que se aísle del sitio. */}
+    {noindex ? <meta name="robots" content="noindex, follow" /> : <meta name="robots" content="index, follow" />}
     <meta name="theme-color" content="#0f172a" />
 
     <!-- Open Graph -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
     <meta property="og:site_name" content={site.name} />
     <meta property="og:locale" content="es_PE" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image:width" content={String(imageSize.width)} />
+    <meta property="og:image:height" content={String(imageSize.height)} />
     <meta property="og:image:alt" content={pageTitle} />
+    {article && (
+      <>
+        <meta property="article:published_time" content={article.publishedTime} />
+        <meta property="article:modified_time" content={article.modifiedTime ?? article.publishedTime} />
+        <meta property="article:publisher" content={site.domain} />
+        {article.section && <meta property="article:section" content={article.section} />}
+        {(article.tags ?? []).map((t) => <meta property="article:tag" content={t} />)}
+      </>
+    )}
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -166,15 +256,46 @@ const jsonLd = { '@context': 'https://schema.org', '@graph': graph };
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={pageTitle} />
 
-    <!-- Fuentes -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Fuentes. Se sirven desde este mismo dominio: ya no hay hoja de estilos
+         de Google Fonts ni los dos preconnect que hacían falta para alcanzarla.
+         Ver el bloque de @font-face al principio de src/styles/global.css.
+
+         Se adelantan solo dos archivos, los que pinta cualquier página en el
+         primer pantallazo: el titular y el texto corriente. Los otros seis
+         pesos los pide el navegador cuando los necesita. Adelantarlos todos
+         sería competir con la imagen grande por el mismo ancho de banda. -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/space-grotesk-700.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/plus-jakarta-sans-400.woff2" crossorigin />
 
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    {/* Analítica. Todo este bloque desaparece del HTML mientras `analitica.ga4`
+        esté vacío: no es un script apagado, es que no se escribe. Ver el porqué
+        y cómo encenderlo en `analitica` (src/data/site.ts). */}
+    {analitica.ga4 && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${analitica.ga4}`}></script>
+        <script is:inline define:vars={{ ga4: analitica.ga4 }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { window.dataLayer.push(arguments); }
+          window.gtag = gtag;
+          gtag('js', new Date());
+          gtag('config', ga4);
+
+          // Las dos conversiones del sitio. Se enganchan en el documento y no
+          // en cada botón: los enlaces a WhatsApp están repartidos por el
+          // navegador, el pie, las tarjetas y el botón flotante, y así ninguno
+          // se queda sin medir cuando se agregue el siguiente.
+          addEventListener('click', (e) => {
+            const a = e.target.closest('a[href*="wa.me"]');
+            if (a) gtag('event', 'clic_whatsapp', { pagina: location.pathname });
+          });
+          addEventListener('submit', () => {
+            gtag('event', 'envio_formulario', { pagina: location.pathname });
+          }, true);
+        </script>
+      </>
+    )}
   </head>
   <body>
     <Navbar />

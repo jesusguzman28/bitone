@@ -1,16 +1,20 @@
 ---
 import { homeStats } from '../data/site';
-import { entregaMinimaDias } from '../data/rubros';
 
-// La "entrega mínima" sale del plazo más corto de los 12 rubros, no de un 7
-// escrito a mano en site.ts. Antes venía de cuando bodegas entregaba en 7 días:
-// seguía siendo cierto por casualidad, no por construcción.
-const stats = homeStats.map((s) =>
-  s.derivado === 'entregaMinima' ? { ...s, n: entregaMinimaDias } : s,
-);
+// El campo `derivado` de cada cifra sobrevive aunque ahora ninguna lo use.
+//
+// Servía para una sola cosa: la "entrega mínima" salía del plazo más corto de
+// las 12 landings de rubro en vez de estar escrita a mano, así no podía quedar
+// vieja. Esas landings ya no existen y esa cifra tampoco, pero el mecanismo se
+// queda porque el problema que resolvía sigue vigente: cualquier número que se
+// pueda calcular a partir de los datos reales debe calcularse, no escribirse.
+//
+// Para volver a usarlo: se le pone a la cifra `derivado: 'loQueSea'` en
+// site.ts y aquí se añade la rama que lo resuelve.
+const stats = homeStats;
 ---
 
-<section class="surface px-6 py-14" aria-label="Cifras de Bitwise">
+<section class="surface px-6 py-14" aria-label="Cifras de BIT-ONE">
   <div
     class="reveal mx-auto grid w-full max-w-[1120px] gap-4 rounded-[28px] px-[clamp(20px,4vw,44px)] py-[34px]"
     style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));background:linear-gradient(135deg,#151b29,#0e1521);box-shadow:0 30px 60px -30px rgba(14,21,33,0.6)"

@@ -35,7 +35,7 @@ const pista = Array.from({ length: REPETICIONES }, () => marcas).flat();
   </svg>
 
   <p class="relative m-0 px-6 text-center text-[11px] font-bold uppercase tracking-[0.24em] text-slate-500">
-    Las empresas que ya confiaron en nosotros
+    Software que construimos y está en producción
   </p>
 
   <div class="mb-wrap relative mt-9">
@@ -56,9 +56,9 @@ const pista = Array.from({ length: REPETICIONES }, () => marcas).flat();
              renderiza el string vacío como un atributo `alt` suelto, sin valor,
              y los auditores lo cuentan como imagen sin alt. */
           primeraVuelta ? (
-            <img src={m.logo} alt={m.alt} loading="lazy" class="mb-mark h-12 w-12 rounded-[12px] object-cover" />
+            <img src={m.logo} alt={m.alt} width="48" height="48" loading="lazy" decoding="async" class="mb-mark h-12 w-12 rounded-[12px] object-cover" />
           ) : (
-            <img src={m.logo} alt="" aria-hidden="true" loading="lazy" class="mb-mark h-12 w-12 rounded-[12px] object-cover" />
+            <img src={m.logo} alt="" aria-hidden="true" width="48" height="48" loading="lazy" decoding="async" class="mb-mark h-12 w-12 rounded-[12px] object-cover" />
           )
         ) : (
           <>

@@ -29,16 +29,20 @@ import { fileURLToPath } from 'node:url';
 
 // Rutas que siempre tienen que existir y responder. Si se agrega una página
 // importante al sitio, va aquí.
+// Las tres últimas eran /cuanto-cuesta-una-pagina-web-en-peru/ y dos landings
+// de rubro. Se borraron con el cambio a fábrica de software y sus direcciones
+// viven ahora en public/_redirects como 301 hacia /servicios/.
 const RUTAS = [
   '/',
   '/servicios/',
+  '/servicios/desarrollo-de-software-a-medida/',
+  '/servicios/mantenimiento-de-software/',
+  '/servicios/apps-moviles/',
+  '/metodologia/',
   '/proyectos/',
   '/nosotros/',
   '/contacto/',
   '/blog/',
-  '/cuanto-cuesta-una-pagina-web-en-peru/',
-  '/paginas-web-para-pollerias/',
-  '/paginas-web-para-bodegas/',
 ];
 
 // Frases que delatan un problema aunque el proceso siga vivo.
@@ -122,6 +126,60 @@ try {
                 : bien('ninguna página quedó vacía');
   sinTitulo.length ? mal(`páginas sin título: ${sinTitulo.join(', ')}`)
                    : bien('todas tienen título');
+
+  // ---- Revisiones de SEO ----
+  //
+  // Todas nacen de un problema que ya estuvo publicado en bitwise.pe, no de una
+  // lista de buenas prácticas copiada de algún sitio. Se comprueban aquí porque
+  // ninguna rompe la compilación: el sitio se ve perfecto y el daño solo
+  // aparece semanas después en los resultados de búsqueda.
+  const LIMITE_TITULO = 65;      // a partir de aquí Google corta el título
+  const LIMITE_DESC = 160;       // y aquí, la descripción
+  const largos = [];
+  const descLargas = [];
+  const sinDesc = [];
+  const sinBarra = new Map();
+  const h1Malos = [];
+
+  for (const h of htmls) {
+    const c = await readFile(h, 'utf8');
+    const rel = h.slice(dist.length).replace(/\\/g, '/').replace(/index\.html$/, '');
+
+    const titulo = c.match(/<title>([^<]*)<\/title>/)?.[1] ?? '';
+    if (titulo.length > LIMITE_TITULO) largos.push(`${rel} (${titulo.length})`);
+
+    const desc = c.match(/<meta name="description" content="([^"]*)"/)?.[1];
+    if (!desc) sinDesc.push(rel);
+    else if (desc.length > LIMITE_DESC) descLargas.push(`${rel} (${desc.length})`);
+
+    // Exactamente un H1 por página: cero deja a Google sin el titular, y dos o
+    // más le hacen elegir cuál manda.
+    const h1 = c.match(/<h1[\s>]/g)?.length ?? 0;
+    if (h1 !== 1) h1Malos.push(`${rel} (${h1})`);
+
+    // Enlaces internos sin barra final. Cada uno se sirve con un 307 —una
+    // redirección temporal— hacia la versión con barra, que es la que declara
+    // el canonical. Google no consolida señales a través de un 307 y cada
+    // rastreo cuesta dos peticiones. Ver la nota en src/data/site.ts.
+    for (const href of c.matchAll(/<a[^>]+href="(\/[^"]*)"/g)) {
+      const ruta = href[1].split('#')[0].split('?')[0];
+      const ultimo = ruta.split('/').pop() ?? '';
+      if (ruta && !ruta.endsWith('/') && !ultimo.includes('.')) {
+        sinBarra.set(ruta, (sinBarra.get(ruta) ?? 0) + 1);
+      }
+    }
+  }
+
+  largos.length ? mal(`títulos que Google va a cortar (>${LIMITE_TITULO}): ${largos.join(', ')}`)
+                : bien(`ningún título pasa de ${LIMITE_TITULO} caracteres`);
+  sinDesc.length ? mal(`páginas sin descripción: ${sinDesc.join(', ')}`)
+                 : bien('todas tienen descripción');
+  descLargas.length ? mal(`descripciones que Google va a cortar (>${LIMITE_DESC}): ${descLargas.join(', ')}`)
+                    : bien(`ninguna descripción pasa de ${LIMITE_DESC} caracteres`);
+  h1Malos.length ? mal(`páginas que no tienen exactamente un H1: ${h1Malos.join(', ')}`)
+                 : bien('todas tienen exactamente un H1');
+  sinBarra.size ? mal(`enlaces internos sin barra final (se sirven con 307): ${[...sinBarra.keys()].join(', ')}`)
+                : bien('todos los enlaces internos llevan barra final');
 
   // Las redirecciones y las reglas de cabeceras solo funcionan si los archivos
   // llegan a dist. Es fácil que se queden en public y nadie lo note.

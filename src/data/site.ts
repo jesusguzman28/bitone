@@ -2,19 +2,24 @@
 // Contenido alineado con el rediseño 2026.
 
 export const site = {
-  name: 'Bitwise',
+  name: 'BIT-ONE',
   // Nombre comercial: el que la gente conoce y el que se enseña en pantalla.
-  // Antes este campo se llamaba `legalName` y decía "Bitwise Perú", que no es el
-  // nombre legal de nada: la empresa registrada es Bitone E.I.R.L. Se separaron
-  // porque son cosas distintas y Google las lee por separado —`name` es la marca
-  // y `legalName` la razón social—; tenerlas mezcladas hacía que el sitio
-  // declarara como razón social una marca que no está inscrita así.
-  marca: 'Bitwise Perú',
+  //
+  // La marca pasó de "Bitwise" a "BIT-ONE" para que se parezca a la empresa que
+  // factura, Bitone E.I.R.L. Aun así marca y razón social siguen en campos
+  // distintos, y eso no es repetición: Google las lee por separado —`name` es la
+  // marca y `legalName` la razón social—, y tenerlas mezcladas hacía que el
+  // sitio declarara como razón social un nombre que no está inscrito así.
+  marca: 'BIT-ONE Perú',
   // Razón social y RUC de la empresa que factura.
   razonSocial: 'Bitone E.I.R.L.',
   domain: 'https://bitwise.pe',
   whatsapp: '51945574190',
-  whatsappMsg: 'Hola Bitwise 👋 quiero una cotización para mi negocio',
+  // Es el mensaje que se autocompleta desde el menú y desde el botón flotante
+  // en las 15 páginas, así que fija el tono de la primera frase que escribe
+  // todo el mundo. Decía "quiero una cotización para mi negocio", que es lo que
+  // escribe un dueño de bodega, no un área de sistemas.
+  whatsappMsg: 'Hola BIT-ONE, quiero conversar un proyecto de desarrollo',
   // El correo sale en el pie, en /contacto y en el JSON-LD que lee Google.
   //
   // Está en un Gmail personal y conviene cambiarlo por uno del dominio. El sitio
@@ -37,12 +42,33 @@ export const site = {
   // dígitos, empieza en 20 (persona jurídica) y el verificador cuadra.
   ruc: '20615736261',
   city: 'Lima, Perú',
+  // Horario en texto, tal como se lee en el pie y en /contacto.
   hours: 'Lun – Sáb: 9:00 – 19:00',
+  // El mismo horario en la forma que entiende Google (openingHoursSpecification
+  // del JSON-LD). Van los dos porque uno es para personas y el otro para
+  // máquinas, y ninguno de los dos formatos sirve para lo del otro. Si cambia
+  // el horario, se cambian ambos: el de arriba es lo que se ve, este es lo que
+  // Google usa para decir "abierto ahora" en los resultados.
+  horario: {
+    dias: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    abre: '09:00',
+    cierra: '19:00',
+  },
+  // El orden importa y por eso cambió: es el orden en que se dibujan los iconos
+  // en el pie y el orden del `sameAs` que lee Google para saber qué perfiles son
+  // de esta organización. LinkedIn iba último, empatado con TikTok; en una venta
+  // a empresas es el único de los cuatro donde está el comprador, así que va
+  // primero.
+  //
+  // PENDIENTE: Instagram y TikTok siguen bajo el usuario `bitwise_peru`, de la
+  // marca anterior. Mientras no se renombren, el `sameAs` le está diciendo a
+  // Google que BIT-ONE y Bitwise son la misma entidad, lo cual es cierto pero
+  // se ve descuidado en la ficha.
   socials: {
+    linkedin: 'https://linkedin.com/company/bitwise-peru-oficial',
     facebook: 'https://www.facebook.com/share/1E74K2gsDA/?mibextid=wwXIfr',
     instagram: 'https://www.instagram.com/bitwise_peru',
     tiktok: 'https://www.tiktok.com/@bitwise_peru',
-    linkedin: 'https://linkedin.com/company/bitwise-peru-oficial',
   },
 } as const;
 
@@ -74,22 +100,56 @@ export const formulario = {
   accessKey: '',
 } as const;
 
+// Medición del sitio.
+//
+// Hasta ahora no había ninguna: solo el token de verificación de Search
+// Console, que dice qué búsquedas traen visitas pero no qué hace la gente al
+// llegar. No se sabía cuántos abren WhatsApp, cuántos llenan el formulario ni
+// desde qué página. Sin eso, cualquier decisión de SEO se toma a ciegas.
+//
+// Está vacío a propósito, igual que `formulario`. Mientras `ga4` sea una
+// cadena vacía NO se carga ningún script: el sitio sigue sin JavaScript de
+// terceros y sin ninguna petición fuera del dominio, que es de donde sale
+// buena parte de su velocidad.
+//
+// Para activarlo:
+//   1. Crea una propiedad en analytics.google.com y copia el identificador de
+//      medición. Tiene la forma G-XXXXXXXXXX.
+//   2. Pégalo aquí abajo.
+//   3. IMPORTANTE — abre public/_headers y descomenta las dos líneas marcadas
+//      "Google Analytics" dentro del Content-Security-Policy. Sin eso el
+//      navegador bloquea el script y no se mide nada, sin ningún aviso visible.
+//
+// Además de las visitas, BaseLayout marca solo las dos conversiones reales del
+// sitio: `clic_whatsapp` (cualquier enlace a wa.me, en cualquier página) y
+// `envio_formulario`. No se mide nada más: llenar el panel de eventos que nadie
+// va a mirar solo hace más difícil encontrar los dos que importan.
+export const analitica = {
+  ga4: '',
+} as const;
+
 export const seo = {
-  defaultTitle: 'Páginas web, tiendas online y ERPs para MYPEs | Bitwise Perú',
-  titleTemplate: '%s | Bitwise',
+  defaultTitle: 'Empresa de desarrollo de software en Perú | BIT-ONE',
+  titleTemplate: '%s | BIT-ONE',
+  // Máximo 160 caracteres: pasado ese punto Google la corta con puntos
+  // suspensivos y la última frase se pierde. Vale para esta y para la
+  // `description` de cualquier página; `npm run verificar` lo comprueba en las
+  // 30 antes de dejar desplegar.
   description:
-    'Páginas web desde S/1,500 con dominio y hosting incluidos, tiendas online desde S/3,000 y sistemas a medida para negocios peruanos. Factura SUNAT y WhatsApp directo.',
+    'Empresa de desarrollo de software en Perú: sistemas a medida, apps móviles y mantenimiento. Alcance y precio por escrito, y el código queda a tu nombre.',
   // Temas reales sobre los que trabaja la empresa. Alimentan `knowsAbout` del
   // JSON-LD: son materias de servicio, NO variantes de búsqueda. Las frases
   // tipo "página web barata" son consultas de usuario y no describen a la
   // organización; ahí no van.
   topics: [
-    'Desarrollo web',
-    'Comercio electrónico',
+    'Empresa de desarrollo de software',
+    'Desarrollo de software a medida',
+    'Fábrica de software',
+    'Mantenimiento de sistemas heredados',
     'Sistemas ERP',
+    'Integración de sistemas',
     'Integración con SUNAT',
     'Aplicaciones móviles',
-    'Chatbots con inteligencia artificial',
   ],
   ogImage: '/og-default.jpg',
   // Token de verificación de propiedad en Google Search Console. Vive aquí y
@@ -98,100 +158,156 @@ export const seo = {
   googleSiteVerification: 'pT4-z8d9zSfJdwsOV5p3xuh2UtFTyJATXcMhuTNKEZI',
 } as const;
 
-// Piso de precio anunciado en toda la comunicación: "desde S/1,500 + IGV".
-// Solo es cierto si ningún servicio ni rubro cotiza por debajo. Cualquier
-// precio del sitio se valida contra esta constante.
-export const PRECIO_PISO = 1500;
+// Aquí vivía PRECIO_PISO = 1500, el piso que anunciaba todo el sitio cuando
+// vendía páginas web. Se fue con ellas: ya no hay ninguna cifra publicada
+// contra la que validar, y una constante que nadie lee es una invitación a que
+// alguien la vuelva a usar por error.
 
 export const waLink = (msg: string = site.whatsappMsg) =>
   `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(msg)}`;
 
+// Todas las direcciones internas del sitio se escriben CON barra final.
+//
+// No es un detalle de estilo. El sitio se compila con `build.format: 'directory'`
+// —cada página es una carpeta con su index.html— y el canonical de cada una
+// declara la barra: https://bitwise.pe/servicios/. Cuando un enlace apuntaba a
+// /servicios, Cloudflare respondía 307 —una redirección TEMPORAL— hacia la
+// versión con barra. Un 307 le dice a Google "esta dirección es la buena, la
+// otra es un desvío pasajero", así que no consolidaba las señales en la
+// definitiva y cada rastreo costaba dos peticiones. Todos los enlaces internos
+// del sitio salían así.
+//
+// Regla: si escribes un href interno en cualquier archivo, termínalo en barra.
+// El menú tiene seis sitios y todos cuestan: cada uno que se añade le quita
+// atención a los demás. Por eso "Blog" salió y entró "Metodología".
+//
+// El blog está apartado del índice de Google mientras su contenido sea del
+// negocio anterior (ver blog/index.astro), así que darle un puesto en el menú
+// principal era mandar visitas a lo único que el sitio pide a Google que no
+// tenga en cuenta. Sigue enlazado desde el pie.
+//
+// Metodología ocupa su lugar porque responde la pregunta que decide esta venta
+// —"¿y si esto se va de las manos?"— y porque es la página que un comprador
+// necesita para justificar la contratación dentro de su propia empresa.
 export const nav = [
   { label: 'Inicio', href: '/' },
-  { label: 'Servicios', href: '/servicios' },
-  { label: 'Proyectos', href: '/proyectos' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'Nosotros', href: '/nosotros' },
-  { label: 'Contacto', href: '/contacto' },
+  { label: 'Servicios', href: '/servicios/' },
+  { label: 'Metodología', href: '/metodologia/' },
+  { label: 'Proyectos', href: '/proyectos/' },
+  { label: 'Nosotros', href: '/nosotros/' },
+  { label: 'Contacto', href: '/contacto/' },
 ] as const;
 
 // ---- Hero (home) ----
 export const hero = {
-  eyebrow: 'Hecho en Perú',
   // Arranque fijo del titular, en grande. Lleva la keyword principal y no se
   // anima: es lo que leen Google y los buscadores con IA, que no ejecutan
   // JavaScript. Un H1 pintado por JavaScript equivale a una página sin título.
-  h1: 'Páginas web y tiendas online',
+  h1: 'Empresa de desarrollo de software',
   // El final del titular, también en grande, y esto sí se escribe y se borra.
   //
   // Las tres frases completan la línea de arriba, así que se leen seguidas:
-  // "Páginas web y tiendas online / para MYPEs en Perú". Son cortas a propósito:
-  // a este tamaño de letra, una frase larga ocupa cuatro renglones en un celular
-  // y empuja el botón y los precios fuera de la pantalla.
+  // "Fábrica de software / para empresas en Perú". Son cortas a propósito: a
+  // este tamaño de letra, una frase larga ocupa cuatro renglones en un celular
+  // y empuja el botón fuera de la pantalla.
   //
   // El orden importa. La primera es la que lleva la keyword y es la que se pinta
   // en el HTML servido, así que el titular que lee Google sigue diciendo
-  // exactamente "Páginas web y tiendas online para MYPEs en Perú" aunque el
-  // JavaScript no llegue a correr. Las otras dos son el adorno.
+  // exactamente "Fábrica de software para empresas en Perú" aunque el JavaScript
+  // no llegue a correr. Las otras dos son el adorno.
   //
-  // Cada una afirma algo que el sitio ya sostiene por escrito en otra página
-  // —plazo de entrega, pasarelas peruanas—; nada de promesas genéricas que
-  // después no se puedan respaldar en la cotización.
-  // Las tres miden lo mismo (27 caracteres) y eso no es casualidad: completan la
-  // misma línea de arriba, así que si una fuera más corta el titular ocuparía un
-  // renglón menos y el bloque se vería encogido cada vez que le tocara el turno.
-  // Con largos parejos, el titular corta igual siempre. Al cambiar una frase hay
-  // que mantenerle el largo.
+  // Las tres miden parecido (22-26 caracteres) y eso no es casualidad: completan
+  // la misma línea de arriba, así que si una fuera mucho más larga el titular
+  // ocuparía un renglón más y el bloque saltaría cada vez que le tocara el
+  // turno. Al cambiar una frase hay que mantenerle el largo.
   //
   // Ninguna promete un plazo. Hubo una que decía "listas en semanas, no meses" y
   // se quitó: un proyecto grande puede tomar meses de verdad, y una frase así en
-  // el titular se convierte en un reclamo el día que no se cumple. Los plazos
-  // están en /servicios, donde van por servicio y con su rango. Aquí solo van
-  // hechos que se cumplen siempre, sin depender del tamaño del encargo.
+  // el titular se convierte en un reclamo el día que no se cumple.
+  //
+  // Ninguna afirma tampoco trayectoria, tamaño de equipo ni cartera de clientes.
+  // No es modestia: todavía no hay ventas, así que cualquier cifra de ese tipo
+  // sería inventada, y en una venta B2B esa es justo la afirmación que el
+  // cliente verifica. Las dos últimas frases son compromisos contractuales
+  // —alcance por escrito, código a tu nombre—, que se cumplen desde el primer
+  // proyecto y no dependen de tener historia.
   typed: [
-    'para MYPEs en todo el Perú.',
-    'con el dominio a tu nombre.',
-    'que cobran por Yape y Plin.',
+    'en Perú, para empresas.',
+    'con alcance por escrito.',
+    'con el código a tu nombre.',
   ],
   pills: [
-    { label: 'Rápidas', color: '#f59e0b', icon: '<path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>' },
-    { label: 'Precio justo', color: '#22c55e', icon: '<circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8M12 18V6"/>' },
-    { label: 'Profesionales', color: '#818cf8', icon: '<path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/>' },
+    // Decía "Rápidas", en femenino, porque el titular hablaba de páginas web.
+    // Ahora el sujeto son los sistemas, así que la concordancia se rompía. Y de
+    // paso cambia lo que se promete: "rápido" no es lo que distingue a un
+    // sistema —los grandes tardan meses—, sino que se arme para cómo trabajas
+    // tú. El icono pasa de rayo a controles deslizantes por lo mismo.
+    { label: 'A tu medida', color: '#f59e0b', icon: '<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>' },
+    // "Precio justo" y "Profesionales" hablaban a un dueño de MYPE que teme que
+    // le cobren de más. Un gerente de sistemas no teme eso: teme que el alcance
+    // se le desborde y quedarse con un sistema que nadie sabe mantener. Las dos
+    // pastillas de ahora responden esos dos miedos, y las dos son cosas que se
+    // firman, no cualidades que uno se atribuye solo.
+    { label: 'Precio cerrado', color: '#22c55e', icon: '<circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8M12 18V6"/>' },
+    { label: 'Código documentado', color: '#818cf8', icon: '<path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/>' },
   ],
   // `label` es la etiqueta visible del carrusel; `alt` describe lo que se ve en
   // la foto para lectores de pantalla y para Google Imágenes.
+  //
+  // Las etiquetas decían "Página web", "Aplicaciones móviles" y "Tienda
+  // virtual": los tres productos del negocio anterior, dos de los cuales ya no
+  // se venden. Se leían encima del titular que dice "Empresa de desarrollo de
+  // software" y encima de las tres tarjetas de servicios, así que la portada
+  // ofrecía dos cosas distintas en la misma pantalla.
+  //
+  // Ahora son las mismas tres de `serviciosHome` y en el mismo orden, para que
+  // el carrusel, las tarjetas y la lista de /contacto nombren lo mismo. El
+  // orden de las fotos cambió con ellas: la del celular pasó al final para
+  // quedar debajo de "Apps móviles", que es la única de las tres etiquetas que
+  // su foto muestra de verdad. La primera sigue siendo `uno`, que es la que
+  // index.astro precarga.
+  //
+  // PENDIENTE, y es lo que la etiqueta sola no arregla: las tres fotos son
+  // maquetas del negocio anterior —una web de artesanía, una app de compras y
+  // un catálogo con botón "Añadir al carrito"—. Con las etiquetas nuevas,
+  // "Proyecto a medida" y "Mantener un sistema" salen escritas sobre una tienda
+  // en pantalla. Hacen falta tres fotos de un sistema de operación: un panel
+  // con datos, no un escaparate.
   slides: [
     {
       src: '/hero/uno.webp',
       msrc: '/hero/celular/uno.webp',
-      label: 'Página web',
-      alt: 'Página web de una tienda de artesanía peruana abierta en un iMac sobre un escritorio de madera',
-    },
-    {
-      src: '/hero/dos.webp',
-      msrc: '/hero/celular/dos.webp',
-      label: 'Aplicaciones móviles',
-      alt: 'App móvil de una tienda de accesorios mostrando un producto con su precio en soles, sostenida en la mano',
+      label: 'Proyecto a medida',
+      alt: 'Pantalla de un iMac sobre un escritorio de madera con la portada de una tienda de artesanía peruana',
     },
     {
       src: '/hero/tres.webp',
       msrc: '/hero/celular/tres.webp',
-      label: 'Tienda virtual',
-      alt: 'Tienda virtual con catálogo de textiles peruanos, filtros y botones de añadir al carrito, abierta en una laptop',
+      label: 'Mantener un sistema',
+      alt: 'Laptop sobre un escritorio de madera con un catálogo de textiles peruanos, sus filtros y sus precios en soles',
+    },
+    {
+      src: '/hero/dos.webp',
+      msrc: '/hero/celular/dos.webp',
+      label: 'Apps móviles',
+      alt: 'App móvil de una tienda de accesorios mostrando un producto con su precio en soles, sostenida en la mano',
     },
   ],
 } as const;
 
-// ---- Tira de precios del hero ----
-// Los dos puntos de entrada del catálogo, que son las dos preguntas con las que
-// llega todo el mundo: "cuánto cuesta una web" y "cuánto cuesta vender online".
-// Van con "Desde" delante porque son pisos, no precios cerrados: la cotización
-// real sube según el alcance, y prometer una cifra exacta aquí obliga después a
-// explicar por qué subió.
+// ---- Tira de hechos del hero ----
+// Aquí iban dos precios: "Páginas web desde S/1,500" y "Tiendas online desde
+// S/3,000". Se fueron con el cambio de negocio, y no por gusto: un sistema no
+// tiene precio de entrada publicable. Uno para un taller de dos mecánicos y uno
+// para una distribuidora con tres almacenes no se parecen, así que cualquier
+// cifra aquí obligaría después a explicar por qué subió. Es la misma razón por
+// la que /servicios/erp-sistemas/ nunca publicó una.
 //
-// `S/1,500` tiene que coincidir con PRECIO_PISO. Si algún día se mueve el piso,
-// se mueven los dos: el guardia de rubros.ts valida los rubros contra la
-// constante, pero no puede ver este texto.
+// Lo que ocupa su lugar no es relleno: son las dos cosas que bajan el miedo a
+// escribir cuando no hay precio a la vista. Que la primera visita no se cobra
+// —o sea, preguntar no compromete a nada— y que el sistema se arma por partes
+// —o sea, no hay que pagarlo todo de golpe—. Las dos se sostienen por escrito
+// en la página de cada rubro y en la de sistemas a medida.
 //
 // Cada tarjeta lleva su color, y el color va aquí y no suelto en la plantilla
 // para que la cifra, el borde y el fondo no puedan quedar de tonos distintos.
@@ -207,18 +323,18 @@ export const hero = {
 // la misma tarjeta se leyera distinta según el aparato. Aquí la tarjeta responde
 // una sola pregunta —cuánto cuesta empezar—; el "+ IGV" y todo lo que incluye
 // están en las tarjetas de /servicios, que es donde se va a comparar de verdad.
-export const heroPrecios = [
+export const heroHechos = [
   {
-    k: 'Páginas web',
-    v: 'S/1,500',
+    k: 'Primera reunión',
+    v: 'Sin costo',
     de: '#60a5fa',
     a: '#22d3ee',
     tinte: 'rgba(56,132,246,0.13)',
     borde: 'rgba(96,165,250,0.32)',
   },
   {
-    k: 'Tiendas online',
-    v: 'S/3,000',
+    k: 'Alcance y precio',
+    v: 'Por escrito',
     de: '#c084fc',
     a: '#8b7bf7',
     tinte: 'rgba(139,92,246,0.15)',
@@ -229,68 +345,111 @@ export const heroPrecios = [
 // ---- Contadores animados (home) ----
 // `derivado` marca las cifras que NO se escriben aquí: las calcula el
 // componente a partir de los datos reales para que no puedan quedar viejas.
+//
+// La primera cifra era "Entrega mínima: 7 días", calculada a partir del plazo
+// más corto de las 12 landings web. Ya no aplica: un sistema no se entrega en
+// una fecha, se entrega por partes, y publicar un plazo mínimo aquí sería
+// prometer justo lo que /servicios dice que no se puede prometer. La reemplaza
+// el compromiso de cotización, que sí se cumple siempre y ya está por escrito
+// en la comparativa de /servicios y en las expectativas de /contacto.
+//
+// El mecanismo de `derivado` se queda en Stats.astro aunque ahora ninguna cifra
+// lo use: el día que vuelva a haber un número calculado, está listo.
 export const homeStats = [
-  { n: 7, suffix: 'días', k: 'Entrega mínima', derivado: 'entregaMinima' },
-  { n: 2, prefix: '<', suffix: 'horas', k: 'Respuesta WhatsApp', derivado: null },
+  { n: 24, suffix: 'horas', k: 'Cotización por escrito', derivado: null },
+  // Decía "Respuesta WhatsApp < 2 horas". Es cierto y era un gran argumento
+  // frente a una agencia que no contesta, pero presumir velocidad de WhatsApp
+  // ante una empresa refuerza justo la impresión que hay que evitar: que
+  // detrás hay una persona con el celular en la mano. La cifra se queda —la
+  // respuesta rápida sigue siendo verdad— pero medida como se mide en B2B.
+  { n: 2, prefix: '<', suffix: 'horas', k: 'Primera respuesta', derivado: null },
   { n: 30, suffix: 'días', k: 'Garantía post-entrega', derivado: null },
-  { n: 100, suffix: '%', tight: true, k: 'Código y dominio tuyos', derivado: null },
+  { n: 100, suffix: '%', tight: true, k: 'Código y datos tuyos', derivado: null },
 ] as const;
 
 // ---- Servicios destacados (home) ----
+//
+// `href` apunta a la página propia del servicio, no al ancla de /servicios.
+// Antes decía '/servicios#web': un ancla no es una dirección, así que la
+// portada —la página con más autoridad del sitio— no le pasaba nada a
+// /servicios/pagina-web/, /servicios/tienda-online/ ni /servicios/erp-sistemas/.
+// Esas tres recibían UN solo enlace interno en todo el sitio, mientras cada
+// landing de rubro recibía entre cinco y trece. Y son justo las páginas que
+// compiten por "página web profesional Perú" y "tienda online Perú".
+// Las tres tarjetas ya no son tipos de producto —web, tienda, sistema— sino
+// las tres formas de contratar a una fábrica de software. Es el cambio que pide
+// el cliente nuevo: un gerente de sistemas no elige entre "web" y "app", elige
+// entre encargar un proyecto cerrado, sumar gente a su equipo o soltarle a
+// alguien un sistema que ya existe y nadie quiere tocar.
+//
+// La tarjeta destacada llevaba el rótulo "Más pedido" cuando arriba estaba la
+// tienda online. Se quitó y conviene dejar dicho por qué, para que no vuelva:
+// era falso. Sin ventas todavía, nada puede ser "lo más pedido". El rótulo de
+// ahora dice a qué le dedicamos el tiempo, que es una afirmación sobre nosotros
+// y no sobre una demanda que no existe.
+//
+// Las tres tarjetas enlazan a su página propia. Durante un rato "equipo
+// dedicado" y "mantener un sistema" apuntaron a /contacto/ porque no existían:
+// eso significaba que dos de los tres servicios eran invisibles para Google y
+// no se podían explicar a nadie antes de escribir. Ya están escritas.
 export const serviciosHome = [
   {
-    tag: 'Página web profesional',
-    time: '2 a 4 semanas',
-    desc: 'Rápida, lista para salir en Google y con los textos en tus manos. Dominio y hosting del primer año incluidos.',
-    price: 'S/1,500',
-    priceLabel: 'Desde',
-    priceNote: ' + IGV',
-    href: '/servicios#web',
-    featured: false,
-    iconName: 'www',
-    iconColor: '#D91023',
-    features: [
-      'Se ve bien en el celular',
-      'Cambias textos y fotos tú mismo',
-      'Preparada para salir en Google',
-      'Botón de WhatsApp',
-    ],
-  },
-  {
-    tag: 'Tienda online',
-    time: '4 a 6 semanas',
-    desc: 'Tu cliente elige, paga y tú recibes el pedido listo, a cualquier hora. Dominio y hosting incluidos.',
-    price: 'S/3,000',
-    priceLabel: 'Desde',
-    priceNote: '',
-    href: '/servicios#tienda',
-    featured: true,
-    badge: 'Más pedido',
-    iconName: 'carrito',
-    iconColor: '#E8A317',
-    features: [
-      'Cobras por Yape, Plin y tarjeta',
-      'Catálogo y control de stock',
-      'Pedidos por WhatsApp',
-      'Boleta y factura SUNAT',
-    ],
-  },
-  {
-    tag: 'ERPs y sistemas a medida',
-    time: 'Según el tamaño',
-    desc: 'Para llevar ventas, stock y caja sin cuadernos ni Excel. Hecho a la medida de tu negocio.',
+    tag: 'Proyecto a medida',
+    time: 'Según el alcance',
+    desc: 'Nos encargas el sistema completo, con alcance y precio cerrados antes de escribir una línea de código.',
     price: 'A consultar',
     priceLabel: 'Precio',
-    priceNote: '',
-    href: '/servicios#erp',
-    featured: false,
+    priceNote: 'Según alcance',
+    href: '/servicios/desarrollo-de-software-a-medida/',
+    featured: true,
+    badge: 'Lo principal',
     iconName: 'tuerca',
     iconColor: '#6366f1',
     features: [
-      'Control de ventas, stock y caja',
-      'Chatbot con IA en WhatsApp',
-      'Se conecta con SUNAT y billeteras',
-      'Reportes hechos a tu medida',
+      'Alcance y precio por escrito antes de empezar',
+      'Se entrega por etapas, revisables',
+      'Se integra con los sistemas que ya usas',
+      'Código documentado y entregado',
+    ],
+  },
+  {
+    tag: 'Mantener un sistema',
+    time: 'Por mes o por bolsa de horas',
+    desc: 'Heredaste un sistema y quien lo hizo ya no está. Lo levantamos, lo documentamos y lo dejamos mantenible.',
+    price: 'A consultar',
+    priceLabel: 'Precio',
+    priceNote: 'Según el estado',
+    href: '/servicios/mantenimiento-de-software/',
+    featured: false,
+    iconName: 'soporte',
+    iconColor: '#E8A317',
+    features: [
+      'Primero un diagnóstico de lo que hay',
+      'Se documenta lo que no estaba documentado',
+      'Correcciones y mejoras priorizadas contigo',
+      'Sin quedarte atado: la documentación es tuya',
+    ],
+  },
+  {
+    // Ocupa el hueco que dejó "Equipo dedicado", y le corresponde: es el único
+    // de los tres que se puede comprobar antes de la primera reunión. Hay
+    // cuatro apps publicadas bajo la cuenta de Bitone E.I.R.L. en Play Store, y
+    // están enlazadas más abajo en la propia portada.
+    tag: 'Apps móviles',
+    time: '2 a 5 meses',
+    desc: 'Android y iPhone desde una sola base. Publicadas en las tiendas con las cuentas a nombre de tu empresa.',
+    price: 'A consultar',
+    priceLabel: 'Precio',
+    priceNote: 'Según alcance',
+    href: '/servicios/apps-moviles/',
+    featured: false,
+    iconName: 'celular',
+    iconColor: '#0891b2',
+    features: [
+      'Una sola base para Android y iPhone',
+      'Publicación en las tiendas incluida',
+      'Panel web para administrarla',
+      'Las cuentas quedan a tu nombre',
     ],
   },
 ] as const;
@@ -302,121 +461,85 @@ export const serviciosHome = [
 //
 //   price        precio de entrada en soles; null = no hay precio fijo publicado
 //   rubros       rubros donde ese servicio aplica de verdad. Alimentan el
-//                enlazado interno desde /servicios, que hasta ahora no
-//                enlazaba a ninguna de las 12 páginas de rubro.
+//                enlazado interno hacia páginas de sector. Vacío mientras no
+//                existan: las 12 landings de rubro se borraron con el cambio
+//                de negocio.
 //   ivaIncluido  null cuando el sitio no lo declara. No se supone: un
 //                valueAddedTaxIncluded inventado es una afirmación de precio
 //                falsa en datos estructurados.
+//
+// Los cuatro `id` tienen que existir como `tabId` en servicios.ts, o el índice
+// de /servicios/ enseñará una pestaña que no lleva a ninguna parte.
+//
+// Ninguno publica precio (`price: null`). Es coherente con todo el sitio desde
+// el cambio de negocio, y tiene una consecuencia en el JSON-LD: el Offer de
+// cada servicio se emite sin `price`, nunca con una cifra de relleno.
 export const serviciosTabs = [
   {
-    id: 'web',
-    rubros: ['clinicas-consultorios', 'barberias-salones-belleza', 'talleres-mecanicos'],
-    // Tipos de trabajo que entran en este servicio. Sustituyen a la lista de
-    // rubros que había en /servicios, que daba a entender que el precio cambia
-    // según el giro del negocio. No cambia: una pollería y una barbería pagan lo
-    // mismo por la misma página. Lo que mueve el precio es el trabajo que hay
-    // detrás, y eso es lo que se enseña aquí.
-    trabajos: ['Página de presentación', 'Catálogo sin venta online', 'Página para una campaña', 'Web con blog y noticias'],
-    label: 'Página web',
-    tag: 'Páginas web',
-    icon: 'www',
-    title: 'Tu página web profesional',
-    incluye: 'Dominio y hosting por 1 año incluidos',
-    time: '2 a 4 semanas',
-    price: 1500,
-    ivaIncluido: false,
-    priceLabel: 'S/1,500',
-    priceNote: '+ IGV',
-    schemaId: 'pagina-web',
-    schemaName: 'Diseño y desarrollo de páginas web para MYPEs',
-    serviceType: 'Diseño web',
-    desc: 'Rápida, segura y lista para salir en Google. Se ve bien en el celular y los textos los cambias tú.',
-    wa: 'Hola Bitwise 👋 quiero cotizar una página web',
-    // `c` es el color del icono en la lista de "qué incluye". Uno por fila y no
-    // uno por servicio: seis chips del mismo tono se leen como un bloque gris y
-    // la vista los salta. Con colores distintos cada fila se distingue de un
-    // vistazo. Los tonos van a juego con lo que dice la fila —verde para cobros,
-    // azul para el celular— y los logos de marca llevan el suyo propio.
-    features: [
-      { t: 'Se ve bien en el celular', i: 'celular', c: '#2563eb' },
-      { t: 'Cambias textos y fotos tú mismo', i: 'tablero', c: '#7c3aed' },
-      { t: 'Dominio .com y hosting por 1 año', i: 'www', c: '#0891b2' },
-      { t: 'Candado de seguridad y correo propio', i: 'correo', c: '#db2777' },
-      { t: 'Preparada para salir en Google', i: 'google', c: '#ea4335' },
-      { t: 'Botón de WhatsApp y formulario', i: 'whatsapp', c: '#25d366' },
-    ],
-  },
-  {
-    id: 'tienda',
-    rubros: ['ferreterias', 'opticas', 'panaderias-pastelerias'],
-    // Aquí sí van ejemplos de negocio, porque en una tienda lo que se vende
-    // cambia el trabajo de verdad: no es lo mismo un catálogo de ropa con tallas
-    // y colores que una carta con horarios de reparto o una agenda con pago.
-    trabajos: ['Tienda de ropa con tallas y colores', 'Restaurante con pedidos y reparto', 'Minimarket y abarrotes', 'Reservas y citas con pago'],
-    label: 'Tienda online',
-    tag: 'Tiendas online',
-    icon: 'carrito',
-    title: 'Tu tienda vendiendo sola',
-    incluye: 'Dominio, hosting y medios de pago',
-    time: '4 a 6 semanas',
-    price: 3000,
-    ivaIncluido: null,
-    priceLabel: 'S/3,000',
-    priceNote: '',
-    schemaId: 'tienda-online',
-    schemaName: 'Desarrollo de tiendas online para MYPEs',
-    serviceType: 'Comercio electrónico',
-    desc: 'Tu cliente elige, paga y tú recibes el pedido listo. A cualquier hora, sin que tengas que contestar.',
-    wa: 'Hola Bitwise 👋 quiero cotizar una tienda online',
-    features: [
-      { t: 'Catálogo con control de stock', i: 'carrito', c: '#d97706' },
-      { t: 'Cobras por Yape, Plin y tarjeta', i: 'tarjeta', c: '#059669' },
-      { t: 'Pago automático y pedidos por WhatsApp', i: 'whatsapp', c: '#25d366' },
-      { t: 'Boleta y factura SUNAT (opcional)', i: 'documento', c: '#2563eb' },
-      { t: 'Panel de ventas y reportes', i: 'grafico', c: '#7c3aed' },
-      { t: 'Video para que lo manejes tú', i: 'video', c: '#e11d48' },
-    ],
-  },
-  {
-    id: 'erp',
-    rubros: ['talleres-mecanicos', 'farmacias-boticas', 'academias-preuniversitarios'],
-    trabajos: ['Control de stock y almacén', 'Automatizar tareas repetitivas', 'Facturación y caja', 'Reportes de ventas'],
-    label: 'ERPs y sistemas',
-    tag: 'Sistemas a medida',
+    id: 'medida',
+    rubros: [],
+    trabajos: ['Sistema interno de operación', 'Plataforma con usuarios externos', 'Integración entre sistemas', 'Migración a una tecnología nueva'],
+    label: 'Software a medida',
+    tag: 'Proyecto a medida',
     icon: 'tuerca',
-    title: 'Un sistema hecho para tu negocio',
-    incluye: 'Definimos contigo qué va a hacer',
-    time: 'Según el tamaño',
+    title: 'Nos encargas el proyecto completo',
+    incluye: 'Alcance y precio cerrados antes de programar',
+    time: 'Según el alcance',
     price: null,
     ivaIncluido: null,
     priceLabel: 'A consultar',
     priceNote: 'Según alcance',
-    schemaId: 'erp',
-    schemaName: 'Desarrollo de ERPs y sistemas a medida',
-    serviceType: 'Software a medida',
-    desc: 'Para llevar ventas, stock y caja sin cuadernos ni Excel. Se arma según lo que tu negocio necesita.',
-    wa: 'Hola Bitwise 👋 quiero cotizar un sistema / ERP para mi negocio',
+    schemaId: 'software-a-medida',
+    schemaName: 'Desarrollo de software a medida para empresas',
+    serviceType: 'Desarrollo de software a medida',
+    desc: 'Definimos qué tiene que hacer, lo cerramos por escrito y lo construimos por etapas revisables.',
+    wa: 'Hola BIT-ONE, quiero conversar un proyecto de software a medida',
     features: [
-      { t: 'Control de ventas, stock y caja', i: 'cajas', c: '#d97706' },
-      { t: 'Chatbot con IA en WhatsApp', i: 'whatsapp', c: '#25d366' },
-      { t: 'Se conecta con SUNAT y billeteras', i: 'enchufe', c: '#0891b2' },
-      { t: 'Hace solo las tareas repetitivas', i: 'tuerca', c: '#4f46e5' },
-      { t: 'Reportes hechos a tu medida', i: 'grafico', c: '#7c3aed' },
-      { t: 'Soporte y mejoras continuas', i: 'soporte', c: '#0284c7' },
+      { t: 'Etapa de análisis antes de cotizar', i: 'buscar', c: '#0891b2' },
+      { t: 'Alcance, plazo y precio por escrito', i: 'documento', c: '#2563eb' },
+      { t: 'Adicionales cotizados antes de ejecutarse', i: 'etiqueta', c: '#d97706' },
+      { t: 'Entregas por etapas revisables', i: 'cajas', c: '#4f46e5' },
+      { t: 'Se integra con los sistemas que ya tienes', i: 'enchufe', c: '#7c3aed' },
+      { t: 'Código y documentación a tu nombre', i: 'codigo', c: '#059669' },
+    ],
+  },
+  {
+    id: 'mantenimiento',
+    rubros: [],
+    trabajos: ['Sistema sin documentación', 'Proveedor anterior que ya no está', 'Tecnología que se quedó atrás', 'Correcciones y mejoras continuas'],
+    label: 'Mantenimiento',
+    tag: 'Mantener un sistema',
+    icon: 'soporte',
+    title: 'Un sistema que nadie quiere tocar',
+    incluye: 'Primero un diagnóstico de lo que hay',
+    time: 'Por mes o por bolsa de horas',
+    price: null,
+    ivaIncluido: null,
+    priceLabel: 'A consultar',
+    priceNote: 'Según el estado',
+    schemaId: 'mantenimiento-software',
+    schemaName: 'Mantenimiento y documentación de sistemas existentes',
+    serviceType: 'Mantenimiento de software',
+    desc: 'Heredaste un sistema y quien lo construyó ya no está. Lo levantamos, lo documentamos y lo dejamos mantenible.',
+    wa: 'Hola BIT-ONE, necesito mantenimiento de un sistema que ya tenemos',
+    features: [
+      { t: 'Diagnóstico con informe del estado real', i: 'buscar', c: '#0891b2' },
+      { t: 'Se documenta lo que no estaba documentado', i: 'documento', c: '#2563eb' },
+      { t: 'Correcciones priorizadas contigo', i: 'tuerca', c: '#4f46e5' },
+      { t: 'Por bolsa de horas o contrato mensual', i: 'reloj', c: '#d97706' },
+      { t: 'Reporte de en qué se consumió el tiempo', i: 'grafico', c: '#7c3aed' },
+      { t: 'La documentación es tuya', i: 'llave', c: '#059669' },
     ],
   },
   {
     id: 'apps',
-    rubros: ['gimnasios-crossfit', 'veterinarias-petshop', 'pollerias-restaurantes'],
-    // La app no es un producto cerrado: es llevar al celular algo que ya existe.
-    // Por eso los cuatro empiezan igual, "tu ... en el celular", y el último deja
-    // dicho que se arma según lo que haga falta.
-    trabajos: ['Tu sistema en el celular', 'Tu tienda en el celular', 'App de pedidos para tu equipo', 'A medida, según lo que necesites'],
+    rubros: [],
+    trabajos: ['App para equipo en campo', 'App para tus usuarios finales', 'Llevar al celular un sistema existente', 'Trabajo sin conexión y sincronización'],
     label: 'Apps móviles',
     tag: 'Aplicaciones móviles',
     icon: 'celular',
-    title: 'Tu app en el celular de tus clientes',
-    incluye: 'La publicamos en Play Store',
+    title: 'Aplicaciones para Android y iPhone',
+    incluye: 'Publicadas con las cuentas a tu nombre',
     time: '2 a 5 meses',
     price: null,
     ivaIncluido: null,
@@ -425,15 +548,15 @@ export const serviciosTabs = [
     schemaId: 'apps-moviles',
     schemaName: 'Desarrollo de aplicaciones móviles para Android e iOS',
     serviceType: 'Desarrollo de aplicaciones móviles',
-    desc: 'Una app que tus clientes descargan e instalan. Funciona en Android y en iPhone, y la publicamos nosotros.',
-    wa: 'Hola Bitwise 👋 quiero cotizar una app móvil',
+    desc: 'Para lo que tu equipo hace en la calle o lo que tus usuarios abren varias veces por semana.',
+    wa: 'Hola BIT-ONE, quiero cotizar el desarrollo de una app móvil',
     features: [
-      { t: 'Funciona en Android y en iPhone', i: 'codigo', c: '#7c3aed' },
-      { t: 'La publicamos en Play Store', i: 'tienda', c: '#059669' },
-      { t: 'Avisos al celular y estadísticas', i: 'campana', c: '#d97706' },
+      { t: 'Una sola base para Android y iPhone', i: 'codigo', c: '#7c3aed' },
+      { t: 'Publicación en las tiendas incluida', i: 'tienda', c: '#059669' },
+      { t: 'Avisos al celular y trabajo sin conexión', i: 'campana', c: '#d97706' },
       { t: 'Panel web para administrarla', i: 'tablero', c: '#2563eb' },
-      { t: 'Las cuentas quedan a tu nombre', i: 'llave', c: '#ca8a04' },
-      { t: 'Soporte después de publicarla', i: 'soporte', c: '#0284c7' },
+      { t: 'Las cuentas quedan a nombre de tu empresa', i: 'llave', c: '#ca8a04' },
+      { t: 'Se conecta con tus sistemas', i: 'enchufe', c: '#0891b2' },
     ],
   },
 ] as const;
@@ -441,8 +564,11 @@ export const serviciosTabs = [
 // ---- Condiciones comerciales (/servicios) ----
 export const condiciones = [
   {
-    title: 'Pago 50 / 50',
-    desc: 'Mitad al empezar y mitad al recibir. Hasta 3 cuotas sin interés.',
+    // Decía "Pago 50/50 · hasta 3 cuotas sin interés". Eso es una condición para
+    // una persona que paga de su bolsillo. Una empresa paga contra hito
+    // entregado y con el plazo de crédito que maneje su área de finanzas.
+    title: 'Pago por hitos',
+    desc: 'Se cobra contra entrega de cada etapa, no por adelantado.',
     color: '#16a34a',
     bg: 'rgba(22,163,74,0.1)',
     icon: '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
@@ -462,8 +588,8 @@ export const condiciones = [
     icon: '<path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"/><path d="m9 12 2 2 4-4"/>',
   },
   {
-    title: 'Código y dominio tuyos',
-    desc: 'Todo queda a tu nombre. Si te quieres llevar la web, te la llevas.',
+    title: 'Código y documentación tuyos',
+    desc: 'Repositorios, documentación y datos a nombre de tu empresa.',
     color: '#6366f1',
     bg: 'rgba(129,140,248,0.12)',
     icon: '<path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/>',
@@ -481,170 +607,252 @@ export const condiciones = [
 // queremos hablar. Con ese título, cada "no" de esa columna es cierto por
 // definición y no acusa a nadie. Un freelance formal cae en la primera columna
 // junto con nosotros, y así debe ser.
+// Las columnas cambiaron con el cliente.
+//
+// Antes comparaba contra "Trabajo informal" y "Agencia grande", con criterios
+// como "pagos en cuotas sin interés" y "hablas directo con tu desarrollador".
+// Ninguna empresa evalúa contra el trabajo informal: evalúa contra hacerlo con
+// su propio equipo y contra una fábrica grande. Y "hablas directo con tu
+// desarrollador", en una venta B2B, no se lee como cercanía sino como aviso de
+// que detrás hay muy poca gente.
+//
+// Regla que se mantiene de la versión anterior y que conviene no perder: cada
+// columna es una SITUACIÓN, no un competidor con nombre. Así ningún "no" acusa
+// a nadie en particular y la tabla no le da munición a quien quiera
+// desmentirla. Y las filas donde el rival gana se marcan como gana: una
+// comparativa donde una columna saca 9 de 9 no la cree nadie.
 export const comparativa = {
-  cols: ['Bitwise', 'Trabajo informal', 'Agencia grande'],
+  cols: ['BIT-ONE', 'Con tu equipo interno', 'Fábrica grande'],
   rows: [
-    { label: 'Cotización por escrito en 24 h', vals: ['si', 'aveces', 'no'] },
-    { label: 'Empresa formal con RUC', vals: ['si', 'no', 'si'] },
-    { label: 'Factura electrónica SUNAT', vals: ['si', 'no', 'si'] },
-    { label: 'Respuesta WhatsApp < 2 horas', vals: ['si', 'aveces', 'no'] },
-    { label: 'Hablas directo con tu desarrollador', vals: ['si', 'si', 'no'] },
-    { label: 'Código fuente entregado', vals: ['si', 'aveces', 'Extra'] },
-    { label: 'Garantía de 30 días', vals: ['si', 'no', 'si'] },
-    { label: 'Pagos en cuotas sin interés', vals: ['si', 'no', 'no'] },
-    { label: 'Se conecta con SUNAT y billeteras', vals: ['si', 'aveces', 'si'] },
+    { label: 'Alcance y precio cerrados por escrito', vals: ['si', 'no', 'si'] },
+    { label: 'Empieza sin proceso de contratación', vals: ['si', 'no', 'si'] },
+    { label: 'Adicionales cotizados antes de ejecutarse', vals: ['si', 'aveces', 'aveces'] },
+    { label: 'Código y documentación a tu nombre', vals: ['si', 'si', 'Extra'] },
+    { label: 'Hablas con quien escribe el código', vals: ['si', 'si', 'no'] },
+    { label: 'Se puede parar o cambiar prioridad a mitad', vals: ['si', 'si', 'no'] },
+    { label: 'Conocimiento que se queda en tu empresa', vals: ['aveces', 'si', 'no'] },
+    { label: 'Capacidad para un proyecto de 20 personas', vals: ['no', 'no', 'si'] },
+    { label: 'Empresa formal con RUC y factura SUNAT', vals: ['si', 'si', 'si'] },
   ],
 } as const;
 
 // ---- Proceso (home) ----
+// Las cuatro etapas, reescritas para el encargo de una empresa.
+//
+// La versión anterior describía el proceso de una página web: mockup aprobado,
+// dos rondas de cambios, capacitación grabada, soporte por WhatsApp. Ninguna de
+// esas cuatro cosas es lo que pregunta quien encarga un sistema; lo que
+// pregunta es cómo se fija el alcance, qué pasa cuando cambia, y qué recibe al
+// final además del software funcionando.
+//
+// Aquí está el esqueleto de la página de proceso que todavía falta escribir.
+// Cuando exista, estas cuatro etapas son su índice.
 export const proceso = [
-  { n: '01', title: 'Conversamos', desc: 'Por WhatsApp o videollamada entendemos tu negocio, objetivos y presupuesto real.', icon: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/>' },
-  { n: '02', title: 'Cotizamos claro', desc: 'Propuesta en soles con alcance y fechas por escrito. Sin letra chica ni sorpresas.', icon: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4M8 13h8M8 17h8M8 9h2"/>' },
-  { n: '03', title: 'Diseñamos y desarrollamos', desc: 'Mockup aprobado por ti y avances semanales con link de preview. 2 rondas de cambios sin costo.', icon: '<path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/>' },
-  { n: '04', title: 'Entregamos y acompañamos', desc: 'Capacitación grabada, accesos completos, 30 días de garantía y soporte por WhatsApp.', icon: '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.29 7 12 12l8.71-5M12 22V12"/>' },
+  { n: '01', title: 'Levantamos el alcance', desc: 'Reunión técnica con quien conoce la operación. Qué tiene que hacer, con qué se integra y qué queda fuera.', icon: '<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>' },
+  { n: '02', title: 'Documento y precio', desc: 'Alcance por escrito, cronograma por etapas y precio cerrado. Se firma antes de escribir una línea de código.', icon: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4M8 13h8M8 17h8M8 9h2"/>' },
+  { n: '03', title: 'Construimos por etapas', desc: 'Cada etapa se entrega funcionando y revisable. Lo que salga del alcance se cotiza antes de ejecutarlo, nunca después.', icon: '<path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/>' },
+  { n: '04', title: 'Entregamos y documentamos', desc: 'Código, repositorios, documentación y accesos a nombre de tu empresa, con 30 días de garantía sobre lo entregado.', icon: '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.29 7 12 12l8.71-5M12 22V12"/>' },
 ] as const;
 
 // ---- Marcas / proyectos ----
+//
+// Esta lista tenía seis marcas y el banner las presentaba como "las empresas
+// que ya confiaron en nosotros". Tres de ellas —Florería Adams, Lima Se y
+// Coffee & Dreams— llevaban logotipos que el propio código describía como
+// "provisionales dibujados a medida, se reemplazan en cuanto lleguen los
+// reales". Sin ninguna venta registrada, esa frase era la afirmación más
+// falsable del sitio, y salía en la portada y en /proyectos/.
+//
+// Ahora la lista es exactamente la misma que proyectos.ts, que es la única
+// fuente del sitio donde consta qué se construyó de verdad. El rótulo del
+// banner cambió en consecuencia: ya no habla de confianza ajena, habla de
+// trabajo propio.
+//
+// JMF llegó a salir de esta lista por falta de respaldo, y volvió al aparecer
+// uno: hay una app suya publicada en Play Store —com.jmf.app— bajo la cuenta
+// de desarrollador de Bitone E.I.R.L. Eso es exactamente la clase de prueba
+// que hacía falta, y por eso su enlace apunta a la ficha de la tienda y no a
+// una web: es la dirección donde cualquiera puede comprobarlo.
 export const marcas = [
+  { name: 'ApuraY', link: 'https://apuray.pe', style: 'letter-spacing:0.01em' },
   { name: 'QUIPUY', link: 'https://quipuy.pe', style: 'letter-spacing:0.14em' },
   { name: 'MindBlock', link: 'https://mindblock.io', style: 'letter-spacing:-0.02em', dot: true },
-  { name: 'JMF', link: null, style: '', logo: '/marcas/jmf.png', alt: 'Grupo JMF' },
-
-  // Logotipos provisionales dibujados a medida, cada uno con una forma distinta
-  // para que la fila no se lea como una plantilla repetida. Van en SVG en línea
-  // para heredar el color del banner. Se reemplazan en cuanto lleguen los reales.
-  {
-    // Sello circular
-    name: 'Florería Adams',
-    link: null,
-    style: '',
-    svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Florería Adams">
-      <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="2.2"/>
-      <circle cx="50" cy="50" r="39" stroke="currentColor" stroke-width="0.9" opacity="0.5"/>
-      <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="50" cy="34" r="5.5"/>
-        <path d="M50 28.5c2.6-5 7.6-6.4 10.1-3.9s.9 7.5-4.1 10.1"/>
-        <path d="M50 28.5c-2.6-5-7.6-6.4-10.1-3.9s-.9 7.5 4.1 10.1"/>
-        <path d="M50 39.5c2.6 5 7.6 6.4 10.1 3.9s.9-7.5-4.1-10.1"/>
-        <path d="M50 39.5c-2.6 5-7.6 6.4-10.1 3.9s-.9-7.5 4.1-10.1"/>
-        <path d="M50 45v16"/>
-        <path d="M50 55c-5 0-8.4-2.5-9.2-6.7 5-.8 8.4 1.7 9.2 6.7Z"/>
-      </g>
-      <text x="50" y="76" text-anchor="middle" fill="currentColor" font-family="'Space Grotesk',sans-serif" font-size="8" font-weight="700" letter-spacing="1.6">FLORERÍA</text>
-      <text x="50" y="86" text-anchor="middle" fill="currentColor" font-family="'Space Grotesk',sans-serif" font-size="10" font-weight="700" letter-spacing="1.2">ADAMS</text>
-    </svg>`,
-  },
-  {
-    // Lockup horizontal, sin recuadro
-    name: 'Lima Se',
-    link: null,
-    style: '',
-    wide: true,
-    svg: `<svg viewBox="0 0 190 70" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lima Se">
-      <g stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" transform="translate(2 4)">
-        <ellipse cx="32" cy="31" rx="20" ry="15" transform="rotate(-22 32 31)"/>
-        <path d="M32 16v30" transform="rotate(-22 32 31)"/>
-        <path d="M17 31h30" transform="rotate(-22 32 31)"/>
-        <path d="m22 21 20 20" transform="rotate(-22 32 31)"/>
-        <path d="m42 21-20 20" transform="rotate(-22 32 31)"/>
-        <path d="M47 13c3.5-4.5 8-5.5 11.5-4.5" />
-      </g>
-      <text x="76" y="34" fill="currentColor" font-family="'Space Grotesk',sans-serif" font-size="26" font-weight="700" letter-spacing="1">LIMA</text>
-      <text x="76" y="57" fill="currentColor" font-family="'Space Grotesk',sans-serif" font-size="26" font-weight="700" letter-spacing="6">SE</text>
-    </svg>`,
-  },
-  {
-    // Etiqueta redondeada con el nombre fuera del marco
-    name: 'Coffee & Dreams',
-    link: null,
-    style: '',
-    svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Coffee and Dreams">
-      <rect x="20" y="4" width="60" height="56" rx="26" stroke="currentColor" stroke-width="2.2"/>
-      <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M37 27h22v10a11 11 0 0 1-22 0V27Z"/>
-        <path d="M59 30h3.5a4.5 4.5 0 0 1 0 9H59"/>
-        <path d="M36 51h26"/>
-        <path d="M45 20c-1.6-2.4 0-4 1.2-5.6"/>
-        <path d="M53 20c-1.6-2.4 0-4 1.2-5.6"/>
-      </g>
-      <text x="50" y="79" text-anchor="middle" fill="currentColor" font-family="'Space Grotesk',sans-serif" font-size="11" font-weight="700" letter-spacing="0.6">COFFEE</text>
-      <text x="50" y="92" text-anchor="middle" fill="currentColor" font-family="'Space Grotesk',sans-serif" font-size="9" font-weight="700" letter-spacing="1.4">&amp; DREAMS</text>
-    </svg>`,
-  },
+  { name: 'JMF', link: 'https://play.google.com/store/apps/details?id=com.jmf.app', style: 'letter-spacing:0.1em', logo: '/marcas/jmf.png', alt: 'Grupo JMF' },
+  // Sin enlace: la dirección que responde abre un inicio de sesión, no un sitio
+  // público. Mismo criterio que en proyectos.ts.
+  { name: 'AjosyCebollas', link: null, style: 'letter-spacing:-0.01em' },
 ] as const;
 
 
-// ---- Rubros ----
-
-
 // ---- Nosotros ----
+// Reescrita entera con el cambio a fábrica de software.
+//
+// La versión anterior estaba calibrada para un dueño de MYPE y funcionaba:
+// "empezamos haciendo webs a los vecinos del barrio", "te explicamos en
+// cristiano, como quien le enseña a un pata del colegio", "no somos la agencia
+// más grande del Perú". Ante alguien que tiene que justificar internamente una
+// compra de decenas de miles de soles, esas tres frases restan, y la última se
+// disculpa por el tamaño antes de que nadie pregunte.
+//
+// Lo que la sustituye no infla nada. Aquí NO se afirma ni antigüedad, ni
+// tamaño de equipo, ni número de clientes: sin ventas registradas, cualquiera
+// de esas cifras sería inventada, y son justo las que un comprador verifica.
+// Todo lo que se afirma sale de proyectos.ts —cuatro productos construidos y
+// publicados— o es un compromiso contractual que se cumple desde el primer
+// encargo.
+// Los dos fundadores, con nombre, formación y perfil verificable.
+//
+// Es el hueco más grande que le quedaba al sitio en una venta a empresas:
+// aquí se compra gente, y hasta ahora no aparecía una sola persona. Quien
+// evalúa un proveedor pequeño quiere saber a quién le está pagando, y en un
+// equipo de este tamaño ocultarlo no lo hace parecer más grande, lo hace
+// parecer opaco.
+//
+// El enlace a LinkedIn no es un adorno: es lo que convierte "somos ingenieros
+// de ESAN" en una afirmación que se comprueba en un clic, igual que el RUC en
+// el pie o la cuenta de desarrollador en la sección de apps. Es la misma regla
+// de todo el sitio: nada que no se pueda verificar.
+//
+// Aquí NO va cargo inventado ni años de experiencia. "Fundador" es un hecho;
+// "CTO con 10 años de trayectoria" en una empresa sin ventas registradas es
+// exactamente lo que un comprador B2B comprueba y desmonta.
+export const fundadores = [
+  {
+    nombre: 'Gabriel Guzmán Ramos',
+    rol: 'Fundador',
+    linkedin: 'https://www.linkedin.com/in/gabriel-guzman-ramos/',
+  },
+  {
+    nombre: 'Jesús Guzmán',
+    rol: 'Fundador',
+    linkedin: 'https://www.linkedin.com/in/jesusguzman01/',
+  },
+] as const;
+
+// Aquí había una constante con la formación de los dos fundadores —la carrera
+// y la universidad—. Se quitó de la página y por tanto también de aquí.
+
 export const nosotros = {
-  eyebrow: 'Sobre nosotros',
-  title: 'Peruanos impulsando <span class="gradient-text--warm">negocios peruanos</span>',
-  intro: 'La tecnología no debería ser un lujo reservado para las grandes empresas. Por eso trabajamos con MYPEs, a precio justo, de tú a tú.',
-  historiaTitle: 'Empezamos haciendo webs a los vecinos del barrio',
+  title: 'Construimos productos, <span class="gradient-text--warm">no solo encargos</span>',
+  intro: 'Somos una empresa de desarrollo en Lima. Antes de construir para otros construimos lo nuestro, y eso cambia cómo trabajamos: llegamos a tu proyecto habiendo tomado las decisiones difíciles en el nuestro.',
+  historiaTitle: 'Lo primero que construimos fue nuestro',
   historia: [
-    'Bitwise nació en Lima con una idea simple: las MYPEs peruanas también merecen tecnología de primer nivel, sin pagar lo que pagan las multinacionales. Nos cansamos de ver bodegueros, restauranteros y emprendedores pagando fortunas a agencias que ni siquiera los escuchan.',
-    'Empezamos haciendo webs a vecinos, conocidos y contactos del colegio. Hoy seguimos con la misma idea: tecnología bien hecha, a precio que una MYPE puede pagar, y con la misma persona que te cotiza atendiéndote de principio a fin.',
-    'No somos la agencia más grande del Perú. Pero sí una en la que hablas directo con quien desarrolla tu proyecto, responde el WhatsApp al toque y entrega lo que promete.',
+    'BIT-ONE es la marca de Bitone E.I.R.L., empresa formal con RUC en Lima. Empezó al revés de como empieza casi toda fábrica de software: en vez de esperar el primer encargo, nos pusimos a construir productos propios y a publicarlos.',
+    'ApuraY mueve mototaxi, comida y envíos en Coracora, Ayacucho, con app en el celular y su web. Quipuy le dice a un postulante cuánto le falta para entrar a su universidad. MindBlock enseña robótica y programación a niños, con cuenta propia para cada alumno. Y AjosyCebollas es un sistema de gestión con acceso por usuario. Los cuatro están funcionando, no en una carpeta de propuestas.',
+    'Eso importa para quien nos contrata por una razón concreta: construir un producto de cero obliga a decidir qué entra, qué no entra y qué se rompe primero cuando crece. Esa es la parte que no se aprende ejecutando pedidos ajenos, y es la que traemos cuando todavía no tienes claro qué hay que construir.',
   ],
-  mision: 'Democratizar la tecnología en el Perú. Que cualquier MYPE —desde la bodega de la esquina hasta la ferretería del barrio— pueda vender por internet, facturar electrónicamente y crecer con herramientas profesionales a precio accesible.',
-  vision: 'Que cuando un emprendedor peruano piense "necesito una web o un sistema", lo primero que se le venga a la mente sea Bitwise.',
+  mision: 'Que una empresa peruana pueda encargar software a medida sin las dos cosas que más le pesan: un alcance que se desborda a mitad del proyecto y un sistema que después nadie puede mantener sin llamarnos.',
+  vision: 'Ser el equipo al que una empresa recurre cuando el proyecto importa de verdad: el que no se puede entregar tarde, ni entregar a medias, ni dejar sin documentar.',
   valores: [
-    { title: 'Precio justo', desc: 'Ni carísimo como las grandes consultoras, ni tan bajo que sacrifiquemos calidad. Cotizaciones claras, en soles y sin letra chica.' },
-    { title: 'Hacemos lo que prometemos', desc: 'Fechas reales, no plazos inventados. Si dijimos 10 días, son 10 días. Y si hay demoras, te avisamos primero.' },
-    { title: 'Hablamos como tú', desc: 'Nada de tecnicismos imposibles. Te explicamos todo en cristiano, como quien le enseña a un pata del colegio.' },
-    { title: 'Soporte que responde', desc: 'No te dejamos botado después de entregar. WhatsApp directo con quien hizo tu proyecto, no un call center.' },
-    { title: 'Orgullo peruano', desc: 'Somos peruanos trabajando para peruanos. Entendemos la realidad de la MYPE, los rubros locales y cómo se vende acá.' },
-    { title: 'Transparencia total', desc: 'Ves el avance semana a semana. Si algo no te gusta, lo cambiamos. Tu opinión manda porque tu negocio manda.' },
+    { title: 'El alcance se firma antes', desc: 'Primero una etapa de análisis, después un documento con lo que entra, lo que no entra, el cronograma y el precio. Recién con eso firmado se escribe código.' },
+    { title: 'Los adicionales se cotizan antes', desc: 'El alcance cambia casi siempre y está previsto. Lo que salga de lo firmado se cotiza por escrito, con su impacto en la fecha, antes de ejecutarlo. Nunca se descubre en la entrega.' },
+    { title: 'Se entrega por partes', desc: 'Nada de un único entregable al final. El proyecto se corta en etapas revisables para que puedas parar, corregir o cambiar de prioridad sin haber perdido meses.' },
+    { title: 'El código es tuyo', desc: 'Código fuente, repositorios, documentación y datos quedan a nombre de tu empresa. No usamos piezas propietarias nuestras que te obliguen a seguir contratándonos para mantener lo que ya pagaste.' },
+    { title: 'Se documenta mientras se construye', desc: 'La documentación no es un anexo que se escribe al final si sobra tiempo. Es lo que permite que otro equipo, o el tuyo, tome el sistema y siga.' },
+    { title: 'Empresa formal', desc: 'RUC activo, factura electrónica SUNAT en cada hito, trabajo contra orden de compra y acuerdo de confidencialidad firmado antes de la reunión técnica si tu área legal lo pide.' },
   ],
 } as const;
 
 // ---- Contacto ----
 export const contactoForm = {
-  rubros: ['Bodega / minimarket', 'Restaurante / pollería', 'Ferretería / repuestos', 'Farmacia / botica', 'Consultorio / clínica', 'Salón / barbería', 'Taller / servicio técnico', 'Tienda de ropa', 'Educación / academia', 'Servicio profesional', 'Otro'],
-  necesidades: ['Página web', 'Tienda online', 'ERP / sistema a medida', 'Chatbot IA WhatsApp', 'App móvil', 'Aún no sé, asesórenme'],
+  // La lista de rubros era el giro de una MYPE —bodega, pollería, barbería—.
+  // Con el cliente nuevo, lo que ubica a quien escribe no es su giro sino su
+  // tamaño y si tiene o no área de sistemas: eso es lo que decide cómo se
+  // conversa el proyecto y quién firma.
+  rubros: ['Empresa con área de sistemas', 'Empresa sin área de sistemas', 'Startup', 'Agencia o consultora', 'Institución educativa', 'Entidad pública', 'Otro'],
+  necesidades: ['Proyecto a medida', 'App móvil', 'Mantener un sistema existente', 'Integrar sistemas que ya tenemos', 'Migrar de tecnología', 'Aún no está definido'],
 } as const;
 
+// "Sin compromiso ni presión de venta" tranquilizaba a quien teme que le cobren
+// por preguntar. Quien evalúa un proveedor de software no teme eso: teme contar
+// su operación a un desconocido y que la primera conversación sea con un
+// comercial que no entiende lo que le está describiendo.
 export const contactoExpectativas = [
-  'Respuesta en menos de 2 horas hábiles',
-  'Cotización por escrito en 24 horas',
-  'Sin compromiso ni presión de venta',
+  'Primera respuesta en menos de 2 horas hábiles',
+  'Reunión técnica con quien va a escribir el código',
+  'Acuerdo de confidencialidad firmado antes, si lo necesitas',
 ] as const;
 
 // ---- FAQ (home) ----
+// Las seis preguntas de la portada son las que hace quien evalúa contratar
+// desarrollo, no las que hace un dueño de negocio comprando su primer sistema.
+// Cambia hasta quién las hace: aquí hay un área de sistemas o una gerencia que
+// va a tener que justificar la contratación adentro, así que las dudas son de
+// contrato —alcance, propiedad, confidencialidad, facturación— antes que de
+// funcionalidad.
+//
+// Ninguna respuesta afirma trayectoria, tamaño de equipo ni cartera. Sin ventas
+// todavía, eso sería inventado, y es justo lo que el cliente B2B verifica. Lo
+// que se afirma son compromisos que se firman y se cumplen desde el primer
+// proyecto.
 export const faqs = [
-  { q: '¿Puedo pagar en cuotas o necesito todo al contado?', a: 'Trabajamos con 50% de adelanto y 50% contra entrega. En proyectos grandes puedes dividir en hasta 3 cuotas sin interés. Aceptamos Yape, Plin, transferencia y tarjeta, con boleta o factura electrónica SUNAT en cada pago.' },
-  { q: '¿Qué incluye el precio de S/1,500?', a: 'El diseño y la programación, tu dominio .com y el hosting del primer año, el candado de seguridad, el correo con tu dominio, el formulario de contacto, el botón de WhatsApp y dejarla preparada para salir en Google, con estadísticas de visitas. El precio es sin IGV; emitimos boleta o factura.' },
-  { q: '¿El sitio web, el dominio y el código quedan a mi nombre?', a: 'Sí, 100%. El dominio se registra con tus datos y el código fuente es tuyo desde el primer día. Te entregamos accesos completos. Si mañana quieres migrar a otra agencia, el traspaso es directo.' },
-  { q: '¿Qué pasa si no me gusta el diseño?', a: 'Antes de programar te mostramos el diseño y recién con tu aprobación seguimos. Incluimos 2 rondas de cambios sin costo y 30 días de garantía post-entrega.' },
-  { q: '¿Yo puedo actualizar textos, fotos y precios sin depender de ustedes?', a: 'Sí. Entregamos la web con un panel simple para que lo manejes tú y una capacitación grabada de 30 minutos para que tú o tu equipo cambien contenido sin pagar extra.' },
-  { q: '¿Trabajan con empresas fuera de Lima?', a: 'Sí. Atendemos MYPEs en todo el Perú, 100% remoto por Zoom y WhatsApp. Mismo precio, misma calidad, sin cargo extra por ubicación.' },
+  { q: '¿Qué hace exactamente una empresa de desarrollo de software?', a: 'Construye software por encargo, a la medida de quien lo pide, en vez de vender un producto ya hecho con licencias. En la práctica eso son tres cosas: levantar qué necesita el cliente, construirlo y entregarlo funcionando y documentado. Somos una empresa de desarrollo de software en Lima y trabajamos con empresas de todo el Perú, de forma remota.' },
+  { q: '¿Cómo definen el alcance y el precio?', a: 'En una primera etapa de análisis, antes de programar: se levanta qué tiene que hacer el sistema, con qué se integra y qué queda fuera. De ahí sale un documento de alcance con el precio y el cronograma, y recién con eso firmado se empieza. Esa etapa se puede contratar aparte si quieres evaluarnos con algo chico antes de comprometer el proyecto entero.' },
+  { q: '¿El código y la propiedad intelectual son nuestros?', a: 'Sí, sin condiciones. El código fuente, los repositorios, la documentación y los datos quedan a nombre de tu empresa, y los accesos se entregan completos. No usamos componentes propietarios nuestros que te aten a seguir contratándonos para poder mantener lo que ya pagaste.' },
+  { q: '¿Qué pasa si el alcance cambia a mitad del proyecto?', a: 'Cambia casi siempre, así que está previsto. Lo que entra fuera del alcance firmado se cotiza como adicional, por escrito y antes de ejecutarlo, con su impacto en el cronograma. Lo que no hacemos es absorberlo callados y descubrirlo en la fecha de entrega, que es como se rompen la mayoría de estos proyectos.' },
+  { q: '¿Trabajan con los sistemas que ya tenemos?', a: 'Sí, y es lo habitual: casi ningún proyecto empieza en una empresa que no tenga nada. En la etapa de análisis se revisa qué sistemas hay, si exponen una forma de conectarse y qué se puede leer o escribir contra ellos. Eso se hace antes de cotizar, porque una integración que resulta imposible a mitad del proyecto cambia el alcance entero.' },
+  { q: '¿Firman acuerdo de confidencialidad?', a: 'Sí, y lo firmamos antes de la reunión técnica si tu empresa lo prefiere. Aceptamos el modelo de acuerdo de tu área legal en vez de imponer el nuestro. Si el proyecto toca datos personales o información sensible, eso también se acuerda por escrito antes de tener acceso a nada.' },
+  { q: '¿Emiten factura y trabajan con orden de compra?', a: 'Sí. Somos una empresa formal con RUC y emitimos factura electrónica SUNAT en cada hito. Trabajamos contra orden de compra y nos adaptamos a los plazos de pago de tu área de finanzas, siempre que queden acordados al firmar y no se descubran después.' },
 ] as const;
 
 // ---- Blog (SEO) ----
 // Categorías con el mismo esquema que producción: slug para filtrar, etiqueta para mostrar.
+// Los `slug` NO se tocan aunque las etiquetas cambien: son la dirección con la
+// que cada entrada se filtra y ya están escritos en los seis artículos. Lo que
+// cambia es cómo se llaman en pantalla, que era lenguaje del negocio anterior
+// —"Pymes Perú", "Tiendas online", "Salir en Google"—.
+//
+// PENDIENTE: cuatro de los seis artículos son de MYPE (por qué necesitas una
+// web, tienda contra WhatsApp, cobrar con Yape, SEO local). Traen al lector
+// equivocado y, si alguno llegara a posicionar, atraería consultas que ya no
+// se quieren atender. Se borran cuando haya con qué reemplazarlos: un blog
+// vacío estorba más que uno desactualizado.
 export const blogCats = [
-  { slug: 'pymes-peru', label: 'Pymes Perú' },
-  { slug: 'desarrollo-web', label: 'Desarrollo Web' },
-  { slug: 'ecommerce', label: 'Tiendas online' },
-  { slug: 'seo-marketing', label: 'Salir en Google' },
-  { slug: 'apps-moviles', label: 'Apps Móviles' },
+  { slug: 'pymes-peru', label: 'Negocio y tecnología' },
+  { slug: 'desarrollo-web', label: 'Desarrollo' },
+  { slug: 'ecommerce', label: 'Comercio electrónico' },
+  { slug: 'seo-marketing', label: 'Presencia en buscadores' },
+  { slug: 'apps-moviles', label: 'Apps móviles' },
 ] as const;
 
 export const catLabel = (slug: string) =>
   blogCats.find((c) => c.slug === slug)?.label ?? slug;
 
+// Cada entrada lleva dos titulares y no es redundancia:
+//
+//   `title`     el que se lee en la página y en el H1. Puede ser largo y con
+//               paréntesis, porque quien ya entró tiene sitio para leerlo.
+//   `seoTitle`  el de la etiqueta <title>, o sea el que sale en Google. Máximo
+//               55 caracteres: BaseLayout le suma " | BIT-ONE" y a partir de
+//               ~65 Google corta el resto con puntos suspensivos. Los seis
+//               títulos medían entre 76 y 90 con el sufijo, así que en los seis
+//               el resultado de búsqueda terminaba cortado a media frase.
+//               Además va con la keyword adelante, que es lo primero que se lee.
+//
+// Las portadas viven en public/blog/<slug>.webp (1200x630) y <slug>-sm.webp
+// (640x336). Antes se cargaban directo desde images.unsplash.com, y esa foto es
+// la imagen grande de la página: el navegador tenía que resolver un dominio
+// ajeno, abrir conexión y negociar TLS antes de poder empezar a bajarla, justo
+// en el elemento que decide la nota de velocidad de la página. Además dejaba a
+// un tercero como pieza obligatoria del sitio: el día que Unsplash cambie de
+// dirección o borre una foto, seis artículos se quedan sin portada.
+//
+// Son las mismas fotos, recortadas a 1200x630 —la medida que piden Facebook,
+// LinkedIn y WhatsApp para la tarjeta al compartir— y servidas desde el propio
+// dominio con caché de una semana. `unsplash` guarda el identificador original
+// por si hay que volver al archivo de mayor calidad.
 export const blog = [
   {
     slug: 'inteligencia-artificial-para-negocios-pequenos-peru',
     rubros: ['clinicas-consultorios', 'academias-preuniversitarios', 'barberias-salones-belleza'],
     title: '5 formas de usar inteligencia artificial en tu negocio pequeño (sin ser experto)',
+    seoTitle: 'Inteligencia artificial para negocios pequeños en Perú',
     excerpt: 'La IA ya no es solo para grandes empresas. Te mostramos cómo una MYPE peruana puede ahorrar horas y vender más usando herramientas de IA hoy mismo.',
     category: 'pymes-peru',
-    image: 'https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=1200&q=80&auto=format&fit=crop',
+    image: '/blog/inteligencia-artificial-para-negocios-pequenos-peru.webp',
+    unsplash: '1531746790731-6c087fecd65a',
     emoji: '🤖',
-    author: 'Bitwise',
+    author: 'BIT-ONE',
     featured: false,
     date: '2026-07-14',
     readTime: '7 min',
@@ -656,18 +864,20 @@ export const blog = [
       '3. Ordena tus números sin ser contador. La IA puede armarte una hoja de cálculo de flujo de caja, resumir tus ventas del mes o proyectar cuánto stock comprar según tu histórico. Menos adivinar, más decidir con datos.',
       '4. Mejora tus fotos y diseños. Con IA generas o retocas imágenes de tus productos, quitas fondos y creas piezas para redes sin pagar un diseñador para cada post. Tu negocio se ve más profesional a costo casi cero.',
       '5. Automatiza tareas repetitivas. Conectando apps con herramientas como Zapier o Make, puedes hacer que un pedido de WhatsApp se registre solo en una hoja, que se envíe un mensaje de confirmación automático o que te avise cuando un producto se agote.',
-      'El punto no es reemplazar tu toque humano —ese es tu mayor valor—, sino sacarte de encima el trabajo pesado para que dediques tu tiempo a vender y atender bien. En Bitwise integramos estas herramientas de IA directamente en tu web o app, listas para tu rubro. Si quieres empezar, escríbenos por WhatsApp y te asesoramos gratis.',
+      'El punto no es reemplazar tu toque humano —ese es tu mayor valor—, sino sacarte de encima el trabajo pesado para que dediques tu tiempo a vender y atender bien. En BIT-ONE integramos estas herramientas de IA directamente en tu web o app, listas para tu rubro. Si quieres empezar, escríbenos por WhatsApp y te asesoramos gratis.',
     ],
   },
   {
     slug: 'chatbot-whatsapp-con-ia-atencion-24-7',
     rubros: ['pollerias-restaurantes', 'barberias-salones-belleza', 'farmacias-boticas'],
     title: 'Chatbot con IA en WhatsApp: atiende clientes 24/7 sin contratar a nadie',
+    seoTitle: 'Chatbot con IA en WhatsApp para tu negocio',
     excerpt: 'Un asistente automático que responde, toma pedidos y cierra ventas en WhatsApp a cualquier hora. Te explicamos cómo funciona y cuánto puede ayudar a tu MYPE.',
     category: 'seo-marketing',
-    image: 'https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=1200&q=80&auto=format&fit=crop',
+    image: '/blog/chatbot-whatsapp-con-ia-atencion-24-7.webp',
+    unsplash: '1611746872915-64382b5c76da',
     emoji: '💬',
-    author: 'Bitwise',
+    author: 'BIT-ONE',
     featured: false,
     date: '2026-07-13',
     readTime: '6 min',
@@ -678,18 +888,20 @@ export const blog = [
       'A diferencia de los bots antiguos de "responde 1 para menú, 2 para horarios", los de hoy conversan de forma natural. Si un cliente pregunta "¿tienes pollo a la brasa para 4 personas y cuánto sale con delivery a Los Olivos?", el bot lo entiende y responde con precio y tiempo, como lo haría una persona.',
       '¿Para qué rubros sirve? Prácticamente todos: pollerías y restaurantes que reciben pedidos, bodegas que atienden por catálogo, barberías que agendan citas, farmacias que confirman stock. Cualquier negocio que hoy pierde tiempo contestando lo mismo una y otra vez gana con un chatbot.',
       'Lo importante es que el bot atienda bien y sepa cuándo pasarte la conversación a ti. Un buen chatbot filtra las consultas fáciles solo y te avisa cuando llega un cliente listo para comprar o con una duda especial. Tú recibes clientes calientes, no un buzón lleno de preguntas repetidas.',
-      'En Bitwise conectamos tu web o app con un chatbot de IA en WhatsApp entrenado con la información de tu negocio: tus productos, precios, horarios y forma de atender. Escríbenos y te mostramos una demo funcionando para tu rubro.',
+      'En BIT-ONE conectamos tu web o app con un chatbot de IA en WhatsApp entrenado con la información de tu negocio: tus productos, precios, horarios y forma de atender. Escríbenos y te mostramos una demo funcionando para tu rubro.',
     ],
   },
   {
     slug: 'como-cobrar-online-yape-plin-pasarela-de-pago',
     rubros: ['gimnasios-crossfit', 'ferreterias', 'pollerias-restaurantes'],
     title: 'Cómo cobrar online en tu negocio: Yape, Plin y pasarelas de pago explicadas',
+    seoTitle: 'Cómo cobrar online: Yape, Plin y pasarelas de pago',
     excerpt: 'Deja de perder ventas por no aceptar pagos digitales. Comparamos Yape, Plin y las pasarelas de tarjeta para que elijas bien según tu tipo de negocio.',
     category: 'ecommerce',
-    image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=1200&q=80&auto=format&fit=crop&sat=-50',
+    image: '/blog/como-cobrar-online-yape-plin-pasarela-de-pago.webp',
+    unsplash: '1563013544-824ae1b704d3',
     emoji: '💳',
-    author: 'Bitwise',
+    author: 'BIT-ONE',
     featured: false,
     date: '2026-07-12',
     readTime: '6 min',
@@ -700,18 +912,20 @@ export const blog = [
       'Cuando tu volumen crece o vendes montos altos, conviene una pasarela de pago (como las que procesan tarjetas Visa y Mastercard). Estas cobran automáticamente en tu web, aceptan tarjetas nacionales e internacionales y te dan un panel con todas tus transacciones. Cobran una comisión por venta, pero a cambio profesionalizas el cobro y no dependes de confirmar a mano.',
       '¿Cuál elegir? Si recién empiezas o vendes montos bajos, arranca con Yape y Plin integrados a tu catálogo web. Si ya tienes tienda online, vendes a otras ciudades o manejas tickets altos, súmale una pasarela de tarjeta. Lo ideal es ofrecer varias opciones: mientras más formas de pago, menos ventas se caen.',
       'Un detalle clave para las MYPES: cobrar formal también significa emitir boleta o factura electrónica. Conectar tu cobro con facturación SUNAT desde el inicio te evita problemas y le da confianza al cliente. Muchos abandonan una compra si el negocio se ve informal.',
-      'En Bitwise dejamos tu web lista para cobrar: integramos billeteras peruanas, pasarelas de tarjeta y facturación electrónica según lo que tu negocio necesite. Escríbenos por WhatsApp y te armamos el esquema de cobro que más te conviene.',
+      'En BIT-ONE dejamos tu web lista para cobrar: integramos billeteras peruanas, pasarelas de tarjeta y facturación electrónica según lo que tu negocio necesite. Escríbenos por WhatsApp y te armamos el esquema de cobro que más te conviene.',
     ],
   },
   {
     slug: 'por-que-tu-negocio-necesita-pagina-web',
     rubros: ['clinicas-consultorios', 'gimnasios-crossfit', 'veterinarias-petshop'],
     title: 'Por qué tu negocio pequeño necesita una página web (aunque uses redes)',
+    seoTitle: 'Por qué tu negocio necesita una página web',
     excerpt: 'Instagram y WhatsApp no son suficientes. Te explicamos por qué una web propia hace que tu MYPE venda más y se vea más profesional.',
     category: 'desarrollo-web',
-    image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&q=80&auto=format&fit=crop',
+    image: '/blog/por-que-tu-negocio-necesita-pagina-web.webp',
+    unsplash: '1556761175-5973dc0f32e7',
     emoji: '🚀',
-    author: 'Bitwise',
+    author: 'BIT-ONE',
     featured: false,
     date: '2026-07-05',
     readTime: '5 min',
@@ -728,11 +942,13 @@ export const blog = [
     slug: 'como-aparecer-en-google-negocio-local',
     rubros: ['pollerias-restaurantes', 'ferreterias', 'clinicas-consultorios'],
     title: 'Cómo hacer que tu negocio aparezca en Google (SEO local para MYPEs)',
+    seoTitle: 'SEO local para MYPEs: cómo aparecer en Google',
     excerpt: 'Pasos concretos para que tu negocio salga cuando alguien busca tu rubro en tu ciudad. Sin tecnicismos, aplicable hoy mismo.',
     category: 'seo-marketing',
-    image: 'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1200&q=80&auto=format&fit=crop',
+    image: '/blog/como-aparecer-en-google-negocio-local.webp',
+    unsplash: '1524661135-423995f22d0b',
     emoji: '📍',
-    author: 'Bitwise',
+    author: 'BIT-ONE',
     featured: false,
     date: '2026-06-28',
     readTime: '7 min',
@@ -749,11 +965,13 @@ export const blog = [
     slug: 'tienda-online-vs-vender-por-whatsapp',
     rubros: ['ferreterias', 'panaderias-pastelerias', 'farmacias-boticas'],
     title: 'Tienda online vs. vender por WhatsApp: ¿qué le conviene a tu MYPE?',
+    seoTitle: 'Tienda online o vender por WhatsApp: ¿cuál conviene?',
     excerpt: 'Comparamos los dos caminos para vender por internet en Perú, con sus costos, ventajas y cuándo conviene cada uno.',
     category: 'ecommerce',
-    image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=1200&q=80&auto=format&fit=crop',
+    image: '/blog/tienda-online-vs-vender-por-whatsapp.webp',
+    unsplash: '1563013544-824ae1b704d3',
     emoji: '🛍️',
-    author: 'Bitwise',
+    author: 'BIT-ONE',
     featured: false,
     date: '2026-06-20',
     readTime: '6 min',

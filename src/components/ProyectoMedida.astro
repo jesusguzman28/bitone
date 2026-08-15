@@ -1,11 +1,15 @@
 ---
 import { waLink } from '../data/site';
 
+// Los cuatro puntos describían el encargo de una MYPE —módulos de ventas y
+// reservas, billeteras peruanas, rondas de cambios de diseño—. Ahora describen
+// lo que de verdad quiere saber quien está evaluando encargar un desarrollo:
+// cómo se acota, cómo se entrega y qué se lleva al final.
 const puntos = [
-  'Levantamos tu proceso real antes de escribir una línea de código',
-  'Módulos a medida: ventas, inventario, reservas, reportes o lo que necesites',
-  'Se conecta con SUNAT, billeteras peruanas y los sistemas que ya usas',
-  'Avances semanales con link de preview y 2 rondas de cambios sin costo',
+  'Levantamos el alcance con tu equipo antes de escribir una línea de código',
+  'Alcance, cronograma y precio cerrados por escrito antes de empezar',
+  'Se integra con los sistemas que ya tienes y con lo que exige SUNAT',
+  'Entregas por etapas revisables, y el código documentado a tu nombre',
 ];
 ---
 
@@ -17,17 +21,19 @@ const puntos = [
     <div class="pointer-events-none absolute -right-16 -top-16 h-72 w-72 rounded-full opacity-30 blur-[70px]" style="background:radial-gradient(circle,#D91023,transparent 70%)"></div>
 
     <div class="relative">
-      <span class="eyebrow eyebrow--dark">¿Tu rubro no está en la lista?</span>
+      {/* El rótulo decía "¿Tu rubro no está en la lista?" y apuntaba a una
+          parrilla de rubros que se borró con las landings: preguntaba por algo
+          que el visitante nunca llegó a ver. */}
       <h2 class="mt-4 font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.15]">
-        Hacemos tu <span class="gradient-text--warm">proyecto a la medida</span>
+        Construimos <span class="gradient-text--warm">desde cero</span>
       </h2>
       <p class="mt-4 max-w-[440px] text-[15px] leading-[1.7] text-slate-400">
-        Si tu negocio no encaja en una plantilla, lo construimos desde tu operación real. Nos sentamos contigo,
-        entendemos cómo trabajas y armamos el sistema que te falta.
+        La mayoría de los proyectos que valen la pena no se parecen a ningún producto ya hecho.
+        Nos sentamos con tu equipo, levantamos qué tiene que hacer el sistema y lo construimos.
       </p>
 
       <a
-        href={waLink('Hola Bitwise 👋 quiero un proyecto a la medida para mi negocio')}
+        href={waLink('Hola BIT-ONE, quiero conversar un proyecto de software a medida')}
         target="_blank"
         rel="noopener"
         class="btn btn--whatsapp group mt-7 !py-3 !pl-[26px] !text-[15px]"

@@ -14,29 +14,21 @@ import { servicioDeTab, hrefServicio } from '../data/servicios';
 const pagina = `${site.domain}/servicios/`;
 
 const schema = serviciosTabs.map((t) => {
-  const priceSpecification: Record<string, unknown> = {
-    '@type': 'PriceSpecification',
-    priceCurrency: 'PEN',
-  };
-  const offers: Record<string, unknown> = {
-    '@type': 'Offer',
-    priceCurrency: 'PEN',
-    availability: 'https://schema.org/InStock',
-    url: `${site.domain}/servicios#${t.id}`,
-  };
+  // `url` apunta a la página propia del servicio, no a un ancla de esta.
+  //
+  // Antes decía `${site.domain}/servicios#${t.id}`, y eso tenía dos problemas a
+  // la vez. Uno, un ancla no es una dirección: le declaraba a Google que los
+  // cuatro servicios viven en el mismo documento, que es justo lo que se
+  // deshizo al darle página propia a cada uno. Dos, iba sin barra final, contra
+  // la regla del sitio, así que la dirección declarada no coincidía con el
+  // canonical de ninguna página.
+  //
+  // `servicioDeTab` puede devolver undefined si algún día se añade una pestaña
+  // sin página escrita todavía; en ese caso se cae al índice, que sí existe.
+  const propia = servicioDeTab(t.id);
+  const url = propia ? `${site.domain}${hrefServicio(propia.slug)}` : pagina;
 
-  if (t.price === null) {
-    // Sin precio publicado no se declara ninguno: un precio inventado en el
-    // schema es peor que no tenerlo.
-    priceSpecification.description = 'Según alcance';
-  } else {
-    offers.price = String(t.price);
-    priceSpecification.minPrice = String(t.price);
-  }
-  if (t.ivaIncluido !== null) priceSpecification.valueAddedTaxIncluded = t.ivaIncluido;
-  offers.priceSpecification = priceSpecification;
-
-  return {
+  const nodo: Record<string, unknown> = {
     '@type': 'Service',
     '@id': `${pagina}#${t.schemaId}`,
     name: t.schemaName,
@@ -44,21 +36,61 @@ const schema = serviciosTabs.map((t) => {
     description: t.desc,
     provider: { '@id': `${site.domain}/#org` },
     areaServed: { '@type': 'Country', name: 'Perú' },
-    offers,
+    url,
   };
+
+  // Sin `offers` cuando no hay precio publicado, que desde el cambio de negocio
+  // son los cuatro.
+  //
+  // Antes se emitía igual un Offer con moneda, disponibilidad y una
+  // `PriceSpecification` cuya única información era la cadena "Según alcance".
+  // Un Offer sin precio no es un precio prudente: es un nodo que declara que
+  // hay una oferta comprable y no dice por cuánto. Google lo descarta para
+  // resultados enriquecidos y, mientras tanto, ensucia el grafo. Es el mismo
+  // criterio con el que se quitó `priceRange` del LocalBusiness en BaseLayout.
+  //
+  // El día que algún servicio publique una cifra, este bloque la vuelve a
+  // emitir y entonces sí con `price` de verdad.
+  if (t.price !== null) {
+    const priceSpecification: Record<string, unknown> = {
+      '@type': 'PriceSpecification',
+      priceCurrency: 'PEN',
+      minPrice: String(t.price),
+    };
+    if (t.ivaIncluido !== null) priceSpecification.valueAddedTaxIncluded = t.ivaIncluido;
+    nodo.offers = {
+      '@type': 'Offer',
+      priceCurrency: 'PEN',
+      availability: 'https://schema.org/InStock',
+      price: String(t.price),
+      url,
+      priceSpecification,
+    };
+  }
+
+  return nodo;
 });
 ---
 
 <BaseLayout
-  title="Servicios: páginas web, tiendas online, ERPs y apps"
-  description="Página web profesional con dominio y hosting incluidos, tienda online con pasarelas peruanas, ERPs a medida y apps móviles. Cotización clara en soles."
+  title="Servicios: software a medida y apps móviles"
+  description="Desarrollo de software a medida y aplicaciones móviles para empresas peruanas. Alcance y precio cerrados por escrito antes de programar."
   schema={schema}
 >
   {/* Solo el titular. Se quitaron tres cosas que sobraban antes de llegar a los
       servicios: el rótulo "Servicios", que repetía lo que ya marca el menú de
       arriba; la línea "Todo lo que incluye, sin letra chica"; y el detalle de
-      pagos 50/50, que también se quitó de más abajo en esta misma página. */}
-  <PageHero title="Servicios de desarrollo web para <span class='gradient-text--warm'>MYPEs en Perú</span>" />
+      pagos 50/50, que también se quitó de más abajo en esta misma página.
+
+      El titular decía "Servicios de desarrollo web para MYPEs en Perú" y el
+      título de pestaña enumeraba páginas web y tiendas online. Era la
+      contradicción más grande que quedaba en el sitio: esta es la segunda
+      página que abre quien evalúa contratarnos, justo después de la portada,
+      y decía lo contrario que ella. */}
+  <PageHero
+    title="Desarrollo de software <span class='gradient-text--warm'>para empresas</span>"
+    subtitle="Tres formas de trabajar con nosotros, según cuánto quieras dirigir tú y cuánto quieras delegar."
+  />
 
   <!-- Selector de servicio -->
   <section class="surface px-6 pb-12 pt-14">
@@ -98,7 +130,6 @@ const schema = serviciosTabs.map((t) => {
                 <span class="relative mx-auto mb-5 grid h-12 w-12 place-items-center rounded-[14px]" style="background:rgba(232,163,23,0.14);color:#E8A317">
                   <Icono name={t.icon} size={22} />
                 </span>
-                <span class="relative block text-[11px] font-bold uppercase tracking-[0.16em] text-accent">{t.tag}</span>
                 <h2 class="relative mt-3 font-display text-[clamp(1.5rem,3vw,2rem)] font-extrabold leading-[1.15] tracking-[-0.02em]">{t.title}</h2>
 
                 {/* El precio tiene que estar a la vista: Google exige que los
@@ -224,7 +255,6 @@ const schema = serviciosTabs.map((t) => {
   <section class="surface--alt px-6 py-20" aria-labelledby="trabajos-servicios">
     <div class="mx-auto w-full max-w-[1120px]">
       <div class="reveal mx-auto max-w-[640px] text-center">
-        <span class="eyebrow eyebrow--light">Tipos de trabajo</span>
         <h2 id="trabajos-servicios" class="mt-5 font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
           Qué entra en cada servicio
         </h2>

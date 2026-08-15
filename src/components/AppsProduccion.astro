@@ -1,0 +1,247 @@
+---
+import { apps, hrefApp, playDeveloper } from '../data/apps';
+import { site } from '../data/site';
+
+interface Props {
+  /** Titular de la sección. Cambia según dónde se use: en la portada compite
+   *  con el resto del argumentario, en /proyectos/ es parte del catálogo.
+   *
+   *  Sin cifras en el titular, ni aquí ni en quien lo sobrescriba. Decía
+   *  "Cuatro apps nuestras…" y una cifra escrita a mano en un texto envejece
+   *  sola: el día que se publique la quinta o se retire una, el titular
+   *  contradice a la lista que tiene justo debajo, y nadie se acuerda de venir
+   *  a cambiarlo. Si alguna vez hace falta el número, que salga de
+   *  `apps.length` y no de una palabra. */
+  title?: string;
+  subtitle?: string;
+}
+const {
+  title = 'Apps nuestras, publicadas y en producción',
+  subtitle = 'No hace falta que nos creas: están en Google Play bajo la cuenta de Bitone E.I.R.L., la misma razón social que factura y que aparece en el pie de esta página.',
+} = Astro.props;
+
+// El logotipo de Google Play, con sus cuatro colores oficiales. Va en línea y
+// no como imagen porque son cuatro trazos: una petición menos y escala sin
+// perder nitidez en cualquier tamaño.
+const PLAY = `
+  <path fill="#00A0FF" d="M3.6 1.8a1.5 1.5 0 0 0-.5 1.14v18.12c0 .45.19.86.5 1.14l.06.06 10.15-10.15v-.24L3.66 1.72l-.06.08z"/>
+  <path fill="#FFBC00" d="m17.2 15.4-3.39-3.39v-.24l3.4-3.4.07.05 4.02 2.28c1.15.65 1.15 1.72 0 2.38l-4.02 2.28-.08.04z"/>
+  <path fill="#FF3A44" d="M17.28 15.35 13.81 11.88 3.6 22.1c.38.4 1 .45 1.71.05l11.97-6.8z"/>
+  <path fill="#00C853" d="M17.28 8.42 5.31 1.62c-.71-.4-1.33-.35-1.71.05l10.21 10.21 3.47-3.46z"/>
+`;
+---
+
+{/* Banda oscura, como el banner de marcas. No es capricho: es la sección con
+    la prueba más fuerte de todo el sitio —lo único que un desconocido puede
+    verificar sin escribirnos— y necesita separarse del resto de la página en
+    vez de leerse como una tarjeta más. */}
+<section class="apps-band relative isolate overflow-hidden px-6 py-20" aria-labelledby="apps-produccion">
+  <div class="apps-glow apps-glow--a" aria-hidden="true"></div>
+  <div class="apps-glow apps-glow--b" aria-hidden="true"></div>
+
+  <div class="relative mx-auto w-full max-w-[1120px]">
+    <div class="reveal mx-auto max-w-[720px] text-center">
+      <h2 id="apps-produccion" class="m-0 font-display text-[clamp(1.6rem,3.6vw,2.3rem)] font-extrabold leading-[1.15] text-white [text-wrap:balance]">
+        {title}
+      </h2>
+      <p class="mx-auto mt-4 max-w-[600px] text-[15.5px] leading-[1.7] text-slate-400 [text-wrap:pretty]">
+        {subtitle}
+      </p>
+    </div>
+
+    <ul class="apps-grid mt-11 grid list-none gap-4 p-0">
+      {apps.map((app, i) => (
+        <li class="reveal" style={`--reveal-delay:${(i % 4) * 70}ms`}>
+          <a
+            href={hrefApp(app.paquete)}
+            target="_blank"
+            rel="noopener"
+            class="app-card flex h-full flex-col no-underline"
+            style={`--acento:${app.color}`}
+          >
+            {/* El icono real de la ficha, servido desde nuestro dominio. Va con
+                medidas declaradas para que el navegador reserve el hueco antes
+                de bajarlo: sin ellas, las cuatro tarjetas dan un salto cuando
+                cargan y el bloque entero se recoloca.
+
+                `alt` vacío y aria-hidden porque el nombre de la app va escrito
+                justo debajo: un lector de pantalla que lea "icono de Apuray" y
+                acto seguido "Apuray" repite lo mismo dos veces. */}
+            <img
+              src={`/apps/${app.icono}.webp`}
+              width="256"
+              height="256"
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              decoding="async"
+              class="app-card__icono"
+            />
+
+            <span class="app-card__cuerpo">
+              <span class="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
+                <span class="app-card__nombre">{app.nombre}</span>
+                {app.rating && (
+                  <span class="app-card__rating">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6-5.4-2.9-5.4 2.9 1-6L3.2 9.4l6.1-.9L12 3Z"/></svg>
+                    {app.rating.toFixed(1)}
+                    <span class="sr-only">de 5 estrellas en Google Play</span>
+                  </span>
+                )}
+              </span>
+
+              <span class="app-card__proyecto">{app.proyecto}</span>
+              <span class="app-card__que">{app.que}</span>
+
+              <span class="app-card__play">
+                <svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true" set:html={PLAY} />
+                Ver en Google Play
+                <svg class="app-card__flecha" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+              </span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <p class="reveal mt-9 text-center text-[14.5px] text-slate-400">
+      Publicadas por <strong class="font-semibold text-slate-200">{site.razonSocial}</strong> · RUC {site.ruc} ·
+      <a href={playDeveloper} target="_blank" rel="noopener" class="apps-dev">
+        ver la cuenta de desarrollador
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+      </a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .apps-band {
+    background: linear-gradient(170deg, #141b28 0%, #0c1119 100%);
+    border-block: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .apps-glow {
+    position: absolute;
+    height: 320px;
+    width: 320px;
+    border-radius: 999px;
+    filter: blur(90px);
+    pointer-events: none;
+  }
+  .apps-glow--a { left: -90px; top: -60px; opacity: 0.22; background: radial-gradient(circle, #D91023, transparent 70%); }
+  .apps-glow--b { right: -90px; bottom: -80px; opacity: 0.18; background: radial-gradient(circle, #00A0FF, transparent 70%); }
+
+  .apps-grid { grid-template-columns: 1fr; }
+  @media (min-width: 560px) { .apps-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1000px) { .apps-grid { grid-template-columns: repeat(4, 1fr); } }
+
+  .app-card {
+    height: 100%;
+    border-radius: 22px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.09);
+    transition: transform 0.45s var(--ease-fluid), box-shadow 0.45s var(--ease-fluid), background 0.45s var(--ease-fluid);
+  }
+  .app-card:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--acento) 50%, transparent),
+      0 26px 50px -24px color-mix(in srgb, var(--acento) 70%, transparent);
+  }
+  /* El foco tiene que verse: la tarjeta entera es un enlace y sin esto se
+     navega a ciegas con el teclado. */
+  .app-card:focus-visible {
+    outline: 2px solid var(--acento);
+    outline-offset: 3px;
+  }
+
+  /* El icono se dibuja como en la pantalla de un teléfono: cuadrado con las
+     esquinas muy redondeadas y un filo claro de 1px que lo despega del fondo
+     oscuro, porque tres de los cuatro tienen fondo azul y sin ese filo se
+     confundirían con la tarjeta. */
+  .app-card__icono {
+    display: block;
+    height: 66px;
+    width: 66px;
+    border-radius: 17px;
+    /* El filo va con `outline` y offset negativo, no con `box-shadow: inset`.
+       Una sombra interior no se ve sobre un <img>: el navegador pinta el
+       contenido de la imagen encima y se la come entera. El outline sí se
+       dibuja por delante, y con offset negativo cae justo sobre el borde
+       redondeado en vez de rodearlo por fuera. */
+    outline: 1px solid rgba(255, 255, 255, 0.18);
+    outline-offset: -1px;
+    box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.75);
+    transition: transform 0.45s var(--ease-fluid);
+  }
+  .app-card:hover .app-card__icono { transform: scale(1.05); }
+
+  .app-card__cuerpo {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding-top: 16px;
+  }
+  .app-card__nombre {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    color: #fff;
+  }
+  .app-card__rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #fcd34d;
+    background: rgba(252, 211, 77, 0.13);
+    font-variant-numeric: tabular-nums;
+  }
+  .app-card__proyecto {
+    margin-top: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--acento) 55%, #ffffff);
+  }
+  .app-card__que {
+    margin-top: 10px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #94a3b8;
+    text-wrap: pretty;
+  }
+  .app-card__play {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: auto;
+    padding-top: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #e2e8f0;
+  }
+  .app-card__flecha { transition: transform 0.4s var(--ease-fluid); }
+  .app-card:hover .app-card__flecha { transform: translate(2px, -2px); }
+
+  .apps-dev {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+    color: #cbd5e1;
+    text-decoration-color: rgba(203, 213, 225, 0.35);
+    text-underline-offset: 3px;
+  }
+  .apps-dev:hover { color: #fff; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .app-card, .app-card__flecha, .app-card__icono { transition: none; }
+  }
+</style>

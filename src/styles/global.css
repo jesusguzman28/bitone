@@ -1,5 +1,96 @@
 @import "tailwindcss";
 
+/* ============================================================
+   TIPOGRAFÍAS AUTO-ALOJADAS
+   ------------------------------------------------------------
+   Antes se pedían a Google Fonts con una hoja de estilos externa. Eso metía
+   dos servidores ajenos en el camino crítico: el navegador tenía que resolver
+   fonts.googleapis.com, bajar un CSS, y recién ahí enterarse de que necesitaba
+   fonts.gstatic.com para bajar las letras. Dos conexiones nuevas —DNS, TLS,
+   ida y vuelta— antes de poder pintar una sola palabra, en cada visita nueva.
+   Los `preconnect` del layout adelantaban parte de eso, pero no lo eliminaban.
+   Ahora los archivos salen del mismo dominio, en la misma conexión que ya está
+   abierta, y con caché de un año.
+
+   Solo el subconjunto `latin`: cubre U+0000–00FF, o sea todo el español
+   —ñ, tildes, ¿ y ¡— más comillas y guiones tipográficos. Los subconjuntos
+   cirílico y vietnamita que sirve Google no se usan en ninguna página.
+
+   `font-display: swap` se mantiene: el texto se lee desde el primer momento
+   con la letra del sistema y cambia cuando llega la definitiva. Sin esto hay
+   un parpadeo en blanco donde debería ir el titular.
+
+   Para cambiar pesos o familias: se bajan los .woff2 a public/fonts/ y se
+   añade el bloque aquí. La lista de abajo tiene que coincidir con los pesos
+   que se usan de verdad; cada uno es un archivo más que el navegador puede
+   tener que bajar.
+   ============================================================ */
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/plus-jakarta-sans-400.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/plus-jakarta-sans-500.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/plus-jakarta-sans-600.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/plus-jakarta-sans-700.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("/fonts/plus-jakarta-sans-800.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/space-grotesk-500.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/space-grotesk-600.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/space-grotesk-700.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
 /* Tokens alineados con bitwise.pe (producción) */
 @theme {
   --color-primary: #D91023;
@@ -181,21 +272,18 @@
     color: #fff;
   }
 
-  /* ---- Eyebrow / badge ---- */
-  .eyebrow {
-    @apply inline-flex items-center gap-2 rounded-full px-[13px] py-[5px] text-[10px] font-bold uppercase;
-    letter-spacing: 0.2em;
-  }
-  .eyebrow--light {
-    color: var(--color-primary);
-    background: color-mix(in srgb, var(--color-primary) 9%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 16%, transparent);
-  }
-  .eyebrow--dark {
-    color: #fca5b0;
-    background: color-mix(in srgb, var(--color-primary) 18%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 30%, transparent);
-  }
+  /* Aquí vivían .eyebrow, .eyebrow--light y .eyebrow--dark: la pastilla en
+     mayúsculas que iba encima de cada titular del sitio —"Servicios",
+     "Trabajos", "Sobre nosotros", "Preguntas frecuentes"—.
+
+     Se quitaron las trece de una vez. En ningún caso aportaban información: o
+     repetían la sección que el menú de arriba ya marca, o repetían el titular
+     que venía justo debajo. Una etiqueta que dice dos veces lo que ya está en
+     pantalla no crea jerarquía, la diluye, y es de las cosas que hacen que una
+     página se lea como plantilla en vez de como algo escrito para este sitio.
+
+     Si alguna vez vuelve a hacer falta un rótulo, que sea porque dice algo que
+     el titular no dice. */
 
   /* ---- Botones ---- */
   .btn {

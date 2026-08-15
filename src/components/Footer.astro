@@ -1,6 +1,31 @@
 ---
 import { site, nav, waLink } from '../data/site';
+import { servicios, hrefServicio } from '../data/servicios';
 const year = new Date().getFullYear();
+
+// Columna de servicios en el pie.
+//
+// Es la forma más directa de arreglar el peor problema de enlazado interno que
+// tenía el sitio: las cuatro páginas de servicio —las que compiten por "página
+// web profesional Perú", "tienda online Perú", "ERP a medida" y "app móvil"—
+// recibían UN enlace cada una, desde /servicios y nada más. Cada landing de
+// rubro recibía entre cinco y trece. Desde el pie las enlazan las 30 páginas.
+//
+// Cerraba con la guía de precios de páginas web. Esa página se borró con el
+// cambio de negocio; en su lugar va /proyectos/, que en una venta a empresas es
+// la página que más necesita enlaces entrantes: es la primera que abre quien
+// está evaluando si sabemos construir.
+const enlacesServicio = [
+  ...servicios.map((s) => ({ label: s.breadcrumb, href: hrefServicio(s.slug) })),
+  { label: 'Proyectos en producción', href: '/proyectos/' },
+];
+
+// El blog salió del menú principal cuando entró Metodología: está apartado del
+// índice de Google mientras su contenido sea del negocio anterior, así que no
+// merecía uno de los seis puestos de arriba. Pero borrarlo del sitio entero
+// dejaría seis páginas sin ninguna forma de llegar a ellas, así que se enlaza
+// aquí, al final de la navegación del pie.
+const enlacesNav = [...nav, { label: 'Blog', href: '/blog/' }];
 
 const socialItems = [
   { label: 'Facebook', href: site.socials.facebook, path: 'M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z' },
@@ -11,14 +36,14 @@ const socialItems = [
 ---
 
 <footer class="px-6 pb-8 pt-16 text-slate-400" style="background:#0a0f1c">
-  <div class="mx-auto grid w-full max-w-[1120px] gap-10 sm:grid-cols-2 lg:grid-cols-3">
+  <div class="mx-auto grid w-full max-w-[1120px] gap-10 sm:grid-cols-2 lg:grid-cols-4">
     <div>
       <a href="/" class="inline-flex items-center gap-[9px] font-display text-xl font-bold text-white no-underline">
         <span class="grid h-[34px] w-[34px] place-items-center rounded-[11px] text-[13px] font-bold text-white" style="background:linear-gradient(135deg,#D91023,#E8A317)">/B</span>
-        Bitwise
+        BIT-ONE
       </a>
       <p class="mt-3.5 max-w-[280px] text-sm leading-relaxed">
-        Páginas web, tiendas online y sistemas a medida para MYPEs peruanas.
+        Empresa de desarrollo de software en Lima, Perú. Sistemas a medida, apps móviles y mantenimiento.
       </p>
       <div class="mt-[18px] flex gap-2.5">
         {socialItems.map((s) => (
@@ -42,17 +67,30 @@ const socialItems = [
       </div>
     </div>
 
+    {/* h2 y no h4: el último encabezado de cualquier página es un h2 o un h3, y
+        estos saltaban directo a h4 en las 30. La jerarquía se rompía en todo el
+        sitio por el pie. El tamaño lo fijan las clases, así que cambiar la
+        etiqueta no mueve nada en pantalla. */}
     <div>
-      <h4 class="m-0 mb-3.5 font-display text-[13px] font-bold uppercase tracking-[0.14em] text-slate-200">Navegación</h4>
+      <h2 class="m-0 mb-3.5 font-display text-[13px] font-bold uppercase tracking-[0.14em] text-slate-200">Navegación</h2>
       <ul class="m-0 grid list-none gap-[9px] p-0 text-sm">
-        {nav.map((item) => (
+        {enlacesNav.map((item) => (
           <li><a href={item.href} class="text-slate-400 no-underline transition-colors duration-300 hover:text-white">{item.label}</a></li>
         ))}
       </ul>
     </div>
 
     <div>
-      <h4 class="m-0 mb-3.5 font-display text-[13px] font-bold uppercase tracking-[0.14em] text-slate-200">Contacto</h4>
+      <h2 class="m-0 mb-3.5 font-display text-[13px] font-bold uppercase tracking-[0.14em] text-slate-200">Servicios</h2>
+      <ul class="m-0 grid list-none gap-[9px] p-0 text-sm">
+        {enlacesServicio.map((s) => (
+          <li><a href={s.href} class="text-slate-400 no-underline transition-colors duration-300 hover:text-white">{s.label}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="m-0 mb-3.5 font-display text-[13px] font-bold uppercase tracking-[0.14em] text-slate-200">Contacto</h2>
       <ul class="m-0 grid list-none gap-[11px] p-0 text-sm">
         <li class="flex items-center gap-[9px]">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg>
@@ -84,7 +122,12 @@ const socialItems = [
   </div>
 
   <div class="mx-auto mt-12 flex w-full max-w-[1120px] flex-wrap justify-between gap-3 border-t border-white/10 pt-6 text-[13px] text-slate-500">
-    <span>© {year} {site.marca} · Hecho en Lima 🇵🇪</span>
+    {/* Sin banderita. Iba detrás de "Hecho en Lima" y era el último emoji
+        decorativo que quedaba en el sitio: la ubicación ya está dicha en texto
+        aquí mismo, en la ficha de /contacto/ y en el dato estructurado que lee
+        Google, que es donde se comprueba. Un emblema al lado no añade
+        información, solo hace que la línea se lea como plantilla. */}
+    <span>© {year} {site.marca} · Hecho en Lima</span>
   </div>
 </footer>
 

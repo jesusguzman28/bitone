@@ -6,13 +6,17 @@ import { site, contactoExpectativas } from '../data/site';
 ---
 
 <BaseLayout
-  title="Contacto: cotización gratis en 24 horas"
-  description="Cuéntanos de tu negocio y recibe una cotización gratis en menos de 24 horas. WhatsApp +51 945 574 190 · gguzman.bitone@gmail.com · Lima, Perú."
+  title="Contacto: conversemos tu proyecto"
+  description="Cuéntanos qué necesitas construir y coordinamos una reunión técnica. Firmamos acuerdo de confidencialidad antes si tu área legal lo pide. Lima, Perú."
 >
+  {/* Decía "Cotización gratis en menos de 24 horas · en soles y sin compromiso".
+      Es el lenguaje con el que se tranquiliza a un dueño de negocio que teme
+      que le cobren por preguntar. Una empresa no teme eso: lo que necesita
+      saber antes de escribir es si va a poder hablar con alguien técnico y qué
+      pasa con la información que va a contar. */}
   <PageHero
-    eyebrow="Contacto"
-    title="Cotización gratis <span class='gradient-text--warm'>en menos de 24 horas</span>"
-    subtitle="Cuéntanos de tu negocio y te respondemos con una propuesta clara, en soles y sin compromiso."
+    title="Conversemos <span class='gradient-text--warm'>tu proyecto</span>"
+    subtitle="Cuéntanos qué necesitas construir y coordinamos una reunión técnica con quien va a escribir el código. Si tu área legal pide acuerdo de confidencialidad, lo firmamos antes."
     compact
   />
 
@@ -77,7 +81,7 @@ import { site, contactoExpectativas } from '../data/site';
               <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-400">Empresa formal</div>
               {/* Aquí va la razón social, no la marca: quien busca este dato lo
                   va a contrastar en SUNAT, y en SUNAT la empresa figura como
-                  Bitone E.I.R.L. Poner "Bitwise Perú" junto a un RUC que no
+                  Bitone E.I.R.L. Poner "BIT-ONE Perú" junto a un RUC que no
                   devuelve ese nombre haría dudar justo a quien vino a confiar. */}
               <div class="mt-1 font-display text-base font-bold text-dark">{site.razonSocial} · RUC {site.ruc}</div>
               <div class="mt-0.5 text-[12.5px] text-slate-500">Emitimos boleta y factura electrónica</div>

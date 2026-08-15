@@ -1,14 +1,13 @@
 ---
 import { proceso } from '../data/site';
 
-interface Props { title?: string; eyebrow?: string; }
-const { eyebrow = 'Cómo trabajamos', title = 'De la idea al lanzamiento, en 4 pasos' } = Astro.props;
+interface Props { title?: string; }
+const { title = 'De la idea al lanzamiento, en 4 pasos' } = Astro.props;
 ---
 
 <section class="surface px-6 py-24">
   <div class="mx-auto w-full max-w-[1120px]">
     <div class="reveal text-center">
-      <span class="eyebrow eyebrow--light">{eyebrow}</span>
       <h2 class="mx-auto mt-4 max-w-[560px] font-display text-[clamp(1.7rem,4vw,2.5rem)] font-bold leading-[1.08] text-dark">{title}</h2>
     </div>
 

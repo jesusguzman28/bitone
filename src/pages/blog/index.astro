@@ -12,29 +12,66 @@ const fmt = (d: string) =>
   new Date(d + 'T12:00:00').toLocaleDateString('es-PE', { day: 'numeric', month: 'short', year: 'numeric' });
 ---
 
+{/* Apartado del índice de Google mientras el contenido sea del negocio
+    anterior, y esta es la decisión de SEO menos evidente de todo el sitio, así
+    que conviene dejarla explicada.
+
+    En un sitio de 17 páginas, seis artículos sobre páginas web, tiendas online,
+    Yape y SEO local para bodegas son más de un tercio del total, y todos apuntan
+    en la dirección contraria a la que ahora tiene que apuntar el sitio. Google
+    no lee cada página aislada: se hace una idea de sobre qué trata el dominio
+    entero. Con esos seis dentro, esa idea sigue siendo "agencia de páginas web
+    para negocios pequeños", que es justo lo que impide competir por "desarrollo
+    de software a medida".
+
+    Se apartan en vez de borrarse por tres razones: siguen accesibles para quien
+    llegue por un enlace, no producen 404 ni redirecciones nuevas, y el trabajo
+    de escribirlos no se tira. Y van con `noindex, follow`, así que la autoridad
+    que tengan sigue circulando hacia /servicios/ y /proyectos/.
+
+    Para revertirlo: se quita `noindex` de aquí y de [slug].astro. Eso toca
+    hacerlo cuando el blog tenga contenido técnico dirigido a quien compra
+    desarrollo, no antes. */}
 <BaseLayout
-  title="Blog: guías digitales para pymes peruanas"
-  description="Guías prácticas para negocios peruanos: cuánto cuesta una web, cómo cobrar con billeteras digitales, SEO local, chatbots con IA y más."
+  noindex
+  title="Blog"
+  description="Artículos de BIT-ONE. Los publicados hasta agosto de 2026 corresponden a la etapa anterior de la empresa y no describen los servicios actuales."
 >
+  {/* El H1 decía "Guías digitales para tu negocio": "tu negocio" no es nada que
+      nadie busque. Con "MYPEs peruanas" el titular dice de quién habla el blog
+      y coincide con lo que el resto del sitio ya afirma. */}
   <PageHero
-    eyebrow="Blog"
-    title="Guías digitales para <span class='gradient-text--warm'>tu negocio</span>"
+    title="Guías digitales para <span class='gradient-text--warm'>MYPEs peruanas</span>"
     subtitle="Sin tecnicismos: precios reales, cómo cobrar online, aparecer en Google y usar IA en tu pyme."
     compact
   />
 
   <section class="surface px-6 pb-24 pt-16">
     <div class="mx-auto w-full max-w-[1120px]">
+      {/* Esta línea enviaba a la guía de precios de páginas web, borrada con el
+          cambio de negocio. Ahora manda a los proyectos, que es lo que busca
+          quien está evaluando y aterrizó en el blog por casualidad.
+
+          PENDIENTE: los seis artículos siguen siendo de MYPE —web, tienda,
+          Yape, SEO local—. Cuatro sobran en el negocio nuevo y los que vengan
+          tendrán que ser técnicos. Se dejan vivos mientras tanto porque un
+          artículo desactualizado estorba menos que un blog vacío. */}
+      <p class="reveal -mt-2 mb-12 text-[15px] leading-[1.7] text-slate-500">
+        ¿Buscas lo que hemos construido antes que consejos? Está todo en
+        <a href="/proyectos/" class="font-semibold text-primary">proyectos en producción</a>,
+        con lo que se entregó en cada uno.
+      </p>
+
       <!-- Artículo destacado -->
       <h2 class="section-label">Artículo destacado</h2>
-      <a href={`/blog/${featured.slug}`} class="feature-card reveal mt-5 grid overflow-hidden rounded-[28px] bg-white no-underline">
+      <a href={`/blog/${featured.slug}/`} class="feature-card reveal mt-5 grid overflow-hidden rounded-[28px] bg-white no-underline">
         <div class="relative overflow-hidden bg-slate-100">
-          <img src={featured.image} alt={featured.title} class="feature-img h-full w-full object-cover" style="min-height:280px" />
+          <img src={featured.image} alt={featured.title} width="1200" height="630" loading="eager" fetchpriority="high" class="feature-img h-full w-full object-cover" style="min-height:280px" />
           <span class="cat-badge absolute left-4 top-4">{catLabel(featured.category)}</span>
         </div>
         <div class="flex flex-col justify-center p-8 sm:p-10">
           <span class="inline-flex w-fit items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-white" style="background:var(--gradient-brand)">
-            ★ Destacado
+            Destacado
           </span>
           <h3 class="mt-4 font-display text-[clamp(1.4rem,3vw,2rem)] font-extrabold leading-[1.2] text-dark [text-wrap:pretty]">{featured.title}</h3>
           <p class="mt-3 text-[15px] leading-[1.65] text-slate-500">{featured.excerpt}</p>
@@ -69,9 +106,12 @@ const fmt = (d: string) =>
       <div class="mt-6 grid gap-6" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">
         {rest.map((p, i) => (
           <article class="blog-item reveal" data-cat={p.category} style={`--reveal-delay:${(i % 3) * 90}ms`}>
-            <a href={`/blog/${p.slug}`} class="post-card flex h-full flex-col overflow-hidden rounded-[20px] bg-white no-underline">
+            <a href={`/blog/${p.slug}/`} class="post-card flex h-full flex-col overflow-hidden rounded-[20px] bg-white no-underline">
               <div class="relative overflow-hidden bg-slate-100" style="aspect-ratio:16/9">
-                <img src={p.image} alt={p.title} loading="lazy" class="post-img h-full w-full object-cover" />
+                {/* La tarjeta se dibuja como mucho a 400px de ancho: mandarle
+                    la versión de 1200 es bajar tres veces los bytes necesarios
+                    en una página que enseña cinco de estas a la vez. */}
+                <img src={p.image.replace('.webp', '-sm.webp')} alt={p.title} width="640" height="336" loading="lazy" decoding="async" class="post-img h-full w-full object-cover" />
                 <span class="cat-badge absolute left-3 top-3">{catLabel(p.category)}</span>
               </div>
               <div class="flex flex-1 flex-col p-6">

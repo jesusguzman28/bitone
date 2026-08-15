@@ -1,0 +1,686 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icono from '../components/Icono.astro';
+import CTA from '../components/CTA.astro';
+import { metodologia as m } from '../data/metodologia';
+import { site } from '../data/site';
+
+const url = `${site.domain}/metodologia/`;
+
+// Las preguntas van como FAQPage, igual que en las páginas de servicio. No se
+// declara ningún Service aquí: esta página describe CÓMO se trabaja, no un
+// servicio comprable, y duplicar los Service de /servicios/ crearía nodos que
+// compiten entre sí por la misma entidad.
+const schema = [
+  {
+    '@type': 'FAQPage',
+    '@id': `${url}#faq`,
+    mainEntity: m.faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+---
+
+<BaseLayout title={m.metaTitle} description={m.metaDescription} breadcrumbLabel="Metodología" schema={schema}>
+  <PageHero title={m.h1} subtitle={m.intro} />
+
+  {/* 1. La tensión, como un choque de dos frases.
+      Eran cuatro párrafos. La idea es una sola —ágil y precio cerrado se
+      contradicen— y se entiende mucho antes viéndola que leyéndola: dos citas
+      enfrentadas, y debajo la línea que las reconcilia. */}
+  <section class="surface px-6 py-20">
+    <div class="mx-auto w-full max-w-[900px]">
+      <h2 class="reveal text-center font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
+        {m.tension.title}
+      </h2>
+
+      <div class="choque reveal mt-10">
+        <div class="lado">
+          <span class="lado__rotulo">{m.tension.agil.rotulo}</span>
+          <p class="lado__frase">«{m.tension.agil.frase}»</p>
+          <p class="lado__pie">{m.tension.agil.pie}</p>
+        </div>
+
+        <span class="choque__vs" aria-hidden="true">vs</span>
+
+        <div class="lado">
+          <span class="lado__rotulo">{m.tension.contrato.rotulo}</span>
+          <p class="lado__frase">«{m.tension.contrato.frase}»</p>
+          <p class="lado__pie">{m.tension.contrato.pie}</p>
+        </div>
+      </div>
+
+      <p class="salida reveal mt-8" set:html={m.tension.salida} />
+    </div>
+  </section>
+
+  {/* 2. Las fases.
+      La numeración aquí sí es información y no adorno: el orden es el del
+      proceso real y ninguna fase empieza sin que la anterior haya dejado algo
+      firmado. Por eso arranca en 00: el análisis ocurre antes de que exista
+      proyecto, y se puede contratar solo. */}
+  <section class="surface--alt px-6 py-20">
+    <div class="mx-auto w-full max-w-[1020px]">
+      <div class="reveal mx-auto max-w-[760px]">
+        <h2 class="font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">
+          {m.fases.title}
+        </h2>
+        <p class="mt-4 text-[15.5px] leading-[1.7] text-slate-600 [text-wrap:pretty]">{m.fases.intro}</p>
+      </div>
+
+      <ol class="fases mt-10 grid list-none gap-0 p-0">
+        {m.fases.items.map((f) => (
+          <li class="fase reveal">
+            <div class="fase__marca">
+              <span class="fase__ico"><Icono name={f.icono} size={19} /></span>
+              <span class="fase__n">{f.n}</span>
+            </div>
+
+            <div class="fase__cuerpo">
+              <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <h3 class="m-0 font-display text-[18px] font-extrabold leading-[1.25] text-dark">{f.nombre}</h3>
+                <span class="fase__dur">{f.duracion}</span>
+              </div>
+              <p class="m-0 mt-2.5 text-[15px] leading-[1.65] text-slate-600 [text-wrap:pretty]">{f.que}</p>
+              <p class="fase__ent m-0 mt-3.5">
+                <span class="fase__entlabel">Recibes</span>
+                {f.entregable}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- 3. El sprint por dentro -->
+  <section class="surface px-6 py-20">
+    <div class="mx-auto w-full max-w-[1020px]">
+      <div class="reveal mx-auto max-w-[760px]">
+        <h2 class="font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">
+          {m.sprint.title}
+        </h2>
+        <p class="mt-4 text-[15.5px] leading-[1.7] text-slate-600 [text-wrap:pretty]">{m.sprint.intro}</p>
+      </div>
+
+      {/* El calendario de diez días laborables.
+          La rejilla son diez columnas iguales —lunes a viernes, dos veces— y
+          cada hito se coloca en su día con grid-column. Así la distancia entre
+          marcas es la distancia real en el calendario: se ve que entre el punto
+          de control y la demo pasan cuatro días de trabajo sin reuniones, que
+          es justo el dato que tranquiliza a quien teme que un proveedor le
+          coma la agenda. */}
+      <div class="calendario reveal mt-10">
+        <div class="cal-semanas" aria-hidden="true">
+          <span class="cal-semana">Semana 1</span>
+          <span class="cal-semana">Semana 2</span>
+        </div>
+
+        <div class="cal-pista">
+          <span class="cal-fondo" aria-hidden="true"></span>
+          {[...Array(10)].map((_, i) => (
+            <span class="cal-dia" style={`grid-column:${i + 1}`} aria-hidden="true">
+              {['L', 'M', 'M', 'J', 'V'][i % 5]}
+            </span>
+          ))}
+          {m.sprint.hitos.map((h) => (
+            <span class="cal-marca" style={`grid-column:${h.dia}`} aria-hidden="true"></span>
+          ))}
+        </div>
+
+        <p class="cal-fondo-txt">
+          <strong>{m.sprint.fondo.titulo}.</strong> {m.sprint.fondo.que}
+        </p>
+
+        <ol class="cal-hitos">
+          {m.sprint.hitos.map((h, i) => (
+            <li class="hito">
+              <span class="hito__n" aria-hidden="true">{i + 1}</span>
+              <div>
+                <div class="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
+                  <h3 class="m-0 font-display text-[16px] font-extrabold leading-[1.25] text-dark">{h.titulo}</h3>
+                  <span class="hito__dur">{h.duracion}</span>
+                </div>
+                <p class="m-0 mt-2 text-[14.5px] leading-[1.6] text-slate-600 [text-wrap:pretty]">{h.que}</p>
+                <p class="hito__quien m-0 mt-2">{h.quien}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <p class="nota reveal mt-8">{m.sprint.regla}</p>
+    </div>
+  </section>
+
+  {/* 4. El control de cambios.
+      Es el bloque por el que existe la página. Todo el sitio promete "alcance y
+      precio cerrados" y a la vez "entregas revisables", y sin esta tabla esas
+      dos frases se contradicen. */}
+  <section class="surface--alt px-6 py-20">
+    <div class="mx-auto w-full max-w-[1020px]">
+      <div class="reveal mx-auto max-w-[760px]">
+        <h2 class="font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">
+          {m.cambios.title}
+        </h2>
+        <p class="mt-4 text-[15.5px] leading-[1.7] text-slate-600 [text-wrap:pretty]">{m.cambios.intro}</p>
+      </div>
+
+      <div class="tabla-wrap reveal mt-9">
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th scope="col" style="width:17%">Tipo de cambio</th>
+              <th scope="col" style="width:21%">Ejemplo</th>
+              <th scope="col" style="width:30%">Cómo se trata</th>
+              <th scope="col" style="width:14%">Quién decide</th>
+              <th scope="col" style="width:18%">Impacto</th>
+            </tr>
+          </thead>
+          <tbody>
+            {m.cambios.filas.map((c) => (
+              <tr>
+                <th scope="row" class="tabla__clave">{c.tipo}</th>
+                <td class="italic text-slate-500">«{c.ejemplo}»</td>
+                <td>{c.tratamiento}</td>
+                <td class="text-slate-500">{c.decide}</td>
+                <td>
+                  <span class:list={['impacto', `impacto--${c.impacto}`]}>{c.impactoTexto}</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p class="reveal nota mt-6">{m.cambios.nota}</p>
+    </div>
+  </section>
+
+  <!-- 5. Un marco distinto por forma de contratación -->
+  <section class="surface px-6 py-20">
+    <div class="mx-auto w-full max-w-[1020px]">
+      <div class="reveal mx-auto max-w-[760px]">
+        <h2 class="font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">
+          {m.modos.title}
+        </h2>
+        <p class="mt-4 text-[15.5px] leading-[1.7] text-slate-600 [text-wrap:pretty]">{m.modos.intro}</p>
+      </div>
+
+      <div class="modos mt-9 grid gap-5">
+        {m.modos.items.map((mo, i) => (
+          <article class="modo reveal" style={`--reveal-delay:${i * 80}ms`}>
+            <span class="modo__ico"><Icono name={mo.icono} size={19} /></span>
+            <h3 class="m-0 mt-4 font-display text-[17px] font-extrabold leading-[1.25] text-dark">{mo.nombre}</h3>
+            <p class="modo__marco m-0 mt-2">{mo.marco}</p>
+            <p class="m-0 mt-3.5 text-[14.5px] leading-[1.65] text-slate-600 [text-wrap:pretty]">{mo.porque}</p>
+            <p class="modo__ritmo m-0 mt-auto pt-4">{mo.ritmo}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 y 7. Definición de terminado + lo que se pide del cliente -->
+  <section class="surface--alt px-6 py-20">
+    <div class="mx-auto grid w-full max-w-[1020px] items-start gap-12 lg:grid-cols-2">
+      <div>
+        <h2 class="reveal font-display text-[clamp(1.4rem,3vw,1.75rem)] font-extrabold leading-[1.2] text-dark">
+          {m.terminado.title}
+        </h2>
+        <p class="reveal mt-4 text-[15px] leading-[1.7] text-slate-600 [text-wrap:pretty]">{m.terminado.intro}</p>
+
+        <ul class="m-0 mt-6 grid list-none gap-3 p-0">
+          {m.terminado.items.map((t) => (
+            <li class="flex items-start gap-3 text-[14.5px] leading-[1.6] text-slate-600">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round" class="mt-1 shrink-0" aria-hidden="true"><path d="m5 13 4 4L19 7"/></svg>
+              {t}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="reveal font-display text-[clamp(1.4rem,3vw,1.75rem)] font-extrabold leading-[1.2] text-dark">
+          {m.contigo.title}
+        </h2>
+        <p class="reveal mt-4 text-[15px] leading-[1.7] text-slate-600 [text-wrap:pretty]">{m.contigo.intro}</p>
+
+        <div class="mt-6 grid gap-4">
+          {m.contigo.items.map((c) => (
+            <div class="pide reveal">
+              <h3 class="m-0 font-display text-[15.5px] font-bold leading-[1.3] text-dark">{c.title}</h3>
+              <p class="m-0 mt-1.5 text-[14px] leading-[1.6] text-slate-600 [text-wrap:pretty]">{c.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Preguntas -->
+  <section class="surface px-6 py-20">
+    <div class="mx-auto w-full max-w-[760px]">
+      <h2 class="reveal font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
+        Preguntas frecuentes
+      </h2>
+
+      <div class="mt-8 grid gap-3">
+        {m.faqs.map((f) => (
+          <details class="lp-faq reveal rounded-[16px] bg-white p-5">
+            <summary class="flex cursor-pointer items-center justify-between gap-4 font-display text-[16px] font-bold text-dark">
+              {f.q}
+              <svg class="lp-faq__ico shrink-0 text-primary" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            </summary>
+            <p class="mt-3 text-[15px] leading-[1.7] text-slate-600 [text-wrap:pretty]">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTA />
+</BaseLayout>
+
+<style>
+  /* ---- El choque de las dos frases ----
+     En escritorio, dos columnas con el "vs" en medio. En móvil se apilan y el
+     "vs" queda entre ellas como un separador horizontal: sigue leyéndose como
+     un enfrentamiento y no como dos bloques sueltos. */
+  .choque {
+    display: grid;
+    gap: 18px;
+    align-items: stretch;
+  }
+  @media (min-width: 760px) {
+    .choque { grid-template-columns: 1fr auto 1fr; gap: 22px; align-items: center; }
+  }
+
+  .lado {
+    border-radius: 20px;
+    padding: 24px;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--hairline);
+  }
+  .lado__rotulo {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #94a3b8;
+  }
+  .lado__frase {
+    margin: 12px 0 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+    color: var(--color-dark);
+    text-wrap: balance;
+  }
+  .lado__pie {
+    margin: 12px 0 0;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #64748b;
+  }
+
+  .choque__vs {
+    justify-self: center;
+    display: grid;
+    place-items: center;
+    height: 42px;
+    width: 42px;
+    flex: none;
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+    background: var(--gradient-brand);
+    box-shadow: 0 10px 22px -12px rgba(217, 16, 35, 0.7);
+  }
+
+  .salida {
+    border-left: 3px solid var(--color-primary);
+    padding: 6px 0 6px 18px;
+    font-size: 16.5px;
+    line-height: 1.7;
+    color: var(--color-dark);
+    text-wrap: pretty;
+  }
+
+  /* ---- Fases ----
+     Una lista vertical con una línea que las cose. La línea no es decoración:
+     dice que hay un orden y que no se salta ninguna. Se dibuja en el ::after de
+     la marca y se corta en la última con :last-child. */
+  .fase {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 20px;
+    padding-bottom: 32px;
+  }
+  .fase:last-child { padding-bottom: 0; }
+
+  .fase__marca {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .fase__marca::after {
+    content: "";
+    position: absolute;
+    top: 56px;
+    bottom: -32px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--hairline-strong), var(--hairline));
+  }
+  .fase:last-child .fase__marca::after { display: none; }
+
+  .fase__ico {
+    display: grid;
+    place-items: center;
+    height: 46px;
+    width: 46px;
+    flex: none;
+    border-radius: 15px;
+    color: #fff;
+    background: var(--gradient-brand);
+    box-shadow: 0 10px 22px -12px rgba(217, 16, 35, 0.6);
+  }
+  .fase__n {
+    font-family: var(--font-display);
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: #94a3b8;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .fase__cuerpo {
+    border-radius: 20px;
+    padding: 22px;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--hairline);
+  }
+  .fase__dur {
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #64748b;
+    background: #f1f5f9;
+    white-space: nowrap;
+  }
+  .fase__ent {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 9px;
+    border-top: 1px dashed var(--hairline);
+    padding-top: 14px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--color-dark);
+    font-weight: 500;
+  }
+  .fase__entlabel {
+    flex: none;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: #16a34a;
+  }
+
+  @media (max-width: 560px) {
+    .fase { grid-template-columns: 46px 1fr; gap: 14px; }
+    .fase__ico { height: 40px; width: 40px; border-radius: 13px; }
+    .fase__marca::after { top: 50px; }
+    .fase__cuerpo { padding: 18px; }
+  }
+
+  /* ---- Calendario del sprint ---- */
+  .calendario {
+    border-radius: 22px;
+    padding: clamp(20px, 3vw, 28px);
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--hairline);
+  }
+
+  .cal-semanas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+  .cal-semana {
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #94a3b8;
+  }
+  .cal-semana + .cal-semana { padding-left: 10px; border-left: 1px dashed var(--hairline); }
+
+  /* Diez columnas iguales: la posición de cada marca es su día real. */
+  .cal-pista {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    align-items: center;
+    height: 54px;
+  }
+  /* La barra continua de construcción, por debajo de las marcas. */
+  .cal-fondo {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    height: 10px;
+    border-radius: 999px;
+    background: repeating-linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-primary) 9%, transparent) 0 7px,
+      color-mix(in srgb, var(--color-primary) 4%, transparent) 7px 14px
+    );
+    box-shadow: inset 0 0 0 1px var(--hairline);
+  }
+  .cal-dia {
+    grid-row: 1;
+    justify-self: center;
+    align-self: end;
+    font-size: 10px;
+    font-weight: 700;
+    color: #cbd5e1;
+  }
+  .cal-marca {
+    grid-row: 1;
+    justify-self: center;
+    height: 20px;
+    width: 20px;
+    border-radius: 999px;
+    background: var(--gradient-brand);
+    box-shadow: 0 0 0 4px #fff, 0 8px 18px -8px rgba(217, 16, 35, 0.75);
+  }
+
+  .cal-fondo-txt {
+    margin: 14px 0 0;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #64748b;
+  }
+  .cal-fondo-txt strong { color: var(--color-dark); font-weight: 700; }
+
+  .cal-hitos {
+    display: grid;
+    gap: 16px;
+    margin: 22px 0 0;
+    border-top: 1px solid var(--hairline);
+    padding: 22px 0 0;
+    list-style: none;
+  }
+  @media (min-width: 820px) { .cal-hitos { grid-template-columns: repeat(3, 1fr); gap: 24px; } }
+
+  .hito {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+  .hito__n {
+    display: grid;
+    place-items: center;
+    height: 26px;
+    width: 26px;
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+    background: var(--gradient-brand);
+  }
+  .hito__dur {
+    border-radius: 999px;
+    padding: 2px 9px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    background: #f1f5f9;
+    white-space: nowrap;
+  }
+  .hito__quien {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #94a3b8;
+  }
+
+  /* ---- Tablas ----
+     El contenedor scrollea, no el cuerpo de la página. Sin esto, una tabla de
+     cinco columnas empuja el ancho del documento entero y toda la página se
+     mueve de lado en un celular. */
+  .tabla-wrap {
+    overflow-x: auto;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--hairline);
+    -webkit-overflow-scrolling: touch;
+  }
+  .tabla {
+    width: 100%;
+    min-width: 720px;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  .tabla th,
+  .tabla td {
+    padding: 15px 18px;
+    font-size: 14px;
+    line-height: 1.55;
+    vertical-align: top;
+  }
+  .tabla thead th {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #64748b;
+    background: #f8fafc;
+    border-bottom: 1px solid var(--hairline);
+    white-space: nowrap;
+  }
+  .tabla tbody tr + tr th,
+  .tabla tbody tr + tr td { border-top: 1px solid var(--hairline); }
+  .tabla tbody td { color: #475569; }
+  .tabla__clave {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-dark);
+  }
+
+  /* Semáforo de impacto. El color va con el significado —verde no mueve nada,
+     ámbar puede moverlo, rojo lo mueve siempre— y el texto lo dice igual, así
+     que la tabla se sigue entendiendo sin distinguir colores. */
+  .impacto {
+    display: inline-block;
+    border-radius: 6px;
+    padding: 4px 9px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+  .impacto--no { color: #15803d; background: rgba(22, 163, 74, 0.11); }
+  .impacto--quizas { color: #b45309; background: rgba(232, 163, 23, 0.16); }
+  .impacto--si { color: #b91c1c; background: rgba(217, 16, 35, 0.1); }
+
+  .nota {
+    border-left: 3px solid var(--color-primary);
+    padding: 4px 0 4px 16px;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-dark);
+    font-weight: 500;
+    max-width: 72ch;
+  }
+
+  /* ---- Modos ---- */
+  .modos { grid-template-columns: 1fr; }
+  @media (min-width: 900px) { .modos { grid-template-columns: repeat(3, 1fr); } }
+
+  .modo {
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    padding: 24px;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--hairline);
+  }
+  .modo__ico {
+    display: grid;
+    place-items: center;
+    height: 40px;
+    width: 40px;
+    border-radius: 13px;
+    color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 9%, transparent);
+  }
+  .modo__marco {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+  .modo__ritmo {
+    border-top: 1px dashed var(--hairline);
+    margin-top: auto;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #64748b;
+  }
+
+  /* ---- Lo que se pide del cliente ---- */
+  .pide {
+    border-left: 2px solid var(--hairline-strong);
+    padding-left: 16px;
+  }
+
+  /* ---- Preguntas ---- */
+  .lp-faq {
+    box-shadow: inset 0 0 0 1px var(--hairline);
+    transition: box-shadow 0.4s var(--ease-fluid);
+  }
+  .lp-faq:hover { box-shadow: inset 0 0 0 1px var(--hairline-strong); }
+  .lp-faq summary::-webkit-details-marker { display: none; }
+  .lp-faq summary { list-style: none; }
+  .lp-faq__ico { transition: transform 0.4s var(--ease-fluid); }
+  .lp-faq[open] .lp-faq__ico { transform: rotate(45deg); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lp-faq, .lp-faq__ico { transition: none; }
+  }
+</style>

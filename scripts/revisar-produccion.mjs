@@ -14,6 +14,12 @@ const DOMINIO = 'https://bitwise.pe';
 const RUTAS = [
   '/',
   '/servicios/',
+  // Las cuatro páginas de servicio: son las que compiten por las búsquedas
+  // comerciales y las que enlaza el pie desde las 30 páginas del sitio.
+  '/servicios/pagina-web/',
+  '/servicios/tienda-online/',
+  '/servicios/erp-sistemas/',
+  '/servicios/apps-moviles/',
   '/proyectos/',
   '/nosotros/',
   '/contacto/',
@@ -23,6 +29,10 @@ const RUTAS = [
   '/paginas-web-para-bodegas/',
   '/robots.txt',
   '/sitemap-index.xml',
+  // Las tipografías dejaron de pedirse a Google y salen de aquí. Si un archivo
+  // no llega, el sitio entero se ve con la letra del sistema.
+  '/fonts/plus-jakarta-sans-400.woff2',
+  '/fonts/space-grotesk-700.woff2',
 ];
 
 // Direcciones viejas que tienen que seguir redirigiendo. Si una se rompe, se
@@ -78,6 +88,19 @@ for (const ruta of REDIRECCIONES) {
   if (!r.ok) mal(`${ruta} no responde (${r.error})`);
   else if (r.estado === 301 || r.estado === 308) bien(`${ruta} redirige ${r.estado} hacia ${r.destino}`);
   else mal(`${ruta} responde ${r.estado}, se esperaba una redirección 301`);
+}
+
+// Las direcciones del sitio llevan barra final y el canonical la declara. Sin
+// ella, Cloudflare responde un 307 —una redirección temporal— y Google no
+// consolida las señales en la dirección buena. Aquí se comprueba que la barra
+// sigue siendo la forma canónica y que ningún cambio de configuración la
+// invirtió: /servicios/ tiene que dar 200 directo, sin desvío.
+console.log('\n2b. Forma canónica de las direcciones (barra final)');
+for (const ruta of ['/servicios/', '/blog/', '/paginas-web-para-pollerias/']) {
+  const r = await pedir(DOMINIO + ruta, false);
+  if (!r.ok) mal(`${ruta} no responde (${r.error})`);
+  else if (r.estado === 200) bien(`${ruta} responde 200 sin redirección`);
+  else mal(`${ruta} responde ${r.estado} hacia ${r.destino}: la forma canónica cambió`);
 }
 
 console.log('\n3. Quién la está sirviendo');

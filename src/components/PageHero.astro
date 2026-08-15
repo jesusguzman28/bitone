@@ -1,41 +1,37 @@
 ---
 import Stars from './Stars.astro';
 
+// Sin rótulo sobre el titular.
+//
+// Este componente tenía un `eyebrow`: la etiqueta pequeña que iba encima del H1
+// —"Contacto", "Metodología", "Sobre nosotros"—. Se quitó en todo el sitio, y
+// no por gusto: en cada caso decía exactamente lo mismo que el menú de arriba
+// ya marca como sección activa y lo que el propio titular dice debajo. Una
+// etiqueta que repite dos veces lo que ya está en pantalla no es jerarquía, es
+// relleno, y es una de las cosas que hacen que una página se lea como
+// plantilla generada en vez de como algo escrito para este sitio.
+//
+// El mismo criterio se aplicó a los rótulos de sección de los componentes
+// (Servicios, Proyectos, FAQ, Comparativa…) y a la banderita del pie.
 interface Props {
-  /** Rótulo pequeño sobre el titular. Opcional: en páginas donde el menú de
-   *  arriba ya marca en qué sección estás, repetirlo aquí no dice nada nuevo. */
-  eyebrow?: string;
   title: string;
   /** Frase de entrada bajo el H1. Sirve para que un titular de marca pueda
    *  convivir con un H1 que lleva la keyword, sin perder el copy. */
   lead?: string;
   subtitle?: string;
-  flag?: boolean;
   compact?: boolean;
 }
-const { eyebrow, title, lead, subtitle, flag = false, compact = false } = Astro.props;
+// Aquí también iba una banderita peruana junto al rótulo de /nosotros/, y se
+// fue por lo mismo: la razón social, el RUC y la dirección de Lima están en el
+// pie, en /contacto/ y en el dato estructurado, que es donde se comprueban.
+const { title, lead, subtitle, compact = false } = Astro.props;
 ---
 
 <section class:list={['hero-dark relative isolate overflow-hidden px-6 text-center text-white', compact ? 'pb-[66px] pt-[150px]' : 'pb-[70px] pt-[150px]']}>
   <Stars />
 
-  {eyebrow && (
-    <span class="eyebrow eyebrow--dark">
-      {flag && (
-        <svg width="20" height="13" viewBox="0 0 3 2" aria-hidden="true" style="border-radius:2px;box-shadow:0 0 0 1px rgba(255,255,255,0.15)">
-          <rect width="1" height="2" x="0" fill="#D91023"/><rect width="1" height="2" x="1" fill="#fff"/><rect width="1" height="2" x="2" fill="#D91023"/>
-        </svg>
-      )}
-      {eyebrow}
-    </span>
-  )}
-  {/* Sin rótulo, el titular no necesita separarse de nada: el margen de arriba
-      solo existe para despegarlo del rótulo. */}
   <h1
-    class:list={[
-      'mx-auto max-w-[700px] font-display text-[clamp(1.9rem,5vw,3rem)] font-bold leading-[1.08]',
-      eyebrow && 'mt-[18px]',
-    ]}
+    class="mx-auto max-w-[700px] font-display text-[clamp(1.9rem,5vw,3rem)] font-bold leading-[1.08]"
     set:html={title}
   />
   {lead && <p class="mx-auto mt-4 max-w-[560px] font-display text-[clamp(1.05rem,2.4vw,1.25rem)] font-semibold leading-[1.4] text-slate-100" set:html={lead} />}

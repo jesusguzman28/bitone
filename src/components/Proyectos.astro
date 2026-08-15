@@ -1,136 +1,279 @@
 ---
 import { proyectos } from '../data/proyectos';
+
+interface Props {
+  /** Titular y bajada de la sección. Se pueden sobrescribir porque el bloque se
+   *  usa en dos sitios que llegan con el lector en estados distintos: en la
+   *  portada, quien lee todavía no sabe quiénes somos y esto es la prueba; en
+   *  /proyectos/ ya entró a ver trabajos y el titular no tiene que convencer de
+   *  nada, solo ordenar.
+   *
+   *  Sin cifras en ninguno de los dos, igual que en <AppsProduccion>: el día
+   *  que se sume un proyecto, un "cinco" escrito a mano contradice a la lista
+   *  que tiene debajo y nadie se acuerda de venir a cambiarlo. */
+  title?: string;
+  subtitle?: string;
+}
+const {
+  title = 'Productos que construimos de cero',
+  subtitle = 'No son encargos ejecutados: son productos que concebimos, construimos y publicamos. Los que tienen dirección pública se pueden abrir ahora mismo.',
+} = Astro.props;
 ---
 
-<section class="surface px-6 py-20" aria-labelledby="proyectos-lista">
-  <div class="mx-auto w-full max-w-[1120px]">
-    <div class="reveal mx-auto max-w-[640px] text-center">
-      <span class="eyebrow eyebrow--light">Trabajos</span>
-      <h2 id="proyectos-lista" class="mt-5 font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
-        Algunos de nuestros trabajos
+{/* Rehecho para que combine con <AppsProduccion>, que va justo debajo en la
+    portada y en /proyectos/.
+
+    Antes eran tarjetas claras con una captura de pantalla a lo ancho, el rubro
+    en mayúsculas, un párrafo de tres o cuatro renglones y cuatro pastillas.
+    Multiplicado por cinco proyectos, ocupaba media página y no se parecía en
+    nada a la fila compacta y oscura de las apps: dos bloques que dicen lo mismo
+    —esto lo construimos nosotros— con dos lenguajes visuales distintos, uno
+    encima del otro.
+
+    Ahora comparten anatomía exacta: misma banda oscura, mismo cuadrado
+    redondeado para el logotipo, mismo tamaño de nombre, una sola línea de
+    descripción y el enlace abajo del todo. Lo que cambia entre los dos bloques
+    es solo la rejilla —tres columnas aquí, cuatro allá— porque son cinco y
+    cuatro elementos. */}
+<section class="proy-band relative isolate overflow-hidden px-6 py-20" aria-labelledby="proyectos-lista">
+  <div class="proy-glow" aria-hidden="true"></div>
+
+  <div class="relative mx-auto w-full max-w-[1120px]">
+    <div class="reveal mx-auto max-w-[720px] text-center">
+      <h2 id="proyectos-lista" class="m-0 font-display text-[clamp(1.6rem,3.6vw,2.3rem)] font-extrabold leading-[1.15] text-white [text-wrap:balance]">
+        {title}
       </h2>
-      <p class="mt-4 text-[15px] leading-[1.65] text-slate-500 [text-wrap:pretty]">
-        Están en línea ahora mismo. Entra y compruébalo.
+      <p class="mx-auto mt-4 max-w-[600px] text-[15.5px] leading-[1.7] text-slate-400 [text-wrap:pretty]">
+        {subtitle}
       </p>
     </div>
 
-    {/* 250px y no 280: con 280 los cuatro no entraban en la fila —4x280 más los
-        3 huecos de 20 dan 1180 y el contenedor mide 1120— y quedaban tres arriba
-        y uno solo abajo, más corto que los demás. Con 250 caben los cuatro y la
-        rejilla los estira al mismo alto. */}
-    <div class="mt-10 grid gap-5" style="grid-template-columns:repeat(auto-fit,minmax(250px,1fr))">
+    <ul class="proy-grid mt-11 grid list-none gap-4 p-0">
       {proyectos.map((p, i) => (
-        <article class="proy-card reveal flex flex-col overflow-hidden rounded-[20px] bg-white" style={`--reveal-delay:${(i % 4) * 70}ms`}>
-          {/* La captura y su hueco. Sin imagen no se deja un marco vacío ni un
-              icono roto: se pinta una banda con el nombre del rubro, que se lee
-              como una portada a propósito y no como un fallo de carga. */}
-          {p.imagen ? (
-            /* Un solo archivo y no un <picture> con versión chica: estas
-               capturas en WebP pesan 35–45 KB, menos que muchas miniaturas, así
-               que partirlas en dos tamaños añadiría archivos que mantener sin
-               ahorrar nada. Si algún día entra una captura pesada, ahí sí. */
-            <img
-              src={`/proyectos/${p.imagen}.webp`}
-              width="1152"
-              height="778"
-              alt={p.alt}
-              loading="lazy"
-              decoding="async"
-              class="proy-card__img block w-full object-cover"
-            />
-          ) : (
-            /* Portada de color con el nombre, para los que aún no tienen
-               captura. Antes era una banda gris con el rubro en letra chica y
-               parecía una imagen que no cargó. Con el color del propio proyecto
-               y su nombre en grande se lee como una portada hecha a propósito, y
-               la fila no se ve coja al lado de las que sí tienen foto. */
-            <div class="proy-card__portada grid place-items-center" style={`--c:${p.color}`} aria-hidden="true">
-              <span class="font-display text-[26px] font-extrabold tracking-[-0.02em]" style={`color:${p.color}`}>{p.nombre}</span>
-            </div>
-          )}
-
-          <div class="flex flex-1 flex-col p-6">
-            <div class="flex items-center gap-2">
-              <h3 class="m-0 font-display text-[17px] font-bold text-dark">{p.nombre}</h3>
-              {/* Aviso en pantalla mientras es relleno. Es incómodo a propósito:
-                  así nadie lo publica creyendo que ya es un caso real. */}
-              {p.esMarcador && (
-                <span class="proy-card__pendiente">Por completar</span>
-              )}
-            </div>
-            <p class="mt-1 text-[13px] font-semibold uppercase tracking-[0.1em] text-primary">{p.rubro}</p>
-            <p class="mt-3 text-[14.5px] leading-[1.6] text-slate-600 [text-wrap:pretty]">{p.resumen}</p>
-
-            <ul class="m-0 mt-4 flex list-none flex-wrap gap-1.5 p-0">
-              {p.entregado.map((e) => (
-                <li class="proy-chip">{e}</li>
-              ))}
-            </ul>
-
-            {/* El botón solo existe si hay dirección de verdad. Es la regla que
-                evita repetir el error de prometer "URL en vivo" sin tenerla. */}
-            {p.url && (
-              <a href={p.url} target="_blank" rel="noopener" class="proy-link mt-auto flex items-center gap-1.5 pt-5 text-[14px] font-bold text-primary no-underline">
-                Ver en vivo
-                <svg class="proy-link__flecha" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
-                <span class="sr-only">{p.nombre}</span>
-              </a>
+        <li class="reveal" style={`--reveal-delay:${(i % 3) * 70}ms`}>
+          <a
+            href={p.url ?? '#'}
+            target={p.url ? '_blank' : undefined}
+            rel={p.url ? 'noopener' : undefined}
+            class="proy-card flex h-full flex-col no-underline"
+            style={`--acento:${p.color}`}
+          >
+            {/* El logotipo real del sitio, o un monograma con el color del
+                proyecto cuando no hay ninguno publicable. Los dos ocupan
+                exactamente el mismo cuadrado, así que la fila no se descuadra
+                aunque dos de los cinco no tengan logo. */}
+            {p.logo ? (
+              <img
+                src={`/proyectos/logo-${p.logo}.webp`}
+                width="256"
+                height="256"
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                decoding="async"
+                class="proy-card__logo"
+              />
+            ) : (
+              <span class="proy-card__logo proy-card__logo--mono" aria-hidden="true">{p.nombre.charAt(0)}</span>
             )}
-          </div>
-        </article>
+
+            <span class="proy-card__cuerpo">
+              <span class="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
+                <span class="proy-card__nombre">{p.nombre}</span>
+                {/* Aviso en pantalla mientras es relleno. Es incómodo a
+                    propósito: así nadie lo publica creyendo que es un caso
+                    real. */}
+                {p.esMarcador && <span class="proy-card__pendiente">Por completar</span>}
+              </span>
+
+              <span class="proy-card__rubro">{p.rubro}</span>
+              <span class="proy-card__que">{p.resumen}</span>
+
+              {/* Lo entregado en una línea de texto separada por puntos, no en
+                  pastillas. Cuatro pastillas por tarjeta y cinco tarjetas eran
+                  veinte cápsulas de color compitiendo entre sí; en una línea se
+                  lee igual de rápido y pesa la décima parte. */}
+              <span class="proy-card__entregado">{p.entregado.join(' · ')}</span>
+
+              {p.stack.length > 0 && (
+                <span class="proy-card__stack">
+                  {p.stack.map((t) => <span class="proy-tech">{t}</span>)}
+                </span>
+              )}
+
+              {p.url && (
+                <span class:list={['proy-card__link', p.acceso === 'privado' && 'proy-card__link--privado']}>
+                  {p.acceso === 'privado' ? (
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+                  ) : (
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18Z"/></svg>
+                  )}
+                  {p.acceso === 'privado' ? 'Acceso privado' : 'Ver en vivo'}
+                  <svg class="proy-card__flecha" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+                  <span class="sr-only">{p.nombre}</span>
+                </span>
+              )}
+            </span>
+          </a>
+        </li>
       ))}
-    </div>
+    </ul>
   </div>
 </section>
 
 <style>
+  /* Misma banda que <AppsProduccion>, un punto más clara. Al ir una encima de
+     otra en la portada, esa diferencia mínima las separa sin cortar la
+     continuidad: se leen como dos partes de un mismo bloque de prueba y no como
+     dos secciones sin relación. */
+  .proy-band {
+    background: linear-gradient(170deg, #171f2e 0%, #101724 100%);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .proy-glow {
+    position: absolute;
+    right: -110px;
+    top: -80px;
+    height: 340px;
+    width: 340px;
+    border-radius: 999px;
+    opacity: 0.2;
+    filter: blur(95px);
+    background: radial-gradient(circle, #D91023, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Tres columnas y no cuatro: son cinco proyectos, y con cuatro quedaría una
+     fila de cuatro y otra de uno solo estirado a lo ancho. Con tres van 3 + 2 y
+     la segunda fila se centra sola. */
+  .proy-grid { grid-template-columns: 1fr; }
+  @media (min-width: 620px) { .proy-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 980px) { .proy-grid { grid-template-columns: repeat(3, 1fr); } }
+
   .proy-card {
-    box-shadow: inset 0 0 0 1px var(--hairline);
-    transition: transform 0.45s var(--ease-fluid), box-shadow 0.45s var(--ease-fluid);
+    height: 100%;
+    border-radius: 22px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.09);
+    transition: transform 0.45s var(--ease-fluid), box-shadow 0.45s var(--ease-fluid), background 0.45s var(--ease-fluid);
   }
   .proy-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.07);
     box-shadow:
-      inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 30%, transparent),
-      0 20px 40px -20px rgba(217, 16, 35, 0.16);
+      inset 0 0 0 1px color-mix(in srgb, var(--acento) 50%, transparent),
+      0 26px 50px -24px color-mix(in srgb, var(--acento) 70%, transparent);
+  }
+  .proy-card:focus-visible {
+    outline: 2px solid var(--acento);
+    outline-offset: 3px;
   }
 
-  .proy-card__img { aspect-ratio: 40 / 27; }
-
-  /* Mismo alto que tendrá la captura, para que al llegar las fotos reales la
-     tarjeta no cambie de tamaño y la fila no se reacomode. */
-  .proy-card__portada {
-    aspect-ratio: 40 / 27;
-    background:
-      radial-gradient(120% 90% at 30% 20%, color-mix(in srgb, var(--c) 16%, transparent), transparent 70%),
-      color-mix(in srgb, var(--c) 7%, #ffffff);
-    box-shadow: inset 0 -1px 0 var(--hairline);
+  /* El mismo cuadrado que el icono de una app, para que las dos filas rimen. */
+  .proy-card__logo {
+    display: block;
+    height: 60px;
+    width: 60px;
+    border-radius: 16px;
+    /* `outline` con offset negativo y no `box-shadow: inset`: una sombra
+       interior no se ve sobre un <img>, el navegador pinta la imagen encima. */
+    outline: 1px solid rgba(255, 255, 255, 0.16);
+    outline-offset: -1px;
+    box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.75);
+    transition: transform 0.45s var(--ease-fluid);
   }
+  .proy-card__logo--mono {
+    display: grid;
+    place-items: center;
+    font-family: var(--font-display);
+    font-size: 25px;
+    font-weight: 800;
+    line-height: 1;
+    color: #fff;
+    background: linear-gradient(140deg, var(--acento), color-mix(in srgb, var(--acento) 55%, #0b1120));
+    outline: none;
+  }
+  .proy-card:hover .proy-card__logo { transform: scale(1.05); }
 
+  .proy-card__cuerpo {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding-top: 15px;
+  }
+  .proy-card__nombre {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    color: #fff;
+  }
   .proy-card__pendiente {
     border-radius: 999px;
-    padding: 3px 9px;
+    padding: 2px 8px;
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #b45309;
-    background: rgba(232, 163, 23, 0.16);
+    color: #fcd34d;
+    background: rgba(252, 211, 77, 0.14);
   }
-
-  .proy-chip {
-    border-radius: 999px;
-    padding: 5px 11px;
+  .proy-card__rubro {
+    margin-top: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--acento) 55%, #ffffff);
+  }
+  .proy-card__que {
+    margin-top: 10px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #94a3b8;
+    text-wrap: pretty;
+  }
+  .proy-card__entregado {
+    margin-top: 12px;
     font-size: 12px;
+    line-height: 1.55;
+    color: #64748b;
+  }
+  .proy-card__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 10px;
+  }
+  .proy-tech {
+    border-radius: 5px;
+    padding: 2px 7px;
+    font-size: 11px;
     font-weight: 600;
-    color: #475569;
-    background: #f1f5f9;
+    color: #cbd5e1;
+    background: rgba(255, 255, 255, 0.07);
   }
 
-  .proy-link__flecha { transition: transform 0.4s var(--ease-fluid); }
-  .proy-link:hover .proy-link__flecha { transform: translate(2px, -2px); }
+  .proy-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: auto;
+    padding-top: 15px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #e2e8f0;
+  }
+  /* El enlace a un sistema privado va apagado. El tono de acción promete "esto
+     se puede abrir", y aquí lo que hay detrás es una pantalla de inicio de
+     sesión: el color avisa antes de que se lea el texto. */
+  .proy-card__link--privado { color: #7c8899; }
+
+  .proy-card__flecha { transition: transform 0.4s var(--ease-fluid); }
+  .proy-card:hover .proy-card__flecha { transform: translate(2px, -2px); }
 
   @media (prefers-reduced-motion: reduce) {
-    .proy-card, .proy-link__flecha { transition: none; }
+    .proy-card, .proy-card__flecha, .proy-card__logo { transition: none; }
   }
 </style>

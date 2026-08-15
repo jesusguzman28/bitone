@@ -2,34 +2,56 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
 import Proyectos from '../../components/Proyectos.astro';
+import AppsProduccion from '../../components/AppsProduccion.astro';
 import Resenas from '../../components/Resenas.astro';
-import Rubros from '../../components/Rubros.astro';
 import ProyectoMedida from '../../components/ProyectoMedida.astro';
-import MarcasBanner from '../../components/MarcasBanner.astro';
 import CTA from '../../components/CTA.astro';
 ---
 
-<BaseLayout
-  title="Proyectos: páginas web y tiendas online para MYPEs"
-  description="Trabajos entregados a negocios peruanos: páginas web, tiendas online y sistemas a medida, por rubro."
->
-  {/* El titular decía "Trabajo real, con URL en vivo" y remataba con "entra,
-      navega y compruébalo tú mismo", pero debajo no había ni un proyecto: solo
-      la parrilla de rubros, que son páginas de venta. Invitar a comprobar algo
-      que no se puede comprobar cuesta más credibilidad de la que da.
+{/* Esta página cambió de papel dos veces y conviene dejar constancia.
 
-      Ahora el titular dice lo que la página enseña, y los trabajos van en la
-      sección de abajo. Vuelve a prometer "URL en vivo" cuando haya direcciones
-      reales que enseñar. */}
+    Primero fue una parrilla de rubros —pollerías, bodegas, barberías— que en
+    realidad eran páginas de venta y no trabajos hechos. Después se le sumaron
+    los proyectos de verdad. Ahora, con la empresa vendiendo desarrollo a otras
+    empresas, es la página MÁS importante del sitio después de la portada: en
+    esta venta, lo primero que hace quien evalúa contratarte es abrir tus
+    trabajos y ver si has construido algo del tamaño de lo suyo.
+
+    Por eso desaparece <Rubros>: listar giros de negocio no le dice nada a un
+    área de sistemas. Lo que sí le dice algo son las cuatro cosas construidas
+    —dos apps publicadas, dos plataformas con cuentas de usuario— que ya viven
+    en data/proyectos.ts.
+
+    PENDIENTE, y es lo que falta para que esta página cierre una venta: cada
+    proyecto tiene hoy una sola frase. Necesita ficha propia con el problema,
+    la arquitectura, con qué está construido y qué se resolvió. Sin eso, la
+    página demuestra que existen, no que sabemos construirlos. */}
+<BaseLayout
+  title="Proyectos: software que ya está en producción"
+  description="Aplicaciones móviles y plataformas web construidas por BIT-ONE y publicadas: apps en tiendas, plataformas con cuentas de usuario y sistemas a medida."
+>
   <PageHero
-    title="Proyectos que <span class='gradient-text--warm'>ya están trabajando</span>"
-    subtitle="Lo que hemos entregado a negocios peruanos, por rubro."
+    title="Software que <span class='gradient-text--warm'>ya está en producción</span>"
+    subtitle="Aplicaciones y plataformas que construimos y que hoy usan personas reales. Entra y compruébalo."
   />
 
   <Proyectos />
+
+  {/* Aquí el titular cambia respecto a la portada. Arriba, en <Proyectos>, ya
+      se enseñaron los cuatro productos completos; esto no es una repetición
+      sino el detalle de las apps que salieron de ellos, con su ficha pública.
+      Dos apps de ApuraY y una de MindBlock cuelgan de proyectos que ya están
+      en la lista de arriba, así que se presentan como lo que son: las piezas
+      que se pueden abrir e instalar. */}
+  <AppsProduccion
+    title="Y sus apps están en Google Play"
+    subtitle="Las apps que salieron de esos proyectos, con su ficha pública. Se pueden instalar ahora mismo: es la parte de este portafolio que no hace falta que te contemos."
+  />
+
   <Resenas />
-  <Rubros variant="grid" />
+  {/* Sin <MarcasBanner /> aquí tampoco. Un carrusel con los cinco nombres, en
+      la misma página donde esos cinco ya están con su descripción, su enlace y
+      su estado de acceso, es repetir lo mismo con menos información. */}
   <ProyectoMedida />
-  <MarcasBanner />
   <CTA />
 </BaseLayout>
