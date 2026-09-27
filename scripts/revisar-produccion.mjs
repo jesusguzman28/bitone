@@ -23,6 +23,7 @@ const RUTAS = [
   '/proyectos/',
   '/nosotros/',
   '/contacto/',
+  '/blog/',
   '/robots.txt',
   '/sitemap-index.xml',
   // Las tipografías dejaron de pedirse a Google y salen de aquí. Si un archivo

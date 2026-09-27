@@ -1,0 +1,52 @@
+---
+import { blog } from '../data/blog';
+
+// Tres guías en la portada. La portada es la página que más autoridad recibe,
+// y enlazar desde aquí es lo que más ayuda a que Google encuentre y valore los
+// artículos nuevos. Se muestran las tres primeras de blog.ts, que es donde se
+// elige el orden.
+const guias = blog.slice(0, 3);
+---
+
+<section class="surface px-6 pb-6 pt-20">
+  <div class="mx-auto w-full max-w-[1120px]">
+    <div class="reveal flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <h2 class="font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.15] text-dark">
+          Antes de contratar, <span class="gradient-text--warm">léelo aquí</span>
+        </h2>
+        <p class="mt-2 text-[15px] text-slate-500">Guías cortas para presupuestar, elegir y no heredar problemas.</p>
+      </div>
+      <a href="/blog/" class="inline-flex items-center gap-1.5 text-sm font-semibold text-primary no-underline">
+        Ver todas las guías
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+      </a>
+    </div>
+
+    <div class="mt-8 grid gap-5" style="grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))">
+      {guias.map((g, i) => (
+        <a href={`/blog/${g.slug}/`} class="guia reveal flex flex-col overflow-hidden rounded-[20px] bg-white no-underline" style={`--reveal-delay:${i * 90}ms`}>
+          <div class="overflow-hidden bg-slate-100" style="aspect-ratio:640/336">
+            <img src={g.image.replace('.webp', '-sm.webp')} alt="" width="640" height="336" loading="lazy" decoding="async" class="h-full w-full object-cover" />
+          </div>
+          <div class="flex flex-1 flex-col p-5">
+            <span class="text-[11px] font-bold uppercase tracking-[0.12em] text-primary">{g.category}</span>
+            <h3 class="mt-2 font-display text-[17px] font-bold leading-[1.3] text-dark [text-wrap:pretty]">{g.title}</h3>
+            <span class="mt-auto pt-4 text-[12.5px] text-slate-400">{g.readTime} de lectura</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .guia {
+    box-shadow: inset 0 0 0 1px var(--hairline), 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+    transition: transform 0.5s var(--ease-fluid), box-shadow 0.5s var(--ease-fluid);
+  }
+  .guia:hover {
+    transform: translateY(-4px);
+    box-shadow: inset 0 0 0 1px var(--hairline-strong), 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  }
+</style>

@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import CTA from '../../components/CTA.astro';
+import { blog } from '../../data/blog';
+
+// El primero de la lista va destacado. Se elige a mano por el orden de
+// blog.ts y no por fecha: todos se publicaron juntos y el que más busca quien
+// compra software es el del precio.
+const [featured, ...rest] = blog;
+---
+
+<BaseLayout
+  title="Blog: guías para contratar software"
+  description="Guías prácticas para empresas peruanas: cuánto cuesta un sistema a medida, facturación electrónica SUNAT, apps móviles y sistemas heredados."
+>
+  <PageHero
+    title="Guías para <span class='gradient-text--warm'>contratar software</span>"
+    subtitle="Lo que conviene saber antes de presupuestar, elegir o heredar un sistema. Sin letra chica."
+    compact
+  />
+
+  <section class="surface px-6 pb-24 pt-16">
+    <div class="mx-auto w-full max-w-[1120px]">
+      <a href={`/blog/${featured.slug}/`} class="feature-card reveal grid overflow-hidden rounded-[28px] bg-white no-underline">
+        {/* La portada lleva el titular escrito: con object-cover se recortaba y
+            cortaba el texto. Se muestra entera sobre el mismo fondo oscuro. */}
+        <div class="relative grid place-items-center overflow-hidden" style="background:#0a0f1c">
+          <img src={featured.image} alt="" width="1200" height="630" loading="eager" fetchpriority="high" class="feature-img block h-auto w-full" />
+        </div>
+        <div class="flex flex-col justify-center p-8 sm:p-10">
+          <span class="inline-flex w-fit items-center rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-white" style="background:var(--gradient-brand)">
+            {featured.category}
+          </span>
+          <h2 class="mt-4 font-display text-[clamp(1.4rem,3vw,2rem)] font-extrabold leading-[1.2] text-dark [text-wrap:pretty]">{featured.title}</h2>
+          <p class="mt-3 text-[15px] leading-[1.65] text-slate-500">{featured.excerpt}</p>
+          <span class="mt-6 inline-flex items-center gap-2 text-sm font-bold text-primary">
+            Leer la guía
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <div class="mt-10 grid gap-6" style="grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr))">
+        {rest.map((p, i) => (
+          <article class="reveal" style={`--reveal-delay:${(i % 3) * 90}ms`}>
+            <a href={`/blog/${p.slug}/`} class="post-card flex h-full flex-col overflow-hidden rounded-[20px] bg-white no-underline">
+              <div class="overflow-hidden bg-slate-100" style="aspect-ratio:640/336">
+                <img src={p.image.replace('.webp', '-sm.webp')} alt="" width="640" height="336" loading="lazy" decoding="async" class="post-img h-full w-full object-cover" />
+              </div>
+              <div class="flex flex-1 flex-col p-6">
+                <span class="text-[11px] font-bold uppercase tracking-[0.12em] text-primary">{p.category}</span>
+                <h2 class="mt-2 font-display text-[18px] font-bold leading-[1.3] text-dark [text-wrap:pretty]">{p.title}</h2>
+                <p class="mt-2.5 text-[14px] leading-[1.6] text-slate-500">{p.excerpt}</p>
+                <span class="mt-auto pt-5 text-[12.5px] text-slate-400">{p.readTime} de lectura</span>
+              </div>
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTA />
+</BaseLayout>
+
+<style>
+  .feature-card,
+  .post-card {
+    box-shadow: inset 0 0 0 1px var(--hairline), 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+    transition: transform 0.5s var(--ease-fluid), box-shadow 0.5s var(--ease-fluid);
+  }
+  .feature-card:hover,
+  .post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: inset 0 0 0 1px var(--hairline-strong), 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  }
+  .feature-img,
+  .post-img { transition: transform 1s var(--ease-fluid); }
+  .feature-card:hover .feature-img,
+  .post-card:hover .post-img { transform: scale(1.04); }
+
+  @media (min-width: 900px) {
+    .feature-card { grid-template-columns: 1fr 1fr; }
+  }
+</style>

@@ -5,6 +5,7 @@ import Stars from '../../components/Stars.astro';
 import Icono from '../../components/Icono.astro';
 import { servicios, type Servicio } from '../../data/servicios';
 import { site, serviciosTabs, waLink } from '../../data/site';
+import { blog, blogDeServicio } from '../../data/blog';
 
 // Una página por servicio. Al sumar un servicio a servicios.ts, su página se
 // genera sola con esta misma estructura.
@@ -21,6 +22,11 @@ const { servicio } = Astro.props;
 const tab = serviciosTabs.find((t) => t.id === servicio.tabId)!;
 
 const url = `${site.domain}/servicios/${servicio.slug}/`;
+
+// Guías del blog que terminan en este servicio. Si ninguna apunta aquí, se
+// muestran las dos primeras del blog para que la sección no quede vacía.
+const guiasPropias = blogDeServicio(`/servicios/${servicio.slug}/`);
+const guias = (guiasPropias.length ? guiasPropias : blog).slice(0, 3);
 
 const offers: Record<string, unknown> = {
   '@type': 'Offer',
@@ -294,6 +300,20 @@ const schema = [
         <a href="/servicios/" class="font-semibold text-primary">la página de servicios</a>, y lo que hemos construido en
         <a href="/proyectos/" class="font-semibold text-primary">proyectos</a>.
       </p>
+
+      <div class="reveal mt-10">
+        <p class="m-0 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">Guías relacionadas</p>
+        <ul class="m-0 mt-3 grid list-none gap-2.5 p-0">
+          {guias.map((g) => (
+            <li>
+              <a href={`/blog/${g.slug}/`} class="group inline-flex items-start gap-2 text-[15px] font-semibold leading-[1.5] text-dark no-underline hover:text-primary">
+                <svg class="mt-[5px] shrink-0 text-primary" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                {g.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   </section>
 

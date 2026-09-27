@@ -122,4 +122,5 @@ Todas con barra final: sin ella el servidor responde una redirección.
 - https://bitone.pe/proyectos/ — el software propio, con enlaces en vivo
 - https://bitone.pe/nosotros/ — quiénes somos y cómo trabajamos
 - https://bitone.pe/contacto/ — reunión técnica y formulario
+- https://bitone.pe/blog/ — guías para contratar software: precios, facturación electrónica SUNAT, apps, sistemas heredados y el caso ApuraY
 

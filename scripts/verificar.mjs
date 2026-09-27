@@ -39,6 +39,8 @@ const RUTAS = [
   '/proyectos/',
   '/nosotros/',
   '/contacto/',
+  '/blog/',
+  '/blog/cuanto-cuesta-un-software-a-medida-en-peru/',
 ];
 
 // Frases que delatan un problema aunque el proceso siga vivo.
