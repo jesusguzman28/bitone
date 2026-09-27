@@ -1,0 +1,140 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CTA from '../components/CTA.astro';
+import { site, serviciosHome } from '../data/site';
+import { regiones, zonas } from '../data/regiones';
+
+const url = `${site.domain}/fabrica-de-software-peru/`;
+const description =
+  'Fábrica de software para empresas de las 25 regiones del Perú: sistemas a medida, apps móviles y mantenimiento, con trabajo remoto y factura electrónica.';
+
+const faq = [
+  {
+    q: '¿Trabajan con empresas fuera de Lima?',
+    a: 'Sí, con cualquier región del Perú. La reunión técnica es por videollamada, cada etapa se entrega en línea sobre el sistema funcionando y la factura electrónica es válida en todo el país.',
+  },
+  {
+    q: '¿Cuesta más si mi empresa está en provincia?',
+    a: 'No. El precio depende del alcance del sistema, no de la ciudad. Al ser remoto, no hay gastos de viaje que sumar.',
+  },
+  {
+    q: '¿Qué pasa si en mi zona la conexión es mala?',
+    a: 'Se diseña para eso desde el inicio: las apps guardan lo que se hace sin señal y lo envían cuando vuelve la conexión, sin duplicar registros.',
+  },
+];
+
+// Un solo Service con todas las regiones en areaServed: le dice a Google que
+// se atiende todo el país sin necesidad de una página por ciudad.
+const schema = [
+  {
+    '@type': 'Service',
+    '@id': url + '#servicio',
+    name: 'Fábrica de software en Perú',
+    serviceType: 'Desarrollo de software a medida',
+    description,
+    provider: { '@id': site.domain + '/#org' },
+    areaServed: regiones.map((r) => ({ '@type': 'AdministrativeArea', name: r.nombre, containedInPlace: { '@type': 'Country', name: 'Perú' } })),
+    url,
+  },
+  {
+    '@type': 'FAQPage',
+    '@id': url + '#faq',
+    mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+
+const pasos = [
+  { t: 'Reunión técnica por videollamada', d: 'Con quien va a construir el sistema. Sin costo y sin viajar.' },
+  { t: 'Alcance y precio por escrito', d: 'Cerrados antes de programar, con el cronograma por etapas.' },
+  { t: 'Entregas en línea', d: 'Cada etapa se revisa sobre el sistema funcionando, desde tu ciudad.' },
+  { t: 'Factura electrónica', d: 'Bitone E.I.R.L., RUC 20615736261. Válida en todo el país.' },
+];
+---
+
+<BaseLayout title="Fábrica de software en todo el Perú" description={description} breadcrumbLabel="Fábrica de software en todo el Perú" schema={schema}>
+  <PageHero
+    title="Fábrica de software en <span class='gradient-text--warm'>todo el Perú</span>"
+    subtitle="De Tumbes a Tacna y de Lima a Iquitos: construimos sistemas y apps para empresas de las 25 regiones, con trabajo remoto."
+  />
+
+  <section class="surface px-6 py-20">
+    <div class="mx-auto w-full max-w-[1020px]">
+      <div class="reveal max-w-[760px]">
+        <p class="m-0 text-[16.5px] leading-[1.75] text-slate-600 [text-wrap:pretty]">
+          BIT-ONE es una fábrica de software con sede fiscal en Lima que trabaja de forma remota con empresas de todo el país. No hace falta estar en la capital para tener un sistema bien hecho: el proceso es el mismo para una empresa de Miraflores que para una de Juliaca o de Pucallpa.
+        </p>
+      </div>
+
+      <h2 class="reveal mt-16 font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">Cómo trabajamos a distancia</h2>
+      <ol class="mt-7 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-4">
+        {pasos.map((p, i) => (
+          <li class="caja reveal rounded-[20px] p-6" style={`--reveal-delay:${i * 70}ms`}>
+            <span class="font-display text-[13px] font-extrabold text-primary">0{i + 1}</span>
+            <h3 class="m-0 mt-2 font-display text-[16.5px] font-bold text-dark">{p.t}</h3>
+            <p class="m-0 mt-2 text-[14px] leading-[1.65] text-slate-500">{p.d}</p>
+          </li>
+        ))}
+      </ol>
+
+      <h2 class="reveal mt-16 font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">Qué construimos</h2>
+      <div class="mt-7 grid gap-5 md:grid-cols-3">
+        {serviciosHome.map((s) => (
+          <a href={s.href} class="caja caja--link reveal flex flex-col rounded-[20px] p-6 no-underline">
+            <h3 class="m-0 font-display text-[18px] font-bold text-dark">{s.tag}</h3>
+            <p class="m-0 mt-2 text-[14px] leading-[1.65] text-slate-500">{s.desc}</p>
+            <span class="mt-auto pt-4 text-[13.5px] font-semibold text-primary">Ver detalle →</span>
+          </a>
+        ))}
+      </div>
+
+      <h2 class="reveal mt-16 font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">Cada zona pide algo distinto</h2>
+      <p class="reveal mt-3 max-w-[760px] text-[15.5px] leading-[1.7] text-slate-600">
+        La ciudad no cambia el precio ni el proceso, pero sí cómo se diseña el sistema: la conectividad y las distancias no son las mismas en todo el país.
+      </p>
+
+      {zonas.map((z) => (
+        <div class="reveal mt-10">
+          <h3 class="m-0 font-display text-[20px] font-bold text-dark">{z.titulo}</h3>
+          <p class="m-0 mt-2 max-w-[760px] text-[15px] leading-[1.7] text-slate-600">{z.texto}</p>
+          <ul class="m-0 mt-5 grid list-none gap-3 p-0" style="grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr))">
+            {regiones.filter((r) => r.zona === z.id).map((r) => (
+              <li class="caja rounded-[16px] px-5 py-4">
+                {r.pagina ? (
+                  <a href={r.pagina} class="font-display text-[15.5px] font-bold text-primary no-underline">{r.nombre} →</a>
+                ) : (
+                  <span class="font-display text-[15.5px] font-bold text-dark">{r.nombre}</span>
+                )}
+                <span class="mt-1 block text-[13px] leading-[1.5] text-slate-500">{r.ciudades.join(' · ')}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+
+      <h2 class="reveal mt-16 font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">Preguntas frecuentes</h2>
+      <div class="mt-6 grid gap-4">
+        {faq.map((f) => (
+          <div class="caja reveal rounded-[18px] p-6">
+            <h3 class="m-0 font-display text-[16.5px] font-bold text-dark">{f.q}</h3>
+            <p class="m-0 mt-2 text-[15px] leading-[1.7] text-slate-600">{f.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTA />
+</BaseLayout>
+
+<style>
+  .caja {
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--hairline), 0 10px 25px -5px rgba(0, 0, 0, 0.06);
+  }
+  .caja--link { transition: transform 0.5s var(--ease-fluid), box-shadow 0.5s var(--ease-fluid); }
+  .caja--link:hover {
+    transform: translateY(-4px);
+    box-shadow: inset 0 0 0 1px var(--hairline-strong), 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  }
+</style>

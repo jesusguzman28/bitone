@@ -128,5 +128,6 @@ Todas con barra final: sin ella el servidor responde una redirección.
 - https://bitone.pe/contacto/ — reunión técnica y formulario
 - https://bitone.pe/fabrica-de-software-lima/ — fábrica de software en Lima
 - https://bitone.pe/fabrica-de-software-ayacucho/ — fábrica de software en Ayacucho
+- https://bitone.pe/fabrica-de-software-peru/ — cobertura en las 25 regiones del Perú, trabajo remoto
 - https://bitone.pe/blog/ — guías para contratar software: precios, facturación electrónica SUNAT, apps, sistemas heredados y el caso ApuraY
 

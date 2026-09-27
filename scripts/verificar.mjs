@@ -42,6 +42,7 @@ const RUTAS = [
   '/blog/',
   '/fabrica-de-software-lima/',
   '/fabrica-de-software-ayacucho/',
+  '/fabrica-de-software-peru/',
   '/blog/cuanto-cuesta-un-software-a-medida-en-peru/',
 ];
 
