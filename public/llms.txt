@@ -89,6 +89,9 @@ concibió, construyó y publicó estos productos:
   acceso por usuario y su app móvil. Acceso privado.
 - **AjosyCebollas** (https://ajosycebollas.com.pe/login) — sistema de gestión a
   medida con cuenta de acceso por usuario. Acceso privado.
+- **Liberalismo Comunal** (https://liberalismocomunal.org/) — plataforma
+  editorial del libro "Libertad en los Andes": biblioteca de ensayos,
+  propuestas por tema y suscripción por correo.
 
 Apps publicadas en Google Play bajo la cuenta de BITONE E.I.R.L.:
 https://play.google.com/store/apps/developer?id=BITONE+E.I.R.L

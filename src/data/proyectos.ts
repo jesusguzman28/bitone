@@ -152,6 +152,20 @@ export const proyectos: readonly Proyecto[] = [
     stack: [],
     anio: null,
   },
+  {
+    nombre: 'Liberalismo Comunal',
+    rubro: 'Plataforma editorial',
+    resumen:
+      'Sitio del libro "Libertad en los Andes": biblioteca de ensayos, propuestas por tema y suscripción por correo, con cada tema en su propia página para posicionar en Google.',
+    entregado: ['Sitio web', 'Biblioteca de ensayos', 'Suscripción por correo', 'SEO por tema'],
+    url: 'https://liberalismocomunal.org/',
+    acceso: 'publico',
+    logo: 'liberalismo-comunal',
+    color: '#E7653E',
+    esMarcador: false,
+    stack: [],
+    anio: null,
+  },
 ];
 
 /** Cuántos de los publicados son todavía relleno. Sirve para avisar en el build
