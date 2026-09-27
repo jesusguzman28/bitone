@@ -1,0 +1,128 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import ContactForm from '../components/ContactForm.astro';
+import CTA from '../components/CTA.astro';
+import { site, serviciosHome } from '../data/site';
+import { ciudades, type Ciudad } from '../data/ciudades';
+
+export function getStaticPaths() {
+  return ciudades.map((c) => ({ params: { ciudad: c.slug }, props: { c } }));
+}
+
+const { c } = Astro.props as { c: Ciudad };
+const url = `${site.domain}/fabrica-de-software-${c.slug}/`;
+
+// Un Service por ciudad, ligado a la organización por @id: le dice a Google
+// que la misma empresa ofrece el servicio en esa zona, sin inventar una sede.
+const schema = [
+  {
+    '@type': 'Service',
+    '@id': url + '#servicio',
+    name: `Fábrica de software en ${c.nombre}`,
+    serviceType: 'Desarrollo de software a medida',
+    description: c.description,
+    provider: { '@id': site.domain + '/#org' },
+    areaServed: { '@type': c.tipo, name: c.nombre, containedInPlace: { '@type': 'Country', name: 'Perú' } },
+    url,
+  },
+  {
+    '@type': 'FAQPage',
+    '@id': url + '#faq',
+    mainEntity: c.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+
+<BaseLayout title={c.seoTitle} description={c.description} breadcrumbLabel={`Fábrica de software en ${c.nombre}`} schema={schema}>
+  <PageHero
+    title={`Fábrica de software en <span class='gradient-text--warm'>${c.nombre}</span>`}
+    subtitle={c.subtitulo}
+  />
+
+  <section class="surface px-6 py-20">
+    <div class="mx-auto w-full max-w-[1020px]">
+      <div class="reveal max-w-[760px]">
+        {c.intro.map((p, i) => (
+          <p class:list={['m-0 text-[16.5px] leading-[1.75] text-slate-600 [text-wrap:pretty]', i > 0 && 'mt-5']}>{p}</p>
+        ))}
+      </div>
+
+      <h2 class="reveal mt-16 font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">Qué construimos</h2>
+      <div class="mt-7 grid gap-5 md:grid-cols-3">
+        {serviciosHome.map((s, i) => (
+          <a href={s.href} class="svc-mini reveal flex flex-col rounded-[20px] bg-white p-6 no-underline" style={`--reveal-delay:${i * 80}ms`}>
+            <h3 class="m-0 font-display text-[18px] font-bold text-dark">{s.tag}</h3>
+            <p class="m-0 mt-2 text-[14px] leading-[1.65] text-slate-500">{s.desc}</p>
+            <span class="mt-auto inline-flex items-center gap-1.5 pt-4 text-[13.5px] font-semibold text-primary">
+              Ver detalle
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </span>
+          </a>
+        ))}
+      </div>
+
+      <h2 class="reveal mt-16 font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">{c.razonesTitulo}</h2>
+      <div class="mt-7 grid gap-5 sm:grid-cols-2">
+        {c.razones.map((r, i) => (
+          <div class="razon reveal rounded-[20px] p-6" style={`--reveal-delay:${(i % 2) * 80}ms`}>
+            <h3 class="m-0 font-display text-[17px] font-bold text-dark">{r.titulo}</h3>
+            <p class="m-0 mt-2 text-[14.5px] leading-[1.7] text-slate-600">{r.texto}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="reveal mt-14">
+        <p class="m-0 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">Para comprobarlo</p>
+        <ul class="m-0 mt-3 grid list-none gap-2.5 p-0">
+          {c.pruebas.map((p) => (
+            <li>
+              <a href={p.href} class="inline-flex items-start gap-2 text-[15px] font-semibold leading-[1.5] text-dark no-underline hover:text-primary">
+                <svg class="mt-[5px] shrink-0 text-primary" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                {p.texto}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <h2 class="reveal mt-16 font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">Preguntas frecuentes</h2>
+      <div class="mt-6 grid gap-4">
+        {c.faq.map((f) => (
+          <div class="razon reveal rounded-[18px] p-6">
+            <h3 class="m-0 font-display text-[16.5px] font-bold text-dark">{f.q}</h3>
+            <p class="m-0 mt-2 text-[15px] leading-[1.7] text-slate-600">{f.a}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-16 grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+        <div class="reveal">
+          <h2 class="m-0 font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">
+            ¿Tienes un proyecto en {c.nombre}?
+          </h2>
+          <p class="mt-4 text-[15.5px] leading-[1.7] text-slate-600">
+            Cuéntanos qué necesitas. La primera reunión técnica no tiene costo y el alcance y el precio te llegan por escrito.
+            Atendemos a empresas de todo el Perú.
+          </p>
+        </div>
+        <ContactForm context={c.contexto} title="Escríbenos" id={`form-${c.slug}`} />
+      </div>
+    </div>
+  </section>
+
+  <CTA />
+</BaseLayout>
+
+<style>
+  .svc-mini,
+  .razon {
+    box-shadow: inset 0 0 0 1px var(--hairline), 0 10px 25px -5px rgba(0, 0, 0, 0.06);
+  }
+  .razon { background: #fff; }
+  .svc-mini { transition: transform 0.5s var(--ease-fluid), box-shadow 0.5s var(--ease-fluid); }
+  .svc-mini:hover {
+    transform: translateY(-4px);
+    box-shadow: inset 0 0 0 1px var(--hairline-strong), 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  }
+</style>

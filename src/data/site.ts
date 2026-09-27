@@ -130,14 +130,14 @@ export const analitica = {
 } as const;
 
 export const seo = {
-  defaultTitle: 'Empresa de desarrollo de software en Perú | BIT-ONE',
+  defaultTitle: 'Fábrica de software y desarrollo a medida en Perú | BIT-ONE',
   titleTemplate: '%s | BIT-ONE',
   // Máximo 160 caracteres: pasado ese punto Google la corta con puntos
   // suspensivos y la última frase se pierde. Vale para esta y para la
   // `description` de cualquier página; `npm run verificar` lo comprueba en las
   // 30 antes de dejar desplegar.
   description:
-    'Empresa de desarrollo de software en Perú: sistemas a medida, apps móviles y mantenimiento. Alcance y precio por escrito, y el código queda a tu nombre.',
+    'Fábrica de software en Perú: sistemas a medida, apps móviles y mantenimiento para empresas de Lima, Ayacucho y todo el país. Alcance y precio por escrito.',
   // Temas reales sobre los que trabaja la empresa. Alimentan `knowsAbout` del
   // JSON-LD: son materias de servicio, NO variantes de búsqueda. Las frases
   // tipo "página web barata" son consultas de usuario y no describen a la
@@ -199,7 +199,10 @@ export const hero = {
   // Arranque fijo del titular, en grande. Lleva la keyword principal y no se
   // anima: es lo que leen Google y los buscadores con IA, que no ejecutan
   // JavaScript. Un H1 pintado por JavaScript equivale a una página sin título.
-  h1: 'Empresa de desarrollo de software',
+  // "Fábrica de software" es como busca el comprador en Perú; "empresa de
+  // desarrollo de software" sigue en el título de las páginas de servicio y en
+  // la descripción, así las dos formas quedan cubiertas.
+  h1: 'Fábrica de software',
   // El final del titular, también en grande, y esto sí se escribe y se borra.
   //
   // Las tres frases completan la línea de arriba, así que se leen seguidas:

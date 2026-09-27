@@ -122,7 +122,14 @@ const graph: Record<string, unknown>[] = [
     description,
     parentOrganization: { '@id': site.domain + '/#org' },
     address: { '@type': 'PostalAddress', addressLocality: 'Lima', addressCountry: 'PE' },
-    areaServed: { '@type': 'Country', name: 'Perú' },
+    // Todo el país, y además las dos zonas con página propia
+    // (src/data/ciudades.ts). Sin sede declarada fuera de Lima: el trabajo es
+    // remoto.
+    areaServed: [
+      { '@type': 'Country', name: 'Perú' },
+      { '@type': 'City', name: 'Lima' },
+      { '@type': 'AdministrativeArea', name: 'Ayacucho' },
+    ],
     // Los tres campos que Google pide para una ficha de negocio y que faltaban.
     // Sin teléfono ni horario, el nodo era un LocalBusiness a medias: declaraba
     // ser un negocio local sin ninguno de los datos que hacen falta para

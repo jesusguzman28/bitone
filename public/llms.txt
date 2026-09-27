@@ -1,8 +1,9 @@
 # BIT-ONE Perú
 
-> Empresa de desarrollo de software en Lima, Perú. Sistemas a medida,
-> aplicaciones móviles y mantenimiento de sistemas existentes, para empresas
-> peruanas. También descrita como fábrica de software.
+> Fábrica de software (empresa de desarrollo de software) con sede fiscal en
+> Lima, Perú. Sistemas a medida, aplicaciones móviles y mantenimiento de
+> sistemas existentes para empresas de todo el Perú, con trabajo remoto.
+> Atiende en particular Lima y Ayacucho, donde funciona su primer producto.
 
 Razón social: Bitone E.I.R.L. · RUC 20615736261 · Lima, Perú.
 
@@ -125,5 +126,7 @@ Todas con barra final: sin ella el servidor responde una redirección.
 - https://bitone.pe/proyectos/ — el software propio, con enlaces en vivo
 - https://bitone.pe/nosotros/ — quiénes somos y cómo trabajamos
 - https://bitone.pe/contacto/ — reunión técnica y formulario
+- https://bitone.pe/fabrica-de-software-lima/ — fábrica de software en Lima
+- https://bitone.pe/fabrica-de-software-ayacucho/ — fábrica de software en Ayacucho
 - https://bitone.pe/blog/ — guías para contratar software: precios, facturación electrónica SUNAT, apps, sistemas heredados y el caso ApuraY
 

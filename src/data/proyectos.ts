@@ -152,7 +152,7 @@ export const proyectos: readonly Proyecto[] = [
     logo: null,
     color: '#16A34A',
     esMarcador: false,
-    stack: ['php', 'laravel'],
+    stack: ['php', 'laravel', 'mysql'],
     anio: null,
   },
   {
