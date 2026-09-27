@@ -28,8 +28,7 @@ const RUTAS = [
   '/sitemap-index.xml',
   // Las tipografías dejaron de pedirse a Google y salen de aquí. Si un archivo
   // no llega, el sitio entero se ve con la letra del sistema.
-  '/fonts/plus-jakarta-sans.woff2',
-  '/fonts/space-grotesk.woff2',
+  '/fonts/archivo.woff2',
 ];
 
 let fallos = 0;

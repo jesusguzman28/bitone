@@ -9,7 +9,7 @@ import { resenas } from '../data/resenas';
 {resenas.length > 0 && (
   <section class="surface--alt px-6 py-20" aria-labelledby="resenas">
     <div class="mx-auto w-full max-w-[1120px]">
-      <div class="reveal mx-auto max-w-[640px] text-center">
+      <div class="reveal max-w-[640px]">
         <h2 id="resenas" class="mt-5 font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
           Lo que dicen los que ya trabajaron con nosotros
         </h2>
@@ -17,7 +17,7 @@ import { resenas } from '../data/resenas';
 
       <div class="mt-10 grid gap-5" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
         {resenas.map((r, i) => (
-          <figure class="resena reveal m-0 flex flex-col rounded-[20px] bg-white p-6" style={`--reveal-delay:${(i % 3) * 80}ms`}>
+          <figure class="resena reveal m-0 flex flex-col rounded-[10px] bg-white p-6" style={`--reveal-delay:${(i % 3) * 80}ms`}>
             <svg class="resena__comilla" width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M7.5 6C5 6 3 8 3 10.5S5 15 7.5 15c.3 0 .6 0 .9-.1-.5 1.7-2 3-3.9 3.3v2.6c4.4-.4 7.5-4 7.5-8.8V10.5C12 8 10 6 7.5 6Zm9 0C14 6 12 8 12 10.5S14 15 16.5 15c.3 0 .6 0 .9-.1-.5 1.7-2 3-3.9 3.3v2.6c4.4-.4 7.5-4 7.5-8.8V10.5C21 8 19 6 16.5 6Z"/>
             </svg>

@@ -242,7 +242,7 @@ const jsonLd = { '@context': 'https://schema.org', '@graph': graph };
         que es justo lo que queremos que siga haciendo. Lo que se pide es que la
         página no compita en resultados, no que se aísle del sitio. */}
     {noindex ? <meta name="robots" content="noindex, follow" /> : <meta name="robots" content="index, follow" />}
-    <meta name="theme-color" content="#0f172a" />
+    <meta name="theme-color" content="#1A2044" />
 
     <!-- Open Graph -->
     <meta property="og:type" content={article ? 'article' : 'website'} />
@@ -279,8 +279,7 @@ const jsonLd = { '@context': 'https://schema.org', '@graph': graph };
          Son dos archivos variables, uno por familia, con todos los pesos
          adentro. Se adelantan los dos porque cualquier página los pinta en el
          primer pantallazo: el titular y el texto corriente. -->
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/space-grotesk.woff2" crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/plus-jakarta-sans.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/archivo.woff2" crossorigin />
 
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 

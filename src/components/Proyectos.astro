@@ -37,14 +37,13 @@ const {
     es solo la rejilla —tres columnas aquí, cuatro allá— porque son cinco y
     cuatro elementos. */}
 <section class="proy-band relative isolate overflow-hidden px-6 py-20" aria-labelledby="proyectos-lista">
-  <div class="proy-glow" aria-hidden="true"></div>
 
   <div class="relative mx-auto w-full max-w-[1120px]">
-    <div class="reveal mx-auto max-w-[720px] text-center">
-      <h2 id="proyectos-lista" class="m-0 font-display text-[clamp(1.6rem,3.6vw,2.3rem)] font-extrabold leading-[1.15] text-white [text-wrap:balance]">
+    <div class="reveal max-w-[720px]">
+      <h2 id="proyectos-lista" class="m-0 font-display text-[clamp(1.6rem,3.6vw,2.3rem)] font-extrabold leading-[1.1] text-dark [text-wrap:balance]">
         {title}
       </h2>
-      <p class="mx-auto mt-4 max-w-[600px] text-[15.5px] leading-[1.7] text-slate-400 [text-wrap:pretty]">
+      <p class="mt-4 max-w-[600px] text-[16px] leading-[1.7] text-[#5B6272] [text-wrap:pretty]">
         {subtitle}
       </p>
     </div>
@@ -94,7 +93,7 @@ const {
                   pastillas. Cuatro pastillas por tarjeta y cinco tarjetas eran
                   veinte cápsulas de color compitiendo entre sí; en una línea se
                   lee igual de rápido y pesa la décima parte. */}
-              <span class="proy-card__entregado">{p.entregado.join(' · ')}</span>
+              <span class="proy-card__entregado">{p.entregado.join(', ')}</span>
 
               {p.stack.length > 0 && (
                 <span class="proy-card__stack">
@@ -132,22 +131,7 @@ const {
      otra en la portada, esa diferencia mínima las separa sin cortar la
      continuidad: se leen como dos partes de un mismo bloque de prueba y no como
      dos secciones sin relación. */
-  .proy-band {
-    background: linear-gradient(170deg, #171f2e 0%, #101724 100%);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-  }
-  .proy-glow {
-    position: absolute;
-    right: -110px;
-    top: -80px;
-    height: 340px;
-    width: 340px;
-    border-radius: 999px;
-    opacity: 0.2;
-    filter: blur(95px);
-    background: radial-gradient(circle, #D91023, transparent 70%);
-    pointer-events: none;
-  }
+  .proy-band { background: var(--surface-alt); }
 
   /* Tres columnas y no cuatro: son cinco proyectos, y con cuatro quedaría una
      fila de cuatro y otra de uno solo estirado a lo ancho. Con tres van 3 + 2 y
@@ -158,19 +142,13 @@ const {
 
   .proy-card {
     height: 100%;
-    border-radius: 22px;
+    border-radius: 10px;
     padding: 18px;
-    background: rgba(255, 255, 255, 0.04);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.09);
-    transition: transform 0.45s var(--ease-fluid), box-shadow 0.45s var(--ease-fluid), background 0.45s var(--ease-fluid);
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--hairline);
+    transition: box-shadow 0.25s ease;
   }
-  .proy-card:hover {
-    transform: translateY(-4px);
-    background: rgba(255, 255, 255, 0.07);
-    box-shadow:
-      inset 0 0 0 1px color-mix(in srgb, var(--acento) 50%, transparent),
-      0 26px 50px -24px color-mix(in srgb, var(--acento) 70%, transparent);
-  }
+  .proy-card:hover { box-shadow: inset 0 0 0 2px var(--acento); }
   .proy-card:focus-visible {
     outline: 2px solid var(--acento);
     outline-offset: 3px;
@@ -181,13 +159,11 @@ const {
     display: block;
     height: 60px;
     width: 60px;
-    border-radius: 16px;
+    border-radius: 8px;
     /* `outline` con offset negativo y no `box-shadow: inset`: una sombra
        interior no se ve sobre un <img>, el navegador pinta la imagen encima. */
-    outline: 1px solid rgba(255, 255, 255, 0.16);
+    outline: 1px solid rgba(26, 32, 68, 0.1);
     outline-offset: -1px;
-    box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.75);
-    transition: transform 0.45s var(--ease-fluid);
   }
   .proy-card__logo--mono {
     display: grid;
@@ -197,10 +173,9 @@ const {
     font-weight: 800;
     line-height: 1;
     color: #fff;
-    background: linear-gradient(140deg, var(--acento), color-mix(in srgb, var(--acento) 55%, #0b1120));
+    background: var(--acento);
     outline: none;
   }
-  .proy-card:hover .proy-card__logo { transform: scale(1.05); }
 
   .proy-card__cuerpo {
     display: flex;
@@ -212,16 +187,14 @@ const {
     font-family: var(--font-display);
     font-size: 17px;
     font-weight: 800;
-    letter-spacing: -0.015em;
-    color: #fff;
+    font-stretch: 112%;
+    color: var(--color-anil);
   }
   .proy-card__pendiente {
     border-radius: 999px;
     padding: 2px 8px;
     font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     color: #fcd34d;
     background: rgba(252, 211, 77, 0.14);
   }
@@ -229,39 +202,34 @@ const {
     margin-top: 6px;
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: color-mix(in srgb, var(--acento) 55%, #ffffff);
+    color: color-mix(in srgb, var(--acento) 75%, #1A2044);
   }
   .proy-card__que {
     margin-top: 10px;
-    font-size: 13.5px;
+    font-size: 14px;
     line-height: 1.6;
-    color: #94a3b8;
+    color: #3E4456;
     text-wrap: pretty;
   }
   .proy-card__entregado {
     margin-top: 12px;
-    font-size: 12px;
+    font-size: 12.5px;
     line-height: 1.55;
-    color: #64748b;
+    color: #6B7185;
   }
   .proy-card__stack {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 10px;
+    gap: 6px 14px;
+    margin-top: 14px;
   }
   .proy-tech {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    border-radius: 6px;
-    padding: 3px 8px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
-    color: #cbd5e1;
-    background: rgba(255, 255, 255, 0.1);
+    color: #3E4456;
   }
 
   .proy-card__link {
@@ -272,12 +240,12 @@ const {
     padding-top: 15px;
     font-size: 13px;
     font-weight: 700;
-    color: #e2e8f0;
+    color: var(--color-anil);
   }
   /* El enlace a un sistema privado va apagado. El tono de acción promete "esto
      se puede abrir", y aquí lo que hay detrás es una pantalla de inicio de
      sesión: el color avisa antes de que se lea el texto. */
-  .proy-card__link--privado { color: #7c8899; }
+  .proy-card__link--privado { color: #8A90A0; }
 
   .proy-card__flecha { transition: transform 0.4s var(--ease-fluid); }
   .proy-card:hover .proy-card__flecha { transform: translate(2px, -2px); }

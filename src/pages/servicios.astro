@@ -121,13 +121,12 @@ const schema = serviciosTabs.map((t) => {
       <div class="svc-panels">
       {serviciosTabs.map((t, i) => (
         <div id={t.id} role="tabpanel" aria-labelledby={`tab-${t.id}`} inert={i !== 0} class:list={['svc-panel', i !== 0 && 'svc-panel--off']}>
-          <div class="flip mx-auto mt-10 w-full max-w-[760px]">
+          <div class="flip mt-10 w-full max-w-[760px]">
             <div class="flip-inner">
               <!-- Cara frontal: el servicio -->
-              <div class="flip-face flip-front panel-dark relative overflow-hidden rounded-[28px] p-8 text-center text-white sm:p-9" style="box-shadow:0 30px 60px -30px rgba(14,21,33,0.6)">
-                <div class="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full opacity-30 blur-[70px]" style="background:radial-gradient(circle,#D91023,transparent 70%)"></div>
+              <div class="flip-face flip-front panel-dark relative overflow-hidden rounded-[14px] p-8 text-white sm:p-9" style="">
 
-                <span class="relative mx-auto mb-5 grid h-12 w-12 place-items-center rounded-[14px]" style="background:rgba(232,163,23,0.14);color:#E8A317">
+                <span class="relative mb-4 block" style="color:#E8A317">
                   <Icono name={t.icon} size={22} />
                 </span>
                 <h2 class="relative mt-3 font-display text-[clamp(1.5rem,3vw,2rem)] font-extrabold leading-[1.15] tracking-[-0.02em]">{t.title}</h2>
@@ -135,30 +134,30 @@ const schema = serviciosTabs.map((t) => {
                 {/* El precio tiene que estar a la vista: Google exige que los
                     datos estructurados representen contenido visible, y hasta
                     ahora los precios solo salían en la portada. */}
-                <p class="relative mt-4 flex flex-wrap items-baseline justify-center gap-x-2 gap-y-1">
-                  <span class="text-[11px] font-medium uppercase tracking-wide text-slate-500">{t.price === null ? 'Precio' : 'Desde'}</span>
+                <p class="relative mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                  <span class="text-[11px] font-medium tracking-wide text-slate-500">{t.price === null ? 'Precio' : 'Desde'}</span>
                   <span class="font-display text-2xl font-bold text-white [font-variant-numeric:tabular-nums]">{t.priceLabel}</span>
                   {t.priceNote && <span class="text-[13px] text-slate-400">{t.priceNote}</span>}
                 </p>
 
-                <p class="relative mx-auto mt-4 max-w-[520px] text-[15px] leading-[1.7] text-slate-400">{t.desc}</p>
+                <p class="relative mt-4 max-w-[520px] text-[15px] leading-[1.7] text-slate-400">{t.desc}</p>
 
                 <div class="relative mt-7 grid gap-3 border-t border-white/10 pt-6 sm:grid-cols-2">
-                  <div class="flex items-center justify-center gap-3">
-                    <span class="grid h-9 w-9 flex-none place-items-center rounded-[12px]" style="background:rgba(232,163,23,0.14);color:#E8A317">
+                  <div class="flex items-center gap-3">
+                    <span class="flex-none" style="color:#E8A317">
                       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                     </span>
                     <div>
-                      <div class="text-[11px] font-bold uppercase tracking-[0.1em] text-slate-500">Entrega</div>
+                      <div class="text-[11px] font-bold text-slate-500">Entrega</div>
                       <div class="font-display text-[15px] font-bold text-white">{t.time}</div>
                     </div>
                   </div>
-                  <div class="flex items-center justify-center gap-3">
-                    <span class="grid h-9 w-9 flex-none place-items-center rounded-[12px]" style="background:rgba(43,222,114,0.14);color:#2bde72">
+                  <div class="flex items-center gap-3">
+                    <span class="flex-none" style="color:#E8A317">
                       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m5 13 4 4L19 7"/></svg>
                     </span>
                     <div>
-                      <div class="text-[11px] font-bold uppercase tracking-[0.1em] text-slate-500">Incluido</div>
+                      <div class="text-[11px] font-bold text-slate-500">Incluido</div>
                       <div class="font-display text-[15px] font-bold text-white">{t.incluye}</div>
                     </div>
                   </div>
@@ -170,7 +169,7 @@ const schema = serviciosTabs.map((t) => {
                     bastante. El enlace vive ahora en las tarjetas de "Qué entra
                     en cada servicio", más abajo, con un "Ver más" por servicio. */}
 
-                <div class="relative mt-auto flex flex-wrap items-center justify-center gap-3 pt-8">
+                <div class="relative mt-auto flex flex-wrap items-center gap-3 pt-8">
                   <a href={waLink(t.wa)} target="_blank" rel="noopener" class="btn btn--whatsapp group !py-3 !pl-[26px] !text-[15px]">
                     Cotizar este servicio
                     <span class="btn__icon" aria-hidden="true">
@@ -185,7 +184,6 @@ const schema = serviciosTabs.map((t) => {
                     aria-label={`Ver qué incluye ${t.label}`}
                     class="flip-controls btn btn--on-dark group relative !px-5 !py-3 !text-[15px]"
                   >
-                    <span class="ping" aria-hidden="true"></span>
                     Qué incluye
                     <svg class="flip-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                       <path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/>
@@ -195,25 +193,24 @@ const schema = serviciosTabs.map((t) => {
               </div>
 
               <!-- Cara trasera: qué incluye -->
-              <div class="flip-face flip-back rounded-[28px] bg-white p-8 sm:p-9" inert style="box-shadow:inset 0 0 0 1px var(--hairline),0 30px 60px -30px rgba(0,0,0,0.18)">
-                <h3 class="flex items-center justify-center gap-3 font-display text-[13px] font-bold uppercase tracking-[0.14em] text-slate-500">
-                  <span class="h-[3px] w-7 rounded-full bg-primary"></span>
-                  Qué incluye · {t.label}
+              <div class="flip-face flip-back rounded-[14px] bg-white p-8 sm:p-9" inert style="box-shadow:inset 0 0 0 1px var(--hairline)">
+                <h3 class="flex items-center gap-3 font-display text-[15px] font-bold text-dark">
+                  Qué incluye {t.label.toLowerCase()}
                 </h3>
 
                 <!-- Una sola columna: en dos, el texto se parte en tres líneas
                      y los renglones pierden el ritmo de lectura. -->
                 <ul class="m-0 mt-5 grid list-none gap-2.5 p-0">
                   {t.features.map((f, fi) => (
-                    <li class="feat-item flex items-center gap-3.5 rounded-[16px] bg-white px-4 py-3.5" style={`--i:${fi}`}>
+                    <li class="feat-item flex items-center gap-3.5 rounded-[8px] bg-white px-4 py-3.5" style={`--i:${fi}`}>
                       <span
-                        class="feat-ico grid h-9 w-9 flex-none place-items-center rounded-[11px]"
+                        class="feat-ico grid h-9 w-9 flex-none place-items-center rounded-[6px]"
                         style={`color:${f.c};background:color-mix(in srgb, ${f.c} 13%, transparent)`}
                       >
                         <Icono name={f.i} size={19} />
                       </span>
                       <span class="flex-1 text-[14px] font-medium leading-[1.45] text-slate-700">{f.t}</span>
-                      <span class="grid h-[22px] w-[22px] flex-none place-items-center rounded-full" style="background:rgba(22,163,74,0.1);color:#16a34a">
+                      <span class="grid flex-none place-items-center" style="color:#16a34a">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="m5 13 4 4L19 7"/></svg>
                       </span>
                     </li>
@@ -254,7 +251,7 @@ const schema = serviciosTabs.map((t) => {
       él se rastrean mucho menos. */}
   <section class="surface--alt px-6 py-20" aria-labelledby="trabajos-servicios">
     <div class="mx-auto w-full max-w-[1120px]">
-      <div class="reveal mx-auto max-w-[640px] text-center">
+      <div class="reveal max-w-[640px]">
         <h2 id="trabajos-servicios" class="mt-5 font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
           Qué entra en cada servicio
         </h2>
@@ -272,7 +269,7 @@ const schema = serviciosTabs.map((t) => {
                hueco blanco al final de las más cortas. Con el "Ver más" anclado
                al pie, ese hueco pasa a ser el aire que separa la lista del
                enlace, y las cuatro terminan en la misma línea. */
-            <div class="reveal flex flex-col rounded-[20px] bg-white p-6" style={`--reveal-delay:${(i % 4) * 70}ms;box-shadow:inset 0 0 0 1px var(--hairline)`}>
+            <div class="reveal flex flex-col rounded-[10px] bg-white p-6" style={`--reveal-delay:${(i % 4) * 70}ms;box-shadow:inset 0 0 0 1px var(--hairline)`}>
               <a href={`#${t.id}`} class="font-display text-[15px] font-bold text-dark no-underline">{t.label}</a>
               <ul class="m-0 mt-4 grid list-none gap-2.5 p-0">
                 {t.trabajos.map((trabajo) => (
@@ -286,7 +283,6 @@ const schema = serviciosTabs.map((t) => {
               {servicio && (
                 <a href={hrefServicio(servicio.slug)} class="ver-mas mt-auto flex items-center gap-1.5 pt-5 text-[14px] font-bold text-primary no-underline">
                   Ver más
-                  <svg class="ver-mas__flecha" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
                   <span class="sr-only">sobre {t.label}</span>
                 </a>
               )}
@@ -310,10 +306,9 @@ const schema = serviciosTabs.map((t) => {
       cuatro títulos separados por puntos. Los textos largos siguen en
       `condiciones` (site.ts) por si alguna vez se quieren desarrollar. */}
   <section class="surface--alt px-6 pb-16">
-    <p class="reveal mx-auto flex max-w-[900px] flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center text-[14px] font-medium text-slate-600">
+    <p class="reveal mx-auto flex w-full max-w-[1120px] flex-wrap items-center gap-x-7 gap-y-2 text-[14.5px] font-medium text-[#3E4456]">
       {condiciones.map((c, i) => (
         <>
-          {i > 0 && <span class="text-slate-300" aria-hidden="true">·</span>}
           <span class="inline-flex items-center gap-1.5">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="m5 13 4 4L19 7"/></svg>
             {c.title}
@@ -676,4 +671,15 @@ const schema = serviciosTabs.map((t) => {
   @media (prefers-reduced-motion: reduce) {
     .svc-panel, .panel-in, .feat-item { animation: none; }
   }
+
+  /* Identidad: pestañas subrayadas y alineadas a la izquierda, sin cápsula ni
+     máscara; íconos sin cuadrito. */
+  .tabs-wrap { -webkit-mask-image: none; mask-image: none; }
+  @media (min-width: 768px) { .tabs-wrap { justify-content: flex-start; } }
+  .tabs-track { gap: 28px; padding: 0; border-radius: 0; background: none; box-shadow: inset 0 -1px 0 var(--hairline); }
+  .svc-tab { border-radius: 0; padding: 10px 0; font-size: 15px; color: #5B6272; }
+  .svc-tab:hover { color: var(--color-anil); }
+  .svc-tab.is-active { color: var(--color-anil); background: none; box-shadow: inset 0 -3px 0 var(--color-grana); }
+  .feat-ico { background: none !important; box-shadow: none !important; }
+  .feat-ico { color: var(--color-grana) !important; }
 </style>

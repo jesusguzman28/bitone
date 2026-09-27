@@ -17,20 +17,20 @@ const {
 ---
 
 <div
-  class="reveal panel-dark rounded-[28px] p-[clamp(24px,4vw,36px)] text-white"
-  style="box-shadow:0 30px 60px -30px rgba(14,21,33,0.7)"
+  class="reveal panel-dark rounded-[14px] p-[clamp(24px,4vw,36px)] text-white"
+  style=""
 >
   <h2 class="m-0 font-display text-xl font-bold">{title}</h2>
   <p class="mt-2 text-[13.5px] leading-[1.6] text-slate-400">{subtitle}</p>
 
   <form id={id} class="mt-6 grid gap-3.5" data-context={context}>
     <div>
-      <label for={`${id}-nombre`} class="mb-2 block text-xs font-bold uppercase tracking-[0.06em] text-slate-400">Nombre</label>
+      <label for={`${id}-nombre`} class="mb-2 block text-xs font-bold text-slate-400">Nombre</label>
       <input id={`${id}-nombre`} name="nombre" class="field" type="text" required placeholder="Tu nombre" />
     </div>
 
     <div>
-      <label for={`${id}-celular`} class="mb-2 block text-xs font-bold uppercase tracking-[0.06em] text-slate-400">Celular</label>
+      <label for={`${id}-celular`} class="mb-2 block text-xs font-bold text-slate-400">Celular</label>
       <input
         id={`${id}-celular`}
         name="celular"
@@ -44,7 +44,7 @@ const {
     </div>
 
     <div>
-      <label for={`${id}-pregunta`} class="mb-2 block text-xs font-bold uppercase tracking-[0.06em] text-slate-400">Tu pregunta</label>
+      <label for={`${id}-pregunta`} class="mb-2 block text-xs font-bold text-slate-400">Tu pregunta</label>
       <textarea id={`${id}-pregunta`} name="pregunta" class="field resize-y" rows="3" required placeholder="¿Qué sistema o app necesita tu empresa?"></textarea>
     </div>
 

@@ -33,39 +33,39 @@ import { site, contactoExpectativas } from '../data/site';
           href={`https://wa.me/${site.whatsapp}`}
           target="_blank"
           rel="noopener"
-          class="reveal panel-dark flex items-center gap-4 rounded-[20px] p-[22px] text-white no-underline transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-[3px]"
-          style="--reveal-delay:80ms;box-shadow:0 24px 50px -28px rgba(14,21,33,0.6)"
+          class="reveal panel-dark flex items-center gap-4 rounded-[10px] p-[22px] text-white no-underline transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-[3px]"
+          style="--reveal-delay:80ms"
         >
-          <span class="grid h-[46px] w-[46px] flex-none place-items-center rounded-[12px]" style="background:rgba(43,222,114,0.15);color:#2bde72">
+          <span class="contacto-ico flex-none" style="color:#E8A317">
             <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Z"/></svg>
           </span>
-          <div>
-            <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-400">WhatsApp · respuesta &lt; 2 h</div>
+          <div class="min-w-0">
+            <div class="text-[11px] font-bold text-slate-400">WhatsApp, respuesta en menos de 2 horas</div>
             <div class="mt-1 font-display text-lg font-bold">{site.phone}</div>
           </div>
         </a>
 
         <a
           href={`mailto:${site.email}`}
-          class="reveal card flex items-center gap-4 rounded-[20px] p-[22px] text-dark no-underline transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-[3px]"
+          class="reveal card flex items-center gap-4 rounded-[10px] p-[22px] text-dark no-underline transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-[3px]"
           style="--reveal-delay:160ms"
         >
-          <span class="grid h-[46px] w-[46px] flex-none place-items-center rounded-[12px]" style="background:rgba(232,163,23,0.14);color:#B8820F">
+          <span class="contacto-ico flex-none" style="color:var(--color-grana)">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
           </span>
-          <div>
-            <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-400">Correo</div>
-            <div class="mt-1 font-display text-lg font-bold">{site.email}</div>
+          <div class="min-w-0">
+            <div class="text-[11px] font-bold text-slate-400">Correo</div>
+            <div class="mt-1 font-display text-lg font-bold break-all">{site.email}</div>
           </div>
         </a>
 
-        <div class="reveal card flex items-center gap-4 rounded-[20px] p-[22px]" style="--reveal-delay:240ms">
-          <span class="grid h-[46px] w-[46px] flex-none place-items-center rounded-[12px]" style="background:rgba(217,16,35,0.09);color:#D91023">
+        <div class="reveal card flex items-center gap-4 rounded-[10px] p-[22px]" style="--reveal-delay:240ms">
+          <span class="contacto-ico flex-none" style="color:var(--color-grana)">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
           </span>
-          <div>
-            <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-400">Ubicación y horario</div>
-            <div class="mt-1 font-display text-base font-bold text-dark">{site.city} · {site.hours.replace('Lun – Sáb: ', 'Lun – Sáb ')}</div>
+          <div class="min-w-0">
+            <div class="text-[11px] font-bold text-slate-400">Ubicación y horario</div>
+            <div class="mt-1 font-display text-base font-bold text-dark">{site.city}, {site.hours.replace('Lun – Sáb: ', 'Lun – Sáb ')}</div>
             <div class="mt-0.5 text-[12.5px] text-slate-500">Atendemos todo el Perú, 100% remoto</div>
           </div>
         </div>
@@ -73,24 +73,24 @@ import { site, contactoExpectativas } from '../data/site';
         {/* Datos de la empresa. Quien llega a /contacto desconfiando es
             justamente quien busca el RUC antes de escribir. */}
         {site.ruc && (
-          <div class="reveal card flex items-center gap-4 rounded-[20px] p-[22px]" style="--reveal-delay:280ms">
-            <span class="grid h-[46px] w-[46px] flex-none place-items-center rounded-[12px]" style="background:rgba(43,222,114,0.11);color:#16a34a">
+          <div class="reveal card flex items-center gap-4 rounded-[10px] p-[22px]" style="--reveal-delay:280ms">
+            <span class="contacto-ico flex-none" style="color:var(--color-grana)">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4M8 13h8M8 17h5"/></svg>
             </span>
-            <div>
-              <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-400">Empresa formal</div>
+            <div class="min-w-0">
+              <div class="text-[11px] font-bold text-slate-400">Empresa formal</div>
               {/* Aquí va la razón social, no la marca: quien busca este dato lo
                   va a contrastar en SUNAT, y en SUNAT la empresa figura como
                   Bitone E.I.R.L. Poner "BIT-ONE Perú" junto a un RUC que no
                   devuelve ese nombre haría dudar justo a quien vino a confiar. */}
-              <div class="mt-1 font-display text-base font-bold text-dark">{site.razonSocial} · RUC {site.ruc}</div>
+              <div class="mt-1 font-display text-base font-bold text-dark">{site.razonSocial}, RUC {site.ruc}</div>
               <div class="mt-0.5 text-[12.5px] text-slate-500">Emitimos factura electrónica</div>
             </div>
           </div>
         )}
 
-        <div class="reveal card rounded-[20px] p-[22px]" style="--reveal-delay:320ms">
-          <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-400">Qué esperar</div>
+        <div class="reveal card rounded-[10px] p-[22px]" style="--reveal-delay:320ms">
+          <div class="text-[11px] font-bold text-slate-400">Qué esperar</div>
           <ul class="m-0 mt-3 grid list-none gap-[9px] p-0 text-[13.5px] text-slate-700">
             {contactoExpectativas.map((e) => (
               <li class="flex items-center gap-2">

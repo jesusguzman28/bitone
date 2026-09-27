@@ -101,7 +101,7 @@ export const metodologia = {
       'Cinco fases. Ninguna empieza sin que la anterior te haya entregado algo en la mano.',
     items: [
       {
-        n: '00',
+        n: '1',
         nombre: 'Análisis',
         que: 'Reuniones con quien conoce la operación. Qué tiene que hacer el sistema, con qué se integra y qué queda fuera. Se puede contratar sola.',
         entregable: 'Alcance, cronograma y precio cerrado.',
@@ -109,7 +109,7 @@ export const metodologia = {
         icono: 'buscar',
       },
       {
-        n: '01',
+        n: '2',
         nombre: 'Arranque',
         que: 'Se firma el alcance y se monta lo necesario: repositorios a tu nombre, entornos, accesos y el tablero donde verás el avance.',
         entregable: 'Accesos, tablero y primer sprint planificado.',
@@ -117,7 +117,7 @@ export const metodologia = {
         icono: 'llave',
       },
       {
-        n: '02',
+        n: '3',
         nombre: 'Construcción',
         que: 'Sprints de dos semanas. Cada uno abre con una planificación donde tú priorizas y cierra con software funcionando, no con diapositivas.',
         entregable: 'Cada dos semanas: incremento probado y desplegado.',
@@ -125,7 +125,7 @@ export const metodologia = {
         icono: 'cajas',
       },
       {
-        n: '03',
+        n: '4',
         nombre: 'Estabilización',
         que: 'Un sprint entero sin funcionalidad nueva: pruebas con datos reales, carga si hace falta y corrección. Va planificado desde el principio.',
         entregable: 'Sistema probado y lista de defectos cerrada.',
@@ -133,7 +133,7 @@ export const metodologia = {
         icono: 'escudo',
       },
       {
-        n: '04',
+        n: '5',
         nombre: 'Entrega',
         que: 'Puesta en producción acompañada, capacitación y traspaso técnico a quien lo vaya a mantener, seamos nosotros o no.',
         entregable: 'Producción, documentación, accesos y 30 días de garantía.',

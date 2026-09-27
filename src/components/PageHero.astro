@@ -1,5 +1,4 @@
 ---
-import Stars from './Stars.astro';
 
 // Sin rótulo sobre el titular.
 //
@@ -27,14 +26,24 @@ interface Props {
 const { title, lead, subtitle, compact = false } = Astro.props;
 ---
 
-<section class:list={['hero-dark relative isolate overflow-hidden px-6 text-center text-white', compact ? 'pb-[66px] pt-[150px]' : 'pb-[70px] pt-[150px]']}>
-  <Stars />
-
-  <h1
-    class="mx-auto max-w-[700px] font-display text-[clamp(1.9rem,5vw,3rem)] font-bold leading-[1.08]"
-    set:html={title}
-  />
-  {lead && <p class="mx-auto mt-4 max-w-[560px] font-display text-[clamp(1.05rem,2.4vw,1.25rem)] font-semibold leading-[1.4] text-slate-100" set:html={lead} />}
-  {subtitle && <p class="mx-auto mt-4 max-w-[540px] text-base leading-[1.65] text-slate-300">{subtitle}</p>}
-  <slot />
+<section class:list={['hero-dark relative isolate overflow-hidden px-6 text-white', compact ? 'pb-16 pt-[132px]' : 'pb-20 pt-[140px]']}>
+  <div class="mx-auto w-full max-w-[1120px]">
+    <h1
+      class="page-h1 m-0 max-w-[18ch]"
+      set:html={title}
+    />
+    {lead && <p class="mt-4 max-w-[560px] font-display text-[clamp(1.05rem,2.4vw,1.25rem)] font-semibold leading-[1.4] text-white" set:html={lead} />}
+    {subtitle && <p class="mt-4 max-w-[540px] text-base leading-[1.65] text-[#C9CDE0]">{subtitle}</p>}
+    <slot />
+  </div>
 </section>
+
+<style>
+  .page-h1 {
+    font-size: clamp(2.1rem, 5.6vw, 4rem);
+    font-stretch: 125%;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+</style>

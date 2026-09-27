@@ -41,7 +41,7 @@ const schema = [
   />
 
   <section class="surface px-6 py-20">
-    <div class="mx-auto w-full max-w-[1020px]">
+    <div class="w-full max-w-[1020px] ml-[max(0px,calc((100%-1120px)/2))]">
       <div class="reveal max-w-[760px]">
         {c.intro.map((p, i) => (
           <p class:list={['m-0 text-[16.5px] leading-[1.75] text-slate-600 [text-wrap:pretty]', i > 0 && 'mt-5']}>{p}</p>
@@ -51,12 +51,11 @@ const schema = [
       <h2 class="reveal mt-16 font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">Qué construimos</h2>
       <div class="mt-7 grid gap-5 md:grid-cols-3">
         {serviciosHome.map((s, i) => (
-          <a href={s.href} class="svc-mini reveal flex flex-col rounded-[20px] bg-white p-6 no-underline" style={`--reveal-delay:${i * 80}ms`}>
+          <a href={s.href} class="svc-mini reveal flex flex-col rounded-[10px] bg-white p-6 no-underline" style={`--reveal-delay:${i * 80}ms`}>
             <h3 class="m-0 font-display text-[18px] font-bold text-dark">{s.tag}</h3>
             <p class="m-0 mt-2 text-[14px] leading-[1.65] text-slate-500">{s.desc}</p>
             <span class="mt-auto inline-flex items-center gap-1.5 pt-4 text-[13.5px] font-semibold text-primary">
               Ver detalle
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
             </span>
           </a>
         ))}
@@ -65,7 +64,7 @@ const schema = [
       <h2 class="reveal mt-16 font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">{c.razonesTitulo}</h2>
       <div class="mt-7 grid gap-5 sm:grid-cols-2">
         {c.razones.map((r, i) => (
-          <div class="razon reveal rounded-[20px] p-6" style={`--reveal-delay:${(i % 2) * 80}ms`}>
+          <div class="razon reveal rounded-[10px] p-6" style={`--reveal-delay:${(i % 2) * 80}ms`}>
             <h3 class="m-0 font-display text-[17px] font-bold text-dark">{r.titulo}</h3>
             <p class="m-0 mt-2 text-[14.5px] leading-[1.7] text-slate-600">{r.texto}</p>
           </div>
@@ -73,12 +72,11 @@ const schema = [
       </div>
 
       <div class="reveal mt-14">
-        <p class="m-0 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">Para comprobarlo</p>
+        <p class="m-0 text-[11px] font-bold text-slate-500">Para comprobarlo</p>
         <ul class="m-0 mt-3 grid list-none gap-2.5 p-0">
           {c.pruebas.map((p) => (
             <li>
               <a href={p.href} class="inline-flex items-start gap-2 text-[15px] font-semibold leading-[1.5] text-dark no-underline hover:text-primary">
-                <svg class="mt-[5px] shrink-0 text-primary" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
                 {p.texto}
               </a>
             </li>
@@ -89,7 +87,7 @@ const schema = [
       <h2 class="reveal mt-16 font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">Preguntas frecuentes</h2>
       <div class="mt-6 grid gap-4">
         {c.faq.map((f) => (
-          <div class="razon reveal rounded-[18px] p-6">
+          <div class="razon reveal rounded-[8px] p-6">
             <h3 class="m-0 font-display text-[16.5px] font-bold text-dark">{f.q}</h3>
             <p class="m-0 mt-2 text-[15px] leading-[1.7] text-slate-600">{f.a}</p>
           </div>
@@ -103,7 +101,7 @@ const schema = [
           </h2>
           <p class="mt-4 text-[15.5px] leading-[1.7] text-slate-600">
             Cuéntanos qué necesitas. La primera reunión técnica no tiene costo y el alcance y el precio te llegan por escrito.
-            Atendemos a empresas de <a href="/fabrica-de-software-peru/" class="font-semibold text-primary">todo el Perú</a>.
+            Atendemos a empresas de <a href="/fabrica-de-software-peru/" class="enlace">todo el Perú</a>.
           </p>
         </div>
         <ContactForm context={c.contexto} title="Escríbenos" id={`form-${c.slug}`} />

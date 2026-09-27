@@ -7,16 +7,16 @@ const { title = 'De la idea al lanzamiento, en 4 pasos' } = Astro.props;
 
 <section class="surface px-6 py-24">
   <div class="mx-auto w-full max-w-[1120px]">
-    <div class="reveal text-center">
-      <h2 class="mx-auto mt-4 max-w-[560px] font-display text-[clamp(1.7rem,4vw,2.5rem)] font-bold leading-[1.08] text-dark">{title}</h2>
+    <div class="reveal">
+      <h2 class="mt-4 max-w-[560px] font-display text-[clamp(1.7rem,4vw,2.5rem)] font-bold leading-[1.08] text-dark">{title}</h2>
     </div>
 
     <div class="mt-12 grid gap-[18px]" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
       {proceso.map((step, i) => (
-        <div class="reveal card card--lift rounded-[20px] p-6" style={`--reveal-delay:${i * 110}ms`}>
+        <div class="reveal card card--lift rounded-[10px] p-6" style={`--reveal-delay:${i * 110}ms`}>
           <div class="flex items-center gap-3">
             <span class="font-display text-[13px] font-bold text-primary">{step.n}</span>
-            <span class="grid h-[38px] w-[38px] place-items-center rounded-xl text-primary" style="background:rgba(217,16,35,0.09)">
+            <span class="block text-primary">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={step.icon} />
             </span>
           </div>

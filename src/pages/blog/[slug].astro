@@ -61,20 +61,20 @@ if (post.faq?.length) {
   article={{ publishedTime: post.date, section: post.category, tags: post.keywords }}
 >
   <article class="surface px-6 pb-24 pt-[130px]">
-    <div class="mx-auto w-full max-w-[720px]">
-      <a href="/blog/" class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-[18px] py-2 text-[13px] font-semibold text-slate-600 no-underline transition-colors duration-300 hover:bg-slate-200">
+    <div class="w-full max-w-[720px] ml-[max(0px,calc((100%-1120px)/2))]">
+      <a href="/blog/" class="enlace inline-flex items-center gap-2 text-[14px]">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M19 12H5m6 6-6-6 6-6"/></svg>
         Volver al blog
       </a>
 
       <div class="mt-7 flex flex-wrap items-center gap-2.5 text-xs font-semibold text-slate-400">
-        <span class="rounded-full px-3 py-1 text-primary" style="background:rgba(217,16,35,0.08)">{post.category}</span>
-        <span>{fmt(post.date)}</span><span>·</span><span>{post.readTime} de lectura</span>
+        <span class="text-primary">{post.category}</span>
+        <span>{fmt(post.date)}, {post.readTime} de lectura</span>
       </div>
 
       <h1 class="mt-4 font-display text-[clamp(1.6rem,4vw,2.3rem)] font-bold leading-[1.12] text-dark [text-wrap:pretty]">{post.title}</h1>
 
-      <div class="mt-7 overflow-hidden rounded-[20px] bg-slate-100">
+      <div class="mt-7 overflow-hidden rounded-[10px] bg-slate-100">
         <picture>
           <source media="(max-width: 640px)" srcset={post.image.replace('.webp', '-sm.webp')} width="640" height="336" />
           <img src={post.image} alt={post.title} width="1200" height="630" loading="eager" fetchpriority="high" class="block h-auto w-full" />
@@ -83,8 +83,8 @@ if (post.faq?.length) {
 
       <p class="mt-8 text-[17px] font-medium leading-[1.75] text-dark [text-wrap:pretty]">{post.intro}</p>
 
-      <nav aria-label="Contenido del artículo" class="indice mt-8 rounded-[18px] p-5">
-        <p class="m-0 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">En este artículo</p>
+      <nav aria-label="Contenido del artículo" class="indice mt-8 rounded-[8px] p-5">
+        <p class="m-0 text-[11px] font-bold text-slate-500">En este artículo</p>
         <ol class="m-0 mt-3 grid list-none gap-1.5 p-0 text-[14.5px]">
           {post.secciones.map((s) => (
             <li><a href={`#${ancla(s.h2)}`} class="text-slate-600 no-underline hover:text-primary">{s.h2}</a></li>
@@ -120,14 +120,14 @@ if (post.faq?.length) {
       </div>
 
       <div
-        class="mt-11 rounded-[28px] p-[30px] text-center text-white"
-        style="background:radial-gradient(120% 160% at 50% 0%,#1c2331 0%,#0e1521 75%)"
+        class="mt-11 rounded-[14px] p-[30px] text-white"
+        style="background:var(--color-anil)"
       >
         <h2 class="m-0 font-display text-xl font-bold">¿Lo quieres aplicar en tu empresa?</h2>
-        <p class="mx-auto mt-2 max-w-[420px] text-sm leading-[1.6] text-slate-300">
+        <p class="mt-2 max-w-[420px] text-sm leading-[1.6] text-slate-300">
           Revisamos tu caso en una reunión técnica sin costo y te dejamos el alcance y el precio por escrito.
         </p>
-        <div class="mt-[18px] flex flex-wrap justify-center gap-3">
+        <div class="mt-[18px] flex flex-wrap gap-3">
           <a
             href={waLink(`Hola BIT-ONE, leí "${post.title}" y quiero conversar un proyecto`)}
             target="_blank"
@@ -142,12 +142,12 @@ if (post.faq?.length) {
         <h2 class="font-display text-xl font-bold text-dark">Sigue leyendo</h2>
         <div class="mt-5 grid gap-4 sm:grid-cols-2">
           {related.map((p) => (
-            <a href={`/blog/${p.slug}/`} class="card card--gradient card--lift block overflow-hidden rounded-[20px] no-underline">
+            <a href={`/blog/${p.slug}/`} class="card card--gradient card--lift block overflow-hidden rounded-[10px] no-underline">
               <div class="overflow-hidden bg-slate-100" style="aspect-ratio:640/336">
                 <img src={p.image.replace('.webp', '-sm.webp')} alt="" width="640" height="336" loading="lazy" decoding="async" class="h-full w-full object-cover" />
               </div>
               <div class="p-5">
-                <span class="text-[11px] font-bold uppercase tracking-[0.12em] text-primary">{p.category}</span>
+                <span class="text-[11px] font-bold text-primary">{p.category}</span>
                 <h3 class="mt-2 font-display text-base font-bold leading-[1.3] text-dark">{p.title}</h3>
                 <p class="mt-2 text-[13px] leading-[1.6] text-slate-500">{p.excerpt}</p>
               </div>

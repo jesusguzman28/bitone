@@ -24,29 +24,37 @@
    añade el bloque aquí. Si la familia es variable, un solo archivo
    con el rango de pesos basta.
    ============================================================ */
-/* Las dos familias son tipografías variables: un solo archivo trae todos los
-   pesos. Antes había una @font-face por peso apuntando a copias idénticas del
-   mismo archivo, y el navegador podía bajarlo una vez por cada nombre. */
+/* Una sola familia, Archivo, variable en peso (100–900) y en ancho (62–125 %).
+   La personalidad del sitio sale del contraste de ANCHO, no del color: los
+   titulares van anchos y pesados, el texto corrido en ancho normal. Antes
+   eran Plus Jakarta Sans + Space Grotesk, la pareja más repetida en sitios
+   generados; se cambió justo por eso. */
 @font-face {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Archivo";
   font-style: normal;
-  font-weight: 200 800;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
   font-display: swap;
-  src: url("/fonts/plus-jakarta-sans.woff2") format("woff2");
+  src: url("/fonts/archivo.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-@font-face {
-  font-family: "Space Grotesk";
-  font-style: normal;
-  font-weight: 300 700;
-  font-display: swap;
-  src: url("/fonts/space-grotesk.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
+/* ============================================================
+   IDENTIDAD — el quipu
+   ------------------------------------------------------------
+   El quipu era el sistema de cuerdas y nudos con que los incas registraban
+   información: el software original de los Andes. De ahí salen los colores
+   —tintes andinos— y el único adorno del sitio, las cuerdas con nudos.
 
+   Añil   #1A2044  el índigo de los tintes; reemplaza al negro azulado.
+   Grana  #D91023  el rojo de la cochinilla y de la marca.
+   Maíz   #E8A317  solo para nudos y detalles sobre añil. Nunca en texto claro.
+   Piedra #5B6272  texto secundario.
+   Hilo   #D5D8E0  bordes y reglas.
 
-/* Tokens de marca */
+   Reglas: sin degradados, sin sombras difusas, sin pastillas, sin mayúsculas
+   decorativas. Los bordes separan; el color señala.
+   ============================================================ */
 @theme {
   --color-primary: #D91023;
   --color-primary-light: #E63946;
@@ -54,41 +62,34 @@
   --color-accent: #E8A317;
   --color-accent-light: #F5C242;
   --color-accent-dark: #B8820F;
-  --color-dark: #0f172a;
-  --color-darker: #0a0f1c;
-  --color-ink: #1e293b;
+  --color-dark: #1A2044;
+  --color-darker: #121632;
+  --color-ink: #1F2437;
+  --color-anil: #1A2044;
+  --color-grana: #D91023;
+  --color-maiz: #E8A317;
+  --color-piedra: #5B6272;
+  --color-hilo: #D5D8E0;
 
-  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
-  --font-display: "Space Grotesk", "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-sans: "Archivo", system-ui, -apple-system, sans-serif;
+  --font-display: "Archivo", system-ui, sans-serif;
 
   --ease-fluid: cubic-bezier(0.32, 0.72, 0, 1);
 
-  --radius: 12px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
+  --radius: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
 }
 
-/* ============================================================
-   SUPERFICIE CLARA — gris suave con fondo difuminado.
-   (Reemplaza el crema #fbf2ec / #f7ebe3 del rediseño original.)
-   Para cambiar el tono de toda la web, toca SOLO estas variables.
-   ============================================================ */
 :root {
-  --surface-base: #f4f5f8;        /* color de fondo plano de respaldo */
-  --surface-blob-1: rgba(148, 163, 184, 0.26);
-  --surface-blob-2: rgba(176, 187, 203, 0.28);
-  --surface-blob-3: rgba(203, 213, 225, 0.30);
-  --surface-alt: rgba(100, 116, 139, 0.06); /* velo extra en secciones alternas */
-
-  /* Bordes y sombras: valores neutros de producción (gray-200/300, sombras negras) */
-  --hairline: #e2e8f0;
-  --hairline-strong: #cbd5e1;
-  --shadow-tint: rgba(0, 0, 0, 0.1);
-  --shadow-tint-strong: rgba(0, 0, 0, 0.15);
-
-  /* Degradados de marca (idénticos a producción) */
-  --gradient-brand: linear-gradient(135deg, #D91023 0%, #E8A317 100%);
-  --gradient-text: linear-gradient(135deg, #D91023 0%, #E63946 45%, #E8A317 100%);
+  --surface-base: #F5F6F8;
+  --surface-alt: #ECEEF2;
+  --hairline: #D5D8E0;
+  --hairline-strong: #B9BECB;
+  --shadow-tint: transparent;
+  --shadow-tint-strong: transparent;
+  --gradient-brand: #D91023;
+  --gradient-text: currentColor;
 }
 
 @layer base {
@@ -116,26 +117,14 @@
     background: var(--surface-base);
   }
 
-  /* Fondo difuminado global: manchas moradas suaves, fijas al viewport.
-     Va detrás de todo (z-index:-1); las secciones oscuras la tapan solas. */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background:
-      radial-gradient(58% 44% at 8% 2%, var(--surface-blob-1), transparent 68%),
-      radial-gradient(54% 40% at 94% 16%, var(--surface-blob-2), transparent 70%),
-      radial-gradient(66% 48% at 46% 98%, var(--surface-blob-3), transparent 72%),
-      linear-gradient(180deg, #fafbfc 0%, #eef0f4 52%, #f5f6f9 100%);
-  }
-
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.03em;
-    line-height: 1.05;
+    font-stretch: 118%;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
   }
+  p { text-wrap: pretty; }
 
   ::selection {
     background: color-mix(in srgb, var(--color-primary) 22%, transparent);
@@ -156,239 +145,112 @@
 }
 
 @layer components {
-  /* ---- Layout ---- */
-  .section {
-    @apply mx-auto w-full max-w-[1120px] px-6;
-  }
+  .section { @apply mx-auto w-full max-w-[1120px] px-6; }
 
   /* ---- Superficies ---- */
-  /* Sección clara: transparente para dejar ver el difuminado del body */
   .surface { background: transparent; }
-  /* Sección clara alterna: un velo morado un pelín más denso */
   .surface--alt { background: var(--surface-alt); }
+  .section-dark { @apply relative overflow-hidden text-white; background: var(--color-anil); }
+  .hero-dark { background: var(--color-anil); }
+  .panel-dark { background: var(--color-anil); }
 
-  /* Sección oscura (navy del rediseño) */
-  .section-dark {
-    @apply relative overflow-hidden text-white;
-    background: linear-gradient(180deg, #0e1521, #141b28);
-  }
-  .hero-dark {
-    background: radial-gradient(120% 100% at 50% 0%, #1c2331 0%, #141b28 55%, #0e1521 100%);
-  }
-  .panel-dark {
-    background: linear-gradient(180deg, #151b29, #0e1521);
-  }
+  /* ---- Tarjetas: un borde fino y nada más ---- */
+  .card { background: #fff; box-shadow: inset 0 0 0 1px var(--hairline); }
+  .card--gradient { background: #fff; }
+  .card--lift { transition: box-shadow 0.25s ease; }
+  .card--lift:hover,
+  .card--lift-lg:hover { box-shadow: inset 0 0 0 1px var(--color-anil); }
 
-  /* ---- Tarjeta clara del rediseño ---- */
-  /* Tarjeta clara: borde gray-200 + sombra neutra (escala de producción) */
-  .card {
-    background: #fff;
-    box-shadow: inset 0 0 0 1px var(--hairline), 0 10px 25px -5px var(--shadow-tint);
-  }
-  .card--gradient {
-    background: linear-gradient(180deg, #ffffff, #fbfaff);
-  }
-  .card--lift {
-    transition: transform 0.5s var(--ease-fluid), box-shadow 0.5s var(--ease-fluid);
-  }
-  .card--lift:hover {
-    transform: translateY(-4px);
-    box-shadow: inset 0 0 0 1px var(--hairline-strong), 0 25px 50px -12px var(--shadow-tint-strong);
-  }
-  .card--lift-lg:hover {
-    transform: translateY(-6px);
-    box-shadow: inset 0 0 0 1px var(--hairline-strong), 0 30px 60px -15px rgba(0, 0, 0, 0.2);
-  }
+  /* Tarjetas de servicio: sin marco degradado. La destacada va en añil. */
+  .bezel { @apply rounded-[10px]; background: #fff; box-shadow: inset 0 0 0 1px var(--hairline); transition: box-shadow 0.25s ease; }
+  .bezel__core { @apply flex h-full flex-col rounded-[10px]; background: transparent; }
+  .bezel:hover { box-shadow: inset 0 0 0 1px var(--color-anil); }
+  .bezel--featured { background: var(--color-anil); box-shadow: none; }
+  .bezel--featured:hover { box-shadow: inset 0 0 0 1px var(--color-maiz); }
+  .bezel--featured .bezel__core { background: transparent; color: #fff; }
 
-  /* Marco degradado de las tarjetas de servicio */
-  .bezel {
-    @apply rounded-[28px] p-px;
-    background: linear-gradient(160deg, rgba(15, 23, 42, 0.14), rgba(15, 23, 42, 0.05) 42%, rgba(15, 23, 42, 0.09));
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 10px 25px -5px var(--shadow-tint);
-    transition: transform 0.55s var(--ease-fluid), box-shadow 0.55s var(--ease-fluid);
-  }
-  .bezel__core {
-    @apply flex h-full flex-col rounded-[27px];
-    background: linear-gradient(180deg, #ffffff, #fbfaff);
-  }
-  .bezel:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06), 0 25px 50px -12px var(--shadow-tint-strong);
-  }
-  .bezel--featured {
-    background: linear-gradient(160deg, var(--color-primary), var(--color-accent));
-    box-shadow: 0 18px 44px -22px rgba(217, 16, 35, 0.45);
-  }
-  .bezel--featured:hover {
-    box-shadow: 0 28px 60px -26px rgba(217, 16, 35, 0.55);
-  }
-  .bezel--featured .bezel__core {
-    background: linear-gradient(180deg, #151b29, #0e1521);
-    color: #fff;
-  }
-
-  /* Aquí vivían .eyebrow, .eyebrow--light y .eyebrow--dark: la pastilla en
-     mayúsculas que iba encima de cada titular del sitio —"Servicios",
-     "Trabajos", "Sobre nosotros", "Preguntas frecuentes"—.
-
-     Se quitaron las trece de una vez. En ningún caso aportaban información: o
-     repetían la sección que el menú de arriba ya marca, o repetían el titular
-     que venía justo debajo. Una etiqueta que dice dos veces lo que ya está en
-     pantalla no crea jerarquía, la diluye, y es de las cosas que hacen que una
-     página se lea como plantilla en vez de como algo escrito para este sitio.
-
-     Si alguna vez vuelve a hacer falta un rótulo, que sea porque dice algo que
-     el titular no dice. */
-
-  /* ---- Botones ---- */
+  /* ---- Botones: rectángulos de esquinas leves, color plano ---- */
   .btn {
-    @apply relative inline-flex items-center justify-center gap-2 rounded-full font-semibold no-underline;
-    transition: transform 0.5s var(--ease-fluid), box-shadow 0.5s var(--ease-fluid), background 0.5s var(--ease-fluid);
+    @apply relative inline-flex items-center justify-center gap-2 rounded-[6px] font-semibold no-underline;
+    font-stretch: 105%;
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
   }
-  .btn:active { transform: scale(0.98); }
+  .btn:active { transform: translateY(1px); }
+  .btn--primary { @apply px-5 py-2.5 text-sm text-white; background: var(--color-grana); }
+  .btn--primary:hover { color: #fff; background: var(--color-primary-dark); }
+  .btn--whatsapp { @apply px-6 py-3 text-sm text-white; background: #1B9E4B; }
+  .btn--whatsapp:hover { color: #fff; background: #157F3C; }
+  .btn--on-dark { @apply px-[22px] py-2.5 text-sm text-white; background: transparent; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35); }
+  .btn--on-dark:hover { color: #fff; box-shadow: inset 0 0 0 1px #fff; }
+  /* El círculo con flecha dentro de cada botón era decoración de plantilla. */
+  .btn__icon { display: none; }
 
-  .btn--primary {
-    @apply py-2 pl-5 pr-2 text-sm text-white;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-    box-shadow: 0 10px 30px -10px rgba(217, 16, 35, 0.65);
-  }
-  .btn--primary:hover {
-    color: #fff;
-    box-shadow: 0 18px 40px -12px rgba(217, 16, 35, 0.7);
-  }
-
-  .btn--whatsapp {
-    @apply py-2.5 pl-6 pr-2.5 text-sm text-white;
-    background: linear-gradient(135deg, #2bde72, #14a04f);
-    box-shadow: 0 10px 30px -10px rgba(37, 211, 102, 0.6);
-  }
-  .btn--whatsapp:hover {
-    color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 18px 40px -12px rgba(37, 211, 102, 0.7);
-  }
-
-  .btn--on-dark {
-    @apply px-[22px] py-2.5 text-sm text-white;
-    background: rgba(255, 255, 255, 0.06);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
-    backdrop-filter: blur(8px);
-  }
-  .btn--on-dark:hover {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.12);
-    transform: translateY(-2px);
-  }
-
-  .btn__icon {
-    @apply flex h-[30px] w-[30px] items-center justify-center rounded-full;
-    background: rgba(255, 255, 255, 0.16);
-    transition: transform 0.5s var(--ease-fluid);
-  }
-  .btn:hover .btn__icon { transform: translate(2px, -1px) scale(1.05); }
-
-  /* ---- Píldoras de filtro / tabs ---- */
+  /* Pestañas: subrayado, no cápsula. */
   .pill-tab {
-    @apply cursor-pointer rounded-full border-0 px-4 py-2 text-[13px] font-semibold;
+    @apply cursor-pointer border-0 px-1 py-2 text-[14px] font-semibold;
     font-family: var(--font-sans);
-    color: #475569;
-    background: #fff;
-    box-shadow: inset 0 0 0 1px var(--hairline);
-    transition: all 0.4s var(--ease-fluid);
+    color: var(--color-piedra);
+    background: transparent;
+    box-shadow: inset 0 -2px 0 transparent;
+    transition: color 0.2s ease, box-shadow 0.2s ease;
   }
-  .pill-tab:hover { color: var(--color-primary); }
-  .pill-tab.is-active {
-    color: #fff;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-    box-shadow: 0 12px 28px -12px rgba(217, 16, 35, 0.6);
-  }
-  .pill-tab--lg { @apply px-5 py-2.5 text-sm; }
+  .pill-tab:hover { color: var(--color-anil); }
+  .pill-tab.is-active { color: var(--color-anil); background: transparent; box-shadow: inset 0 -3px 0 var(--color-grana); }
+  .pill-tab--lg { @apply text-[15px]; }
 
-  /* Chips sobre panel oscuro (formulario de contacto) */
   .chip-dark {
-    @apply cursor-pointer rounded-full border-0 px-3.5 py-[7px] text-[12.5px] font-semibold;
+    @apply cursor-pointer rounded-[6px] border-0 px-3.5 py-[7px] text-[13px] font-semibold;
     font-family: var(--font-sans);
     color: #cbd5e1;
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
-    transition: all 0.35s var(--ease-fluid);
+    background: transparent;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
   }
-  .chip-dark:hover { color: #fff; background: rgba(255, 255, 255, 0.14); }
-  .chip-dark.is-active {
-    color: #fff;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-    box-shadow: 0 10px 24px -12px rgba(217, 16, 35, 0.6);
-  }
+  .chip-dark:hover { color: #fff; }
+  .chip-dark.is-active { color: var(--color-anil); background: var(--color-maiz); box-shadow: none; }
 
-  /* ---- Campos de formulario ---- */
   .field {
-    @apply w-full rounded-[12px] border-0 px-4 py-[13px] text-[14.5px];
+    @apply w-full rounded-[6px] border-0 px-4 py-[13px] text-[15px];
     box-sizing: border-box;
     font-family: var(--font-sans);
-    color: #0f172a;
+    color: var(--color-ink);
     background: #fff;
-    box-shadow: inset 0 0 0 1px var(--hairline);
+    box-shadow: inset 0 0 0 1px var(--hairline-strong);
     outline: none;
-    transition: box-shadow 0.3s var(--ease-fluid);
   }
-  .field::placeholder { color: #94a3b8; }
-  .field:focus { box-shadow: inset 0 0 0 2px var(--color-primary); }
+  .field::placeholder { color: #8A90A0; }
+  .field:focus { box-shadow: inset 0 0 0 2px var(--color-anil); }
 
-  /* Botón sobre superficie clara */
-  .btn--ghost {
-    @apply px-6 py-2.5 text-sm;
-    color: var(--color-dark);
-    background: #fff;
-    box-shadow: inset 0 0 0 1px var(--hairline);
-  }
-  .btn--ghost:hover {
-    color: var(--color-primary);
-    box-shadow: inset 0 0 0 1px var(--hairline-strong), 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-  }
+  .btn--ghost { @apply px-6 py-2.5 text-sm; color: var(--color-anil); background: #fff; box-shadow: inset 0 0 0 1px var(--hairline-strong); }
+  .btn--ghost:hover { color: var(--color-anil); box-shadow: inset 0 0 0 1px var(--color-anil); }
+  .btn--white { @apply px-[26px] py-3 text-[15px]; color: var(--color-anil); background: #fff; }
+  .btn--white:hover { color: var(--color-anil); background: #F0F1F5; }
 
-  /* Botón blanco sobre banda de marca (como el CTA de producción) */
-  .btn--white {
-    @apply px-[26px] py-3 text-[15px];
-    color: var(--color-primary);
-    background: #fff;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-  }
-  .btn--white:hover {
-    color: var(--color-primary-dark);
-    transform: translateY(-2px);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-  }
+  /* El cierre de cada página: añil plano, sin degradado. */
+  .band-brand { background: var(--color-anil); }
 
-  /* Banda de marca a todo el ancho: el cierre visual de la home en producción */
-  .band-brand {
-    background: var(--gradient-brand);
-  }
+  /* El texto con degradado en una palabra de cada titular era la señal más
+     clara de plantilla. Las clases se quedan para no tocar cada titular, pero
+     ya no pintan nada: el titular se lee entero, en un solo color. */
+  .gradient-text,
+  .gradient-text--warm { background: none; color: inherit; }
 
-  .gradient-text {
-    background: var(--gradient-text);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+  /* Enlace de texto: subrayado en grana. Sin flechas ni cápsulas. */
+  .enlace {
+    color: var(--color-anil);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--color-grana);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
   }
-  .gradient-text--warm {
-    background: linear-gradient(120deg, #ff5b6b, var(--color-accent));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
+  .enlace:hover { color: var(--color-grana); }
 }
 
-/* ---- Scroll reveal (IntersectionObserver añade .is-visible) ---- */
-.reveal {
-  opacity: 0;
-  transform: translateY(1.75rem);
-  transition: opacity 0.8s var(--ease-fluid), transform 0.8s var(--ease-fluid);
-  transition-delay: var(--reveal-delay, 0ms);
-}
-.reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* ---- Sin apariciones al hacer scroll ----
+   Cada sección entraba con el mismo fundido desde abajo: es el movimiento por
+   defecto de una página generada. La clase .reveal se queda en el marcado,
+   pero ya no anima. El único movimiento del sitio es el quipu de la portada. */
+.reveal, .reveal.is-visible { opacity: 1; transform: none; }
 
 /* ---- Animaciones del rediseño ---- */
 @keyframes bwBlink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }

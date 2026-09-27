@@ -1,68 +1,37 @@
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+# Genera public/og-default.jpg: la tarjeta que se ve al compartir cualquier
+# página sin portada propia (WhatsApp, Facebook, LinkedIn).
+#
+#     python scripts/make-og.py
+#
+# Mismo lenguaje que la portada del sitio: el titular en Archivo ancho y el
+# quipu con las cuerdas de los seis proyectos, cada una con tantos nudos como
+# tecnologías usa (ver src/components/Hero.astro).
+from quipu_img import (RAIZ, W, H, ALGODON, NIEBLA, lienzo, marca, titular,
+                       quipu, fuente)
 
-W, H = 1200, 630
-img = Image.new("RGB", (W, H), (10, 15, 28))  # #0a0f1c
-d = ImageDraw.Draw(img, "RGBA")
+img, d = lienzo()
+marca(d)
+titular(d, "Fábrica de software en Perú, para empresas.", 72, 150, 760,
+        tams=(66, 60, 54), max_lineas=3)
 
-# --- soft brand glows (red top-right, amber bottom-left) on a blur layer ---
-glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-gd = ImageDraw.Draw(glow)
-gd.ellipse([W - 520, -260, W + 240, 500], fill=(217, 16, 35, 120))     # red
-gd.ellipse([-300, H - 420, 460, H + 260], fill=(232, 163, 23, 90))     # amber
-gd.ellipse([300, -200, 900, 260], fill=(59, 130, 246, 45))            # subtle blue
-glow = glow.filter(ImageFilter.GaussianBlur(150))
-img = Image.alpha_composite(img.convert("RGBA"), glow).convert("RGB")
-d = ImageDraw.Draw(img, "RGBA")
+d.text((72, 420), "Sistemas a medida, apps móviles y mantenimiento.",
+       font=fuente("texto", 27), fill=(201, 205, 224))
 
-def font(path, size):
-    return ImageFont.truetype(path, size)
+# ApuraY, Quipuy, MindBlock, JMF, AjosyCebollas, Liberalismo Comunal.
+cuerdas = [
+    ((0, 134, 234), 250, 8),
+    ((91, 76, 240), 190, 5),
+    ((249, 115, 22), 230, 7),
+    ((42, 102, 192), 260, 8),
+    ((22, 163, 74), 150, 3),
+    ((231, 101, 62), 170, 3),
+]
+quipu(d, 850, 150, 290, cuerdas)
 
-BOLD = "C:/Windows/Fonts/segoeuib.ttf"
-SEMI = "C:/Windows/Fonts/seguisb.ttf"
-REG = "C:/Windows/Fonts/segoeui.ttf"
-
-# --- brand wordmark ---
-# El punto rojo se coloca a partir del ancho medido del nombre, no en una
-# coordenada fija. Estaba clavado en x=210, que era la medida de "Bitwise": con
-# la marca nueva —más ancha, por las mayúsculas y el guion— el punto caía encima
-# de la última letra. Medido, cualquier cambio de nombre lo recoloca solo.
-marca = "BIT-ONE"
-mf = font(BOLD, 46)
-d.text((72, 66), marca, font=mf, fill=(255, 255, 255))
-mb = d.textbbox((72, 66), marca, font=mf)
-d.ellipse([mb[2] + 8, 78, mb[2] + 30, 100], fill=(217, 16, 35))
-
-# eyebrow pill
-eb = "HECHO EN PERÚ"
-ebf = font(SEMI, 22)
-bb = d.textbbox((0, 0), eb, font=ebf)
-pw, ph = bb[2] - bb[0], bb[3] - bb[1]
-d.rounded_rectangle([72, 200, 72 + pw + 44, 200 + ph + 26], radius=100,
-                    fill=(217, 16, 35, 40), outline=(217, 16, 35, 120), width=2)
-d.text((72 + 22, 200 + 13), eb, font=ebf, fill=(252, 165, 176))
-
-# headline
-# Es el mismo titular de la portada. Decía "Páginas web para tu negocio", que
-# es lo que vendía la etapa anterior; la imagen que se ve al compartir el enlace
-# tiene que decir lo mismo que la página a la que lleva.
-hf = font(BOLD, 72)
-d.text((72, 270), "Desarrollo de software", font=hf, fill=(255, 255, 255))
-# second line with accent word (amber)
-d.text((72, 356), "a ", font=hf, fill=(255, 255, 255))
-w_a = d.textbbox((72, 356), "a ", font=hf)[2]
-d.text((w_a, 356), "medida.", font=hf, fill=(232, 163, 23))
-
-# subtitle
-# Sin precio: el sitio ya no publica precios de entrada (ver llms.txt). Son los
-# tres servicios que ofrece hoy, en el mismo orden que /servicios/.
-sf = font(REG, 34)
-d.text((72, 470), "Sistemas para empresas  -  apps móviles  -  mantenimiento", font=sf, fill=(148, 163, 184))
-
-# domain bottom-right
-df = font(SEMI, 30)
 dom = "bitone.pe"
-db = d.textbbox((0, 0), dom, font=df)
-d.text((W - 72 - (db[2] - db[0]), H - 72 - (db[3] - db[1])), dom, font=df, fill=(226, 232, 240))
+f = fuente("semi", 26)
+bb = d.textbbox((0, 0), dom, font=f)
+d.text((72, H - 64 - bb[3]), dom, font=f, fill=NIEBLA)
 
-img.save("public/og-default.jpg", quality=88, optimize=True, progressive=True)
-print("OG saved:", img.size)
+img.save(RAIZ / "public/og-default.jpg", quality=88, optimize=True, progressive=True)
+print("OG guardada:", img.size)

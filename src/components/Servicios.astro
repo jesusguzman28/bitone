@@ -1,12 +1,11 @@
 ---
 import { serviciosHome } from '../data/site';
-import Icono from './Icono.astro';
 ---
 
 <section class="surface px-6 pb-10 pt-24">
   <div class="mx-auto w-full max-w-[1120px]">
-    <div class="reveal text-center">
-      <h2 class="mx-auto mt-4 max-w-[620px] font-display text-[clamp(1.7rem,4vw,2.5rem)] font-bold leading-[1.08] text-dark">
+    <div class="reveal">
+      <h2 class="mt-4 max-w-[620px] font-display text-[clamp(1.7rem,4vw,2.5rem)] font-bold leading-[1.08] text-dark">
         {/* Decía "a precio claro" cuando las tarjetas mostraban S/1,500 y
             S/3,000. Ahora las tres dicen "A consultar", así que prometer
             claridad de precio justo encima de tres cifras ausentes se leía como
@@ -33,14 +32,9 @@ import Icono from './Icono.astro';
                 decía "Más pedido", que era falso sin ventas; después "Lo
                 principal", que era cierto pero seguía siendo una etiqueta que
                 no informa: la tarjeta ya se distingue por el fondo oscuro. */}
-            <div class="flex items-center justify-between">
-              <span class="grid h-11 w-11 place-items-center rounded-[12px]" style={`background:${s.featured ? 'rgba(232,163,23,0.14)' : `color-mix(in srgb, ${s.iconColor} 10%, transparent)`};color:${s.iconColor}`}>
-                <Icono name={s.iconName} size={20} />
-              </span>
-              <span class:list={['rounded-full px-2.5 py-1 text-[11px] font-semibold', s.featured ? 'bg-white/10 text-slate-300' : 'bg-slate-100 text-slate-500']}>{s.time}</span>
-            </div>
+            <p class:list={['m-0 text-[13px] font-semibold', s.featured ? 'text-[#E8A317]' : 'text-[#5B6272]']}>{s.time}</p>
 
-            <h3 class:list={['mt-[18px] font-display text-[21px] font-bold tracking-[-0.02em]', s.featured ? 'text-white' : 'text-dark']}>{s.tag}</h3>
+            <h3 class:list={['mt-2 font-display text-[23px] font-extrabold', s.featured ? 'text-white' : 'text-dark']}>{s.tag}</h3>
             <p class:list={['mt-2.5 text-sm leading-relaxed', s.featured ? 'text-slate-400' : 'text-slate-500']}>{s.desc}</p>
 
             <ul class:list={['m-0 mt-4 grid list-none gap-2 p-0 text-[13.5px]', s.featured ? 'text-slate-200' : 'text-slate-700']}>
@@ -63,7 +57,6 @@ import Icono from './Icono.astro';
               </div>
               <a href={s.href} class:list={['inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap text-[13.5px] font-semibold no-underline', s.featured ? 'text-accent' : 'text-primary']}>
                 Ver detalle
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
               </a>
             </div>
           </div>
@@ -72,14 +65,14 @@ import Icono from './Icono.astro';
     </div>
 
     <!-- Indicadores del carrusel: solo móvil -->
-    <div class="mt-5 flex justify-center gap-2 md:hidden">
+    <div class="mt-5 flex gap-2 md:hidden">
       {serviciosHome.map((s, i) => (
         <button type="button" data-svc-dot={i} aria-label={`Ir a ${s.tag}`} class:list={['svc-dot', i === 0 && 'is-active']}></button>
       ))}
     </div>
 
-    <p class="reveal mt-6 text-center text-sm text-slate-500" style="--reveal-delay:300ms">
-      ¿No sabes cuál te conviene? <a href="/servicios/" class="font-semibold text-primary">Compara las tres formas de trabajar →</a>
+    <p class="reveal mt-6 text-sm text-slate-500" style="--reveal-delay:300ms">
+      ¿No sabes cuál te conviene? <a href="/servicios/" class="enlace">Compara las tres formas de trabajar</a>
     </p>
   </div>
 </section>

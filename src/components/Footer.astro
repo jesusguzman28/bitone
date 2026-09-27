@@ -35,15 +35,12 @@ const socialItems = [
 ];
 ---
 
-<footer class="px-6 pb-8 pt-16 text-slate-400" style="background:#0a0f1c">
+<footer class="px-6 pb-8 pt-16 text-slate-400" style="background:var(--color-anil);box-shadow:inset 0 1px 0 rgba(255,255,255,0.12)">
   <div class="mx-auto grid w-full max-w-[1120px] gap-10 sm:grid-cols-2 lg:grid-cols-4">
     <div>
-      <a href="/" class="inline-flex items-center gap-[9px] font-display text-xl font-bold text-white no-underline">
-        <span class="grid h-[34px] w-[34px] place-items-center rounded-[11px] text-[13px] font-bold text-white" style="background:linear-gradient(135deg,#D91023,#E8A317)">/B</span>
-        BIT-ONE
-      </a>
+      <a href="/" class="pie-marca no-underline">BIT<span class="text-[#E8A317]">-</span>ONE</a>
       <p class="mt-3.5 max-w-[280px] text-sm leading-relaxed">
-        Empresa de desarrollo de software en Lima, Perú. Sistemas a medida, apps móviles y mantenimiento.
+        Fábrica de software en Perú. Sistemas a medida, apps móviles y mantenimiento para empresas de todo el país.
       </p>
       <div class="mt-[18px] flex gap-2.5">
         {socialItems.map((s) => (
@@ -52,7 +49,7 @@ const socialItems = [
             target="_blank"
             rel="noopener"
             aria-label={s.label}
-            class="social-dot grid h-9 w-9 place-items-center rounded-full text-slate-300 no-underline transition-all duration-300"
+            class="social-dot grid h-9 w-9 place-items-center text-[#C9CDE0] no-underline"
             style="background:rgba(255,255,255,0.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,0.12)"
           >
             {s.stroke ? (
@@ -72,7 +69,7 @@ const socialItems = [
         sitio por el pie. El tamaño lo fijan las clases, así que cambiar la
         etiqueta no mueve nada en pantalla. */}
     <div>
-      <h2 class="m-0 mb-3.5 font-display text-[13px] font-bold uppercase tracking-[0.14em] text-slate-200">Navegación</h2>
+      <h2 class="m-0 mb-3.5 font-display text-[13px] font-bold text-slate-200">Navegación</h2>
       <ul class="m-0 grid list-none gap-[9px] p-0 text-sm">
         {enlacesNav.map((item) => (
           <li><a href={item.href} class="text-slate-400 no-underline transition-colors duration-300 hover:text-white">{item.label}</a></li>
@@ -81,7 +78,7 @@ const socialItems = [
     </div>
 
     <div>
-      <h2 class="m-0 mb-3.5 font-display text-[13px] font-bold uppercase tracking-[0.14em] text-slate-200">Servicios</h2>
+      <h2 class="m-0 mb-3.5 font-display text-[13px] font-bold text-slate-200">Servicios</h2>
       <ul class="m-0 grid list-none gap-[9px] p-0 text-sm">
         {enlacesServicio.map((s) => (
           <li><a href={s.href} class="text-slate-400 no-underline transition-colors duration-300 hover:text-white">{s.label}</a></li>
@@ -90,7 +87,7 @@ const socialItems = [
     </div>
 
     <div>
-      <h2 class="m-0 mb-3.5 font-display text-[13px] font-bold uppercase tracking-[0.14em] text-slate-200">Contacto</h2>
+      <h2 class="m-0 mb-3.5 font-display text-[13px] font-bold text-slate-200">Contacto</h2>
       <ul class="m-0 grid list-none gap-[11px] p-0 text-sm">
         <li class="flex items-center gap-[9px]">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg>
@@ -127,7 +124,7 @@ const socialItems = [
         aquí mismo, en la ficha de /contacto/ y en el dato estructurado que lee
         Google, que es donde se comprueba. Un emblema al lado no añade
         información, solo hace que la línea se lea como plantilla. */}
-    <span>© {year} {site.marca} · Hecho en Lima</span>
+    <span>© {year} {site.marca}. Hecho en Perú.</span>
   </div>
 </footer>
 
@@ -136,4 +133,11 @@ const socialItems = [
     background: rgba(217, 16, 35, 0.25) !important;
     color: #fff;
   }
+</style>
+
+<style>
+  .pie-marca { font-stretch: 125%; font-size: 22px; font-weight: 850; letter-spacing: -0.02em; color: #fff; }
+  .social-dot { background: none !important; box-shadow: none !important; }
+  .social-dot:hover { background: none !important; color: var(--color-maiz) !important; }
+  footer li svg { color: var(--color-maiz) !important; stroke: currentColor; }
 </style>

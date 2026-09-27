@@ -4,7 +4,6 @@ import Hero from '../components/Hero.astro';
 import Servicios from '../components/Servicios.astro';
 import Proyectos from '../components/Proyectos.astro';
 import AppsProduccion from '../components/AppsProduccion.astro';
-import Stats from '../components/Stats.astro';
 import Resenas from '../components/Resenas.astro';
 import FAQ from '../components/FAQ.astro';
 import GuiasHome from '../components/GuiasHome.astro';
@@ -30,10 +29,6 @@ const schema = [
 
 <BaseLayout
   schema={schema}
-  preloadImages={[
-    { href: '/hero/uno.webp', media: '(min-width: 641px)', type: 'image/webp' },
-    { href: '/hero/celular/uno.webp', media: '(max-width: 640px)', type: 'image/webp' },
-  ]}
 >
   <Hero />
   <Servicios />
@@ -62,7 +57,6 @@ const schema = [
   />
   <AppsProduccion />
 
-  <Stats />
   {/* Va después de los números y antes de las preguntas: los números dicen lo
       que prometemos nosotros, la reseña lo dice quien ya pagó. Mientras no haya
       ninguna cargada, el componente no dibuja nada. */}

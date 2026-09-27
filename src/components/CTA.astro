@@ -12,15 +12,13 @@ const {
 ---
 
 <!-- Banda de marca a todo el ancho -->
-<section class="band-brand relative isolate overflow-hidden px-6 py-24 text-center text-white">
-  <div class="pointer-events-none absolute -left-24 -top-24 h-80 w-80 rounded-full opacity-25 blur-[80px]" style="background:radial-gradient(circle,#fff,transparent 70%)"></div>
-  <div class="pointer-events-none absolute -bottom-24 -right-24 h-80 w-80 rounded-full opacity-20 blur-[80px]" style="background:radial-gradient(circle,#fff,transparent 70%)"></div>
+<section class="band-brand relative isolate overflow-hidden px-6 py-24 text-white">
 
-  <div class="reveal relative mx-auto max-w-[720px]">
-    <h2 class="font-display text-[clamp(1.9rem,4.5vw,2.75rem)] font-extrabold leading-[1.1]">{title}</h2>
-    <p class="mx-auto mt-4 max-w-[520px] text-[16.5px] leading-[1.65] text-white/90">{subtitle}</p>
+  <div class="reveal relative mx-auto w-full max-w-[1120px]">
+    <h2 class="max-w-[16ch] font-display text-[clamp(2rem,5vw,3.4rem)] font-extrabold leading-[1.02]">{title}</h2>
+    <p class="mt-4 max-w-[520px] text-[16.5px] leading-[1.65] text-[#C9CDE0]">{subtitle}</p>
 
-    <div class="mt-8 flex flex-wrap justify-center gap-3">
+    <div class="mt-8 flex flex-wrap gap-3">
       <a href={waLink()} target="_blank" rel="noopener" class="btn btn--whatsapp group !py-3 !pl-[26px] !text-[15px]">
         Cotizar por WhatsApp
         <span class="btn__icon" aria-hidden="true">

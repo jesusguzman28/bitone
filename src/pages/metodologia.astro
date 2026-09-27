@@ -33,8 +33,8 @@ const schema = [
       contradicen— y se entiende mucho antes viéndola que leyéndola: dos citas
       enfrentadas, y debajo la línea que las reconcilia. */}
   <section class="surface px-6 py-20">
-    <div class="mx-auto w-full max-w-[900px]">
-      <h2 class="reveal text-center font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
+    <div class="w-full max-w-[900px] ml-[max(0px,calc((100%-1120px)/2))]">
+      <h2 class="reveal font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
         {m.tension.title}
       </h2>
 
@@ -64,7 +64,7 @@ const schema = [
       firmado. Por eso arranca en 00: el análisis ocurre antes de que exista
       proyecto, y se puede contratar solo. */}
   <section class="surface--alt px-6 py-20">
-    <div class="mx-auto w-full max-w-[1020px]">
+    <div class="w-full max-w-[1020px] ml-[max(0px,calc((100%-1120px)/2))]">
       <div class="reveal max-w-[760px]">
         <h2 class="font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">
           {m.fases.title}
@@ -99,7 +99,7 @@ const schema = [
 
   <!-- 3. El sprint por dentro -->
   <section class="surface px-6 py-20">
-    <div class="mx-auto w-full max-w-[1020px]">
+    <div class="w-full max-w-[1020px] ml-[max(0px,calc((100%-1120px)/2))]">
       <div class="reveal max-w-[760px]">
         <h2 class="font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">
           {m.sprint.title}
@@ -162,7 +162,7 @@ const schema = [
       precio cerrados" y a la vez "entregas revisables", y sin esta tabla esas
       dos frases se contradicen. */}
   <section class="surface--alt px-6 py-20">
-    <div class="mx-auto w-full max-w-[1020px]">
+    <div class="w-full max-w-[1020px] ml-[max(0px,calc((100%-1120px)/2))]">
       <div class="reveal max-w-[760px]">
         <h2 class="font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">
           {m.cambios.title}
@@ -203,7 +203,7 @@ const schema = [
 
   <!-- 5. Un marco distinto por forma de contratación -->
   <section class="surface px-6 py-20">
-    <div class="mx-auto w-full max-w-[1020px]">
+    <div class="w-full max-w-[1020px] ml-[max(0px,calc((100%-1120px)/2))]">
       <div class="reveal max-w-[760px]">
         <h2 class="font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">
           {m.modos.title}
@@ -264,14 +264,14 @@ const schema = [
 
   <!-- 8. Preguntas -->
   <section class="surface px-6 py-20">
-    <div class="mx-auto w-full max-w-[760px]">
+    <div class="w-full max-w-[760px] ml-[max(0px,calc((100%-1120px)/2))]">
       <h2 class="reveal font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
         Preguntas frecuentes
       </h2>
 
       <div class="mt-8 grid gap-3">
         {m.faqs.map((f) => (
-          <details class="lp-faq reveal rounded-[16px] bg-white p-5">
+          <details class="lp-faq reveal rounded-[8px] bg-white p-5">
             <summary class="flex cursor-pointer items-center justify-between gap-4 font-display text-[16px] font-bold text-dark">
               {f.q}
               <svg class="lp-faq__ico shrink-0 text-primary" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
@@ -301,7 +301,7 @@ const schema = [
   }
 
   .lado {
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 24px;
     background: #fff;
     box-shadow: inset 0 0 0 1px var(--hairline);
@@ -309,8 +309,6 @@ const schema = [
   .lado__rotulo {
     font-size: 11px;
     font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
     color: #94a3b8;
   }
   .lado__frase {
@@ -399,13 +397,12 @@ const schema = [
     font-family: var(--font-display);
     font-size: 11.5px;
     font-weight: 800;
-    letter-spacing: 0.08em;
     color: #94a3b8;
     font-variant-numeric: tabular-nums;
   }
 
   .fase__cuerpo {
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 22px;
     background: #fff;
     box-shadow: inset 0 0 0 1px var(--hairline);
@@ -435,8 +432,6 @@ const schema = [
     flex: none;
     font-size: 10.5px;
     font-weight: 800;
-    letter-spacing: 0.13em;
-    text-transform: uppercase;
     color: #16a34a;
   }
 
@@ -449,7 +444,7 @@ const schema = [
 
   /* ---- Calendario del sprint ---- */
   .calendario {
-    border-radius: 22px;
+    border-radius: 10px;
     padding: clamp(20px, 3vw, 28px);
     background: #fff;
     box-shadow: inset 0 0 0 1px var(--hairline);
@@ -464,8 +459,6 @@ const schema = [
   .cal-semana {
     font-size: 10.5px;
     font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
     color: #94a3b8;
   }
   .cal-semana + .cal-semana { padding-left: 10px; border-left: 1px dashed var(--hairline); }
@@ -566,7 +559,7 @@ const schema = [
      mueve de lado en un celular. */
   .tabla-wrap {
     overflow-x: auto;
-    border-radius: 18px;
+    border-radius: 8px;
     background: #fff;
     box-shadow: inset 0 0 0 1px var(--hairline);
     -webkit-overflow-scrolling: touch;
@@ -588,8 +581,6 @@ const schema = [
     font-family: var(--font-display);
     font-size: 11px;
     font-weight: 800;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
     color: #64748b;
     background: #f8fafc;
     border-bottom: 1px solid var(--hairline);
@@ -636,8 +627,6 @@ const schema = [
       font-size: 10.5px;
       font-style: normal;
       font-weight: 800;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
       color: #94a3b8;
     }
   }
@@ -676,7 +665,7 @@ const schema = [
   .modo {
     display: flex;
     flex-direction: column;
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 24px;
     background: #fff;
     box-shadow: inset 0 0 0 1px var(--hairline);
@@ -723,4 +712,63 @@ const schema = [
   @media (prefers-reduced-motion: reduce) {
     .lp-faq, .lp-faq__ico { transition: none; }
   }
+
+  /* ============================================================
+     Identidad: las fases son un quipu vertical.
+     La línea que ya cosía las fases pasa a ser la cuerda, y cada fase un nudo
+     con su número. El calendario del sprint es otra cuerda: los nudos marcan
+     los días con reunión. Sin degradados, sin sombras, sin cápsulas.
+     ============================================================ */
+  .fase__ico { display: none; }
+  .fase__marca::after {
+    top: 0;
+    bottom: -32px;
+    width: 4px;
+    border-radius: 2px;
+    background: var(--color-anil);
+  }
+  .fase:last-child .fase__marca::after { display: block; bottom: auto; height: 34px; }
+  .fase__n {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    margin-top: 16px;
+    height: 28px;
+    width: 38px;
+    border-radius: 50%;
+    font-size: 14px;
+    color: var(--color-anil);
+    background: var(--color-maiz);
+    box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.18);
+  }
+  .fase__cuerpo { box-shadow: inset 0 0 0 1px var(--hairline); }
+  .fase__dur { border-radius: 0; padding: 0; background: none; font-size: 13px; font-weight: 600; color: #5B6272; }
+  .fase__entlabel { color: var(--color-grana); }
+
+  .choque__vs {
+    height: auto;
+    width: auto;
+    border-radius: 0;
+    font-size: 15px;
+    color: var(--color-grana);
+    background: none;
+    box-shadow: none;
+  }
+
+  .cal-fondo { height: 5px; background: var(--color-anil); box-shadow: none; }
+  .cal-marca {
+    height: 16px;
+    width: 22px;
+    border-radius: 50%;
+    background: var(--color-maiz);
+    box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.18);
+  }
+  .hito__n { border-radius: 50%; height: 22px; width: 28px; color: var(--color-anil); background: var(--color-maiz); }
+  .hito__dur { border-radius: 0; padding: 0; background: none; font-weight: 600; color: #5B6272; }
+
+  .impacto { border-radius: 0; padding: 0 0 0 9px; background: none !important; box-shadow: inset 2px 0 0 currentColor; }
+  .modo__ico { background: none !important; box-shadow: none !important; color: var(--color-grana); width: auto; height: auto; }
+  .choque { align-items: stretch; }
+  .choque .lado { height: 100%; }
 </style>

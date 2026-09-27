@@ -7,25 +7,25 @@ const total = comparativa.rows.length;
 ---
 
 <section class="section-dark px-6 pb-24 pt-[72px]">
-  <div class="mx-auto w-full max-w-[980px]">
-    <div class="reveal text-center">
-      <h2 class="mx-auto mt-5 max-w-[560px] font-display text-[clamp(1.6rem,3.8vw,2.3rem)] font-extrabold leading-[1.15]">
+  <div class="w-full max-w-[980px] ml-[max(0px,calc((100%-1120px)/2))]">
+    <div class="reveal">
+      <h2 class="mt-5 max-w-[560px] font-display text-[clamp(1.6rem,3.8vw,2.3rem)] font-extrabold leading-[1.15]">
         ¿Con quién conviene trabajar?
       </h2>
-      <p class="mx-auto mt-4 max-w-[480px] text-[15px] leading-[1.65] text-slate-400">
+      <p class="mt-4 max-w-[480px] text-[15px] leading-[1.65] text-slate-400">
         Los mismos criterios para los tres casos. Elige con cuál comparar y míralo por ti mismo.
       </p>
     </div>
 
     <!-- Selector de rival: en móvil evita la tabla de 3 columnas cortada -->
-    <div class="mt-8 flex justify-center md:hidden">
+    <div class="mt-8 flex md:hidden">
       <div class="vs-switch">
         <button type="button" data-rival="1" class="vs-opt is-active">vs {comparativa.cols[1]}</button>
         <button type="button" data-rival="2" class="vs-opt">vs {comparativa.cols[2]}</button>
       </div>
     </div>
 
-    <div id="cmp" class="cmp reveal is-vs-1 mt-6 overflow-hidden rounded-[20px] md:mt-10" style="--reveal-delay:120ms;background:rgba(255,255,255,0.03);box-shadow:inset 0 0 0 1px rgba(255,255,255,0.1)">
+    <div id="cmp" class="cmp reveal is-vs-1 mt-6 overflow-hidden rounded-[10px] md:mt-10" style="--reveal-delay:120ms;background:rgba(255,255,255,0.03);box-shadow:inset 0 0 0 1px rgba(255,255,255,0.1)">
       <table class="w-full border-collapse text-left">
         <thead>
           <tr>
@@ -72,7 +72,7 @@ const total = comparativa.rows.length;
       </table>
     </div>
 
-    <div class="reveal mt-11 text-center" style="--reveal-delay:200ms">
+    <div class="reveal mt-11" style="--reveal-delay:200ms">
       <a href={waLink()} target="_blank" rel="noopener" class="btn btn--whatsapp group !py-3 !pl-[26px] !text-[15px]">
         Pedir cotización gratis
         <span class="btn__icon" aria-hidden="true">
@@ -123,7 +123,6 @@ const total = comparativa.rows.length;
     margin-top: 4px;
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.04em;
     color: #64748b;
   }
   .cmp-score--bw { color: #E8A317; }

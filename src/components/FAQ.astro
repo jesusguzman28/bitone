@@ -12,31 +12,31 @@ import { faqs } from '../data/site';
 ---
 
 <section class="surface px-6 pb-24 pt-16">
-  <div class="mx-auto w-full max-w-[860px]">
-    <div class="reveal text-center">
-      <h2 class="mx-auto mt-5 max-w-[620px] font-display text-[clamp(1.75rem,4vw,2.6rem)] font-extrabold leading-[1.15] text-dark">
-        Resolvemos tus dudas antes de<br /><span class="gradient-text">empezar tu proyecto</span>
+  <div class="mx-auto w-full max-w-[1120px]">
+    <div class="reveal">
+      <h2 class="mt-5 max-w-[18ch] font-display text-[clamp(1.75rem,4vw,2.6rem)] font-extrabold leading-[1.15] text-dark">
+        Resolvemos tus dudas antes de empezar tu proyecto
       </h2>
     </div>
 
-    <div class="reveal mt-11 grid gap-3.5" style="--reveal-delay:120ms">
+    <div class="reveal mt-11 grid max-w-[820px]">
       {faqs.map((f, i) => (
-        <div class:list={['faq-item rounded-[20px] bg-white', i === 0 && 'is-open']}>
+        <div class:list={['faq-item', i === 0 && 'is-open']}>
           <button
             type="button"
-            class="faq-btn flex w-full cursor-pointer items-center justify-between gap-4 border-0 bg-transparent px-6 py-[22px] text-left font-sans text-[16.5px] font-bold text-dark"
+            class="faq-btn flex w-full cursor-pointer items-center justify-between gap-4 border-0 bg-transparent px-0 py-[22px] text-left font-sans text-[17px] font-semibold text-dark"
             aria-expanded={i === 0 ? 'true' : 'false'}
             aria-controls={`faq-panel-${i}`}
           >
             {f.q}
-            <span class="faq-toggle grid h-[26px] w-[26px] flex-none place-items-center rounded-full text-white">
+            <span class="faq-toggle grid h-[26px] w-[26px] flex-none place-items-center">
               <svg class="faq-plus" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
               <svg class="faq-minus" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/></svg>
             </span>
           </button>
           <div id={`faq-panel-${i}`} class="faq-panel">
             <div class="overflow-hidden">
-              <p class="mx-6 mb-[22px] mt-0 border-t border-slate-100 pt-[18px] text-[15px] leading-[1.75] text-slate-600">{f.a}</p>
+              <p class="mb-[22px] mt-0 max-w-[68ch] text-[16px] leading-[1.7] text-[#3E4456]">{f.a}</p>
             </div>
           </div>
         </div>
@@ -47,9 +47,9 @@ import { faqs } from '../data/site';
         el cambio de negocio. El hueco no se deja vacío: quien termina de leer
         estas preguntas ya entendió cómo trabajamos y lo siguiente que quiere
         es ver qué hemos construido, no cuánto cuesta. */}
-    <p class="reveal mt-8 text-center text-[15px] text-slate-500" style="--reveal-delay:200ms">
+    <p class="reveal mt-8 text-[15px] text-slate-500" style="--reveal-delay:200ms">
       ¿Quieres ver lo que hemos construido?
-      <a href="/proyectos/" class="font-semibold text-primary">Proyectos en producción →</a>
+      <a href="/proyectos/" class="enlace">Proyectos en producción</a>
     </p>
   </div>
 </section>
@@ -75,21 +75,15 @@ import { faqs } from '../data/site';
 <style>
   /* Acordeón: tarjeta blanca, borde de marca al abrir
      y botón circular con degradado que pasa de + a −. */
+  /* Lista separada por reglas finas, no tarjetas. */
   .faq-item {
-    box-shadow: inset 0 0 0 1px var(--hairline), 0 1px 2px rgba(0, 0, 0, 0.05);
-    transition: box-shadow 0.45s var(--ease-fluid);
+    background: transparent;
+    border-radius: 0;
+    box-shadow: inset 0 -1px 0 var(--hairline);
   }
-  .faq-item:hover { box-shadow: inset 0 0 0 1px var(--hairline-strong), 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-  .faq-item.is-open {
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 45%, transparent),
-      0 10px 25px -5px rgba(217, 16, 35, 0.12);
-  }
+  .faq-item.is-open { box-shadow: inset 0 -2px 0 var(--color-grana); }
 
-  .faq-toggle {
-    background: var(--gradient-brand);
-    transition: transform 0.45s var(--ease-fluid);
-  }
-  .faq-item.is-open .faq-toggle { transform: rotate(180deg); }
+  .faq-toggle { color: var(--color-grana); }
 
   .faq-plus { display: block; }
   .faq-minus { display: none; }
