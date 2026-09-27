@@ -1,5 +1,6 @@
 ---
 import { proyectos } from '../data/proyectos';
+import { tecnologias } from '../data/tecnologias';
 
 interface Props {
   /** Titular y bajada de la sección. Se pueden sobrescribir porque el bloque se
@@ -97,7 +98,12 @@ const {
 
               {p.stack.length > 0 && (
                 <span class="proy-card__stack">
-                  {p.stack.map((t) => <span class="proy-tech">{t}</span>)}
+                  {p.stack.map((t) => (
+                    <span class="proy-tech">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill={tecnologias[t].color} aria-hidden="true"><path d={tecnologias[t].path} /></svg>
+                      {tecnologias[t].nombre}
+                    </span>
+                  ))}
                 </span>
               )}
 
@@ -247,12 +253,15 @@ const {
     margin-top: 10px;
   }
   .proy-tech {
-    border-radius: 5px;
-    padding: 2px 7px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border-radius: 6px;
+    padding: 3px 8px;
     font-size: 11px;
     font-weight: 600;
     color: #cbd5e1;
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.1);
   }
 
   .proy-card__link {

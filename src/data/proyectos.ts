@@ -1,3 +1,4 @@
+import type { Tecnologia } from './tecnologias';
 // Trabajos entregados, para /proyectos.
 //
 // Es la página más importante del sitio después de la portada: en una venta a
@@ -68,13 +69,15 @@ export interface Proyecto {
   // y para eso una frase por proyecto no alcanza: necesita saber con qué está
   // hecho y cuándo.
   //
-  // Van vacíos a propósito, igual que las reseñas: el sitio no publica lo que
-  // no puede sostener, y el stack es exactamente el dato que se verifica en la
-  // primera reunión técnica. En cuanto se llenen, la tarjeta los muestra sola.
+  // El stack se llenó el 27/09/2026 con lo comprobado en los repositorios y en
+  // los sitios publicados. El año sigue vacío hasta confirmarlo: el sitio no
+  // publica lo que no puede sostener.
 
-  /** Tecnologías con las que está construido. Lista vacía = todavía no se
-   *  publica. Escribir solo lo que se pueda defender en una reunión técnica. */
-  stack: readonly string[];
+  /** Tecnologías con las que está construido, con su logo (ver
+   *  tecnologias.ts). Solo lo comprobado: el código en los repositorios o lo
+   *  que el propio sitio publicado deja ver. Lo que no se pudo confirmar —la
+   *  base de datos de un sistema ajeno, el hardware del robot— no se pone. */
+  stack: readonly Tecnologia[];
 
   /** Año de publicación, o rango si el desarrollo cruzó dos. `null` mientras no
    *  se confirme: una fecha equivocada en un portafolio se nota enseguida. */
@@ -93,7 +96,7 @@ export const proyectos: readonly Proyecto[] = [
     logo: 'apuray',
     color: '#0086EA',
     esMarcador: false,
-    stack: [],
+    stack: ['laravel', 'mysql', 'tailwind', 'kotlin', 'compose', 'firebase', 'googlemaps'],
     anio: null,
   },
   {
@@ -107,7 +110,7 @@ export const proyectos: readonly Proyecto[] = [
     logo: null,
     color: '#5B4CF0',
     esMarcador: false,
-    stack: [],
+    stack: ['laravel', 'kotlin', 'firebase'],
     anio: null,
   },
   {
@@ -121,7 +124,7 @@ export const proyectos: readonly Proyecto[] = [
     logo: 'mindblock',
     color: '#F97316',
     esMarcador: false,
-    stack: [],
+    stack: ['laravel', 'firebase'],
     anio: null,
   },
   {
@@ -135,7 +138,7 @@ export const proyectos: readonly Proyecto[] = [
     logo: 'jmf',
     color: '#2A66C0',
     esMarcador: false,
-    stack: [],
+    stack: ['laravel', 'mysql', 'tailwind', 'kotlin', 'compose', 'firebase'],
     anio: null,
   },
   {
@@ -149,7 +152,7 @@ export const proyectos: readonly Proyecto[] = [
     logo: null,
     color: '#16A34A',
     esMarcador: false,
-    stack: [],
+    stack: ['laravel'],
     anio: null,
   },
   {
@@ -163,7 +166,7 @@ export const proyectos: readonly Proyecto[] = [
     logo: 'liberalismo-comunal',
     color: '#E7653E',
     esMarcador: false,
-    stack: [],
+    stack: ['react', 'vite'],
     anio: null,
   },
 ];

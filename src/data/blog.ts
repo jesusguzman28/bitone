@@ -394,6 +394,62 @@ export const blog: readonly Post[] = [
     ],
     image: portada('caso-apuray-plataforma-de-delivery-en-provincia'),
   },
+  {
+    slug: 'caso-quipuy-plataforma-educativa-preuniversitaria',
+    title: 'Caso QUIPUY: una plataforma que le dice al postulante cuánto le falta',
+    seoTitle: 'Caso QUIPUY: plataforma educativa preuniversitaria',
+    excerpt:
+      'Cómo construimos QUIPUY: web y app Android sobre una sola API, práctica adaptativa y lo que exige Google Play para publicar una app con cuentas de usuario.',
+    date: '2026-09-27',
+    category: 'Casos',
+    readTime: '5 min',
+    keywords: ['caso de éxito desarrollo de software', 'plataforma educativa Perú', 'desarrollo de app educativa'],
+    servicio: { href: '/servicios/apps-moviles/', label: 'Desarrollo de apps móviles' },
+    intro:
+      'QUIPUY es una plataforma para postulantes a la universidad en el Perú. Es un producto propio: lo diseñamos, lo construimos y lo operamos. Lo contamos porque reúne casi todo lo que tiene una plataforma con usuarios reales —cuentas, pagos por suscripción, una app en la tienda— y porque las lecciones sirven para cualquier empresa que quiera lanzar la suya.',
+    secciones: [
+      {
+        h2: 'El problema',
+        parrafos: [
+          'Un postulante estudia meses sin saber si va bien. Sabe cuál es el puntaje de corte de la carrera que quiere, pero no cuánto le falta para llegar, ni en qué temas se le escapan los puntos. Los simulacros le dan una nota, no un camino.',
+        ],
+      },
+      {
+        h2: 'Lo que se construyó',
+        parrafos: ['QUIPUY son dos puertas a un mismo sistema:'],
+        lista: [
+          'Una plataforma web donde el postulante elige universidad y carrera, practica y ve su avance.',
+          'Una app Android nativa con la misma cuenta y el mismo avance.',
+          'Un backend en Laravel que expone una sola API para la web y para la app, con cuentas de usuario y suscripciones.',
+          'Acceso con Google o con correo y contraseña.',
+        ],
+      },
+      {
+        h2: 'Decisiones que importaron',
+        parrafos: [],
+        lista: [
+          'Una sola API para web y app: cada regla —cómo se calcula lo que falta, qué se desbloquea con la suscripción— vive en un solo lugar y no se desincroniza entre plataformas.',
+          'El avance se mide contra el puntaje de corte de la carrera elegida, no contra una nota abstracta. Es lo que el postulante entiende y lo que lo mueve a practicar.',
+          'Práctica adaptativa: el sistema prioriza los temas donde el postulante falla más, en vez de repetir lo que ya domina.',
+          'Login con correo además de Google: Google Play exige que sus revisores puedan entrar a la app sin una cuenta de Google personal.',
+        ],
+      },
+      {
+        h2: 'Lo que exige publicar en Google Play',
+        parrafos: [
+          'Publicar una app con cuentas de usuario no es solo subir el archivo. La tienda pide una cuenta de prueba para sus revisores, una página donde el usuario pueda eliminar su cuenta y sus datos, políticas de privacidad y declarar qué datos recoge la app. Además, la firma de la app la administra Google: eso cambia cómo se configura el inicio de sesión con Google y cómo se prueba una versión antes de publicarla.',
+          'Ninguna de esas cosas es difícil, pero todas toman tiempo si se descubren al final. En los proyectos de apps que hacemos para otras empresas entran en el plan desde el primer día.',
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: '¿Una app y una web pueden compartir el mismo sistema?',
+        a: 'Sí, y es lo recomendable: un solo backend con una API que usan las dos. Las reglas del negocio viven en un solo lugar y los datos del usuario son los mismos en ambas.',
+      },
+    ],
+    image: portada('caso-quipuy-plataforma-educativa-preuniversitaria'),
+  },
 ];
 
 export const blogPorSlug = (slug: string) => blog.find((p) => p.slug === slug);
