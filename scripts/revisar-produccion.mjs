@@ -14,30 +14,38 @@ const DOMINIO = 'https://bitwise.pe';
 const RUTAS = [
   '/',
   '/servicios/',
-  // Las cuatro páginas de servicio: son las que compiten por las búsquedas
-  // comerciales y las que enlaza el pie desde las 30 páginas del sitio.
-  '/servicios/pagina-web/',
-  '/servicios/tienda-online/',
-  '/servicios/erp-sistemas/',
+  // Las tres páginas de servicio: son las que compiten por las búsquedas
+  // comerciales y las que enlaza el pie desde todas las páginas del sitio.
+  '/servicios/desarrollo-de-software-a-medida/',
+  '/servicios/mantenimiento-de-software/',
   '/servicios/apps-moviles/',
+  '/metodologia/',
   '/proyectos/',
   '/nosotros/',
   '/contacto/',
   '/blog/',
-  '/cuanto-cuesta-una-pagina-web-en-peru/',
-  '/paginas-web-para-pollerias/',
-  '/paginas-web-para-bodegas/',
   '/robots.txt',
   '/sitemap-index.xml',
   // Las tipografías dejaron de pedirse a Google y salen de aquí. Si un archivo
   // no llega, el sitio entero se ve con la letra del sistema.
-  '/fonts/plus-jakarta-sans-400.woff2',
-  '/fonts/space-grotesk-700.woff2',
+  '/fonts/plus-jakarta-sans.woff2',
+  '/fonts/space-grotesk.woff2',
 ];
 
 // Direcciones viejas que tienen que seguir redirigiendo. Si una se rompe, se
 // pierde el posicionamiento que ya tenía esa página en Google.
-const REDIRECCIONES = ['/proyectos/pollerias-restaurantes', '/clientes'];
+// Incluye las páginas del negocio anterior (página web, tienda online, landings
+// de rubro): ya no existen y deben mandar a su equivalente actual con un 301.
+const REDIRECCIONES = [
+  '/proyectos/pollerias-restaurantes',
+  '/clientes',
+  '/servicios/pagina-web/',
+  '/servicios/tienda-online/',
+  '/servicios/erp-sistemas/',
+  '/cuanto-cuesta-una-pagina-web-en-peru/',
+  '/paginas-web-para-pollerias/',
+  '/paginas-web-para-bodegas/',
+];
 
 let fallos = 0;
 const bien = (m) => console.log(`  ok    ${m}`);
@@ -96,7 +104,7 @@ for (const ruta of REDIRECCIONES) {
 // sigue siendo la forma canónica y que ningún cambio de configuración la
 // invirtió: /servicios/ tiene que dar 200 directo, sin desvío.
 console.log('\n2b. Forma canónica de las direcciones (barra final)');
-for (const ruta of ['/servicios/', '/blog/', '/paginas-web-para-pollerias/']) {
+for (const ruta of ['/servicios/', '/blog/', '/servicios/apps-moviles/']) {
   const r = await pedir(DOMINIO + ruta, false);
   if (!r.ok) mal(`${ruta} no responde (${r.error})`);
   else if (r.estado === 200) bien(`${ruta} responde 200 sin redirección`);

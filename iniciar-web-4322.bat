@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 >nul
-title Bitwise - servidor de pruebas (4322)
+title BIT-ONE - servidor de pruebas (4322)
 cd /d "%~dp0"
 
 REM Segundo servidor de desarrollo, en el puerto 4322.
@@ -33,7 +33,7 @@ set ESPERA=3
 
 echo.
 echo   ====================================================
-echo    Bitwise - servidor de pruebas
+echo    BIT-ONE - servidor de pruebas
 echo   ====================================================
 echo.
 echo    En esta PC:     http://localhost:4322

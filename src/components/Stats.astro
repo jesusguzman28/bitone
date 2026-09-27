@@ -11,7 +11,8 @@ import { homeStats } from '../data/site';
 //
 // Para volver a usarlo: se le pone a la cifra `derivado: 'loQueSea'` en
 // site.ts y aquí se añade la rama que lo resuelve.
-const stats = homeStats;
+type Cifra = { n: number; prefix?: string; suffix: string; tight?: boolean; k: string };
+const stats: readonly Cifra[] = homeStats;
 ---
 
 <section class="surface px-6 py-14" aria-label="Cifras de BIT-ONE">

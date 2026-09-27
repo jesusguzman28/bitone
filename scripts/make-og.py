@@ -42,20 +42,21 @@ d.rounded_rectangle([72, 200, 72 + pw + 44, 200 + ph + 26], radius=100,
 d.text((72 + 22, 200 + 13), eb, font=ebf, fill=(252, 165, 176))
 
 # headline
-hf = font(BOLD, 76)
-d.text((72, 270), "Páginas web para", font=hf, fill=(255, 255, 255))
-# second line with accent word gradient-ish (amber)
-d.text((72, 356), "tu ", font=hf, fill=(255, 255, 255))
-w_tu = d.textbbox((72, 356), "tu ", font=hf)[2]
-d.text((w_tu, 356), "negocio.", font=hf, fill=(232, 163, 23))
+# Es el mismo titular de la portada. Decía "Páginas web para tu negocio", que
+# es lo que vendía la etapa anterior; la imagen que se ve al compartir el enlace
+# tiene que decir lo mismo que la página a la que lleva.
+hf = font(BOLD, 72)
+d.text((72, 270), "Desarrollo de software", font=hf, fill=(255, 255, 255))
+# second line with accent word (amber)
+d.text((72, 356), "a ", font=hf, fill=(255, 255, 255))
+w_a = d.textbbox((72, 356), "a ", font=hf)[2]
+d.text((w_a, 356), "medida.", font=hf, fill=(232, 163, 23))
 
 # subtitle
-# El precio tiene que ser el mismo piso que anuncia todo el sitio (PRECIO_PISO
-# en src/data/site.ts). Decía "desde S/499", que no existe en ninguna otra
-# pantalla: era la cifra que veía quien recibía el enlace por WhatsApp, justo
-# antes de entrar y encontrarse con S/1,500.
+# Sin precio: el sitio ya no publica precios de entrada (ver llms.txt). Son los
+# tres servicios que ofrece hoy, en el mismo orden que /servicios/.
 sf = font(REG, 34)
-d.text((72, 470), "MYPEs y pymes  -  desde S/1,500  -  factura SUNAT", font=sf, fill=(148, 163, 184))
+d.text((72, 470), "Sistemas para empresas  -  apps móviles  -  mantenimiento", font=sf, fill=(148, 163, 184))
 
 # domain bottom-right
 df = font(SEMI, 30)

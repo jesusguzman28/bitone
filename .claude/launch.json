@@ -2,13 +2,13 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "bitwise-dev",
+      "name": "bit-one-dev",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 4321
     },
     {
-      "name": "bitwise-4322",
+      "name": "bit-one-4322",
       "url": "http://localhost:4322",
       "port": 4322
     }

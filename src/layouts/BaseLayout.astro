@@ -260,12 +260,11 @@ const jsonLd = { '@context': 'https://schema.org', '@graph': graph };
          de Google Fonts ni los dos preconnect que hacían falta para alcanzarla.
          Ver el bloque de @font-face al principio de src/styles/global.css.
 
-         Se adelantan solo dos archivos, los que pinta cualquier página en el
-         primer pantallazo: el titular y el texto corriente. Los otros seis
-         pesos los pide el navegador cuando los necesita. Adelantarlos todos
-         sería competir con la imagen grande por el mismo ancho de banda. -->
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/space-grotesk-700.woff2" crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/plus-jakarta-sans-400.woff2" crossorigin />
+         Son dos archivos variables, uno por familia, con todos los pesos
+         adentro. Se adelantan los dos porque cualquier página los pinta en el
+         primer pantallazo: el titular y el texto corriente. -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/space-grotesk.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/plus-jakarta-sans.woff2" crossorigin />
 
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 

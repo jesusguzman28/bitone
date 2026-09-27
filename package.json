@@ -1,5 +1,5 @@
 {
-  "name": "bitwise-new",
+  "name": "bit-one-web",
   "type": "module",
   "version": "0.1.0",
   "private": true,
@@ -14,9 +14,9 @@
     "revisar-produccion": "node scripts/revisar-produccion.mjs"
   },
   "dependencies": {
-    "astro": "^5.13.0",
-    "@astrojs/sitemap": "^3.4.1",
-    "@tailwindcss/vite": "^4.1.11",
-    "tailwindcss": "^4.1.11"
+    "@astrojs/sitemap": "^3.7.4",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.5",
+    "tailwindcss": "^4.3.3"
   }
 }

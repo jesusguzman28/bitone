@@ -654,36 +654,6 @@ export const proceso = [
   { n: '04', title: 'Entregamos y documentamos', desc: 'Código, repositorios, documentación y accesos a nombre de tu empresa, con 30 días de garantía sobre lo entregado.', icon: '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.29 7 12 12l8.71-5M12 22V12"/>' },
 ] as const;
 
-// ---- Marcas / proyectos ----
-//
-// Esta lista tenía seis marcas y el banner las presentaba como "las empresas
-// que ya confiaron en nosotros". Tres de ellas —Florería Adams, Lima Se y
-// Coffee & Dreams— llevaban logotipos que el propio código describía como
-// "provisionales dibujados a medida, se reemplazan en cuanto lleguen los
-// reales". Sin ninguna venta registrada, esa frase era la afirmación más
-// falsable del sitio, y salía en la portada y en /proyectos/.
-//
-// Ahora la lista es exactamente la misma que proyectos.ts, que es la única
-// fuente del sitio donde consta qué se construyó de verdad. El rótulo del
-// banner cambió en consecuencia: ya no habla de confianza ajena, habla de
-// trabajo propio.
-//
-// JMF llegó a salir de esta lista por falta de respaldo, y volvió al aparecer
-// uno: hay una app suya publicada en Play Store —com.jmf.app— bajo la cuenta
-// de desarrollador de Bitone E.I.R.L. Eso es exactamente la clase de prueba
-// que hacía falta, y por eso su enlace apunta a la ficha de la tienda y no a
-// una web: es la dirección donde cualquiera puede comprobarlo.
-export const marcas = [
-  { name: 'ApuraY', link: 'https://apuray.pe', style: 'letter-spacing:0.01em' },
-  { name: 'QUIPUY', link: 'https://quipuy.pe', style: 'letter-spacing:0.14em' },
-  { name: 'MindBlock', link: 'https://mindblock.io', style: 'letter-spacing:-0.02em', dot: true },
-  { name: 'JMF', link: 'https://play.google.com/store/apps/details?id=com.jmf.app', style: 'letter-spacing:0.1em', logo: '/marcas/jmf.png', alt: 'Grupo JMF' },
-  // Sin enlace: la dirección que responde abre un inicio de sesión, no un sitio
-  // público. Mismo criterio que en proyectos.ts.
-  { name: 'AjosyCebollas', link: null, style: 'letter-spacing:-0.01em' },
-] as const;
-
-
 // ---- Nosotros ----
 // Reescrita entera con el cambio a fábrica de software.
 //
