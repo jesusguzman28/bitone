@@ -96,7 +96,8 @@ const schema = [
           <span class="hero-chip">
             <Icono name="etiqueta" size={15} />
             {tab.price === null ? 'Precio' : 'Desde'}
-            <strong class="text-accent">{tab.priceLabel}{tab.priceNote ? ` ${tab.priceNote}` : ''}</strong>
+            <strong class="text-accent">{tab.priceLabel}</strong>
+            {tab.priceNote && <span class="text-slate-400">· {tab.priceNote.toLowerCase()}</span>}
           </span>
           <span class="hero-chip">
             <Icono name="reloj" size={15} />
@@ -163,7 +164,7 @@ const schema = [
   <!-- 3. Cómo funciona: un paso por bloque, con su foto -->
   <section class="surface--alt px-6 py-20">
     <div class="mx-auto w-full max-w-[1120px]">
-      <div class="reveal mx-auto max-w-[760px]">
+      <div class="reveal max-w-[760px]">
         <h2 class="font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
           {servicio.comoFunciona.title}
         </h2>
@@ -216,12 +217,15 @@ const schema = [
   <!-- 4. Qué incluye -->
   <section class="surface px-6 py-20">
     <div class="mx-auto w-full max-w-[1120px]">
-      <div class="reveal mx-auto max-w-[760px]">
+      <div class="reveal max-w-[760px]">
         <h2 class="font-display text-[clamp(1.6rem,3.6vw,2.2rem)] font-extrabold leading-[1.18] text-dark">
           Qué incluye
         </h2>
         <p class="mt-5 text-[16.5px] leading-[1.75] text-slate-600 [text-wrap:pretty]">
-          Todo esto entra en el precio de {tab.priceLabel}{tab.priceNote ? ` ${tab.priceNote}` : ''}. Lo que se cotiza aparte se dice antes, nunca a mitad del proyecto.
+          {tab.price === null
+            ? 'Todo esto entra en el precio que te damos cerrado y por escrito.'
+            : `Todo esto entra en el precio de ${tab.priceLabel}.`}{' '}
+          Lo que se cotiza aparte se dice antes, nunca a mitad del proyecto.
         </p>
       </div>
 

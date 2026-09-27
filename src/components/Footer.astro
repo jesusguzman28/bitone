@@ -20,12 +20,7 @@ const enlacesServicio = [
   { label: 'Proyectos en producción', href: '/proyectos/' },
 ];
 
-// El blog salió del menú principal cuando entró Metodología: está apartado del
-// índice de Google mientras su contenido sea del negocio anterior, así que no
-// merecía uno de los seis puestos de arriba. Pero borrarlo del sitio entero
-// dejaría seis páginas sin ninguna forma de llegar a ellas, así que se enlaza
-// aquí, al final de la navegación del pie.
-const enlacesNav = [...nav, { label: 'Blog', href: '/blog/' }];
+const enlacesNav = nav;
 
 const socialItems = [
   { label: 'Facebook', href: site.socials.facebook, path: 'M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z' },

@@ -29,9 +29,6 @@ import { fileURLToPath } from 'node:url';
 
 // Rutas que siempre tienen que existir y responder. Si se agrega una página
 // importante al sitio, va aquí.
-// Las tres últimas eran /cuanto-cuesta-una-pagina-web-en-peru/ y dos landings
-// de rubro. Se borraron con el cambio a fábrica de software y sus direcciones
-// viven ahora en public/_redirects como 301 hacia /servicios/.
 const RUTAS = [
   '/',
   '/servicios/',
@@ -42,7 +39,6 @@ const RUTAS = [
   '/proyectos/',
   '/nosotros/',
   '/contacto/',
-  '/blog/',
 ];
 
 // Frases que delatan un problema aunque el proceso siga vivo.
@@ -129,7 +125,7 @@ try {
 
   // ---- Revisiones de SEO ----
   //
-  // Todas nacen de un problema que ya estuvo publicado en bitwise.pe, no de una
+  // Todas nacen de un problema que ya estuvo publicado en la web anterior, no de una
   // lista de buenas prácticas copiada de algún sitio. Se comprueban aquí porque
   // ninguna rompe la compilación: el sitio se ve perfecto y el daño solo
   // aparece semanas después en los resultados de búsqueda.
@@ -181,9 +177,10 @@ try {
   sinBarra.size ? mal(`enlaces internos sin barra final (se sirven con 307): ${[...sinBarra.keys()].join(', ')}`)
                 : bien('todos los enlaces internos llevan barra final');
 
-  // Las redirecciones y las reglas de cabeceras solo funcionan si los archivos
-  // llegan a dist. Es fácil que se queden en public y nadie lo note.
-  for (const archivo of ['_redirects', '_headers', 'robots.txt', 'sitemap-index.xml']) {
+  // Archivos que tienen que llegar a dist. CNAME es el que le dice a GitHub
+  // Pages que la web va en bitone.pe: si falta, cada despliegue borra el
+  // dominio propio y la web vuelve a jesusguzman28.github.io.
+  for (const archivo of ['CNAME', '404.html', 'robots.txt', 'sitemap-index.xml']) {
     try {
       await stat(join(dist, archivo));
       bien(`${archivo} llegó a dist`);

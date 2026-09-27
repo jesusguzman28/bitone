@@ -67,10 +67,10 @@ const titleCase = (s: string) =>
 
 // `acc` se acumula CON barra final, y eso arregla dos cosas de una:
 //
-//   1. La dirección declarada. Salía "bitwise.pe/servicios" en las 15 páginas,
+//   1. La dirección declarada. Salía "dominio/servicios" en las 15 páginas,
 //      contra la regla que el propio sitio documenta en site.ts: todas las
 //      direcciones internas llevan barra, porque el canonical la lleva y sin
-//      ella Cloudflare responde una redirección temporal.
+//      ella el servidor responde con una redirección.
 //   2. El nombre de cada miga. `navLabel` busca la ruta dentro de `nav`, y las
 //      del menú están escritas con barra: al comparar "/servicios" contra
 //      "/servicios/" no acertaba nunca, así que ninguna miga usaba jamás su
@@ -206,6 +206,15 @@ const jsonLd = { '@context': 'https://schema.org', '@graph': graph };
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Política de seguridad. GitHub Pages no deja fijar cabeceras HTTP, así
+         que va como meta: cubre scripts, estilos, letras, imágenes y
+         conexiones, y solo admite recursos de este mismo dominio.
+         'unsafe-inline' es obligatorio porque Astro inlina los scripts chicos
+         y el diseño usa style= en todo el sitio. Si se activa la analítica o
+         el respaldo del formulario (src/data/site.ts), hay que sumar aquí sus
+         dominios o el navegador los bloqueará sin avisar. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; upgrade-insecure-requests" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonical} />
 

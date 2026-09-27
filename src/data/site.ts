@@ -13,7 +13,7 @@ export const site = {
   marca: 'BIT-ONE Perú',
   // Razón social y RUC de la empresa que factura.
   razonSocial: 'Bitone E.I.R.L.',
-  domain: 'https://bitwise.pe',
+  domain: 'https://bitone.pe',
   whatsapp: '51945574190',
   // Es el mensaje que se autocompleta desde el menú y desde el botón flotante
   // en las 15 páginas, así que fija el tono de la primera frase que escribe
@@ -93,8 +93,8 @@ export const site = {
 //      `formAccessKey` se deja vacío.
 //
 // IMPORTANTE: al poner una dirección aquí hay que sumar ese dominio a
-// `connect-src` en public/_headers, o el navegador bloqueará el envío por la
-// política de seguridad del sitio. Está anotado también allí.
+// `connect-src` en la política de seguridad (la meta Content-Security-Policy de
+// src/layouts/BaseLayout.astro), o el navegador bloqueará el envío.
 export const formulario = {
   endpoint: '',
   accessKey: '',
@@ -116,9 +116,10 @@ export const formulario = {
 //   1. Crea una propiedad en analytics.google.com y copia el identificador de
 //      medición. Tiene la forma G-XXXXXXXXXX.
 //   2. Pégalo aquí abajo.
-//   3. IMPORTANTE — abre public/_headers y descomenta las dos líneas marcadas
-//      "Google Analytics" dentro del Content-Security-Policy. Sin eso el
-//      navegador bloquea el script y no se mide nada, sin ningún aviso visible.
+//   3. IMPORTANTE — en src/layouts/BaseLayout.astro, suma a la meta
+//      Content-Security-Policy https://www.googletagmanager.com en script-src
+//      y https://www.google-analytics.com https://*.google-analytics.com en
+//      connect-src. Sin eso el navegador bloquea el script y no se mide nada.
 //
 // Además de las visitas, BaseLayout marca solo las dos conversiones reales del
 // sitio: `clic_whatsapp` (cualquier enlace a wa.me, en cualquier página) y
@@ -170,8 +171,8 @@ export const waLink = (msg: string = site.whatsappMsg) =>
 //
 // No es un detalle de estilo. El sitio se compila con `build.format: 'directory'`
 // —cada página es una carpeta con su index.html— y el canonical de cada una
-// declara la barra: https://bitwise.pe/servicios/. Cuando un enlace apuntaba a
-// /servicios, Cloudflare respondía 307 —una redirección TEMPORAL— hacia la
+// declara la barra: https://bitone.pe/servicios/. Cuando un enlace apuntaba a
+// /servicios, el servidor respondía 307 —una redirección TEMPORAL— hacia la
 // versión con barra. Un 307 le dice a Google "esta dirección es la buena, la
 // otra es un desvío pasajero", así que no consolidaba las señales en la
 // definitiva y cada rastreo costaba dos peticiones. Todos los enlaces internos
@@ -180,11 +181,6 @@ export const waLink = (msg: string = site.whatsappMsg) =>
 // Regla: si escribes un href interno en cualquier archivo, termínalo en barra.
 // El menú tiene seis sitios y todos cuestan: cada uno que se añade le quita
 // atención a los demás. Por eso "Blog" salió y entró "Metodología".
-//
-// El blog está apartado del índice de Google mientras su contenido sea del
-// negocio anterior (ver blog/index.astro), así que darle un puesto en el menú
-// principal era mandar visitas a lo único que el sitio pide a Google que no
-// tenga en cuenta. Sigue enlazado desde el pie.
 //
 // Metodología ocupa su lugar porque responde la pregunta que decide esta venta
 // —"¿y si esto se va de las manos?"— y porque es la página que un comprador
@@ -763,195 +759,4 @@ export const faqs = [
   { q: '¿Trabajan con los sistemas que ya tenemos?', a: 'Sí, y es lo habitual: casi ningún proyecto empieza en una empresa que no tenga nada. En la etapa de análisis se revisa qué sistemas hay, si exponen una forma de conectarse y qué se puede leer o escribir contra ellos. Eso se hace antes de cotizar, porque una integración que resulta imposible a mitad del proyecto cambia el alcance entero.' },
   { q: '¿Firman acuerdo de confidencialidad?', a: 'Sí, y lo firmamos antes de la reunión técnica si tu empresa lo prefiere. Aceptamos el modelo de acuerdo de tu área legal en vez de imponer el nuestro. Si el proyecto toca datos personales o información sensible, eso también se acuerda por escrito antes de tener acceso a nada.' },
   { q: '¿Emiten factura y trabajan con orden de compra?', a: 'Sí. Somos una empresa formal con RUC y emitimos factura electrónica SUNAT en cada hito. Trabajamos contra orden de compra y nos adaptamos a los plazos de pago de tu área de finanzas, siempre que queden acordados al firmar y no se descubran después.' },
-] as const;
-
-// ---- Blog (SEO) ----
-// Categorías con el mismo esquema que producción: slug para filtrar, etiqueta para mostrar.
-// Los `slug` NO se tocan aunque las etiquetas cambien: son la dirección con la
-// que cada entrada se filtra y ya están escritos en los seis artículos. Lo que
-// cambia es cómo se llaman en pantalla, que era lenguaje del negocio anterior
-// —"Pymes Perú", "Tiendas online", "Salir en Google"—.
-//
-// PENDIENTE: cuatro de los seis artículos son de MYPE (por qué necesitas una
-// web, tienda contra WhatsApp, cobrar con Yape, SEO local). Traen al lector
-// equivocado y, si alguno llegara a posicionar, atraería consultas que ya no
-// se quieren atender. Se borran cuando haya con qué reemplazarlos: un blog
-// vacío estorba más que uno desactualizado.
-export const blogCats = [
-  { slug: 'pymes-peru', label: 'Negocio y tecnología' },
-  { slug: 'desarrollo-web', label: 'Desarrollo' },
-  { slug: 'ecommerce', label: 'Comercio electrónico' },
-  { slug: 'seo-marketing', label: 'Presencia en buscadores' },
-  { slug: 'apps-moviles', label: 'Apps móviles' },
-] as const;
-
-export const catLabel = (slug: string) =>
-  blogCats.find((c) => c.slug === slug)?.label ?? slug;
-
-// Cada entrada lleva dos titulares y no es redundancia:
-//
-//   `title`     el que se lee en la página y en el H1. Puede ser largo y con
-//               paréntesis, porque quien ya entró tiene sitio para leerlo.
-//   `seoTitle`  el de la etiqueta <title>, o sea el que sale en Google. Máximo
-//               55 caracteres: BaseLayout le suma " | BIT-ONE" y a partir de
-//               ~65 Google corta el resto con puntos suspensivos. Los seis
-//               títulos medían entre 76 y 90 con el sufijo, así que en los seis
-//               el resultado de búsqueda terminaba cortado a media frase.
-//               Además va con la keyword adelante, que es lo primero que se lee.
-//
-// Las portadas viven en public/blog/<slug>.webp (1200x630) y <slug>-sm.webp
-// (640x336). Antes se cargaban directo desde images.unsplash.com, y esa foto es
-// la imagen grande de la página: el navegador tenía que resolver un dominio
-// ajeno, abrir conexión y negociar TLS antes de poder empezar a bajarla, justo
-// en el elemento que decide la nota de velocidad de la página. Además dejaba a
-// un tercero como pieza obligatoria del sitio: el día que Unsplash cambie de
-// dirección o borre una foto, seis artículos se quedan sin portada.
-//
-// Son las mismas fotos, recortadas a 1200x630 —la medida que piden Facebook,
-// LinkedIn y WhatsApp para la tarjeta al compartir— y servidas desde el propio
-// dominio con caché de una semana. `unsplash` guarda el identificador original
-// por si hay que volver al archivo de mayor calidad.
-export const blog = [
-  {
-    slug: 'inteligencia-artificial-para-negocios-pequenos-peru',
-    rubros: ['clinicas-consultorios', 'academias-preuniversitarios', 'barberias-salones-belleza'],
-    title: '5 formas de usar inteligencia artificial en tu negocio pequeño (sin ser experto)',
-    seoTitle: 'Inteligencia artificial para negocios pequeños en Perú',
-    excerpt: 'La IA ya no es solo para grandes empresas. Te mostramos cómo una MYPE peruana puede ahorrar horas y vender más usando herramientas de IA hoy mismo.',
-    category: 'pymes-peru',
-    image: '/blog/inteligencia-artificial-para-negocios-pequenos-peru.webp',
-    unsplash: '1531746790731-6c087fecd65a',
-    emoji: '🤖',
-    author: 'BIT-ONE',
-    featured: false,
-    date: '2026-07-14',
-    readTime: '7 min',
-    keywords: ['inteligencia artificial para pequeñas empresas', 'IA para negocios Perú', 'herramientas de IA para MYPES', 'automatización para negocios'],
-    body: [
-      'La inteligencia artificial dejó de ser cosa de películas o de grandes corporaciones. Hoy, en Perú, más del 80% de los dueños de pequeñas empresas dice estar listo para usar IA, y lo mejor es que muchas de estas herramientas son gratuitas o cuestan menos que un almuerzo al mes. Aquí van 5 formas prácticas de aprovecharla en tu negocio, sin necesidad de saber programar.',
-      '1. Contesta clientes 24/7 con un chatbot en WhatsApp. Un asistente con IA puede responder las preguntas típicas ("¿cuánto cuesta?", "¿hacen delivery?", "¿dónde están?"), tomar pedidos e incluso cerrar ventas mientras tú duermes o atiendes el local. Nunca más pierdes un cliente por no contestar a tiempo.',
-      '2. Crea contenido para tus redes y tu web en minutos. Herramientas como ChatGPT o Gemini te ayudan a redactar publicaciones, descripciones de productos, correos y hasta las preguntas frecuentes de tu web. Tú das la idea en tu idioma; la IA te devuelve un borrador listo para pulir.',
-      '3. Ordena tus números sin ser contador. La IA puede armarte una hoja de cálculo de flujo de caja, resumir tus ventas del mes o proyectar cuánto stock comprar según tu histórico. Menos adivinar, más decidir con datos.',
-      '4. Mejora tus fotos y diseños. Con IA generas o retocas imágenes de tus productos, quitas fondos y creas piezas para redes sin pagar un diseñador para cada post. Tu negocio se ve más profesional a costo casi cero.',
-      '5. Automatiza tareas repetitivas. Conectando apps con herramientas como Zapier o Make, puedes hacer que un pedido de WhatsApp se registre solo en una hoja, que se envíe un mensaje de confirmación automático o que te avise cuando un producto se agote.',
-      'El punto no es reemplazar tu toque humano —ese es tu mayor valor—, sino sacarte de encima el trabajo pesado para que dediques tu tiempo a vender y atender bien. En BIT-ONE integramos estas herramientas de IA directamente en tu web o app, listas para tu rubro. Si quieres empezar, escríbenos por WhatsApp y te asesoramos gratis.',
-    ],
-  },
-  {
-    slug: 'chatbot-whatsapp-con-ia-atencion-24-7',
-    rubros: ['pollerias-restaurantes', 'barberias-salones-belleza', 'farmacias-boticas'],
-    title: 'Chatbot con IA en WhatsApp: atiende clientes 24/7 sin contratar a nadie',
-    seoTitle: 'Chatbot con IA en WhatsApp para tu negocio',
-    excerpt: 'Un asistente automático que responde, toma pedidos y cierra ventas en WhatsApp a cualquier hora. Te explicamos cómo funciona y cuánto puede ayudar a tu MYPE.',
-    category: 'seo-marketing',
-    image: '/blog/chatbot-whatsapp-con-ia-atencion-24-7.webp',
-    unsplash: '1611746872915-64382b5c76da',
-    emoji: '💬',
-    author: 'BIT-ONE',
-    featured: false,
-    date: '2026-07-13',
-    readTime: '6 min',
-    keywords: ['chatbot WhatsApp Perú', 'WhatsApp Business con IA', 'atención al cliente automática', 'bot para vender por WhatsApp'],
-    body: [
-      'En Perú, casi toda venta pasa por WhatsApp. El problema: no puedes estar pegado al celular las 24 horas. Cada mensaje que no contestas a tiempo es una venta que probablemente se va a la competencia. Ahí es donde un chatbot con inteligencia artificial cambia el juego.',
-      'Un chatbot con IA es como tener un vendedor que nunca duerme. Responde al instante, entiende lo que el cliente quiere (aunque escriba con faltas o en jerga), muestra tu catálogo, arma el pedido y hasta genera el link de pago. Todo sin que tú levantes un dedo.',
-      'A diferencia de los bots antiguos de "responde 1 para menú, 2 para horarios", los de hoy conversan de forma natural. Si un cliente pregunta "¿tienes pollo a la brasa para 4 personas y cuánto sale con delivery a Los Olivos?", el bot lo entiende y responde con precio y tiempo, como lo haría una persona.',
-      '¿Para qué rubros sirve? Prácticamente todos: pollerías y restaurantes que reciben pedidos, bodegas que atienden por catálogo, barberías que agendan citas, farmacias que confirman stock. Cualquier negocio que hoy pierde tiempo contestando lo mismo una y otra vez gana con un chatbot.',
-      'Lo importante es que el bot atienda bien y sepa cuándo pasarte la conversación a ti. Un buen chatbot filtra las consultas fáciles solo y te avisa cuando llega un cliente listo para comprar o con una duda especial. Tú recibes clientes calientes, no un buzón lleno de preguntas repetidas.',
-      'En BIT-ONE conectamos tu web o app con un chatbot de IA en WhatsApp entrenado con la información de tu negocio: tus productos, precios, horarios y forma de atender. Escríbenos y te mostramos una demo funcionando para tu rubro.',
-    ],
-  },
-  {
-    slug: 'como-cobrar-online-yape-plin-pasarela-de-pago',
-    rubros: ['gimnasios-crossfit', 'ferreterias', 'pollerias-restaurantes'],
-    title: 'Cómo cobrar online en tu negocio: Yape, Plin y pasarelas de pago explicadas',
-    seoTitle: 'Cómo cobrar online: Yape, Plin y pasarelas de pago',
-    excerpt: 'Deja de perder ventas por no aceptar pagos digitales. Comparamos Yape, Plin y las pasarelas de tarjeta para que elijas bien según tu tipo de negocio.',
-    category: 'ecommerce',
-    image: '/blog/como-cobrar-online-yape-plin-pasarela-de-pago.webp',
-    unsplash: '1563013544-824ae1b704d3',
-    emoji: '💳',
-    author: 'BIT-ONE',
-    featured: false,
-    date: '2026-07-12',
-    readTime: '6 min',
-    keywords: ['cobrar con Yape en mi web', 'pasarela de pago Perú', 'aceptar pagos online negocio', 'cobrar por internet Perú'],
-    body: [
-      'Hoy en Perú, si tu negocio no acepta pagos digitales, estás perdiendo ventas. Las billeteras móviles como Yape y Plin ya son parte del día a día, y cada vez más clientes esperan poder pagar sin efectivo, incluso online. La buena noticia: montar el cobro digital es más fácil y económico de lo que crees.',
-      'Yape y Plin son ideales para empezar. Son gratuitas, todo el mundo las tiene y el dinero te llega al instante. Para un negocio chico, poner tu QR en el local y en tu web ya te resuelve gran parte de los cobros. La limitación: son pagos manuales, tú confirmas cada uno, y tienen topes de monto.',
-      'Cuando tu volumen crece o vendes montos altos, conviene una pasarela de pago (como las que procesan tarjetas Visa y Mastercard). Estas cobran automáticamente en tu web, aceptan tarjetas nacionales e internacionales y te dan un panel con todas tus transacciones. Cobran una comisión por venta, pero a cambio profesionalizas el cobro y no dependes de confirmar a mano.',
-      '¿Cuál elegir? Si recién empiezas o vendes montos bajos, arranca con Yape y Plin integrados a tu catálogo web. Si ya tienes tienda online, vendes a otras ciudades o manejas tickets altos, súmale una pasarela de tarjeta. Lo ideal es ofrecer varias opciones: mientras más formas de pago, menos ventas se caen.',
-      'Un detalle clave para las MYPES: cobrar formal también significa emitir boleta o factura electrónica. Conectar tu cobro con facturación SUNAT desde el inicio te evita problemas y le da confianza al cliente. Muchos abandonan una compra si el negocio se ve informal.',
-      'En BIT-ONE dejamos tu web lista para cobrar: integramos billeteras peruanas, pasarelas de tarjeta y facturación electrónica según lo que tu negocio necesite. Escríbenos por WhatsApp y te armamos el esquema de cobro que más te conviene.',
-    ],
-  },
-  {
-    slug: 'por-que-tu-negocio-necesita-pagina-web',
-    rubros: ['clinicas-consultorios', 'gimnasios-crossfit', 'veterinarias-petshop'],
-    title: 'Por qué tu negocio pequeño necesita una página web (aunque uses redes)',
-    seoTitle: 'Por qué tu negocio necesita una página web',
-    excerpt: 'Instagram y WhatsApp no son suficientes. Te explicamos por qué una web propia hace que tu MYPE venda más y se vea más profesional.',
-    category: 'desarrollo-web',
-    image: '/blog/por-que-tu-negocio-necesita-pagina-web.webp',
-    unsplash: '1556761175-5973dc0f32e7',
-    emoji: '🚀',
-    author: 'BIT-ONE',
-    featured: false,
-    date: '2026-07-05',
-    readTime: '5 min',
-    keywords: ['página web para negocios pequeños', 'página web para mi negocio', 'página web para mypes'],
-    body: [
-      'Muchos emprendedores nos dicen: "ya tengo Instagram, ¿para qué quiero una web?". La respuesta corta: porque las redes no son tuyas. Si mañana te cierran o bloquean la cuenta, pierdes años de trabajo y todos tus clientes de golpe.',
-      'Tu página web es tu local en internet: es tuya, aparece en Google cuando alguien busca tu rubro y da confianza. Un negocio con web propia se ve más serio que uno que solo manda fotos por WhatsApp. Y lo mejor: trabaja para ti las 24 horas, incluso cuando estás durmiendo.',
-      'Piensa en cómo compra la gente hoy: antes de ir a un local o escribir por WhatsApp, buscan en Google y comparan. Si no apareces, simplemente no existes para ese cliente. Y si el que sí aparece tiene una web ordenada con precios, fotos y ubicación, se lleva la venta aunque tú tengas mejor producto.',
-      'Una web también te ahorra tiempo. En vez de contestar las mismas preguntas cien veces al día ("¿cuánto cuesta?", "¿hacen delivery?", "¿dónde están?"), tu web responde sola y filtra a los clientes que llegan realmente listos para comprar.',
-      'Lo ideal es combinar ambas: usa las redes para llegar a la gente y tu web para cerrar la venta, mostrar tu catálogo completo y quedar bien posicionado en las búsquedas de Google. Las redes son el alquiler; tu web es la propiedad.',
-    ],
-  },
-  {
-    slug: 'como-aparecer-en-google-negocio-local',
-    rubros: ['pollerias-restaurantes', 'ferreterias', 'clinicas-consultorios'],
-    title: 'Cómo hacer que tu negocio aparezca en Google (SEO local para MYPEs)',
-    seoTitle: 'SEO local para MYPEs: cómo aparecer en Google',
-    excerpt: 'Pasos concretos para que tu negocio salga cuando alguien busca tu rubro en tu ciudad. Sin tecnicismos, aplicable hoy mismo.',
-    category: 'seo-marketing',
-    image: '/blog/como-aparecer-en-google-negocio-local.webp',
-    unsplash: '1524661135-423995f22d0b',
-    emoji: '📍',
-    author: 'BIT-ONE',
-    featured: false,
-    date: '2026-06-28',
-    readTime: '7 min',
-    keywords: ['SEO local Perú', 'aparecer en Google', 'posicionamiento web Perú'],
-    body: [
-      'Cuando alguien busca "pollería cerca de mí" o "ferretería en Trujillo", Google muestra primero a los negocios que trabajaron su presencia digital. La buena noticia es que no necesitas pagar publicidad para aparecer: con SEO local bien hecho, puedes rankear gratis.',
-      'Lo básico: crea y verifica tu ficha de Google Business Profile, usa las mismas palabras que tus clientes buscan en los textos de tu web, consigue reseñas reales y asegúrate de que tu web cargue rápido y se vea bien en el celular (el 80% del tráfico en Perú es móvil).',
-      'Las reseñas son oro. Un negocio con 50 reseñas de 4.8 estrellas gana casi siempre contra uno sin reseñas, aunque el segundo esté más cerca. Pide reseñas a tus clientes contentos: mándales el link directo por WhatsApp después de una buena compra y hazlo un hábito.',
-      'La ficha de Google también necesita datos completos y consistentes: mismo nombre, dirección y teléfono en tu web, tu ficha y tus redes. Sube fotos reales de tu local y tus productos, responde las preguntas y publica novedades. Google premia a los negocios activos.',
-      'En cada web que hacemos incluimos SEO básico: títulos optimizados, datos estructurados y velocidad. Es la base para que Google te encuentre. Luego, con el tiempo y buen contenido —como este blog—, subes posiciones sin gastar en publicidad.',
-    ],
-  },
-  {
-    slug: 'tienda-online-vs-vender-por-whatsapp',
-    rubros: ['ferreterias', 'panaderias-pastelerias', 'farmacias-boticas'],
-    title: 'Tienda online vs. vender por WhatsApp: ¿qué le conviene a tu MYPE?',
-    seoTitle: 'Tienda online o vender por WhatsApp: ¿cuál conviene?',
-    excerpt: 'Comparamos los dos caminos para vender por internet en Perú, con sus costos, ventajas y cuándo conviene cada uno.',
-    category: 'ecommerce',
-    image: '/blog/tienda-online-vs-vender-por-whatsapp.webp',
-    unsplash: '1563013544-824ae1b704d3',
-    emoji: '🛍️',
-    author: 'BIT-ONE',
-    featured: false,
-    date: '2026-06-20',
-    readTime: '6 min',
-    keywords: ['tienda online Perú', 'vender por WhatsApp', 'tienda virtual para negocios pequeños'],
-    body: [
-      'Vender por WhatsApp es rápido y sin costo, perfecto para empezar. Pero cuando tu volumen crece, contestar pedidos uno por uno te consume el día y pierdes ventas por no responder a tiempo.',
-      'Una tienda online resuelve eso: tu cliente ve el catálogo, arma su pedido y paga solo, a cualquier hora. Tú recibes la orden lista con el comprobante. Se integra igual con WhatsApp para coordinar la entrega, así que no pierdes ese canal.',
-      'Hay un costo oculto de vender solo por WhatsApp: los errores. Pedidos mal apuntados, precios que cambias de memoria, stock que ya no tienes. Una tienda online mantiene todo ordenado —catálogo, precios y stock en un solo lugar— y reduce esos errores que te cuestan plata y reputación.',
-      'Otra ventaja: la tienda cobra igual mientras duermes. Muchas ventas se pierden porque el cliente quiere comprar a las 11 de la noche y nadie contesta. Con pago automátict automático, esa venta entra sola y tú la despachas al día siguiente.',
-      'Nuestra recomendación: empieza con un catálogo web conectado a WhatsApp y, cuando el volumen lo justifique, súmale la pasarela de pago y el cobro automático. Creces por módulos, sin gastar de más al inicio.',
-    ],
-  },
 ] as const;

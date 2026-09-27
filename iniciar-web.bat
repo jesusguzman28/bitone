@@ -9,8 +9,8 @@ REM Si el servidor se cae, esta ventana lo vuelve a levantar sola en 3
 REM segundos. Antes habia que venir a arrancarlo a mano cada vez.
 REM
 REM Importante: esto es SOLO para trabajar en la PC. La web publicada en
-REM bitwise.pe no usa esto ni depende de esta ventana: son archivos ya
-REM compilados que sirve Cloudflare. Si apagas la PC, bitwise.pe sigue arriba.
+REM bitone.pe no usa esto ni depende de esta ventana: son archivos ya
+REM compilados que sirve GitHub Pages. Si apagas la PC, bitone.pe sigue arriba.
 
 set INTENTOS=0
 

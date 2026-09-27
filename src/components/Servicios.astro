@@ -52,14 +52,16 @@ import Icono from './Icono.astro';
               ))}
             </ul>
 
-            <div class="mt-auto flex items-end justify-between pt-[22px]">
-              <div>
+            {/* La nota del precio va en su propio renglón. Pegada a la cifra, en
+                una tarjeta angosta se partía a media frase ("Según" arriba,
+                "alcance" abajo) y empujaba "Ver detalle" a dos renglones. */}
+            <div class="mt-auto flex items-end justify-between gap-4 pt-[22px]">
+              <div class="min-w-0">
                 <span class="text-[11px] text-slate-400">{s.priceLabel}</span>
-                <div class:list={['font-display text-[28px] font-bold', s.featured ? 'text-white' : 'text-dark']}>
-                  {s.price}{s.priceNote && <span class="text-xs font-medium text-slate-400">{s.priceNote}</span>}
-                </div>
+                <div class:list={['font-display text-[28px] font-bold leading-tight whitespace-nowrap', s.featured ? 'text-white' : 'text-dark']}>{s.price}</div>
+                {s.priceNote && <span class="mt-0.5 block text-xs font-medium text-slate-400">{s.priceNote}</span>}
               </div>
-              <a href={s.href} class:list={['inline-flex items-center gap-1.5 text-[13.5px] font-semibold no-underline', s.featured ? 'text-accent' : 'text-primary']}>
+              <a href={s.href} class:list={['inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap text-[13.5px] font-semibold no-underline', s.featured ? 'text-accent' : 'text-primary']}>
                 Ver detalle
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
               </a>
@@ -77,7 +79,7 @@ import Icono from './Icono.astro';
     </div>
 
     <p class="reveal mt-6 text-center text-sm text-slate-500" style="--reveal-delay:300ms">
-      ¿Necesitas una app móvil? <a href="/servicios/apps-moviles/" class="font-semibold text-primary">También la hacemos →</a>
+      ¿No sabes cuál te conviene? <a href="/servicios/" class="font-semibold text-primary">Compara las tres formas de trabajar →</a>
     </p>
   </div>
 </section>

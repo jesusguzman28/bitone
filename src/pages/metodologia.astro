@@ -65,7 +65,7 @@ const schema = [
       proyecto, y se puede contratar solo. */}
   <section class="surface--alt px-6 py-20">
     <div class="mx-auto w-full max-w-[1020px]">
-      <div class="reveal mx-auto max-w-[760px]">
+      <div class="reveal max-w-[760px]">
         <h2 class="font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">
           {m.fases.title}
         </h2>
@@ -100,7 +100,7 @@ const schema = [
   <!-- 3. El sprint por dentro -->
   <section class="surface px-6 py-20">
     <div class="mx-auto w-full max-w-[1020px]">
-      <div class="reveal mx-auto max-w-[760px]">
+      <div class="reveal max-w-[760px]">
         <h2 class="font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">
           {m.sprint.title}
         </h2>
@@ -163,7 +163,7 @@ const schema = [
       dos frases se contradicen. */}
   <section class="surface--alt px-6 py-20">
     <div class="mx-auto w-full max-w-[1020px]">
-      <div class="reveal mx-auto max-w-[760px]">
+      <div class="reveal max-w-[760px]">
         <h2 class="font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">
           {m.cambios.title}
         </h2>
@@ -185,10 +185,10 @@ const schema = [
             {m.cambios.filas.map((c) => (
               <tr>
                 <th scope="row" class="tabla__clave">{c.tipo}</th>
-                <td class="italic text-slate-500">«{c.ejemplo}»</td>
-                <td>{c.tratamiento}</td>
-                <td class="text-slate-500">{c.decide}</td>
-                <td>
+                <td data-label="Ejemplo" class="italic text-slate-500">«{c.ejemplo}»</td>
+                <td data-label="Cómo se trata">{c.tratamiento}</td>
+                <td data-label="Quién decide" class="text-slate-500">{c.decide}</td>
+                <td data-label="Impacto">
                   <span class:list={['impacto', `impacto--${c.impacto}`]}>{c.impactoTexto}</span>
                 </td>
               </tr>
@@ -204,7 +204,7 @@ const schema = [
   <!-- 5. Un marco distinto por forma de contratación -->
   <section class="surface px-6 py-20">
     <div class="mx-auto w-full max-w-[1020px]">
-      <div class="reveal mx-auto max-w-[760px]">
+      <div class="reveal max-w-[760px]">
         <h2 class="font-display text-[clamp(1.5rem,3.2vw,2rem)] font-extrabold leading-[1.18] text-dark">
           {m.modos.title}
         </h2>
@@ -604,6 +604,44 @@ const schema = [
     color: var(--color-dark);
   }
 
+  /* En el celular la tabla se vuelve una tarjeta por fila. Con scroll lateral
+     solo se veían las dos primeras columnas y justo quedaban fuera "Quién
+     decide" e "Impacto", que es lo que el lector vino a buscar. Cada dato lleva
+     su etiqueta encima (data-label) porque la cabecera ya no se ve. */
+  @media (max-width: 640px) {
+    .tabla { min-width: 0; }
+    .tabla thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+    .tabla tbody,
+    .tabla tr,
+    .tabla th,
+    .tabla td { display: block; }
+    .tabla tbody tr { padding: 18px 20px; }
+    .tabla tbody tr + tr { border-top: 1px solid var(--hairline); }
+    .tabla tbody tr + tr th,
+    .tabla tbody tr + tr td { border-top: 0; }
+    .tabla th,
+    .tabla td { padding: 0; }
+    .tabla td { margin-top: 10px; }
+    .tabla td[data-label]::before {
+      content: attr(data-label);
+      display: block;
+      margin-bottom: 2px;
+      font-family: var(--font-display);
+      font-size: 10.5px;
+      font-style: normal;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #94a3b8;
+    }
+  }
+
   /* Semáforo de impacto. El color va con el significado —verde no mueve nada,
      ámbar puede moverlo, rojo lo mueve siempre— y el texto lo dice igual, así
      que la tabla se sigue entendiendo sin distinguir colores. */
@@ -631,7 +669,9 @@ const schema = [
 
   /* ---- Modos ---- */
   .modos { grid-template-columns: 1fr; }
-  @media (min-width: 900px) { .modos { grid-template-columns: repeat(3, 1fr); } }
+  /* auto-fit y no 3 columnas fijas: hoy son dos marcos y con tres columnas
+     quedaba un hueco a la derecha. Así ocupan el ancho sean los que sean. */
+  @media (min-width: 900px) { .modos { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); } }
 
   .modo {
     display: flex;

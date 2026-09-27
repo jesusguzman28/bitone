@@ -25,8 +25,8 @@ REM      quinto intento seguido espera 15 segundos en vez de 3 y avisa en
 REM      pantalla, para no reintentar a ciegas contra codigo roto.
 REM
 REM Importante: esto es SOLO para trabajar en la PC. La web publicada en
-REM bitwise.pe no usa esto ni depende de esta ventana: son archivos ya
-REM compilados que sirve Cloudflare. Si apagas la PC, bitwise.pe sigue arriba.
+REM bitone.pe no usa esto ni depende de esta ventana: son archivos ya
+REM compilados que sirve GitHub Pages. Si apagas la PC, bitone.pe sigue arriba.
 
 set INTENTOS=0
 set ESPERA=3

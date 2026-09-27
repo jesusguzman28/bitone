@@ -1,4 +1,4 @@
-# BIT-ONE Perú — https://bitwise.pe
+# BIT-ONE Perú — https://bitone.pe
 
 # Buscadores tradicionales
 User-agent: *
@@ -74,6 +74,6 @@ User-agent: Amazonbot
 Allow: /
 
 # Resumen del negocio en texto plano para modelos de lenguaje:
-# https://bitwise.pe/llms.txt
+# https://bitone.pe/llms.txt
 
-Sitemap: https://bitwise.pe/sitemap-index.xml
+Sitemap: https://bitone.pe/sitemap-index.xml

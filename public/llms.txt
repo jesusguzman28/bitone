@@ -55,7 +55,7 @@ sprint decide EN QUÉ ORDEN y CÓMO.
 - No hay reunión diaria con el cliente: hay tablero abierto, un punto de
   control opcional a mitad de sprint y una demo cada dos semanas.
 
-Detalle completo en https://bitwise.pe/metodologia/
+Detalle completo en https://bitone.pe/metodologia/
 
 ## Condiciones de contratación
 
@@ -113,19 +113,13 @@ ofrecían. Las direcciones antiguas redirigen a /servicios/.
 
 Todas con barra final: sin ella el servidor responde una redirección.
 
-- https://bitwise.pe/ — portada
-- https://bitwise.pe/servicios/ — las tres formas de contratar, comparadas
-- https://bitwise.pe/servicios/desarrollo-de-software-a-medida/ — proyecto cerrado
-- https://bitwise.pe/servicios/mantenimiento-de-software/ — sistemas heredados
-- https://bitwise.pe/servicios/apps-moviles/ — Android e iPhone
-- https://bitwise.pe/metodologia/ — cómo se trabaja: fases, sprints y control de cambios
-- https://bitwise.pe/proyectos/ — el software propio, con enlaces en vivo
-- https://bitwise.pe/nosotros/ — quiénes somos y cómo trabajamos
-- https://bitwise.pe/contacto/ — reunión técnica y formulario
-- https://bitwise.pe/blog/ — artículos
+- https://bitone.pe/ — portada
+- https://bitone.pe/servicios/ — las tres formas de contratar, comparadas
+- https://bitone.pe/servicios/desarrollo-de-software-a-medida/ — proyecto cerrado
+- https://bitone.pe/servicios/mantenimiento-de-software/ — sistemas heredados
+- https://bitone.pe/servicios/apps-moviles/ — Android e iPhone
+- https://bitone.pe/metodologia/ — cómo se trabaja: fases, sprints y control de cambios
+- https://bitone.pe/proyectos/ — el software propio, con enlaces en vivo
+- https://bitone.pe/nosotros/ — quiénes somos y cómo trabajamos
+- https://bitone.pe/contacto/ — reunión técnica y formulario
 
-## Nota sobre el blog
-
-Los artículos publicados hasta agosto de 2026 están escritos para pequeños
-negocios y corresponden a la etapa anterior de la empresa. No describen los
-servicios actuales.

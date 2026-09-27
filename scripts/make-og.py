@@ -60,7 +60,7 @@ d.text((72, 470), "Sistemas para empresas  -  apps móviles  -  mantenimiento", 
 
 # domain bottom-right
 df = font(SEMI, 30)
-dom = "bitwise.pe"
+dom = "bitone.pe"
 db = d.textbbox((0, 0), dom, font=df)
 d.text((W - 72 - (db[2] - db[0]), H - 72 - (db[3] - db[1])), dom, font=df, fill=(226, 232, 240))
 

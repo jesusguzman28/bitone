@@ -30,10 +30,7 @@
 // Hubo una cuarta, /servicios/equipo-de-desarrollo-dedicado/, y se retiró: es un
 // servicio que solo se puede vender cuando hay personas disponibles para
 // asignar, y publicarlo antes de eso es prometer capacidad que no se tiene.
-// Su dirección redirige en _redirects. El texto está en el historial de git
-// para cuando el equipo dé para ofrecerlo.
-//
-// La dirección vieja /servicios/erp-sistemas/ tiene su 301 en _redirects.
+// El texto está en el historial de git para cuando el equipo dé para ofrecerlo.
 // ---------------------------------------------------------------------------
 //
 // `serviciosTabs` en site.ts sigue siendo la fuente del precio, el plazo y la

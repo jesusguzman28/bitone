@@ -1,0 +1,50 @@
+# Publica la web en GitHub Pages cada vez que se sube algo a main.
+#
+# Compila con Astro y sube la carpeta dist. El dominio bitone.pe lo fija el
+# archivo public/CNAME, que viaja dentro de dist en cada despliegue.
+name: Publicar web
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Si se suben dos cambios seguidos, gana el último y no se pisan.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  compilar:
+    runs-on: ubuntu-latest
+    steps:
+      # Historial completo: astro.config.mjs lee la fecha del último commit que
+      # tocó src/ para el `lastmod` del sitemap. Con un clon superficial esa
+      # fecha sería siempre la del despliegue.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  publicar:
+    needs: compilar
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.despliegue.outputs.page_url }}
+    steps:
+      - id: despliegue
+        uses: actions/deploy-pages@v4

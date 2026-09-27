@@ -280,7 +280,7 @@ export const metodologia = {
 
   // ---- Definición de terminado ----
   terminado: {
-    title: 'Qué significa "terminado"',
+    title: 'Qué significa “terminado”',
     intro:
       'Si no se acuerda antes, "terminado" acaba significando cosas distintas para cada lado — y eso se descubre siempre el día de la entrega. Estas cinco se cumplen o la tarea no se marca como hecha.',
     items: [
