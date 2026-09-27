@@ -96,7 +96,7 @@ export const proyectos: readonly Proyecto[] = [
     logo: 'apuray',
     color: '#0086EA',
     esMarcador: false,
-    stack: ['laravel', 'mysql', 'tailwind', 'kotlin', 'compose', 'firebase', 'googlemaps'],
+    stack: ['android', 'kotlin', 'compose', 'googlemaps', 'firebase', 'php', 'laravel', 'mysql'],
     anio: null,
   },
   {
@@ -110,7 +110,7 @@ export const proyectos: readonly Proyecto[] = [
     logo: null,
     color: '#5B4CF0',
     esMarcador: false,
-    stack: ['laravel', 'kotlin', 'firebase'],
+    stack: ['android', 'kotlin', 'firebase', 'php', 'laravel'],
     anio: null,
   },
   {
@@ -124,7 +124,7 @@ export const proyectos: readonly Proyecto[] = [
     logo: 'mindblock',
     color: '#F97316',
     esMarcador: false,
-    stack: ['laravel', 'firebase'],
+    stack: ['esp32', 'bluetooth', 'jquery', 'bootstrap', 'firebase', 'php', 'laravel'],
     anio: null,
   },
   {
@@ -138,7 +138,7 @@ export const proyectos: readonly Proyecto[] = [
     logo: 'jmf',
     color: '#2A66C0',
     esMarcador: false,
-    stack: ['laravel', 'mysql', 'tailwind', 'kotlin', 'compose', 'firebase'],
+    stack: ['android', 'kotlin', 'compose', 'firebase', 'php', 'laravel', 'mysql', 'tailwind'],
     anio: null,
   },
   {
@@ -152,7 +152,7 @@ export const proyectos: readonly Proyecto[] = [
     logo: null,
     color: '#16A34A',
     esMarcador: false,
-    stack: ['laravel'],
+    stack: ['php', 'laravel'],
     anio: null,
   },
   {
@@ -166,7 +166,7 @@ export const proyectos: readonly Proyecto[] = [
     logo: 'liberalismo-comunal',
     color: '#E7653E',
     esMarcador: false,
-    stack: ['react', 'vite'],
+    stack: ['react', 'vite', 'githubpages'],
     anio: null,
   },
 ];
