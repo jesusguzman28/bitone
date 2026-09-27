@@ -180,7 +180,9 @@ try {
   // Archivos que tienen que llegar a dist. CNAME es el que le dice a GitHub
   // Pages que la web va en bitone.pe: si falta, cada despliegue borra el
   // dominio propio y la web vuelve a jesusguzman28.github.io.
-  for (const archivo of ['CNAME', '404.html', 'robots.txt', 'sitemap-index.xml']) {
+  const conDominio = await stat(join(dist, 'CNAME')).then(() => true, () => false);
+  if (!conDominio) console.log('  aviso sin public/CNAME: se publicará en la dirección provisional de github.io');
+  for (const archivo of [...(conDominio ? ['CNAME'] : []), '404.html', 'robots.txt', 'sitemap-index.xml']) {
     try {
       await stat(join(dist, archivo));
       bien(`${archivo} llegó a dist`);

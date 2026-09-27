@@ -1,7 +1,11 @@
 # Publica la web en GitHub Pages cada vez que se sube algo a main.
 #
-# Compila con Astro y sube la carpeta dist. El dominio bitone.pe lo fija el
-# archivo public/CNAME, que viaja dentro de dist en cada despliegue.
+# Compila con Astro y sube la carpeta dist.
+#
+# Dominio: mientras no exista public/CNAME, la web sale en
+# https://jesusguzman28.github.io/bitone/. Para pasar a bitone.pe: crear
+# public/CNAME con la línea "bitone.pe" y poner el mismo dominio en
+# Settings → Pages → Custom domain.
 name: Publicar web
 
 on:
@@ -35,6 +39,12 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      # Sin public/CNAME no hay dominio propio todavía: la web se sirve en
+      # https://<usuario>.github.io/<repo>/ y hay que anteponer esa subcarpeta
+      # a todas las rutas. Al crear public/CNAME este paso deja de correr.
+      - name: Ruta provisional en github.io
+        if: ${{ hashFiles('public/CNAME') == '' }}
+        run: node scripts/ruta-provisional.mjs "/${{ github.event.repository.name }}" "https://${{ github.repository_owner }}.github.io"
       - uses: actions/upload-pages-artifact@v5
         with:
           path: dist

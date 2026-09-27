@@ -26,7 +26,15 @@ desarrollo para comprobar que arranca. Si no dice "TODO EN ORDEN", no se sube.
 ## Publicar
 
 Cada `git push` a `main` publica solo: el flujo `.github/workflows/publicar.yml`
-compila y sube `dist` a GitHub Pages. El dominio lo fija `public/CNAME`.
+compila y sube `dist` a GitHub Pages.
+
+Mientras bitone.pe no esté activo, la web sale en
+https://jesusguzman28.github.io/bitone/ (con `noindex`, para que Google no la
+tome como la definitiva). Para pasar al dominio:
+
+1. Apuntar los DNS de bitone.pe a GitHub Pages.
+2. Crear `public/CNAME` con la línea `bitone.pe` y subirlo.
+3. En Settings → Pages → Custom domain poner `bitone.pe` y activar HTTPS.
 
 Para comprobar la web ya publicada:
 
