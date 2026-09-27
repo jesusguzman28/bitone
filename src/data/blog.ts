@@ -450,6 +450,61 @@ export const blog: readonly Post[] = [
     ],
     image: portada('caso-quipuy-plataforma-educativa-preuniversitaria'),
   },
+  {
+    slug: 'caso-de-excel-y-google-forms-a-una-intranet',
+    title: 'Caso: de dos Excel y un Google Form a una intranet de operaciones',
+    seoTitle: 'Caso: de Excel y Google Forms a una intranet',
+    excerpt:
+      'Cómo una consultora de ingeniería pasó de planillas sueltas a una intranet con app de asistencia: qué se construyó y qué decidimos dejar fuera a propósito.',
+    date: '2026-09-27',
+    category: 'Casos',
+    readTime: '5 min',
+    keywords: ['intranet para empresas', 'reemplazar Excel por un sistema', 'sistema a medida', 'app de asistencia de personal'],
+    servicio: { href: '/servicios/desarrollo-de-software-a-medida/', label: 'Desarrollo de software a medida' },
+    intro:
+      'Es un sistema interno para un cliente, así que no publicamos su nombre ni pantallas. Sí podemos contar el problema y las decisiones, porque son las mismas que tiene cualquier empresa que un día se da cuenta de que su operación vive repartida entre planillas.',
+    secciones: [
+      {
+        h2: 'El punto de partida',
+        parrafos: [
+          'Una consultora de ingeniería con proyectos en paralelo y personal rotando entre ellos. Todo se controlaba con dos archivos de Excel —uno para el avance de los proyectos y otro para el seguimiento comercial— y un Google Form donde el personal marcaba su asistencia cada día.',
+          'Cada archivo funcionaba solo, pero entre ellos no se hablaban: el mismo proyecto o la misma persona estaba escrita de tres formas distintas, y cruzar la información para saber quién trabajó en qué, y cuándo, era trabajo manual de cada fin de mes.',
+        ],
+      },
+      {
+        h2: 'Lo que se construyó',
+        parrafos: ['Una intranet que junta todo en una sola base de datos, con dos puertas:'],
+        lista: [
+          'Web, para la oficina: clientes, personal y proveedores; proyectos con sus entregables y adendas; asignaciones del personal con su historial; seguimiento comercial; y reportes con un tablero distinto para cada rol.',
+          'App Android, para el personal: marca la asistencia desde el celular en lugar del formulario y recibe avisos por notificación.',
+          'Un solo backend en Laravel con MySQL que atiende a las dos, con acceso por usuario y permisos según el rol.',
+        ],
+      },
+      {
+        h2: 'Decisiones que importaron',
+        parrafos: [],
+        lista: [
+          'Entender la operación antes de copiar la planilla. Uno de los Excel se llamaba "Estado de resultados" y en realidad era un cronograma. Si se hubiera construido lo que decía el nombre, el sistema habría resuelto un problema que no existía.',
+          'Historial en lugar de sobrescribir. Cada asignación de personal guarda desde cuándo y hasta cuándo, así el sistema responde quién estuvo en qué proyecto en cualquier fecha, no solo hoy.',
+          'Dejar fuera los montos, a propósito. El sistema registra los eventos comerciales —qué se valorizó, qué se pagó— pero sin importes. La parte financiera sigue en contabilidad. Menos alcance, menos riesgo y un sistema que se terminó y se usa.',
+          'La app con sesión por dispositivo. Cada celular recibe su propio acceso y sus propias notificaciones, y se puede revocar sin afectar al resto.',
+        ],
+      },
+      {
+        h2: 'Lo que nos dejó',
+        parrafos: [
+          'Migrar las planillas fue la mitad del trabajo: nombres escritos de varias formas, fechas en formatos distintos, filas que en realidad eran notas. Por eso en los proyectos de este tipo la migración de datos tiene su propia etapa en el cronograma, y no se deja para la última semana.',
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: '¿Se puede reemplazar el Excel sin detener la operación?',
+        a: 'Sí. El sistema se construye y se prueba en paralelo, los datos se migran por etapas y el Excel se deja de usar recién cuando el equipo ya trabaja en el sistema.',
+      },
+    ],
+    image: portada('caso-de-excel-y-google-forms-a-una-intranet'),
+  },
 ];
 
 export const blogPorSlug = (slug: string) => blog.find((p) => p.slug === slug);
