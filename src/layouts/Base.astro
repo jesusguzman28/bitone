@@ -7,7 +7,7 @@ import { getImage } from 'astro:assets';
 import Cabecera from '../components/Cabecera.astro';
 import Pie from '../components/Pie.astro';
 import WhatsAppFijo from '../components/WhatsAppFijo.astro';
-import { empresa, redes } from '../data/empresa';
+import { empresa, redes, cofundadores } from '../data/empresa';
 import { signos, nombresDeSigno, type NombreSigno } from '../lib/signos';
 import { simbolo, palabra } from '../lib/logo';
 import tarjeta from '../assets/marca/tarjeta.png';
@@ -63,6 +63,15 @@ const datosDeEmpresa = {
     },
   },
   sameAs: redes.map((r) => r.url),
+  // Los tres se enseñan en la portada y en /nosotros/. Quien tiene sitio personal lleva el
+  // @id del nodo Person que declara allá, y así las dos entidades quedan unidas.
+  founder: cofundadores.map((c) => ({
+    '@type': 'Person',
+    ...(c.web && { '@id': c.web.id, url: c.web.url }),
+    name: c.nombre,
+    jobTitle: c.rol,
+    sameAs: c.web ? [c.linkedin, c.web.url] : [c.linkedin],
+  })),
 };
 ---
 

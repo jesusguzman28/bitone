@@ -80,6 +80,9 @@ export interface Cofundador {
   rol: 'Cofundador';
   linkedin: string;
   foto: ImageMetadata;
+  /** Su sitio personal, si tiene: `id` es el nodo Person que ese sitio declara, para que
+      Google ate las dos entidades. */
+  web?: { url: string; id: string };
   /** El encuadre de su retrato. Lo usan igual la portada (Equipo) y /nosotros/
       (PortadaFirmada): las mismas tres caras se ven igual en las dos páginas. */
   encuadre?: Encuadre;
@@ -95,7 +98,8 @@ export const cofundadores: Cofundador[] = [
   { nombre: 'Gabriel Guzmán Ramos', pila: 'Gabriel', rol: 'Cofundador', linkedin: 'https://www.linkedin.com/in/gabriel-guzman-ramos/', foto: fotoGabriel, encuadre: { zoom: 1.5, x: 44, y: 36 } },
   { nombre: 'Guillermo Vilcas', pila: 'Guillermo', rol: 'Cofundador', linkedin: 'https://www.linkedin.com/in/guillermo-vilcas-cabieses/', foto: fotoGuillermo, encuadre: { zoom: 1.62, x: 49, y: 37.5 } },
   // Su foto ya viene recortada en círculo sobre gris claro: se amplía lo justo para que el aro no asome.
-  { nombre: 'Jesús Guzmán', pila: 'Jesús', rol: 'Cofundador', linkedin: 'https://www.linkedin.com/in/jesusguzman01/', foto: fotoJesus, encuadre: { zoom: 1.16, x: 50, y: 50 } },
+  { nombre: 'Jesús Guzmán', pila: 'Jesús', rol: 'Cofundador', linkedin: 'https://www.linkedin.com/in/jesusguzman01/', foto: fotoJesus, encuadre: { zoom: 1.16, x: 50, y: 50 },
+    web: { url: 'https://jesusguzman28.github.io/', id: 'https://jesusguzman28.github.io/#pedro' } },
 ];
 
 /* ---------- Cómo trabajamos ---------- */

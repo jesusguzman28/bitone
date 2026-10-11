@@ -88,7 +88,10 @@ const gente = personas.map((p) => {
             </span>
             <p class="rotulo pf__rol">{p.rol}</p>
             <h3 class="pf__n"><span class="renglon">{p.primero}</span>{' '}{p.apellidos.map((a, i) => <span class="pf__ap">{a}{i < p.apellidos.length - 1 && ' '}</span>)}</h3>
-            <a class="enlace menor pf__ir" href={p.linkedin} target="_blank" rel="noopener">LinkedIn<span class="solo-lector"> de {p.nombre}</span><Icono nombre="fuera" /></a>
+            <span class="pf__enlaces">
+              <a class="enlace menor pf__ir" href={p.linkedin} target="_blank" rel="noopener">LinkedIn<span class="solo-lector"> de {p.nombre}</span><Icono nombre="fuera" /></a>
+              {p.web && <a class="enlace menor pf__web" href={p.web.url} target="_blank" rel="noopener">Web personal<span class="solo-lector"> de {p.nombre}</span><Icono nombre="fuera" /></a>}
+            </span>
           </li>
         ))}
       </ul>
@@ -152,7 +155,9 @@ const gente = personas.map((p) => {
   /* Una palabra por renglón: el corte del nombre no depende del ancho de la ventana. */
   .pf__n { margin-top: 2px; padding-right: 10px; font-weight: 700; font-stretch: 110%; font-size: var(--t-texto); letter-spacing: -.02em; line-height: 1.18; }
   .pf__ap { display: block; }
-  .pf__ir { align-self: end; }
+  /* Arriba de su fila: los LinkedIn quedan a la misma altura aunque una persona lleve
+     también su web personal debajo. */
+  .pf__enlaces { align-self: start; display: grid; justify-items: start; }
 
   .pf__cenefa { overflow: hidden; }
   .pf__cenefa :global(.pf__friso--celular) { display: none; }
@@ -162,6 +167,8 @@ const gente = personas.map((p) => {
      cara no saca a nadie de la página. */
   @media (hover: hover) and (pointer: fine) {
     .pf__ir::after { content: ""; position: absolute; inset: 0; }
+    /* La web personal queda por encima de esa capa: se puede tocar aparte. */
+    .pf__web { position: relative; z-index: 1; }
     .pf__p:hover .pf__modulo::before { border-color: var(--rojo); }
   }
   /* Con teclado, el marco avisa igual que con el ratón. */
