@@ -171,7 +171,14 @@ const graph: Record<string, unknown>[] = [
     // los fundadores, y eso salió de la página: un dato estructurado tiene que
     // representar contenido visible, así que declararlo cuando ya no se enseña
     // en ningún sitio es justo lo que Google marca como marcado engañoso.
-    founder: fundadores.map((f) => ({
+    founder: fundadores.map((f) => ('web' in f ? {
+      '@type': 'Person',
+      '@id': f.web + '#pedro',
+      name: f.nombre,
+      jobTitle: f.rol,
+      url: f.web,
+      sameAs: [f.linkedin, f.web],
+    } : {
       '@type': 'Person',
       name: f.nombre,
       jobTitle: f.rol,

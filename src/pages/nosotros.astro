@@ -76,6 +76,7 @@ import { nosotros, fundadores, site } from '../data/site';
                 <span class="sr-only">Perfil de {f.nombre} en LinkedIn</span>
               </span>
             </a>
+            {'web' in f && <a href={f.web} class="fundador__web">Sitio personal de {f.nombre}</a>}
           </li>
         ))}
       </ul>
@@ -201,5 +202,7 @@ import { nosotros, fundadores, site } from '../data/site';
     background: rgba(10, 102, 194, 0.09);
   }
 
+  .fundador__web { display: inline-flex; align-items: center; min-height: 44px; margin-left: 4px; font-size: .92rem; color: var(--color-dark); text-decoration: underline; text-underline-offset: 3px; }
+  .fundador__web:hover { color: var(--color-primary); }
   @media (prefers-reduced-motion: reduce) { .fundador { transition: none; } }
 </style>

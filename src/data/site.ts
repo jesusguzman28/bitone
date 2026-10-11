@@ -695,6 +695,9 @@ export const fundadores = [
     nombre: 'Jesús Guzmán',
     rol: 'Fundador',
     linkedin: 'https://www.linkedin.com/in/jesusguzman01/',
+    // Su sitio personal: el mismo nodo Person que declara allá (@id con
+    // #pedro) queda enlazado desde aquí, y Google ata las dos entidades.
+    web: 'https://jesusguzman28.github.io/',
   },
 ] as const;
 
