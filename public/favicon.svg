@@ -1,15 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Un quipu mínimo: la cuerda madre y tres cuerdas con nudos, en los
-       colores de la marca (añil, grana, maíz). -->
-  <rect width="64" height="64" rx="12" fill="#1A2044"/>
-  <rect x="10" y="14" width="44" height="5" rx="2.5" fill="#E9E3D2"/>
-  <rect x="17" y="17" width="5" height="34" rx="2.5" fill="#D91023"/>
-  <rect x="30" y="17" width="5" height="26" rx="2.5" fill="#E9E3D2"/>
-  <rect x="43" y="17" width="5" height="38" rx="2.5" fill="#E8A317"/>
-  <ellipse cx="19.5" cy="30" rx="5" ry="3.6" fill="#E8A317"/>
-  <ellipse cx="19.5" cy="40" rx="5" ry="3.6" fill="#E8A317"/>
-  <ellipse cx="32.5" cy="33" rx="5" ry="3.6" fill="#D91023"/>
-  <ellipse cx="45.5" cy="28" rx="5" ry="3.6" fill="#E9E3D2"/>
-  <ellipse cx="45.5" cy="38" rx="5" ry="3.6" fill="#E9E3D2"/>
-  <ellipse cx="45.5" cy="48" rx="5" ry="3.6" fill="#E9E3D2"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="#D91023" d="M0 0h16v7h-2v2h2v7h-16Z"/><path fill="#F4EEE4" d="M5 3h7v4h-7ZM5 9h8v4h-8Z"/><path fill="#E8A317" d="M8 10h2v2h-2Z"/></svg>

@@ -1,0 +1,78 @@
+---
+// "Si pides algo nuevo", solo en /como-trabajamos/. Los cuatro casos del brief como un
+// cuadro que se lee de un vistazo: arriba, qué pides; en grande, qué pasa con el precio.
+// Van en dos grupos, asentados en los dos orígenes de la página (módulos 1 y 9): los
+// dos casos que no tocan el precio y los dos que sí. El único que lo sube va en rojo.
+//
+// En escritorio son cuatro columnas de cuatro módulos; los renglones de las cuatro se
+// alinean entre sí (subrejilla), aunque un veredicto ocupe dos renglones y otro uno.
+// En tableta, dos columnas por grupo; en celular, una lista.
+// Cada grupo es un grupo con nombre (role="group"), no una sección: dos regiones más
+// dentro de la región de la página serían ruido para el lector de pantalla.
+// Trae su retícula: va directo dentro de la sección.
+import Rotulo from '../Rotulo.astro';
+import type { GrupoDeCambios } from '../../data/como-trabajamos';
+
+interface Props {
+  grupos: GrupoDeCambios[];
+  class?: string;
+}
+
+const { grupos, class: clase, ...resto } = Astro.props;
+---
+
+<div class:list={['pides', 'reticula', clase]} {...resto}>
+  {grupos.map((g, i) => (
+    <div class:list={['grupo', { 'grupo--mueve': g.mueve }]} role="group" aria-labelledby={`pides-${i}`}>
+      <Rotulo como="h3" punto={g.mueve ? 'lleno' : 'hueco'} class="grupo__rot" id={`pides-${i}`} style={`--col:${i * 8 + 1}`}>{g.rotulo}</Rotulo>
+      <ul class="grupo__casos" role="list">
+        {g.casos.map((c, j) => (
+          <li class="caso" style={`--col:${i * 8 + j * 4 + 1}`} data-rev>
+            <h4 class="rotulo caso__si">{c.titulo}</h4>
+            <p class:list={['subtitulo', 'caso__pasa', { 'caso__pasa--sube': g.mueve && j === 0 }]}>{c.etiqueta}.</p>
+            <p class="menor caso__ej">{c.texto}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
+</div>
+
+<style>
+  /* Cuatro filas para toda la rejilla: el rótulo del grupo y los tres renglones de cada caso. */
+  .pides { grid-template-rows: repeat(4, auto); }
+  .grupo, .grupo__casos { display: contents; }
+
+  /* --col es el módulo donde arranca cada cosa: ocho módulos por grupo, cuatro por caso. */
+  .pides :global(.grupo__rot) { grid-row: 1; grid-column: var(--col) / span 8; padding-top: 14px; border-top: 1px solid var(--filete-fuerte); }
+  /* El filete del primer grupo se corta antes del módulo 9: se ven dos grupos, no una fila. */
+  @media (min-width: 960px) {
+    .grupo:first-child :global(.grupo__rot) { margin-right: calc(var(--u) * .4); }
+  }
+  .caso { grid-row: 2 / span 3; grid-column: var(--col) / span 4; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: subgrid; align-content: start; padding-right: calc(var(--u) * .4); }
+  .caso__si { margin-top: calc(var(--u) * .42); color: var(--texto-2); }
+  .caso__pasa { margin-top: 8px; }
+  .caso__pasa--sube { color: var(--rojo); }
+  .caso__ej { margin-top: 12px; color: var(--texto-2); }
+
+  /* Tableta: cada grupo ocupa el ancho, con sus dos casos lado a lado. */
+  @media (max-width: 959px) {
+    .pides { grid-template-rows: none; row-gap: calc(var(--u) * .7); }
+    .grupo { display: block; grid-column: 1 / -1; }
+    .grupo__casos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: calc(var(--u) * .5); }
+    .caso { grid-row: auto; grid-column: auto; display: block; padding-right: 0; }
+    .caso__si { margin-top: calc(var(--u) * .3); }
+  }
+  /* Celular: una lista, con un filete entre los dos casos de cada grupo. */
+  @media (max-width: 699px) {
+    .pides { row-gap: 26px; }
+    .pides :global(.grupo__rot) { padding-top: 12px; }
+    .grupo__casos { grid-template-columns: minmax(0, 1fr); }
+    .caso { padding-block: 14px; }
+    .caso + .caso { border-top: 1px solid var(--filete); }
+    .caso:last-child { padding-bottom: 0; }
+    .caso__si { margin-top: 0; }
+    .caso__pasa { margin-top: 4px; }
+    .caso__ej { margin-top: 6px; }
+  }
+</style>

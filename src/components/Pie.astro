@@ -1,0 +1,146 @@
+---
+// Pie del sitio: la cenefa (con el signo de la página), el mapa, el contacto,
+// las redes y la línea formal. Aquí, y solo aquí, se aclaran los tres nombres
+// (marca, empresa y cuenta de Google Play) y se escribe el RUC: una vez por página.
+// El mapa sale de data/navegacion.ts y solo pinta enlaces que llevan a algún sitio.
+import Logo from './Logo.astro';
+import Friso from './Friso.astro';
+import { empresa, redes, enlaceWhatsApp, aclaracionNombres } from '../data/empresa';
+import { mapa } from '../data/navegacion';
+import type { NombreSigno } from '../lib/signos';
+
+interface Props {
+  /** Signo dominante de la página: es el que más se repite en la cenefa. */
+  signo?: NombreSigno;
+}
+
+const { signo } = Astro.props;
+const anio = new Date().getFullYear();
+const conServicios = mapa.servicios.length > 0;
+---
+
+<footer class="pie plano plano--tinta">
+  <!-- La cenefa va entre el cierre y el pie, los dos tinta: no usa ese tono en ninguna
+       fila (sinTono), o sus casillas se fundirían con el plano y los signos quedarían flotando. -->
+  <div class="pie__cenefa">
+    <Friso tipo="tejido" columnas={18} filas={2} signo={signo} semilla={21} sinTono="tinta" class="pie__friso pie__friso--ancho" />
+    <Friso tipo="tejido" columnas={6} filas={1} signo={signo} semilla={5} sinTono="tinta" class="pie__friso pie__friso--celular" />
+  </div>
+
+  <div class:list={['reticula', 'pie__cuerpo', { 'pie__cuerpo--sin-servicios': !conServicios }]} id="mapa">
+    <div class="pie__marca">
+      <a href="/" aria-label="Bit One, ir al inicio"><Logo /></a>
+      <p>{empresa.lema}</p>
+    </div>
+
+    {conServicios && (
+      <nav class="pie__col pie__col--servicios" aria-label="Servicios, en el pie">
+        <p class="rotulo pie__rot">Servicios</p>
+        <ul>{mapa.servicios.map((p) => <li><a href={p.ruta}>{p.nombre}</a></li>)}</ul>
+      </nav>
+    )}
+
+    <nav class="pie__col pie__col--bitone" aria-label="Bit One, en el pie">
+      <p class="rotulo pie__rot">Bit One</p>
+      <ul>{mapa.enlaces.map((e) => <li><a href={e.href}>{e.nombre}</a></li>)}</ul>
+    </nav>
+
+    <div class="pie__col pie__col--contacto">
+      <p class="rotulo pie__rot">WhatsApp</p>
+      <ul>
+        <li><a href={enlaceWhatsApp()} target="_blank" rel="noopener">{empresa.telefono}<span class="solo-lector"> (abre WhatsApp)</span></a></li>
+        <li class="pie__dato">{empresa.horario}</li>
+        <li class="pie__dato">{empresa.ciudad}</li>
+      </ul>
+    </div>
+
+    <div class="pie__redes">
+      <p class="rotulo pie__rot">Redes</p>
+      <ul>{redes.map((r) => <li><a href={r.url} target="_blank" rel="noopener">{r.nombre}</a></li>)}</ul>
+    </div>
+
+    <div class="pie__legal">
+      <p class="pie__nombres">{aclaracionNombres}</p>
+      <p class="rotulo">© {anio} {empresa.marca} · Hecho en Lima</p>
+      <p class="rotulo"><a class="pie__correo" href={`mailto:${empresa.correo}`}>{empresa.correo}</a></p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .pie { padding-bottom: 28px; }
+  .pie__cenefa { overflow: hidden; }
+  .pie__cenefa :global(.pie__friso--celular) { display: none; }
+  .pie__cuerpo { padding-top: calc(var(--u) * .9); row-gap: calc(var(--u) * .7); align-items: start; }
+
+  /* Cuatro columnas iguales de cuatro módulos: marca, servicios, Bit One y WhatsApp. */
+  .pie__marca { grid-column: 1 / 5; }
+  .pie__marca a { display: inline-flex; align-items: center; min-height: 44px; }
+  /* Renglones parejos: el lema no deja su última palabra sola. */
+  .pie__marca p { margin-top: 10px; max-width: 14em; color: var(--texto-2); text-wrap: balance; }
+
+  .pie__col--servicios { grid-column: 5 / 9; }
+  .pie__col--bitone { grid-column: 9 / 13; }
+  .pie__col--contacto { grid-column: 13 / -1; }
+  .pie__cuerpo--sin-servicios .pie__col--bitone { grid-column: 5 / 9; }
+  .pie__cuerpo--sin-servicios .pie__col--contacto { grid-column: 9 / -1; }
+  .pie__rot { margin-bottom: 8px; color: var(--texto-2); }
+  .pie li { line-height: 1.3; }
+  .pie__col a, .pie__redes a { display: inline-flex; align-items: center; min-height: 36px; text-decoration: none; }
+  .pie__dato { display: flex; align-items: center; min-height: 32px; color: var(--texto-2); }
+
+  .pie__redes { grid-column: 5 / -1; display: flex; align-items: baseline; gap: 28px; padding-top: 18px; border-top: 1px solid var(--filete); }
+  .pie__redes .pie__rot { margin: 0; }
+  .pie__redes ul { display: flex; flex-wrap: wrap; gap: 0 28px; }
+
+  /* La línea formal. La aclaración de los nombres se lee como una frase, no como letra chica. */
+  .pie__legal { grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 40px; padding-top: 18px; border-top: 1px solid var(--filete); color: var(--texto-2); }
+  .pie__nombres { flex: 1 1 26em; font-size: var(--t-menor); line-height: 1.45; color: var(--texto); }
+  /* El correo es un Gmail: va, pero chico y al final. */
+  .pie__correo { display: inline-flex; align-items: center; min-height: 44px; margin-block: -13px; color: inherit; text-transform: none; letter-spacing: .01em; text-underline-offset: .25em; }
+
+  @media (hover: hover) and (pointer: fine) {
+    .pie__col a:hover, .pie__redes a:hover { text-decoration: underline; text-underline-offset: .25em; text-decoration-thickness: 1.5px; }
+    .pie__correo:hover { color: var(--hueso); }
+  }
+
+  @media (max-width: 959px) {
+    /* Como la cenefa de la portada interior: se ve la franja central, diez casillas de un
+       módulo. A todo el ancho serían dieciocho de 45 px, fuera de la retícula. */
+    .pie__cenefa :global(.pie__friso--ancho) { width: 180%; margin-left: -40%; }
+    .pie__marca { grid-column: 1 / -1; }
+    .pie__col--servicios { grid-column: 1 / 4; }
+    .pie__col--bitone { grid-column: 4 / 6; }
+    .pie__col--contacto { grid-column: 6 / -1; }
+    .pie__cuerpo--sin-servicios .pie__col--bitone { grid-column: 1 / 5; }
+    .pie__cuerpo--sin-servicios .pie__col--contacto { grid-column: 5 / -1; }
+    .pie__redes { grid-column: 1 / -1; }
+  }
+
+  @media (max-width: 699px) {
+    .pie { padding-bottom: 20px; }
+    .pie__cenefa :global(.pie__friso--ancho) { display: none; }
+    .pie__cenefa :global(.pie__friso--celular) { display: block; }
+    .pie__cuerpo { padding-top: 22px; row-gap: 14px; column-gap: 0; }
+    .pie__marca { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 16px; }
+    .pie__marca p { margin: 0; max-width: none; font-size: var(--t-menor); }
+    /* Dos columnas de enlaces y, debajo, WhatsApp en su propia fila de lado a lado. */
+    .pie__col--servicios { grid-column: 1 / 4; }
+    .pie__col--bitone { grid-column: 4 / -1; }
+    .pie__cuerpo--sin-servicios .pie__col--bitone { grid-column: 1 / -1; }
+    .pie__col--contacto, .pie__cuerpo--sin-servicios .pie__col--contacto { grid-column: 1 / -1; display: flex; align-items: baseline; justify-content: space-between; padding-top: 6px; border-top: 1px solid var(--filete); }
+    .pie__col--contacto .pie__rot { margin: 0; }
+    .pie__col--contacto ul { text-align: right; padding-bottom: 8px; }
+    .pie__rot { margin-bottom: 2px; }
+    .pie__col a, .pie__redes a { min-height: 44px; }
+    .pie__cuerpo--sin-servicios .pie__col--bitone ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    /* El horario y la ciudad no se esconden: van en un renglón bajo el teléfono. */
+    .pie__dato { display: inline; min-height: 0; font-size: var(--t-menor); }
+    .pie__dato + .pie__dato::before { content: " · "; }
+    .pie__redes { display: block; padding-top: 6px; }
+    .pie__redes .pie__rot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+    .pie__redes ul { gap: 0 20px; }
+    .pie__legal { display: grid; padding-top: 14px; gap: 6px; }
+    .pie__correo { margin-block: -8px -10px; }
+  }
+</style>

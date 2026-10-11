@@ -1,0 +1,46 @@
+---
+// Una escena: varios objetos (dispositivos, una foto recortada) en la misma celda,
+// montados unos sobre otros. Son grandes y se salen del margen de la página a
+// propósito, hasta que el borde de la ventana los corta. Trae sus tres cortes.
+//   <Escena sangra="derecha">
+//     <Dispositivo tipo="laptop" … />                               el primero es el objeto principal
+//     <Dispositivo tipo="celular" … data-en="abajo-izquierda" class="mi-celular" />
+//   </Escena>
+// `data-en` coloca un objeto secundario en una esquina; su tamaño y su desfase
+// los pone la página con una clase (--ancho, margin).
+// La sección que la contiene lleva overflow: hidden (o clip) para que lo que se
+// sale no cree barra horizontal.
+interface Props {
+  /** Hacia qué lado se sale del margen. */
+  sangra?: 'derecha' | 'izquierda';
+  class?: string;
+}
+
+const { sangra = 'derecha', class: clase, ...resto } = Astro.props;
+---
+
+<div class:list={['escena', `escena--${sangra}`, clase]} {...resto}>
+  <slot />
+</div>
+
+<style>
+  .escena { display: grid; min-width: 0; }
+  .escena > :global(*) { grid-area: 1 / 1; }
+  .escena > :global([data-en]) { z-index: 1; align-self: end; }
+  .escena > :global([data-en="abajo-izquierda"]) { justify-self: start; }
+  .escena > :global([data-en="abajo-derecha"]) { justify-self: end; }
+
+  /* Escritorio: el objeto pasa el margen (1 módulo) y el borde de la ventana lo corta. */
+  .escena--derecha { margin-right: calc(var(--u) * -3); }
+  .escena--izquierda { margin-left: calc(var(--u) * -2); }
+
+  @media (max-width: 959px) {
+    .escena--derecha { margin-right: calc(var(--u) * -1.8); }
+    .escena--izquierda { margin-left: calc(var(--u) * -1.6); }
+  }
+  /* Celular: el margen mide 0,3 módulos. */
+  @media (max-width: 699px) {
+    .escena--derecha { margin: 0 calc(var(--u) * -1.1) 0 calc(var(--u) * .9); }
+    .escena--izquierda { margin: 0 calc(var(--u) * .6) 0 calc(var(--u) * -.9); }
+  }
+</style>

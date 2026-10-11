@@ -1,0 +1,48 @@
+---
+// La única forma de poner una foto o una captura en el sitio. Envuelve a
+// <Picture> de astro:assets: genera AVIF y WebP en los anchos pedidos, y pone
+// width, height, carga perezosa y decodificación asíncrona.
+//   import captura from '../assets/proyectos/apuray-web.png';
+//   <Imagen src={captura} alt="…" anchos={[480, 960]} tamanos="(max-width: 699px) 90vw, 50vw" />
+// Fuera de la primera pantalla siempre es perezosa. Solo la imagen principal de
+// una portada lleva prioridad.
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: ImageMetadata;
+  /** Texto alternativo. Vacío ('') solo si la imagen es decorativa. */
+  alt: string;
+  /** Anchos en píxeles que se generan. El mayor no debe pasar del original. */
+  anchos?: number[];
+  /** Atributo sizes: cuánto mide la imagen en pantalla según el ancho de la ventana. */
+  tamanos?: string;
+  /** Imagen de primera pantalla: se carga de inmediato y con prioridad. */
+  prioridad?: boolean;
+  class?: string;
+}
+
+const { src, alt, anchos, tamanos = '100vw', prioridad = false, class: clase, ...resto } = Astro.props;
+// Las medidas se leen de una copia (src.clone, que Astro da al compilar). Leer
+// src.width del original le dice a Astro que el archivo fuente se usa tal cual, y
+// entonces deja el PNG de cientos de KB en la carpeta publicada aunque nadie lo pida.
+const ancho = ((src as ImageMetadata & { clone?: ImageMetadata }).clone ?? src).width;
+const lista = (anchos ?? [Math.min(ancho, 640), ancho]).filter((a, i, t) => a <= ancho && t.indexOf(a) === i);
+// En desarrollo solo WebP: codificar AVIF en cada recarga carga demasiado la máquina.
+const formatos: ('avif' | 'webp')[] = import.meta.env.DEV ? ['webp'] : ['avif'];
+---
+
+<Picture
+  src={src}
+  alt={alt}
+  widths={lista.length ? lista : [ancho]}
+  sizes={tamanos}
+  formats={formatos}
+  fallbackFormat="webp"
+  quality={72}
+  loading={prioridad ? 'eager' : 'lazy'}
+  fetchpriority={prioridad ? 'high' : undefined}
+  decoding="async"
+  class={clase}
+  {...resto}
+/>

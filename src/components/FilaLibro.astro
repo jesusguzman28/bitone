@@ -1,0 +1,89 @@
+---
+// Fila de libro mayor: la forma de listar cosas en el sitio (proyectos, personas,
+// casos). Tres zonas: una marca a la izquierda, el contenido y un cierre a la derecha.
+//   <FilaLibro titulo="Grupo JMF" rotulo="Sistema interno">
+//     <Fragment slot="marca">…</Fragment>   (opcional: signo, retrato, icono)
+//     Texto de la fila.
+//     <Fragment slot="fin">…</Fragment>     (opcional: enlace o nota)
+//   </FilaLibro>
+// Va dentro de una lista con la clase "libro" (ul u ol), que pone el filete de arriba.
+//
+// Las columnas son de la lista. Por defecto el nombre y el texto se reparten lo que
+// hay (5 y 7 partes). Para que el texto caiga en uno de los dos ejes de la página, la
+// lista lleva además una de estas dos clases (solo cuentan en tableta y escritorio):
+//   class="libro libro--mitades"  lista a todo el ancho: el nombre en la primera mitad
+//                                 y el texto desde el módulo 9
+//   class="libro libro--nota"     lista en la mitad derecha (.mitad-2): el texto en el
+//                                 eje de las notas, el módulo 12 (con ancho de sobra,
+//                                 desde 1280 px; por debajo, el reparto por defecto)
+// Con cualquiera de las dos, el cierre (slot "fin") va debajo del texto, en su misma
+// columna: no reserva ancho ni abre un tercer eje a la derecha.
+interface Props {
+  titulo: string;
+  rotulo?: string;
+  /** El rótulo en el color de acento (rojo hondo sobre claro), como el de un caso. */
+  acento?: boolean;
+  /** Nivel del título: 3 por defecto. 0 si no debe ser encabezado. */
+  nivel?: 0 | 3 | 4;
+  class?: string;
+}
+
+const { titulo, rotulo, acento = false, nivel = 3, class: clase, ...resto } = Astro.props;
+const Titulo = (nivel ? `h${nivel}` : 'p') as 'h3' | 'h4' | 'p';
+const conMarca = Astro.slots.has('marca');
+const conFin = Astro.slots.has('fin');
+---
+
+<li class:list={['fila', { 'fila--marca': conMarca, 'fila--fin': conFin, 'fila--acento': acento }, clase]} {...resto}>
+  {conMarca && <div class="fila__marca"><slot name="marca" /></div>}
+  <div class="fila__nombre">
+    <Titulo class="fila__t">{titulo}</Titulo>
+    {rotulo && <p class="rotulo fila__rot">{rotulo}</p>}
+  </div>
+  {Astro.slots.has('default') && <div class="fila__txt"><slot /></div>}
+  {conFin && <div class="fila__fin"><slot name="fin" /></div>}
+</li>
+
+<style>
+  /* Las columnas son de la lista y cada fila las hereda: quedan alineadas
+     aunque una fila tenga marca o cierre y otra no. */
+  :global(.libro) { display: grid; grid-template-columns: [marca] auto [nombre] minmax(0, 5fr) [txt] minmax(0, 7fr) [fin] auto; border-top: 1px solid var(--filete-fuerte); }
+  .fila { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; align-items: center; padding-block: 16px; border-bottom: 1px solid var(--filete); }
+  .fila__marca { grid-column: marca; margin-right: calc(var(--u) * .3); }
+  .fila__nombre { grid-column: nombre; padding-right: calc(var(--u) * .4); }
+  .fila__txt { grid-column: txt; }
+  .fila__fin { grid-column: fin; margin-left: calc(var(--u) * .4); }
+  .fila__t { font-weight: 700; font-stretch: 110%; font-size: 1.25rem; letter-spacing: -.02em; line-height: 1.2; }
+  .fila__rot { margin-top: 4px; color: var(--texto-2); }
+  .fila--acento .fila__rot { color: var(--acento); }
+  .fila__txt { color: var(--texto-2); font-size: var(--t-menor); line-height: 1.45; }
+  .fila__fin { justify-self: end; }
+
+  /* ---------- la lista sobre los ejes de la página ----------
+     El texto ocupa un número entero de módulos, contados desde el borde derecho de la
+     lista: ocho en una lista a todo el ancho (arranca en el módulo 9) y cinco en una
+     lista de la mitad derecha (arranca en el 12). En tableta, cuatro: media lista.
+     El cierre baja a la columna del texto. */
+  @media (min-width: 700px) {
+    :global(.libro--mitades) { grid-template-columns: [marca] auto [nombre] minmax(0, 1fr) [txt fin] calc(var(--u) * 8); }
+    :global(.libro--mitades) .fila__fin, :global(.libro--nota) .fila__fin { grid-column: txt; grid-row: 2; justify-self: start; margin-left: 0; }
+    :global(.libro--mitades) .fila--fin .fila__marca, :global(.libro--mitades) .fila--fin .fila__nombre,
+    :global(.libro--nota) .fila--fin .fila__marca, :global(.libro--nota) .fila--fin .fila__nombre { grid-row: 1 / span 2; }
+    :global(.libro--mitades) .fila--fin .fila__txt, :global(.libro--nota) .fila--fin .fila__txt { grid-row: 1; align-self: end; }
+  }
+  @media (min-width: 1280px) {
+    :global(.libro--nota) { grid-template-columns: [marca] auto [nombre] minmax(0, 1fr) [txt fin] calc(var(--u) * 5); }
+  }
+  @media (min-width: 700px) and (max-width: 959px) {
+    :global(.libro--mitades), :global(.libro--nota) { grid-template-columns: [marca] auto [nombre] minmax(0, 1fr) [txt fin] calc(var(--u) * 4); }
+  }
+
+  @media (max-width: 699px) {
+    :global(.libro) { grid-template-columns: [marca] auto [nombre txt fin] minmax(0, 1fr); }
+    .fila { row-gap: 5px; padding-block: 14px; }
+    .fila__marca { grid-row: 1 / span 3; align-self: start; margin-right: 14px; }
+    .fila__nombre { padding-right: 0; }
+    .fila__t { font-size: 1.125rem; }
+    .fila__fin { justify-self: start; margin-left: 0; }
+  }
+</style>

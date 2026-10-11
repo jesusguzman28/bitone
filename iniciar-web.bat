@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 >nul
-title BIT-ONE - servidor local
+title Bit One - servidor local
 cd /d "%~dp0"
 
 REM Lanzador del servidor de desarrollo.
@@ -16,7 +16,7 @@ set INTENTOS=0
 
 echo.
 echo   ====================================================
-echo    BIT-ONE - servidor local
+echo    Bit One - servidor local
 echo   ====================================================
 echo.
 echo    Direccion:  http://localhost:4321

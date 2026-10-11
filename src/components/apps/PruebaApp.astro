@@ -1,0 +1,322 @@
+---
+// La prueba de /apps/: el momento propio de la página. La tesis ("No siempre hace
+// falta una app") con su explicación y su botón a un lado y, al otro, cuatro teclas:
+// lo que solo tiene el teléfono. Sin nada marcado, el veredicto dice que basta un
+// sistema que se abre en el celular; con una sola tecla, que la app vale la pena. Es
+// la franqueza de la casa puesta a funcionar, y por eso el último renglón del titular
+// va en rojo, como en Franqueza.
+//
+// En escritorio y tableta las teclas van dentro de un celular dibujado. En celular no
+// hay marco: sería un teléfono dentro del teléfono, y obligaba a una letra de 12 px.
+// Ahí las teclas ocupan todo el ancho, sobre el campo de arena.
+//
+// Funciona sin JavaScript: las teclas son casillas de verdad y el veredicto cambia
+// con CSS (:has). El guion solo añade tres cosas: escribe lo marcado en el mensaje
+// de WhatsApp, lo anuncia al lector de pantalla y cubre a los navegadores sin :has.
+// Trae su sección: va tal cual, después de un plano tinta (su campo cuelga de él).
+import Dispositivo from '../Dispositivo.astro';
+import Rotulo from '../Rotulo.astro';
+import Signo from '../Signo.astro';
+import Icono from '../Icono.astro';
+import BotonWhatsApp from '../BotonWhatsApp.astro';
+import { app } from '../../data/apps';
+import { paginas, destino } from '../../data/navegacion';
+
+interface Props {
+  /** id de la sección: la portada baja hasta aquí. */
+  id?: string;
+}
+
+const { id = 'hace-falta' } = Astro.props;
+const d = app.prueba;
+const p = d.pantalla;
+
+// Pictogramas en una cuadrícula de 12 x 12, hechos solo de rectángulos, como los signos.
+const dibujos: Record<string, string[]> = {
+  // Calendario: marco, cabecera, dos anillas y seis días.
+  diario: ['M0 1h12v11H0zM1 4v7h10V4z', 'M3 0h1v2H3zM8 0h1v2H8zM2 5h2v2H2zM5 5h2v2H5zM8 5h2v2H8zM2 8h2v2H2zM5 8h2v2H5zM8 8h2v2H8z'],
+  // Barras de señal y un aspa.
+  senal: ['M1 9h2v2H1zM4 7h2v4H4zM7 5h2v6H7zM10 3h2v8h-2zM0 0h1v1H0zM2 0h1v1H2zM1 1h1v1H1zM0 2h1v1H0zM2 2h1v1H2z'],
+  // Campana.
+  avisos: ['M5 0h2v1H5zM4 1h4v1H4zM3 2h6v6H3zM2 8h8v1H2zM1 9h10v1H1zM5 11h2v1H5z'],
+  // Visor de cámara con un código de barras dentro.
+  camara: ['M0 0h4v1H1v3H0zM8 0h4v4h-1V1H8zM0 8h1v3h3v1H0zM11 8h1v4H8v-1h3zM3 3h1v6H3zM5 3h2v6H5zM8 3h1v6H8z'],
+};
+// Lo que basta cuando no se marca nada: un sistema que se abre sin instalar (una
+// ventana con su barra y dos renglones). Cuando sí vale la pena, el veredicto lleva
+// el signo de la página: el de app.
+const ventana = ['M0 1h12v10H0zM1 4v6h10V4zM1 2h1v1H1zM3 2h1v1H3z', 'M2 5h4v1H2zM2 7h8v1H2z'];
+---
+
+<section class="prueba" id={id} aria-labelledby={`t-${id}`} data-prueba data-no={d.mensajeNo} data-si={d.mensajeSi}>
+  <div class="reticula prueba__r">
+    <header class="prueba__cab">
+      <Rotulo>{d.rotulo}</Rotulo>
+      <h2 class="titulo prueba__t" id={`t-${id}`}>
+        {d.titulo.map((r, i) => <><span class="renglon">{r}</span>{i < d.titulo.length - 1 && ' '}</>)}
+      </h2>
+    </header>
+
+    <p class="entrada prueba__e">{d.entrada}</p>
+
+    <div class="prueba__campo">
+      <Dispositivo tipo="celular" class="prueba__cel" data-rev>
+        <div class="pan plano-claro">
+          <Rotulo class="pan__rot">{p.rotulo}</Rotulo>
+          <p class="pan__q" aria-hidden="true">{p.pregunta}</p>
+          <fieldset class="pan__grupo">
+            <legend class="solo-lector">{p.pregunta}</legend>
+            <div class="pan__teclas">
+              {p.teclas.map((t) => (
+                <label class="tecla">
+                  <input class="solo-lector" type="checkbox" name="necesita" value={t.id} data-dice={t.dice} />
+                  <span class="tecla__cara">
+                    <svg class="tecla__ico" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+                      <path d={dibujos[t.id][0]} fill-rule="evenodd" />
+                      {dibujos[t.id][1] && <path d={dibujos[t.id][1]} />}
+                    </svg>
+                    <span class="tecla__marca" aria-hidden="true"></span>
+                    <span class="tecla__txt"><b>{t.titulo}</b>{' '}<small>{t.texto}</small></span>
+                  </span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <div class="ver">
+            <div class="ver__cara ver__cara--no">
+              <Rotulo punto="hueco">{p.no.rotulo}</Rotulo>
+              <p class="ver__txt">{p.no.titulo}</p>
+              <div class="ver__pie">
+                <p class="ver__sub">{p.no.texto}</p>
+                <svg class="ver__fig" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+                  <path d={ventana[0]} fill-rule="evenodd" /><path d={ventana[1]} />
+                </svg>
+              </div>
+            </div>
+            <div class="ver__cara ver__cara--si plano plano--tinta">
+              <Rotulo>{p.si.rotulo}</Rotulo>
+              <p class="ver__txt">{p.si.titulo}</p>
+              <div class="ver__pie">
+                <p class="ver__sub">{p.si.texto}</p>
+                <Signo nombre="app" tono="rojo" class="ver__fig" />
+              </div>
+            </div>
+          </div>
+          <span class="pan__barra" aria-hidden="true"></span>
+        </div>
+      </Dispositivo>
+    </div>
+
+    <div class="prueba__accion">
+      <BotonWhatsApp mensaje={d.mensajeNo} texto={d.boton} />
+      <p class="menor prueba__nota">{d.nota}</p>
+      {/* El otro camino: lo que basta cuando no se marca nada. */}
+      <a class="enlace menor prueba__simple" href={destino(paginas.sistemas)}>{d.simple}<Icono nombre="derecha" /></a>
+    </div>
+  </div>
+  <p class="solo-lector" role="status" data-voz></p>
+</section>
+
+<script>
+  // Lo marcado va escrito en el mensaje de WhatsApp. Sin esto, el botón abre el
+  // mensaje de quien todavía no sabe si le hace falta una app.
+  for (const raiz of document.querySelectorAll<HTMLElement>('[data-prueba]')) {
+    const cajas = [...raiz.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')];
+    const boton = raiz.querySelector<HTMLAnchorElement>('a[data-wa]');
+    const voz = raiz.querySelector<HTMLElement>('[data-voz]');
+    const base = boton?.href.split('?')[0];
+    // "a", "a y b", "a, b y c".
+    const juntar = (partes: string[]) =>
+      partes.length < 2 ? partes.join('') : `${partes.slice(0, -1).join(', ')} y ${partes[partes.length - 1]}`;
+
+    const pintar = (anunciar: boolean) => {
+      const marcadas = cajas.filter((c) => c.checked);
+      raiz.classList.toggle('hay', marcadas.length > 0);
+      const mensaje = marcadas.length
+        ? `${raiz.dataset.si} ${juntar(marcadas.map((c) => c.dataset.dice ?? ''))}.`
+        : raiz.dataset.no ?? '';
+      if (boton && base) boton.href = `${base}?text=${encodeURIComponent(mensaje)}`;
+      if (anunciar && voz) {
+        const cara = raiz.querySelector(marcadas.length ? '.ver__cara--si .ver__txt' : '.ver__cara--no .ver__txt');
+        voz.textContent = cara?.textContent ?? '';
+      }
+    };
+    for (const c of cajas) c.addEventListener('change', () => { raiz.classList.add('tocada'); pintar(true); });
+    // Al volver atrás el navegador repone las casillas: el mensaje se pone al día.
+    addEventListener('pageshow', () => pintar(false));
+    pintar(false);
+  }
+</script>
+
+<style>
+  /* ---------- la composición (escritorio) ----------
+     A la izquierda, un solo bloque: titular, explicación y acción, juntos y centrados
+     contra el campo. Desde el módulo 9, un campo de arena que cuelga del plano tinta
+     de arriba y sale hasta el borde de la ventana: sobre él está el celular. */
+  .prueba { padding-block: 0 var(--aire); }
+  .prueba__r { grid-template-rows: minmax(calc(var(--u) * .7), 1fr) auto auto auto minmax(calc(var(--u) * .7), 1fr); }
+  .prueba__cab { grid-column: 1 / 9; grid-row: 2; }
+  .prueba__t { margin-top: clamp(14px, calc(var(--u) * .28), 26px); }
+  .prueba__t .renglon { white-space: nowrap; }
+  .prueba__t .renglon:last-child { color: var(--rojo); }
+  .prueba__e { grid-column: 1 / 8; grid-row: 3; max-width: 25em; margin-top: clamp(18px, calc(var(--u) * .4), 32px); }
+  .prueba__accion {
+    grid-column: 1 / 8; grid-row: 4; margin-top: clamp(22px, calc(var(--u) * .45), 36px);
+    display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 4px 24px;
+  }
+  .prueba__nota { max-width: 15em; color: var(--texto-2); }
+  /* La nota solo es verdad si el guion puede escribir el mensaje. */
+  :global(html:not(.js)) .prueba__nota { display: none; }
+  .prueba__simple { grid-column: 1 / -1; justify-self: start; }
+
+  .prueba__campo {
+    grid-column: 9 / -1; grid-row: 1 / -1; margin-right: calc(var(--m) * -1);
+    display: grid; place-items: center; padding-block: min(calc(var(--u) * .7), 6svh) min(calc(var(--u) * .9), 8svh);
+    background: var(--arena);
+    /* La sombra del celular se queda dentro del campo. */
+    overflow: clip;
+  }
+  /* El campo entero cabe en la ventana: el celular mide de alto 2,09 veces su ancho y
+     el relleno del campo se lleva hasta un 14 % del alto. Nunca baja de 290 px, que es
+     lo que piden las teclas para dos renglones de 14 px. */
+  .prueba :global(.prueba__cel) {
+    --ancho: max(290px, min(calc(var(--u) * 4.2), calc((86svh - var(--cab) - 8px) / 2.09), 400px));
+  }
+
+  /* El titular pesa lo mismo que el de la portada: lo distingue el renglón rojo. El
+     cartel menor queda para el cierre. */
+  @media (min-width: 960px) {
+    .prueba__t { font-size: calc(var(--t-titulo) * 1.3); line-height: .96; }
+  }
+  /* Escritorio angosto (960 a 1279 px): junto al botón la nota se partía en tres
+     renglones de dos palabras. Va debajo, como en tableta. */
+  @media (min-width: 960px) and (max-width: 1279px) {
+    .prueba__accion { grid-template-columns: minmax(0, 1fr); justify-items: start; row-gap: 8px; }
+    .prueba__nota { max-width: none; }
+  }
+  /* Ventanas bajas (una laptop de 1366 x 650): menos relleno y un celular algo más
+     chico, para que el botón y el veredicto se vean a la vez. */
+  @media (min-width: 960px) and (max-height: 760px) {
+    .prueba__campo { padding-block: 16px 20px; }
+    .prueba :global(.prueba__cel) { --ancho: max(280px, min(calc(var(--u) * 4.2), calc((100svh - var(--cab) - 48px) / 2.09))); }
+  }
+
+  /* ---------- la pantalla ----------
+     Dentro del dispositivo todo se mide contra su ancho (cqw), con un piso en px.
+     Lo que se lee (no los rótulos) no baja de 14 px. */
+  .pan { position: absolute; inset: 0; display: flex; flex-direction: column; padding: 10.5cqw 5.5cqw 6.5cqw; text-align: left; }
+  .pan :global(.pan__rot) { flex: none; }
+  .pan__q {
+    flex: none; margin-top: 1.6cqw; font-weight: 800; font-stretch: 112%; font-size: clamp(18px, 6.6cqw, 26px);
+    line-height: 1.05; letter-spacing: -.03em; text-wrap: balance;
+  }
+  .pan__grupo { flex: none; min-width: 0; margin: 3.6cqw 0 0; padding: 0; border: 0; }
+  .pan__teclas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 2.2cqw; }
+
+  /* Una tecla es un módulo: hueco mientras no se marca, rojo cuando sí. Es cuadrada
+     como mínimo (el relleno del ::before mide lo que su ancho) y, si el texto pide
+     más, crecen las cuatro a la vez. */
+  .tecla { position: relative; display: flex; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .tecla::before { content: ""; flex: none; width: 0; padding-top: 100%; }
+  .tecla__cara {
+    position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 2cqw; padding: 3.2cqw;
+    background: var(--hueso); color: var(--tinta); box-shadow: inset 0 0 0 1px var(--linea-fuerte);
+    transition: background-color var(--d-toque) ease, color var(--d-toque) ease, transform .14s var(--salida);
+  }
+  .tecla__ico { flex: none; width: 11.5cqw; height: 11.5cqw; fill: currentColor; shape-rendering: crispEdges; }
+  .tecla__marca { position: absolute; top: 3.2cqw; right: 3.2cqw; width: 4.2cqw; height: 4.2cqw; box-shadow: inset 0 0 0 1.5px currentColor; }
+  .tecla__txt b { display: block; font-weight: 750; font-stretch: 108%; font-size: max(14.5px, 4.7cqw); line-height: 1.1; letter-spacing: -.02em; }
+  .tecla__txt small { display: block; margin-top: .25em; font-size: max(14px, 3.9cqw); line-height: 1.2; color: var(--tinta-2); }
+
+  .tecla input:checked + .tecla__cara { background: var(--rojo); color: #fff; box-shadow: none; }
+  .tecla input:checked + .tecla__cara small { color: #fff; }
+  .tecla input:checked + .tecla__cara .tecla__marca { background: #fff; box-shadow: none; }
+  .tecla input:focus-visible + .tecla__cara { outline: 2px solid var(--tinta); outline-offset: 2px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .tecla:active .tecla__cara { transform: scale(.97); }
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .tecla:hover input:not(:checked) + .tecla__cara { box-shadow: inset 0 0 0 2px var(--tinta); }
+  }
+
+  /* El veredicto ocupa lo que queda de pantalla. Dos caras en la misma celda; se ve
+     una y la otra guarda su sitio, así nada salta al marcar. Arriba, la frase; abajo,
+     su figura: una ventana o el signo de app. */
+  .ver { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr); margin-top: 2.6cqw; }
+  .ver__cara { grid-area: 1 / 1; min-height: 0; display: flex; flex-direction: column; padding: 4.2cqw; }
+  .ver__cara--no { background: var(--arena); }
+  .ver__cara--si { visibility: hidden; }
+  .ver__txt { margin-top: 2.2cqw; font-weight: 800; font-stretch: 112%; font-size: clamp(19px, 7.4cqw, 30px); line-height: 1.02; letter-spacing: -.03em; text-wrap: balance; }
+  .ver__pie { display: flex; align-items: flex-end; justify-content: space-between; gap: 4cqw; margin-top: auto; padding-top: 3cqw; }
+  .ver__sub { font-size: max(14px, 4.1cqw); line-height: 1.3; color: var(--texto-2); text-wrap: balance; }
+  .ver__fig, .ver__pie :global(.ver__fig) { flex: none; width: 15cqw; height: auto; aspect-ratio: 1; }
+  svg.ver__fig { fill: currentColor; shape-rendering: crispEdges; }
+  .prueba:has(.tecla input:checked) .ver__cara--no { visibility: hidden; }
+  .prueba:has(.tecla input:checked) .ver__cara--si { visibility: visible; }
+  /* Lo mismo, para los navegadores sin :has (la clase la pone el guion). */
+  .prueba.hay .ver__cara--no { visibility: hidden; }
+  .prueba.hay .ver__cara--si { visibility: visible; }
+  /* La cara que entra aparece con un fundido corto. La primera, al cargar, ya está. */
+  @media (prefers-reduced-motion: no-preference) {
+    .prueba:has(.tecla input:checked) .ver__cara--si, .prueba.hay .ver__cara--si, .prueba.tocada .ver__cara--no { animation: aparecer var(--d-corta) ease both; }
+  }
+
+  .pan__barra { position: absolute; left: 50%; bottom: 2.3cqw; width: 28cqw; height: 1.2cqw; margin-left: -14cqw; border-radius: 99px; background: var(--tinta); opacity: .8; }
+
+  /* ==========================================================================
+     Tableta: el titular a todo el ancho; debajo, el texto junto al campo.
+     ========================================================================== */
+  @media (max-width: 959px) {
+    .prueba { padding-block: calc(var(--aire) * .8) var(--aire); }
+    .prueba__r { grid-template-rows: auto auto auto 1fr; }
+    .prueba__cab { grid-column: 1 / -1; grid-row: 1; padding-bottom: var(--aire-corto); }
+    .prueba__e { grid-column: 1 / 5; grid-row: 2; align-self: start; margin-top: 0; padding-right: calc(var(--u) * .4); }
+    .prueba__accion { grid-column: 1 / 5; grid-row: 3; align-self: start; grid-template-columns: minmax(0, 1fr); justify-items: start; row-gap: 10px; }
+    .prueba__campo { grid-column: 5 / -1; grid-row: 2 / 5; padding-block: calc(var(--u) * .7) calc(var(--u) * .9); }
+    .prueba :global(.prueba__cel) { --ancho: min(300px, calc(100% - 56px)); }
+  }
+
+  /* ==========================================================================
+     Celular: una columna y sin marco. El celular ya es el de quien lee: las teclas
+     van a todo el ancho sobre el campo, con letra de texto, y el botón, después.
+     ========================================================================== */
+  @media (max-width: 699px) {
+    .prueba { padding-block: var(--aire); }
+    .prueba__r { grid-template-rows: none; }
+    .prueba__cab { grid-row: auto; padding-bottom: 0; }
+    .prueba__e { grid-column: 1 / -1; grid-row: auto; margin-top: 12px; padding: 0; font-size: var(--t-texto); }
+    .prueba__campo { display: block; grid-column: 1 / -1; grid-row: auto; margin: 16px calc(var(--m) * -1) 0; padding: 16px var(--m) 18px; }
+    .prueba__accion { grid-column: 1 / -1; grid-row: auto; justify-items: stretch; row-gap: 6px; margin-top: 16px; }
+    .prueba__nota { max-width: none; }
+    .prueba__simple { justify-self: start; }
+
+    /* El dispositivo se queda en su pantalla: sin cuerpo, sin cámara y sin sombra. */
+    .prueba :global(.prueba__cel) { --ancho: 100%; }
+    .prueba :global(.prueba__cel.disp--celular .disp__cuerpo) { padding: 0; border-radius: 0; background: none; box-shadow: none; }
+    .prueba :global(.prueba__cel.disp--celular .disp__cuerpo::after) { display: none; }
+    .prueba :global(.prueba__cel.disp--celular .disp__pantalla) { aspect-ratio: auto; overflow: visible; border-radius: 0; background: none; }
+    .pan { position: static; padding: 0; background: none; }
+    .pan__barra { display: none; }
+
+    .pan__q { margin-top: 6px; font-size: var(--t-subtitulo); }
+    .pan__grupo { margin-top: 12px; }
+    .pan__teclas { gap: 8px; }
+    .tecla::before { padding-top: 70%; }
+    .tecla__cara { gap: 8px; padding: 11px; background: var(--papel); }
+    .tecla__ico { width: 34px; height: 34px; }
+    .tecla__marca { top: 11px; right: 11px; width: 15px; height: 15px; }
+    .tecla__txt b { font-size: 1.0625rem; }
+    /* Dos renglones reservados: el título de una tecla queda a la altura del de su
+       vecina aunque una escena ocupe un renglón y la otra, dos. */
+    .tecla__txt small { min-height: 2.5em; font-size: var(--t-menor); line-height: 1.25; }
+
+    /* Sin nada marcado, el veredicto es un hueco, como las teclas; marcado, se llena. */
+    .ver { margin-top: 8px; }
+    .ver__cara { padding: 13px 14px; }
+    .ver__cara--no { background: none; box-shadow: inset 0 0 0 1px var(--linea-fuerte); }
+    .ver__txt { margin-top: 6px; font-size: var(--t-subtitulo); line-height: 1.06; }
+    .ver__pie { gap: 16px; padding-top: 10px; }
+    .ver__sub { font-size: var(--t-menor); }
+    .ver__fig, .ver__pie :global(.ver__fig) { width: 36px; }
+  }
+</style>

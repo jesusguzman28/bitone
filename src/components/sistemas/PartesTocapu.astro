@@ -1,0 +1,343 @@
+---
+// El momento propio de /sistemas/: el sistema como un tocapu de cinco partes que
+// encajan. Cuatro piezas en molinete alrededor de una cruz, en un plano de 5 x 5.
+// Quien mira elige por cuál empieza: esa pieza se teje en su sitio (rojo = ahora)
+// y las demás siguen sueltas y torcidas, como se llevan hoy, cada una con su nombre
+// escrito encima (en tableta y escritorio; en celular los nombres están en las opciones
+// de al lado). "Todo junto" teje las cinco, las enmarca y enciende un solo bit
+// dorado en el centro, como el del logo.
+//
+// Funciona sin JavaScript: las opciones son botones de radio y el dibujo y las
+// fichas responden con :has(). Tocar una pieza del dibujo también la elige (cada
+// zona es un <label> de su radio). Donde no hay :has() se ve el tocapu completo y
+// las seis fichas, una bajo otra. Solo se mueven transform y opacity.
+//
+// En celular el dibujo y las seis opciones van lado a lado y la ficha debajo: lo
+// que se toca y lo que cambia caben en la misma pantalla.
+//
+// Va sobre un plano tinta y trae su retícula: se pone directo dentro de la sección.
+// Uno por página (los radios comparten nombre).
+import Rotulo from '../Rotulo.astro';
+import ParHoyDespues from '../ParHoyDespues.astro';
+import BotonWhatsApp from '../BotonWhatsApp.astro';
+import type { IdParte, Parte } from '../../data/sistemas';
+import type { NombreSigno } from '../../lib/signos';
+
+interface Props {
+  /** id del título: la sección lo usa en aria-labelledby. */
+  id: string;
+  rotulo?: string;
+  /** Renglones del título: frases que no se parten. */
+  titulo: string[];
+  entrada?: string;
+  /** Qué se elige, para lector de pantalla. */
+  leyenda: string;
+  partes: Parte[];
+  /** La ficha del tocapu completo. */
+  todo: Parte;
+  class?: string;
+}
+
+const { id, rotulo, titulo, entrada, leyenda, partes, todo, class: clase, ...resto } = Astro.props;
+
+interface Pieza {
+  /** Casillas que ocupa: [columna, fila], de 0 a 4. */
+  celdas: [number, number][];
+  /** Su contorno, en unidades del dibujo (cada casilla mide 10). */
+  borde: string;
+  signo: NombreSigno;
+  /** Su tono en el tocapu completo. Sola, la pieza elegida va siempre en rojo. */
+  tono: 'rojo' | 'arena' | 'papel';
+  /** Suelta: cuánto se aparta de su sitio y cuánto gira. */
+  dx: number;
+  dy: number;
+  dr: number;
+  /** Zonas que se pueden tocar, como áreas de una rejilla de 5 x 5 (fila / columna / fila / columna). */
+  zonas: string[];
+  /** Dónde va escrito su nombre mientras está suelta: el centro del rótulo, en unidades
+      del dibujo. Es el centro de su brazo largo (o de su pie de dos casillas, en las dos
+      piezas verticales), ya apartado y girado como la pieza. El texto no gira.
+      En celular los nombres no se pintan: en las dos piezas verticales no cabían derechos. */
+  nombre: [number, number];
+}
+
+// El molinete: almacén arriba, compras a la derecha, caja abajo, clientes a la
+// izquierda y ventas, la cruz del centro, que toca a las cuatro.
+const PIEZAS: Record<IdParte, Pieza> = {
+  almacen: { celdas: [[0, 0], [1, 0], [2, 0], [3, 0], [3, 1]], borde: 'M0 0H40V20H30V10H0Z', signo: 'medida', tono: 'rojo', dx: -2, dy: -4, dr: -5, zonas: ['1 / 1 / 2 / 5', '2 / 4 / 3 / 5'], nombre: [17.6, 1] },
+  compras: { celdas: [[4, 0], [4, 1], [4, 2], [4, 3], [3, 3]], borde: 'M40 0H50V40H30V30H40Z', signo: 'greca', tono: 'arena', dx: 4, dy: -2, dr: 6, zonas: ['1 / 5 / 5 / 6', '4 / 4 / 5 / 5'], nombre: [44.5, 33.5] },
+  caja: { celdas: [[4, 4], [3, 4], [2, 4], [1, 4], [1, 3]], borde: 'M10 30H20V40H50V50H10Z', signo: 'medida', tono: 'rojo', dx: 2, dy: 4, dr: -4, zonas: ['5 / 2 / 6 / 6', '4 / 2 / 5 / 3'], nombre: [32.4, 49] },
+  clientes: { celdas: [[0, 4], [0, 3], [0, 2], [0, 1], [1, 1]], borde: 'M0 10H20V20H10V50H0Z', signo: 'greca', tono: 'arena', dx: -4, dy: 2, dr: 7, zonas: ['2 / 1 / 6 / 2', '2 / 2 / 3 / 3'], nombre: [7.8, 17.1] },
+  ventas: { celdas: [[2, 1], [1, 2], [2, 2], [3, 2], [2, 3]], borde: 'M20 10H30V20H40V30H30V40H20V30H10V20H20Z', signo: 'app', tono: 'papel', dx: 1, dy: 1.5, dr: 9, zonas: ['2 / 3 / 5 / 4', '3 / 2 / 4 / 3', '3 / 4 / 4 / 5'], nombre: [26, 26.5] },
+};
+// El orden en que se tejen cuando van todas: el molinete, y la cruz al final.
+const ORDEN: IdParte[] = ['almacen', 'compras', 'caja', 'clientes', 'ventas'];
+const piezas = ORDEN.map((p, i) => ({ id: p, i, ...PIEZAS[p] }));
+const suelta = (p: { dx: number; dy: number; dr: number; i: number }) => `--dx:${p.dx};--dy:${p.dy};--dr:${p.dr};--i:${p.i}`;
+const sitioDelNombre = (z: Pieza) => `--x:${z.nombre[0]};--y:${z.nombre[1]}`;
+
+const fichas = [...partes, todo];
+---
+
+<div class:list={['pt', 'reticula', clase]} {...resto}>
+  <header class="pt__cab">
+    {rotulo && <Rotulo>{rotulo}</Rotulo>}
+    <h2 class="titulo pt__t" id={id}>
+      {titulo.map((r, i) => <><span class="renglon">{r}</span>{i < titulo.length - 1 && ' '}</>)}
+    </h2>
+    {entrada && <p class="entrada pt__e">{entrada}</p>}
+  </header>
+
+  <div class="pt__mesa">
+    <div class="pt__fig" data-rev>
+      <svg class="pt__svg" viewBox="-7.5 -7.5 65 65" aria-hidden="true" focusable="false">
+        <!-- El plano: el sitio de cada pieza. -->
+        {piezas.map((p) => <path class="pt__sitio" d={p.borde} />)}
+        <rect class="pt__marco" x="-2.6" y="-2.6" width="55.2" height="55.2" />
+
+        <!-- Las piezas sueltas: una hoja por área, cada una por su lado. -->
+        {piezas.map((p) => (
+          <g class="pt__g pt__g--suelta" data-pieza={p.id} style={suelta(p)}>
+            {p.celdas.map(([x, y]) => <rect class="pt__casilla" x={x * 10} y={y * 10} width="10" height="10" />)}
+            <path class="pt__hoja" d={p.borde} />
+          </g>
+        ))}
+
+        <!-- Las mismas piezas, tejidas. Van encima: la que ya está en su sitio manda. -->
+        {piezas.map((p) => (
+          <g class="pt__g pt__g--tejida" data-pieza={p.id} data-tono={p.tono} style={suelta(p)}>
+            {p.celdas.map(([x, y]) => {
+              const centro = p.id === 'ventas' && x === 2 && y === 2;
+              return (
+                <g class="pieza" transform={`translate(${x * 10} ${y * 10})`}>
+                  <rect width="10" height="10" />
+                  <use class:list={{ pt__centro: centro }} href={`#signo-${p.signo}`} width="10" height="10" />
+                  {centro && <rect class="pt__bit" x="3" y="3" width="4" height="4" />}
+                </g>
+              );
+            })}
+            <path class="pt__costura" d={p.borde} />
+          </g>
+        ))}
+      </svg>
+
+      <!-- El nombre de cada pieza suelta, escrito encima y sin girar. Es solo para la
+           vista: quien usa lector de pantalla tiene los mismos nombres en las opciones. -->
+      <div class="pt__nombres" aria-hidden="true">
+        {partes.map((p) => {
+          const z = PIEZAS[p.id as IdParte];
+          return <span class="rotulo pt__n" data-pieza={p.id} style={sitioDelNombre(z)}>{p.pieza ?? p.nombre}</span>;
+        })}
+      </div>
+
+      <!-- Tocar una pieza la elige: cada zona es la etiqueta de su opción. Van vacías y
+           fuera del árbol de accesibilidad: con texto, el lector leería el nombre de cada
+           opción tres veces (una por cada etiqueta de su radio). -->
+      <div class="pt__zonas" aria-hidden="true">
+        {partes.flatMap((p) => PIEZAS[p.id as IdParte].zonas.map((z) => <label class="pt__zona" for={`pt-${p.id}`} data-zona={p.id} style={`grid-area:${z}`}></label>))}
+      </div>
+    </div>
+
+    <fieldset class="pt__elige">
+      <legend class="solo-lector">{leyenda}</legend>
+      <div class="pt__ops">
+        {fichas.map((p, i) => (
+          <label class="pt__op">
+            <input class="solo-lector" type="radio" name="parte" id={`pt-${p.id}`} value={p.id} checked={i === 0} />
+            <svg class="pt__mini" viewBox="0 0 50 50" aria-hidden="true" focusable="false">
+              <rect width="50" height="50" />
+              <path d={p.id === 'todo' ? 'M0 0H50V50H0Z' : PIEZAS[p.id as IdParte].borde} />
+            </svg>
+            <span>{p.nombre}</span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="pt__paneles">
+    {fichas.map((p) => (
+      <article class="pt__panel" data-panel={p.id} aria-labelledby={`pt-t-${p.id}`}>
+        <h3 class="subtitulo pt__nombre" id={`pt-t-${p.id}`}>{p.titulo}</h3>
+        <ParHoyDespues pares={[p.par]} rotuloDespues={p.rotuloDespues} class="pt__par" />
+        <BotonWhatsApp variante="rojo" mensaje={p.mensaje} texto={p.boton} class="pt__boton" />
+      </article>
+    ))}
+  </div>
+</div>
+
+<script>
+  // Tocar una pieza elige su opción sin mover la página. Por sí solo, un <label> enfoca
+  // su radio y el navegador lo trae a la vista: si las opciones están bajo el pliegue,
+  // la página salta. Aquí el radio se marca y se enfoca sin desplazar. Sin este guion
+  // la pieza sigue eligiendo, con el comportamiento normal de la etiqueta.
+  for (const zona of document.querySelectorAll<HTMLLabelElement>('.pt__zona')) {
+    zona.addEventListener('click', (e) => {
+      const radio = zona.control as HTMLInputElement | null;
+      if (!radio) return;
+      e.preventDefault();
+      radio.checked = true;
+      radio.focus({ preventScroll: true });
+    });
+  }
+</script>
+
+<style>
+  /* ---------- composición: el texto a la izquierda, la mesa de piezas a la derecha ---------- */
+  .pt { align-items: start; }
+  /* El título pide ocho módulos: un renglón de 17 letras no cabe en siete. El aire con el
+     dibujo lo pone el margen del propio dibujo, donde descansan las piezas sueltas. */
+  .pt__cab { grid-column: 1 / 9; grid-row: 1; }
+  .pt__t { margin-top: clamp(14px, calc(var(--u) * .28), 26px); }
+  .pt__e { margin-top: clamp(16px, calc(var(--u) * .3), 28px); max-width: 23em; }
+  /* La mesa (dibujo y opciones) nunca es más alta que la ventana: se ve entera mientras se elige. */
+  .pt__mesa { grid-column: 9 / -1; grid-row: 1 / span 2; justify-self: end; width: min(100%, max(340px, calc(100svh - var(--cab) - 136px))); }
+  /* La ficha va pegada al título, que es lo que explica. El aire que sobre queda abajo. */
+  .pt__paneles { grid-column: 1 / 8; grid-row: 2; align-self: start; margin-top: var(--aire-corto); }
+
+  /* ---------- el dibujo ---------- */
+  .pt__fig { position: relative; aspect-ratio: 1; }
+  .pt__svg { display: block; width: 100%; height: 100%; overflow: visible; }
+  .pt__sitio, .pt__marco, .pt__casilla, .pt__hoja, .pt__costura { fill: none; vector-effect: non-scaling-stroke; }
+  /* El plano se intuye entero desde el principio: cinco sitios que esperan su pieza. */
+  .pt__sitio { stroke: color-mix(in srgb, var(--texto) 40%, transparent); stroke-width: 1; }
+  .pt__marco { stroke: var(--texto); stroke-width: 1.5; }
+  .pt__bit { fill: var(--oro); }
+  /* Suelta: cinco casillas vacías sobre una hoja clara, apenas marcada. Tejida: casillas con su signo y una costura
+     del color del plano, que es lo que deja ver dónde encaja cada pieza con la de al lado. */
+  .pt__casilla { stroke: color-mix(in srgb, var(--texto) 17%, transparent); stroke-width: 1; }
+  .pt__hoja { fill: color-mix(in srgb, var(--texto) 7%, transparent); stroke: color-mix(in srgb, var(--texto) 52%, transparent); stroke-width: 1.25; }
+  .pt__costura { stroke: var(--fondo); stroke-width: 2; }
+
+  /* --s dice cuán suelta está una pieza: 1, fuera de su sitio y girada; 0, tejida. */
+  .pt__g {
+    --s: 0;
+    transform-box: fill-box; transform-origin: center;
+    transform: translate(calc(var(--dx) * var(--s) * 1px), calc(var(--dy) * var(--s) * 1px)) rotate(calc(var(--dr) * var(--s) * 1deg));
+  }
+  .pt__g--suelta { opacity: var(--s); }
+  .pt__g--tejida { opacity: calc(1 - var(--s)); }
+  /* Los tonos del tocapu completo. */
+  .pt__g--tejida[data-tono="rojo"] { --tono-fondo: var(--rojo); --tono-trazo: var(--hueso); }
+  .pt__g--tejida[data-tono="arena"] { --tono-fondo: var(--arena); --tono-trazo: var(--tinta); }
+  .pt__g--tejida[data-tono="papel"] { --tono-fondo: var(--papel); --tono-trazo: var(--rojo); }
+  .pt__centro { opacity: 0; }
+
+  .pt__nombres, .pt__zonas { display: none; }
+  .pt__elige { display: none; min-inline-size: 0; margin: 0; padding: 0; border: 0; }
+
+  /* ---------- las fichas ---------- */
+  .pt__paneles { display: grid; grid-template-columns: minmax(0, 1fr); row-gap: calc(var(--u) * .6); }
+  /* El botón va siempre al pie de la ficha: al cambiar de parte no sube ni baja. */
+  .pt__panel { display: flex; flex-direction: column; align-items: flex-start; }
+  .pt__panel :global(.pt__par) { align-self: stretch; margin-block: 14px 26px; }
+  .pt__panel :global(.pt__boton) { margin-top: auto; }
+
+  /* ---------- con :has(): se elige una parte ---------- */
+  @supports selector(:has(*)) {
+    .pt__g { --s: 1; }
+    .pt:has(#pt-almacen:checked) [data-pieza="almacen"],
+    .pt:has(#pt-ventas:checked) [data-pieza="ventas"],
+    .pt:has(#pt-clientes:checked) [data-pieza="clientes"],
+    .pt:has(#pt-compras:checked) [data-pieza="compras"],
+    .pt:has(#pt-caja:checked) [data-pieza="caja"],
+    .pt:has(#pt-todo:checked) :is(.pt__g, .pt__n) { --s: 0; }
+
+    /* Sola, la pieza elegida va en rojo: es la de ahora. El marco y el bit llegan con la última. */
+    .pt:not(:has(#pt-todo:checked)) .pt__g--tejida { --tono-fondo: var(--rojo); --tono-trazo: var(--hueso); }
+    .pt:not(:has(#pt-todo:checked)) :is(.pt__marco, .pt__bit) { opacity: 0; }
+    .pt:not(:has(#pt-todo:checked)) .pt__centro { opacity: 1; }
+
+    /* Los nombres: una capa justo encima del plano (50 unidades: cada una es un 2 %).
+       Cada nombre acompaña a su pieza suelta y se apaga cuando la pieza se teje. */
+    .pt__nombres { display: block; position: absolute; inset: 11.54%; pointer-events: none; }
+    .pt__n {
+      --s: 1;
+      position: absolute; left: calc(var(--x) * 2%); top: calc(var(--y) * 2%); transform: translate(-50%, -50%);
+      color: var(--texto); line-height: 1; white-space: nowrap; opacity: var(--s);
+    }
+
+    /* Las zonas que se tocan: una rejilla de 5 x 5 justo encima del plano. */
+    .pt__zonas { position: absolute; inset: 11.54%; display: grid; grid-template: repeat(5, minmax(0, 1fr)) / repeat(5, minmax(0, 1fr)); }
+    .pt__zona { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+
+    /* Las opciones: seis módulos. La elegida, en rojo. */
+    .pt__elige { display: block; }
+    .pt__ops { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+    .pt__op {
+      display: grid; grid-template-columns: 20px minmax(0, 1fr); align-items: center; column-gap: 10px;
+      min-height: 52px; padding: 0 14px; box-shadow: inset 0 0 0 1px var(--filete);
+      font-weight: 650; font-stretch: 104%; font-size: 1rem; line-height: 1.15; letter-spacing: -.01em;
+      cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent;
+      transition: background-color var(--d-toque) ease, box-shadow var(--d-toque) ease, transform .14s var(--salida);
+    }
+    .pt__mini { width: 20px; height: 20px; }
+    .pt__mini rect { fill: color-mix(in srgb, currentColor 18%, transparent); }
+    .pt__mini path { fill: currentColor; }
+    .pt__op:has(:checked) { background: var(--rojo); box-shadow: inset 0 0 0 1px var(--rojo); color: #fff; }
+    .pt__op:has(:focus-visible) { outline: 2px solid var(--foco); outline-offset: 3px; }
+    .pt__op:active { transform: scale(.97); }
+
+    /* Las seis fichas ocupan la misma celda: el cuadro mide siempre lo que la más alta. */
+    .pt__paneles { row-gap: 0; }
+    .pt__panel { grid-area: 1 / 1; visibility: hidden; opacity: 0; }
+    .pt:has(#pt-almacen:checked) [data-panel="almacen"],
+    .pt:has(#pt-ventas:checked) [data-panel="ventas"],
+    .pt:has(#pt-clientes:checked) [data-panel="clientes"],
+    .pt:has(#pt-compras:checked) [data-panel="compras"],
+    .pt:has(#pt-caja:checked) [data-panel="caja"],
+    .pt:has(#pt-todo:checked) [data-panel="todo"] { visibility: visible; opacity: 1; }
+
+    @media (hover: hover) and (pointer: fine) {
+      .pt__op:not(:has(:checked)):hover { box-shadow: inset 0 0 0 1px var(--texto); }
+      .pt:has([data-zona="almacen"]:hover) .pt__g--suelta[data-pieza="almacen"] .pt__hoja,
+      .pt:has([data-zona="ventas"]:hover) .pt__g--suelta[data-pieza="ventas"] .pt__hoja,
+      .pt:has([data-zona="clientes"]:hover) .pt__g--suelta[data-pieza="clientes"] .pt__hoja,
+      .pt:has([data-zona="compras"]:hover) .pt__g--suelta[data-pieza="compras"] .pt__hoja,
+      .pt:has([data-zona="caja"]:hover) .pt__g--suelta[data-pieza="caja"] .pt__hoja { fill: color-mix(in srgb, var(--texto) 16%, transparent); stroke: var(--texto); }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      /* La pieza viaja a su sitio mientras cambia de hoja suelta a tejido. */
+      .pt__g { transition: transform .52s var(--salida-larga), opacity .22s ease; }
+      .pt:has(#pt-todo:checked) .pt__g { transition-delay: calc(var(--i) * 55ms); }
+      .pt__marco, .pt__bit, .pt__centro { transition: opacity .24s ease; }
+      .pt:has(#pt-todo:checked) :is(.pt__marco, .pt__bit, .pt__centro) { transition-delay: .44s; }
+      .pt__hoja { transition: fill var(--d-toque) ease, stroke var(--d-toque) ease; }
+      .pt__n { transition: opacity .22s ease; }
+      .pt__panel { transition: opacity var(--d-corta) ease; }
+      /* La primera vez que el dibujo entra en pantalla, la pieza elegida llega a su sitio. */
+      .pt__fig.espera:not(.visto) .pt__g { --s: 1 !important; }
+    }
+  }
+
+  /* ---------- tableta: el dibujo y, a su lado, las opciones en columna ---------- */
+  @media (max-width: 959px) {
+    .pt__cab, .pt__mesa, .pt__paneles { grid-column: 1 / -1; grid-row: auto; }
+    .pt__mesa { justify-self: stretch; width: auto; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 3fr); align-items: center; column-gap: calc(var(--u) * .4); margin-top: calc(var(--u) * .2); }
+    .pt__paneles { margin-top: calc(var(--u) * .3); }
+    @supports selector(:has(*)) {
+      .pt__ops { grid-template-columns: minmax(0, 1fr); }
+    }
+  }
+
+  /* ---------- celular: la misma composición, apretada. Dibujo, opciones y ficha con su
+     botón caben en una pantalla: lo que se toca y lo que cambia se ven a la vez ---------- */
+  @media (max-width: 699px) {
+    .pt__e { margin-top: 12px; }
+    .pt__mesa { grid-template-columns: minmax(0, 1fr); margin-top: 10px; }
+    .pt__paneles { margin-top: 14px; }
+    .pt__panel :global(.pt__par) { margin-block: 6px 14px; }
+    @supports selector(:has(*)) {
+      /* La columna de opciones mide lo que su nombre más largo en un renglón ("Todo junto"). */
+      .pt__mesa { grid-template-columns: minmax(0, 1fr) 108px; column-gap: 8px; }
+      .pt__ops { gap: 2px; }
+      .pt__op { grid-template-columns: minmax(0, 1fr); min-height: 44px; padding: 0 10px; font-size: var(--t-menor); line-height: 1.1; }
+      .pt__mini { display: none; }
+      /* En celular las piezas no llevan nombre: en dos de ellas solo cabía de pie, girado
+         y a 12 px sobre líneas que se cruzan. Los nombres están al lado, en las seis
+         opciones, y al tocar una su pieza se teje en rojo. */
+      .pt__nombres { display: none; }
+    }
+  }
+</style>

@@ -1,0 +1,138 @@
+---
+// El damero de /rescate/: el signo de la página (un damero de 4 x 4 con una casilla
+// dorada) dibujado casilla por casilla, para poder contarlo por pasos. Es el sistema
+// que el visitante ya tiene.
+//
+// No sabe en qué paso está: lo dicen cinco variables que pone quien lo usa, en
+// cualquier elemento que lo contenga (ver PasosDamero.astro). Sin ellas se ve terminado.
+//   --v-luz     0 no se ve qué hay · 1 revisado: las casillas se ven
+//   --v-urg     1 las tres casillas fuera de sitio van en rojo: lo urgente
+//   --v-suelta  1 esas tres casillas están fuera de su sitio · 0 en su sitio
+//   --v-nom     1 la casilla dorada y los nombres: queda explicado
+//   --v-fin     1 el marco: lo urgente está arreglado y el tablero, cerrado
+//   --v-espera  retardo antes de cambiar (para cuando el dibujo entra en pantalla)
+// Cuatro colores, cuatro significados: apagado, no se sabe; claro, revisado; rojo,
+// urgente; oro, las reglas del negocio por fin escritas. El oro es una sola casilla.
+//
+// Se colorea solo según el plano. Solo se mueven transform y opacity.
+// OJO: no hagas de .tb un contenedor (container-type). --u se mide con cqw contra
+// .pagina, y todo lo que dependa de --u aquí dentro cambiaría de tamaño.
+interface Props {
+  /** Los nombres de las ocho casillas llenas, en orden de lectura. Sin ellos, no se escriben. */
+  nombres?: readonly string[];
+  class?: string;
+}
+
+const { nombres, class: clase, ...resto } = Astro.props;
+
+interface Casilla {
+  /** Columna y fila, de 0 a 3. */
+  c: number;
+  f: number;
+  /** La pieza recuperada. */
+  oro?: boolean;
+  /** Fuera de su sitio: cuánto se aparta (en casillas de 10) y cuánto gira. Ninguna
+      pisa a otra casilla llena. Dos se salen del tablero por arriba y por la derecha,
+      donde la columna tiene sitio; la de la izquierda baja a una casilla vacía, sin
+      pasar del borde: ese borde es el margen de la página y nada asoma de él. */
+  suelta?: { dx: number; dy: number; dr: number };
+}
+
+// Las ocho casillas llenas del signo de rescate (lib/signos.ts), en orden de lectura.
+const CASILLAS: Casilla[] = [
+  { c: 0, f: 0 },
+  { c: 2, f: 0, suelta: { dx: 0.6, dy: -1.7, dr: -7 } },
+  { c: 1, f: 1, oro: true },
+  { c: 3, f: 1 },
+  // Con 6 grados, una esquina sobresale media unidad: dx 0.5 la deja justo en el borde.
+  { c: 0, f: 2, suelta: { dx: 0.5, dy: 1.7, dr: 6 } },
+  { c: 2, f: 2 },
+  { c: 1, f: 3 },
+  { c: 3, f: 3, suelta: { dx: 1.9, dy: -0.4, dr: 8 } },
+];
+// El plano: las cinco líneas de cada sentido, en un solo trazo para que no se sumen en los cruces.
+const PLANO = 'M0 0H40M0 10H40M0 20H40M0 30H40M0 40H40M0 0V40M10 0V40M20 0V40M30 0V40M40 0V40';
+
+let sueltas = 0;
+const casillas = CASILLAS.map((k, i) => {
+  const s = k.suelta;
+  return { ...k, estilo: `--i:${i}` + (s ? `;--j:${sueltas++};--dx:${s.dx};--dy:${s.dy};--dr:${s.dr}` : '') };
+});
+---
+
+<div class:list={['tb', clase]} {...resto}>
+  <svg class="tb__svg" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+    <path class="tb__plano" d={PLANO} />
+    {casillas.map((k) => (
+      <g class:list={['tb__c', { 'tb__c--suelta': k.suelta }]} style={k.estilo}>
+        <rect class="tb__luz" x={k.c * 10} y={k.f * 10} width="10" height="10" />
+        {k.suelta && <rect class="tb__urg" x={k.c * 10} y={k.f * 10} width="10" height="10" />}
+        {k.oro && <rect class="tb__oro" x={k.c * 10} y={k.f * 10} width="10" height="10" />}
+      </g>
+    ))}
+    <rect class="tb__marco" width="40" height="40" />
+  </svg>
+
+  {nombres && (
+    <div class="tb__nombres" aria-hidden="true">
+      {casillas.map((k, i) => nombres[i] && (
+        <span class:list={['tb__n', { 'tb__n--oro': k.oro, 'tb__n--suelta': k.suelta }]} style={`--c:${k.c};--f:${k.f};${k.estilo}`}>
+          <span class="rotulo tb__nt">{nombres[i].split(' ').map((palabra) => <span>{palabra}</span>)}</span>
+          {/* Mientras la casilla es urgente va en rojo: su nombre, en blanco. Son dos
+              capas que se relevan con la opacidad, no un cambio de color. */}
+          {k.suelta && <span class="rotulo tb__nt tb__nt--urg">{nombres[i].split(' ').map((palabra) => <span>{palabra}</span>)}</span>}
+        </span>
+      ))}
+    </div>
+  )}
+</div>
+
+<style>
+  .tb { position: relative; aspect-ratio: 1; }
+  .tb__svg { display: block; width: 100%; height: 100%; overflow: visible; }
+
+  .tb__plano { fill: none; stroke: var(--filete); stroke-width: 1; vector-effect: non-scaling-stroke; }
+  /* Apagada, la casilla apenas se adivina: el sistema está, pero nadie ve qué tiene. */
+  .tb__luz { fill: var(--texto); opacity: calc(.22 + .78 * var(--v-luz, 1)); }
+  .tb__urg { fill: var(--rojo); opacity: var(--v-urg, 0); }
+  .tb__oro { fill: var(--oro); opacity: var(--v-nom, 1); }
+  /* El marco del tablero terminado: como en los pasos del sitio, dice "queda a tu nombre". */
+  .tb__marco { fill: none; stroke: var(--texto); stroke-width: 2; vector-effect: non-scaling-stroke; opacity: var(--v-fin, 1); }
+
+  .tb__c--suelta {
+    transform-box: fill-box; transform-origin: center;
+    transform:
+      translate(calc(var(--dx) * var(--v-suelta, 0) * 1px), calc(var(--dy) * var(--v-suelta, 0) * 1px))
+      rotate(calc(var(--dr) * var(--v-suelta, 0) * 1deg));
+  }
+
+  /* Los nombres: una capa justo encima del tablero. Cada nombre ocupa su casilla (un
+     cuarto del tablero), así que el de una casilla suelta se aparta y gira con ella:
+     el 10 % de su caja es una unidad del dibujo. */
+  .tb__nombres { position: absolute; inset: 0; pointer-events: none; }
+  .tb__n {
+    position: absolute; left: calc(var(--c) * 25%); top: calc(var(--f) * 25%); width: 25%; height: 25%;
+    display: grid; place-items: center; opacity: var(--v-nom, 1);
+  }
+  .tb__n--suelta {
+    transform:
+      translate(calc(var(--dx) * var(--v-suelta, 0) * 10%), calc(var(--dy) * var(--v-suelta, 0) * 10%))
+      rotate(calc(var(--dr) * var(--v-suelta, 0) * 1deg));
+  }
+  .tb__nt { grid-area: 1 / 1; color: var(--fondo); line-height: 1.3; text-align: center; white-space: nowrap; }
+  .tb__nt span { display: block; }
+  /* Sobre el oro la letra es tinta: el oro nunca es letra. */
+  .tb__n--oro .tb__nt { color: var(--tinta); font-weight: 700; }
+  .tb__n--suelta .tb__nt { opacity: calc(1 - var(--v-urg, 0)); }
+  .tb__n--suelta .tb__nt--urg { color: #fff; opacity: var(--v-urg, 0); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Las casillas se encienden una por una: se revisa casilla por casilla. */
+    .tb__luz { transition: opacity .3s ease calc(var(--v-espera, 0ms) + var(--i) * 45ms); }
+    .tb__urg, .tb__nt { transition: opacity .26s ease var(--v-espera, 0ms); }
+    /* Lo urgente vuelve a su sitio, y su nombre con él. */
+    .tb__c--suelta { transition: transform .56s var(--salida-larga) calc(var(--v-espera, 0ms) + var(--j) * 70ms); }
+    .tb__oro, .tb__marco, .tb__n { transition: opacity .32s ease var(--v-espera, 0ms); }
+    .tb__n--suelta { transition: opacity .32s ease var(--v-espera, 0ms), transform .56s var(--salida-larga) calc(var(--v-espera, 0ms) + var(--j) * 70ms); }
+  }
+</style>

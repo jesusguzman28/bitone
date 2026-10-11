@@ -1,0 +1,59 @@
+---
+// Rescate de un sistema. La página más distinta: quien llega YA tiene un sistema, lo
+// hizo alguien que ya no está y nadie se atreve a tocarlo.
+// Una sola idea: tu sistema es un damero que hoy nadie ve por dentro, y se aclara en
+// el orden del dueño. Primero se mira, después se dice qué conviene, se deja escrito
+// y recién al final se toca. La casilla dorada del signo son las reglas de tu negocio
+// que estaban solo dentro del programa.
+// Orden: la portada · el damero que se aclara, con los cuatro pasos y lo que viene
+// después (tinta) · por qué casi nunca se rehace · preguntas · cierre.
+// Ninguna sección repite el esquema de la anterior: texto y signo, dibujo que acompaña
+// a una lista larga, una frase a todo el ancho, título y preguntas.
+// El dinero vive en /como-trabajamos/: aquí se dice una vez que la revisión y su informe
+// tienen un solo precio fijo por escrito (paso 1, con el enlace que manda allá) y una
+// vez que arreglar se paga por horas o con un contrato mensual (paso 4).
+//
+// El cierre pregunta por el sistema, no por lo que se hace a mano: título, ejemplo,
+// arranque del mensaje ("Mi sistema: …") y mensaje de la página dicen lo mismo. Su
+// renglón 3 de "Qué pasa después" nombra la revisión, que es el primer paso de aquí.
+import Base from '../layouts/Base.astro';
+import PortadaInterior from '../components/PortadaInterior.astro';
+import TituloSeccion from '../components/TituloSeccion.astro';
+import PasosDamero from '../components/rescate/PasosDamero.astro';
+import Franqueza from '../components/Franqueza.astro';
+import Dudas from '../components/Dudas.astro';
+import CierreWhatsApp from '../components/CierreWhatsApp.astro';
+import Icono from '../components/Icono.astro';
+import { mensajes } from '../data/empresa';
+import { paginas, existe, destino } from '../data/navegacion';
+import { rescate as d } from '../data/rescate';
+
+const pagina = paginas.rescate;
+const aFondo = existe(paginas.comoTrabajamos.ruta) ? paginas.comoTrabajamos.ruta : undefined;
+---
+
+<Base
+  titulo="Rescate y mantenimiento de un sistema que ya tienes"
+  descripcion="Tienes un sistema y quien lo hizo ya no está. Lo revisamos, lo dejamos explicado y arreglamos lo urgente, para que cualquier equipo pueda mantenerlo."
+  signo={pagina.signo}
+  mensajeWhatsApp={mensajes.rescate}
+>
+  <PortadaInterior signo={pagina.signo} tonoDeAbajo="tinta" tono="rojo" rotulo={pagina.nombre} titulo={d.portada.titulo} entrada={d.portada.entrada} mensaje={mensajes.rescate} textoBoton={d.portada.boton} />
+
+  <!-- 1 · El damero que se aclara: cómo está hoy, los cuatro pasos y lo que viene después -->
+  <section class="seccion plano plano--tinta" id="como" aria-labelledby="t-como">
+    <TituloSeccion id="t-como" rotulo={d.como.rotulo} titulo={d.como.titulo} entrada={d.como.entrada} />
+    <PasosDamero hoy={d.damero.hoy} pasos={d.damero.pasos} despues={d.damero.despues} href={aFondo} final={d.damero.final} ejemplo={d.damero.ejemplo} nombres={d.damero.nombres} />
+  </section>
+
+  <!-- 2 · Arreglar antes que rehacer. El remate es la prueba: lo construido se puede abrir -->
+  <section class="seccion" aria-labelledby="t-franca">
+    <Franqueza id="t-franca" titulo={d.franca.titulo} texto={d.franca.texto} />
+    <p class="reticula remate"><a class="enlace" href={destino(paginas.proyectos)}>{d.franca.enlace}<Icono nombre="derecha" /></a></p>
+  </section>
+
+  <!-- 3 · Preguntas -->
+  <Dudas titulo="Antes de abrir tu sistema." preguntas={d.dudas} grupo="rescate" />
+
+  <CierreWhatsApp titulo={d.cierre.titulo} interes={d.portada.interes} ejemplo={d.cierre.ejemplo} prefijo={d.cierre.prefijo} general={mensajes.rescate} despues={d.cierre.despues} />
+</Base>

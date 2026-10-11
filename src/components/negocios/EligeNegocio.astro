@@ -1,0 +1,317 @@
+---
+// El momento propio de /negocios/: el signo de la página hecho composición. El signo
+// "enlace" son dos cuadrados unidos, tu negocio y su sistema. Aquí son dos cuadros de
+// verdad: el de hoy, apenas un contorno, con la frase del dueño y lo que pasa; y el del
+// sistema, un objeto de papel, con lo que cambia. Se montan en diagonal, como en el signo,
+// y donde se cruzan (arena) van las flechas que llevan de un renglón al otro.
+// Arriba, los cuatro negocios en una banda de cuatro módulos: se elige uno y cambian la
+// frase, los tres pares, lo que lleva dentro y el botón.
+//
+// Funciona sin JavaScript: las opciones son botones de radio (se recorren con las
+// flechas del teclado) y los cuadros responden con :has(). Tres formas, de más a menos:
+//   - con :has() y subgrid: las opciones y un negocio a la vista;
+//   - con subgrid y sin :has(): sin opciones, los cuatro negocios, uno bajo otro, cada
+//     uno con sus dos cuadros;
+//   - sin subgrid (aunque haya :has()): sin opciones ni cuadros, los cuatro negocios
+//     como bloques simples. Toda la composición depende de subgrid.
+//
+// Los cuatro negocios ocupan la misma rejilla (filas compartidas con subgrid): cada fila
+// mide lo que el texto más alto de los cuatro, así que al cambiar de negocio nada sube ni
+// baja, ni en escritorio ni en celular.
+//
+// En tableta y celular los cuadros van uno sobre otro, corridos media columna: arriba
+// los tres renglones de hoy y abajo los tres del sistema, en el mismo orden.
+//
+// Lector de pantalla y teclado: la leyenda dice qué se elige y qué pasa, y cada opción
+// lleva como descripción la frase de su negocio, que es lo primero que cambia abajo.
+// Al elegir, el negocio queda en la dirección (/negocios/#ferreteria) para compartirla.
+//
+// Va sobre un plano tinta y trae su retícula: se pone directo dentro de la sección.
+// Uno por página (los radios comparten nombre). Hasta cuatro negocios, tres pares cada uno.
+import Icono from '../Icono.astro';
+import BotonWhatsApp from '../BotonWhatsApp.astro';
+import type { Rubro } from '../../data/negocios';
+
+interface Props {
+  rubros: Rubro[];
+  /** Qué se elige y qué pasa al elegir, para lector de pantalla. */
+  leyenda: string;
+  /** Los rótulos de los dos cuadros y de la lista de lo que lleva dentro. */
+  rotulos: { hoy: string; con: string; dentro: string };
+  class?: string;
+}
+
+const { rubros, leyenda, rotulos, class: clase, ...resto } = Astro.props;
+---
+
+<div class:list={['en', 'reticula', clase]} {...resto}>
+  <fieldset class="en__elige">
+    <legend class="solo-lector">{leyenda}</legend>
+    <div class="en__ops">
+      {rubros.map((r, i) => (
+        <label class="en__op">
+          <input class="solo-lector" type="radio" name="rubro" id={`en-${r.id}`} value={r.id} checked={i === 0} aria-describedby={`en-f-${r.id}`} />
+          <span class="rotulo en__num" aria-hidden="true">0{i + 1}</span>
+          <span class="en__nom">{r.nombre}</span>
+        </label>
+      ))}
+    </div>
+  </fieldset>
+
+  <div class="en__lazo">
+    {rubros.map((r) => (
+      <article class="en__capa" id={r.id} aria-labelledby={`en-t-${r.id}`}>
+        <i class="en__cuadro en__cuadro--hoy" aria-hidden="true"></i>
+        <i class="en__cuadro en__cuadro--con" aria-hidden="true"></i>
+        <i class="en__cuadro en__cuadro--cruce" aria-hidden="true"></i>
+
+        <h3 class="rotulo en__rot en__rot--hoy" id={`en-t-${r.id}`}><i class="en__pt en__pt--suelto" aria-hidden="true"></i>{rotulos.hoy} {r.enTu}</h3>
+        <p class="subtitulo en__frase" id={`en-f-${r.id}`}>{r.frase}</p>
+        <p class="rotulo en__rot en__rot--con" aria-hidden="true"><span><i class="en__pt"></i>{rotulos.con}</span><Icono nombre="abajo" class="en__baja" /></p>
+
+        <ul class="en__pares">
+          {r.pares.map((p, n) => (
+            <li style={`--n:${n}`}>
+              <p class="en__hoy"><i class="en__pt en__pt--suelto" aria-hidden="true"></i><span><span class="solo-lector">Hoy: </span>{p.hoy}</span></p>
+              <Icono nombre="derecha" class="en__flecha" />
+              <p class="en__con"><span class="solo-lector">{rotulos.con}: </span>{p.despues}</p>
+            </li>
+          ))}
+        </ul>
+
+        <div class="en__dentro">
+          <p class="rotulo en__dentro-t">{rotulos.dentro}</p>
+          <ul class="rotulo en__partes">{r.incluye.map((x) => <li>{x}</li>)}</ul>
+        </div>
+
+        <div class="en__pie">
+          <BotonWhatsApp variante="rojo" mensaje={r.mensaje} texto={r.boton} />
+          <p class="menor en__tambien">{r.tambien}</p>
+        </div>
+      </article>
+    ))}
+  </div>
+</div>
+
+<script>
+  // Un enlace a /negocios/#ferreteria llega con ese negocio ya elegido. Sin este guion
+  // el ancla baja igual hasta los cuadros, con el primer negocio a la vista.
+  const elegir = () => {
+    let id = '';
+    // Una dirección mal escrita (#%E0) no es un error de la página: se ignora.
+    try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
+    const radio = id ? document.getElementById(`en-${id}`) : null;
+    if (radio instanceof HTMLInputElement && radio.type === 'radio') radio.checked = true;
+  };
+  elegir();
+  addEventListener('hashchange', elegir);
+
+  // Al elegir, el negocio queda en la dirección: así se puede compartir. Se reemplaza la
+  // entrada del historial: no se llena de pasos ni se mueve la página.
+  for (const radio of document.querySelectorAll<HTMLInputElement>('.en__elige input[type="radio"]')) {
+    radio.addEventListener('change', () => { if (radio.checked) history.replaceState(history.state, '', `#${radio.value}`); });
+  }
+</script>
+
+<style>
+  /* --p: el aire por dentro de cada cuadro. --q: el aire a cada lado del cruce.
+     --filas: las filas de los cuadros. Siete en escritorio: la frase · los dos rótulos ·
+     tres pares, los tres del mismo alto · el aire del pie del cuadro de hoy · el pie del
+     sistema, con el botón al lado. */
+  .en {
+    --p: clamp(20px, calc(var(--u) * .4), 36px); --q: calc(var(--u) * .35);
+    --filas: auto auto repeat(3, 1fr) var(--p) auto;
+  }
+
+  /* ---------- las opciones: una banda de cuatro módulos. La elegida, en rojo ----------
+     Solo se ven cuando hay :has() y subgrid (más abajo). */
+  .en__elige { display: none; grid-column: 1 / -1; min-inline-size: 0; margin: 0; padding: 0; border: 0; }
+  /* Sin separación: cada opción mide cuatro módulos justos y sus bordes caen en las
+     mismas líneas que los cuadros de abajo. */
+  .en__ops { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .en__op {
+    position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; column-gap: 14px;
+    min-height: clamp(60px, calc(var(--u) * .9), 76px); padding: 0 calc(var(--u) * .28);
+    /* Un tono lleno, no una línea traslúcida: donde dos opciones se montan, no se suma. */
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--texto) 30%, var(--fondo));
+    cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent;
+    transition: background-color var(--d-toque) ease, box-shadow var(--d-toque) ease, transform .14s var(--salida);
+  }
+  .en__op + .en__op { margin-left: -1px; }
+  .en__num { color: var(--texto-2); transition: color var(--d-toque) ease; }
+  .en__nom { font-weight: 700; font-stretch: 108%; font-size: var(--t-destacado); line-height: 1.1; letter-spacing: -.02em; }
+
+  /* ---------- lo que vale para las tres formas ---------- */
+  .en__lazo { grid-column: 1 / -1; }
+
+  /* El punto de cada rótulo: suelto (hoy, en desorden) o lleno (dicho). */
+  .en__pt { display: inline-block; width: .62em; height: .62em; margin-right: .75em; background: var(--rojo); }
+  .en__pt--suelto { background: none; box-shadow: inset 0 0 0 1.5px currentColor; transform: rotate(18deg); }
+
+  /* Lo que lleva dentro: una lista de rótulos, cada uno con su punto lleno. Sin contorno:
+     con él parecían botones, y no se tocan. */
+  .en__partes { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 8px; }
+  .en__partes li { display: flex; align-items: center; white-space: nowrap; }
+  .en__partes li::before { content: ""; flex: none; width: .45em; height: .45em; margin-right: .5em; background: currentColor; }
+
+  .en__tambien { color: var(--texto-2); text-wrap: pretty; }
+
+  /* ---------- con subgrid: los dos cuadros ---------- */
+  @supports (grid-template-columns: subgrid) {
+    .en__lazo { display: grid; grid-template-columns: subgrid; }
+    .en__capa { --ver: 1; grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; grid-template-rows: var(--filas); }
+    .en__capa + .en__capa { margin-top: calc(var(--u) * .7); }
+
+    .en__cuadro { display: block; pointer-events: none; }
+    /* Hoy: un contorno. Va de la fila 1 a la 6, módulos 1 a 8. */
+    .en__cuadro--hoy { grid-area: 1 / 1 / 7 / 9; box-shadow: inset 0 0 0 1px var(--texto); }
+    /* El sistema: un objeto de papel. Empieza una fila más abajo y termina una después. */
+    .en__cuadro--con { grid-area: 2 / 8 / 8 / -1; background: var(--papel); }
+    /* Donde se cruzan: el módulo 8, de la fila 2 a la 6. */
+    .en__cuadro--cruce { grid-area: 2 / 8 / 7 / 9; background: var(--arena); }
+
+    .en__frase { grid-area: 1 / 1 / 2 / 9; padding: calc(var(--p) * 1.05) var(--p) 0; opacity: var(--ver); }
+    .en__rot { align-self: end; opacity: var(--ver); }
+    .en__rot--hoy { grid-area: 2 / 1 / 3 / 8; padding: var(--p) var(--q) 12px var(--p); color: var(--texto-2); }
+    .en__rot--con { grid-area: 2 / 9 / 3 / -1; padding: var(--p) var(--p) 12px var(--q); color: var(--rojo-hondo); }
+    .en__capa :global(.en__baja) { display: none; }
+
+    /* Los pares: la lista y sus renglones no hacen caja; cada frase va a su fila. */
+    .en__pares, .en__pares > li { display: contents; }
+    .en__hoy {
+      grid-column: 1 / 8; grid-row: calc(3 + var(--n)); margin: 0 var(--q) 0 var(--p); padding-block: 17px 16px;
+      display: grid; grid-template-columns: 1.45em minmax(0, 1fr); align-items: baseline;
+      border-top: 1px solid var(--filete); color: var(--texto-2); line-height: 1.4; text-wrap: pretty; opacity: var(--ver);
+    }
+    .en__hoy .en__pt { margin: 0; font-size: var(--t-rotulo); }
+    /* La flecha va a la altura del primer renglón de su par, no al centro de la fila. */
+    .en__capa :global(.en__flecha) {
+      grid-column: 8 / 9; grid-row: calc(3 + var(--n)); place-self: start center;
+      width: 20px; height: 20px; margin-top: calc(14px + (var(--t-destacado) * 1.15 - 20px) / 2); color: var(--tinta);
+    }
+    .en__con {
+      grid-column: 9 / -1; grid-row: calc(3 + var(--n)); margin: 0 var(--p) 0 var(--q); padding-block: 14px 15px;
+      border-top: 1px solid var(--linea); color: var(--tinta);
+      font-weight: 700; font-stretch: 108%; font-size: var(--t-destacado); line-height: 1.15; letter-spacing: -.02em; text-wrap: balance;
+      opacity: var(--ver); transform: translateX(calc((1 - var(--ver)) * -12px));
+    }
+
+    /* Lo que lleva dentro: el pie del cuadro del sistema. */
+    .en__dentro { grid-area: 7 / 9 / 8 / -1; margin: 0 var(--p) 0 var(--q); padding-block: 14px var(--p); border-top: 1px solid var(--linea); opacity: var(--ver); }
+    .en__dentro-t { color: var(--tinta-2); }
+    .en__partes { color: var(--tinta); }
+
+    /* El botón del negocio elegido: abajo a la izquierda, asentado en el pie del sistema.
+       Su nota va siempre debajo: así no cambia de sitio de un negocio a otro. */
+    .en__pie { grid-area: 7 / 1 / 8 / 8; align-self: end; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: calc(var(--u) * .3) var(--q) 0 0; opacity: var(--ver); }
+
+    /* ---------- con :has(), además: se elige un negocio ---------- */
+    @supports selector(:has(*)) {
+      .en__elige { display: block; }
+      .en__op:has(:checked) { z-index: 1; background: var(--rojo); box-shadow: inset 0 0 0 1px var(--rojo); color: #fff; }
+      .en__op:has(:checked) .en__num { color: #fff; }
+      .en__op:has(:focus-visible) { z-index: 2; outline: 2px solid var(--foco); outline-offset: 3px; }
+      .en__op:active { transform: scale(.97); }
+
+      /* Los cuatro negocios en la misma rejilla: las filas son de todos. */
+      .en__lazo { grid-template-rows: var(--filas); margin-top: calc(var(--u) * .45); }
+      /* Quien llega con un ancla (/negocios/#ferreteria) ve también la banda de opciones:
+         el margen de llegada es el alto de la banda más su aire. */
+      .en__capa {
+        --ver: 0; grid-area: 1 / 1 / -1 / -1; grid-template-rows: subgrid; visibility: hidden;
+        scroll-margin-top: calc(clamp(60px, calc(var(--u) * .9), 76px) + var(--u) * .45 + 12px);
+      }
+      .en__capa + .en__capa { margin-top: 0; }
+      .en:has(.en__op:nth-child(1) :checked) .en__capa:nth-child(1),
+      .en:has(.en__op:nth-child(2) :checked) .en__capa:nth-child(2),
+      .en:has(.en__op:nth-child(3) :checked) .en__capa:nth-child(3),
+      .en:has(.en__op:nth-child(4) :checked) .en__capa:nth-child(4) { --ver: 1; visibility: visible; }
+
+      @media (hover: hover) and (pointer: fine) {
+        .en__op:not(:has(:checked)):hover { z-index: 1; box-shadow: inset 0 0 0 1px var(--texto); }
+      }
+      /* Los cuadros no se mueven: cambia lo escrito. Lo del sistema llega desde el cruce,
+         un renglón tras otro. Lo que se va, se va de golpe (la capa ya está oculta). */
+      @media (prefers-reduced-motion: no-preference) {
+        .en__frase, .en__rot, .en__hoy, .en__dentro, .en__pie { transition: opacity .28s ease; }
+        .en__con { transition: opacity .28s ease calc(var(--n) * 55ms + 40ms), transform .44s var(--salida) calc(var(--n) * 55ms + 40ms); }
+      }
+    }
+
+    /* ---------- tableta y celular: los cuadros, uno sobre otro y corridos (--d) ----------
+       Once filas: rótulo · frase · tres de hoy · el cruce · tres del sistema · lo que lleva · el botón. */
+    @media (max-width: 959px) {
+      .en { --p: 24px; --d: var(--u); --filas: repeat(11, auto); }
+      .en__ops { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .en__op + .en__op:nth-child(odd) { margin-left: 0; }
+      .en__op:nth-child(n + 3) { margin-top: -1px; }
+
+      .en__cuadro--hoy { grid-area: 1 / 1 / 7 / -1; margin-right: var(--d); }
+      .en__cuadro--con { grid-area: 6 / 1 / 11 / -1; margin-left: var(--d); }
+      .en__cuadro--cruce { grid-area: 6 / 1 / 7 / -1; margin-inline: var(--d); }
+
+      .en__rot--hoy { grid-area: 1 / 1 / 2 / -1; margin-right: var(--d); padding: var(--p) var(--p) 0; }
+      .en__frase { grid-area: 2 / 1 / 3 / -1; margin-right: var(--d); padding: 10px var(--p) 18px; }
+      /* Las filas son de los cuatro negocios: si a uno le toca una fila más alta que su
+         texto (un renglón en una casilla de dos), el texto va al centro, no pegado arriba. */
+      .en__hoy { grid-column: 1 / -1; margin: 0 calc(var(--d) + var(--p)) 0 var(--p); padding-block: 12px; align-content: center; }
+      .en__pares > li:last-child .en__hoy { padding-bottom: 18px; }
+
+      /* El rótulo del sistema va sobre el cruce, con la flecha que baja. */
+      .en__rot--con { grid-area: 6 / 1 / 7 / -1; align-self: stretch; margin-inline: var(--d); padding: 12px var(--p); display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--tinta); }
+      .en__capa :global(.en__baja) { display: block; flex: none; width: 18px; height: 18px; }
+      .en__capa :global(.en__flecha) { display: none; }
+
+      .en__con { grid-column: 1 / -1; grid-row: calc(7 + var(--n)); margin: 0 var(--p) 0 calc(var(--d) + var(--p)); padding-block: 13px; display: grid; align-content: center; }
+      .en__pares > li:first-child .en__con { border-top: 0; }
+      .en__pares > li:last-child .en__con { padding-bottom: 16px; }
+      .en__dentro { grid-area: 10 / 1 / 11 / -1; margin: 0 var(--p) 0 calc(var(--d) + var(--p)); padding-block: 12px var(--p); }
+      .en__pie { grid-area: 11 / 1 / 12 / -1; align-self: start; padding: 20px 0 0; }
+
+      /* La banda tiene dos filas. */
+      @supports selector(:has(*)) {
+        .en__lazo { margin-top: calc(var(--u) * .3); }
+        .en__capa { scroll-margin-top: calc(clamp(60px, calc(var(--u) * .9), 76px) * 2 + var(--u) * .3 + 12px); }
+      }
+    }
+
+    @media (max-width: 699px) {
+      .en { --p: 16px; --d: calc(var(--u) * .5); }
+      .en__op { min-height: 52px; padding: 0 14px; column-gap: 10px; }
+      .en__nom { font-size: 1.0625rem; }
+      .en__frase { padding: 8px var(--p) 14px; }
+      .en__hoy { padding-block: 10px; }
+      .en__pares > li:last-child .en__hoy { padding-bottom: 14px; }
+      .en__rot--con { padding-block: 10px; }
+      .en__con { padding-block: 11px; }
+      .en__pares > li:last-child .en__con { padding-bottom: 14px; }
+      .en__dentro { padding-block: 11px var(--p); }
+      .en__partes { margin-top: 6px; }
+      .en__pie { align-items: stretch; padding-top: 14px; gap: 8px; }
+
+      @supports selector(:has(*)) {
+        .en__lazo { margin-top: 14px; }
+        .en__capa { scroll-margin-top: 130px; }
+      }
+    }
+  }
+
+  /* ---------- sin subgrid: los cuatro negocios, como bloques simples ----------
+     Navegadores con :has() y sin subgrid (Chrome y Edge 105 a 116, Samsung Internet hasta
+     la 23). Sin cuadros ni opciones: rótulo, frase, los tres pares (hoy y, debajo, con el
+     sistema), lo que lleva dentro y el botón. Todo sobre el plano de la sección. */
+  @supports not (grid-template-columns: subgrid) {
+    .en__capa + .en__capa { margin-top: calc(var(--u) * .6); padding-top: calc(var(--u) * .5); border-top: 1px solid var(--filete-fuerte); }
+    .en__cuadro, .en__rot--con, .en__capa :global(.en__flecha) { display: none; }
+    .en__rot--hoy { color: var(--texto-2); }
+    .en__frase { max-width: 22em; margin-top: 10px; }
+    .en__pares { max-width: 40em; margin-top: 20px; }
+    .en__pares > li { padding-block: 12px; border-top: 1px solid var(--filete); }
+    .en__hoy { color: var(--texto-2); line-height: 1.4; }
+    .en__hoy .en__pt { font-size: var(--t-rotulo); }
+    .en__con { margin-top: 4px; font-weight: 700; font-stretch: 108%; font-size: var(--t-destacado); line-height: 1.15; letter-spacing: -.02em; }
+    .en__dentro { max-width: 40em; padding-top: 12px; border-top: 1px solid var(--filete); }
+    .en__dentro-t { color: var(--texto-2); }
+    .en__pie { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; margin-top: 22px; }
+  }
+</style>

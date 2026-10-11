@@ -1,0 +1,114 @@
+/* ==========================================================================
+   Bit One · fichas del sistema
+   Todo lo que se repite en el sitio sale de aquí. Si un valor no está en este
+   archivo, antes de escribirlo a mano pregúntate si falta una ficha.
+   ========================================================================== */
+
+:root {
+  /* ---------- color ---------- */
+  --hueso: #F4EEE4;        /* fondo de la página */
+  --papel: #FBF8F2;        /* planos alternos, hojas y pantallas del ejemplo */
+  --arena: #E6DCCB;        /* cuarto tono del tejido */
+  --tinta: #1A1312;        /* texto y planos oscuros */
+  --tinta-2: #5C4F49;      /* texto secundario sobre claro (6,7:1) */
+  --piedra: #8A7B73;       /* solo dibujo: las piezas sueltas del friso */
+  --rojo: #D91023;         /* la marca: acción, "ahora", campo del acuerdo */
+  --rojo-hondo: #B30D1C;   /* rojo para letra chica sobre claro (6,1:1) */
+  --oro: #E8A317;          /* dosis mínimas: el bit, una pieza recuperada. Nunca texto ni acento */
+  --wa: #25D366;           /* solo el WhatsApp fijo */
+
+  --hueso-2: rgba(244, 238, 228, .7);          /* texto secundario sobre tinta */
+  --linea: rgba(26, 19, 18, .16);              /* filete entre filas */
+  --linea-fuerte: rgba(26, 19, 18, .36);
+  --linea-clara: rgba(244, 238, 228, .24);     /* filete sobre tinta */
+  --linea-blanca: rgba(255, 255, 255, .42);    /* filete sobre rojo */
+
+  /* Lo que usa cada componente. Un plano (.plano--tinta, .plano--rojo...) las
+     cambia y todo lo de dentro se recolorea solo. */
+  --fondo: var(--hueso);
+  --texto: var(--tinta);
+  --texto-2: var(--tinta-2);
+  --acento: var(--rojo-hondo);
+  --filete: var(--linea);
+  --filete-fuerte: var(--tinta);
+  --foco: var(--tinta);
+
+  /* ---------- retícula ----------
+     --u es un módulo; --m, el margen lateral. Escritorio: 16 módulos y uno de
+     margen por lado. Se miden contra el ancho real de .pagina (ver base.css). */
+  --u: calc(100cqw / 18);
+  --m: var(--u);
+  --cols: 16;
+  --cab: 64px;             /* alto de la cabecera */
+  --barra-wa: 0px;         /* alto de la barra fija de WhatsApp (solo celular) */
+  --aire: calc(var(--u) * 1.5);       /* aire arriba y abajo de una sección */
+  --aire-corto: calc(var(--u) * .8);  /* entre el título y su contenido */
+
+  /* ---------- letra ---------- */
+  --f-texto: "Archivo", "Archivo Respaldo", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --f-mono: "Martian Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  /* Escala: cinco tamaños de titular y cuatro de texto. No hay intermedios. */
+  --t-cartel: min(calc(var(--u) * 1.78), 19.4svh);
+  --t-cartel-menor: calc(var(--t-cartel) * .62);   /* el plano rojo y el cierre */
+  --t-titulo: clamp(2.125rem, calc(var(--u) * .76), 5rem);
+  --t-subtitulo: clamp(1.3125rem, calc(var(--u) * .42), 2.5rem);
+  --t-destacado: clamp(1.1875rem, calc(var(--u) * .3), 1.625rem);
+  --t-entrada: clamp(1.0625rem, calc(var(--u) * .255), 1.375rem);
+  --t-texto: 1.0625rem;
+  --t-menor: .9688rem;
+  --t-rotulo: .78rem;      /* 12,5 px: el mínimo del sitio */
+
+  /* ancho de la letra (eje wdth de Archivo) */
+  --ancho-cartel: 125%;
+  --ancho-titulo: 118%;
+  --ancho-subtitulo: 112%;
+
+  /* ---------- movimiento ---------- */
+  --salida: cubic-bezier(.23, 1, .32, 1);        /* entradas y respuestas */
+  --salida-larga: cubic-bezier(.22, 1, .36, 1);  /* piezas que viajan */
+  --d-toque: .15s;         /* color al pasar o tocar */
+  --d-corta: .24s;         /* acordeón, flechas, menú */
+  --d-entrada: .4s;        /* bloques que aparecen */
+
+  /* ---------- capas ---------- */
+  --z-cab: 50;
+  --z-wa: 60;
+
+  interpolate-size: allow-keywords;
+}
+
+/* Tableta: 8 módulos y uno de margen */
+@media (max-width: 959px) {
+  :root {
+    --u: calc(100cqw / 10);
+    --cols: 8;
+    --t-cartel: calc(var(--u) * 1.02);
+    --t-cartel-menor: calc(var(--t-cartel) * .9);
+    --aire: calc(var(--u) * 1.2);
+    --aire-corto: calc(var(--u) * .6);
+  }
+}
+
+/* Celular: 6 módulos y 0,3 de margen */
+@media (max-width: 699px) {
+  :root {
+    --u: calc(100cqw / 6.6);
+    --m: calc(var(--u) * .3);
+    --cols: 6;
+    --cab: 56px;
+    --barra-wa: calc(56px + env(safe-area-inset-bottom, 0px));
+    --aire: calc(var(--u) * .64);
+    --aire-corto: calc(var(--u) * .4);
+    --t-cartel: calc(var(--u) * .92);
+    --t-cartel-menor: calc(var(--t-cartel) * .8);
+    --t-titulo: calc(var(--u) * .57);
+    --t-subtitulo: 1.4375rem;
+    --t-destacado: 1.1875rem;
+    --t-texto: 1rem;
+    --t-menor: .9375rem;
+    --ancho-cartel: 104%;
+    --ancho-titulo: 108%;
+    --ancho-subtitulo: 108%;
+  }
+}

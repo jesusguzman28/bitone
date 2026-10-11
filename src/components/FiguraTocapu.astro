@@ -1,0 +1,78 @@
+---
+// Un tocapu de 4 x 4 en uno de sus estados: la figura de un paso. La usan PasosTocapu
+// (portada, /apps/ y /automatizacion/) y como-trabajamos/Recorrido: el dibujo está una
+// sola vez, aquí, y siempre es el mismo paño (misma semilla).
+//   llenas     cuántas casillas van tejidas, de arriba abajo (0 a 16)
+//   sueltas    piezas todavía sin tejer: giradas y en tono piedra
+//   revision   piezas en revisión, con contorno rojo
+//   bit        la casilla que lleva el bit dorado, como el logo (-1: ninguna)
+//   marco      el paño terminado, enmarcado
+// Entre 1 y 15 casillas llenas, la siguiente por llenar lleva el contorno rojo: es la
+// que está en curso.
+// El único oro de la figura es el bit: las piezas de rescate van sin su casilla dorada.
+// Si la figura está dentro de un bloque con data-rev, sus casillas se llenan una por
+// una cuando el bloque entra en pantalla.
+import { generarFriso } from '../lib/friso';
+import type { NombreSigno } from '../lib/signos';
+
+export interface Figura {
+  llenas: number;
+  sueltas?: { n: number; giro: number }[];
+  revision?: number[];
+  bit?: number;
+  marco?: boolean;
+}
+
+interface Props extends Figura {
+  /** Signo dominante del tejido: el de la página. */
+  signo?: NombreSigno;
+  class?: string;
+}
+
+const { llenas, sueltas = [], revision = [], bit = -1, marco = false, signo, class: clase, ...resto } = Astro.props;
+const casillas = generarFriso({ columnas: 4, filas: 4, tipo: 'tejido', signo, semilla: 11 }).flatMap((f) => f.piezas);
+const cursor = llenas > 0 && llenas < 16 ? llenas : -1;
+---
+
+<svg class:list={['fig', clase]} viewBox="0 0 40 40" aria-hidden="true" focusable="false" {...resto}>
+  <g transform={marco ? 'translate(2.4 2.4) scale(.88)' : undefined}>
+    {casillas.map((c, n) =>
+      n < llenas ? (
+        <g class={`pieza pieza--sin-oro tono-${c.tono}`} transform={`translate(${c.x} ${c.y})`} style={`--i:${n}`}>
+          <rect width="10" height="10" />
+          {n === bit ? <rect class="fig__bit" x="3" y="3" width="4" height="4" /> : <use href={`#signo-${c.signo}`} width="10" height="10" />}
+        </g>
+      ) : n === cursor ? (
+        <rect class="fig__cursor" x={c.x + 0.5} y={c.y + 0.5} width="9" height="9" />
+      ) : (
+        <rect class="fig__hueco" x={c.x} y={c.y} width="10" height="10" />
+      ),
+    )}
+    {sueltas.map((s) => (
+      <g transform={`translate(${casillas[s.n].x} ${casillas[s.n].y}) rotate(${s.giro} 5 5)`}>
+        <g class="pieza pieza--sin-oro tono-piedra" style={`--i:${s.n}`}>
+          <rect width="10" height="10" />
+          <use href={`#signo-${casillas[s.n].signo}`} width="10" height="10" />
+        </g>
+      </g>
+    ))}
+    {revision.map((n) => <rect class="fig__cursor" x={casillas[n].x + 0.5} y={casillas[n].y + 0.5} width="9" height="9" />)}
+  </g>
+  {marco && <rect class="fig__marco" x="0.7" y="0.7" width="38.6" height="38.6" />}
+</svg>
+
+<style>
+  .fig { display: block; width: 100%; height: auto; overflow: visible; }
+  .fig__hueco { fill: none; stroke: var(--linea-fuerte); stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .fig__cursor { fill: none; stroke: var(--rojo); stroke-width: 2.5; vector-effect: non-scaling-stroke; }
+  /* El marco del paño terminado se ve: es lo que dice "queda a tu nombre". */
+  .fig__marco { fill: none; stroke: var(--texto); stroke-width: 1.4; }
+  .fig__bit { fill: var(--oro); }
+
+  /* Las casillas se llenan una por una cuando el bloque que contiene la figura entra en
+     pantalla (.espera y .visto los pone el guion de Base.astro en lo que lleva data-rev). */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.espera) .fig .pieza { opacity: 0; }
+    :global(.espera.visto) .fig .pieza { opacity: 1; transition: opacity .24s ease; transition-delay: calc(var(--rd, 0ms) + var(--i) * 12ms); }
+  }
+</style>

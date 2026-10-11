@@ -1,0 +1,100 @@
+---
+// Un proyecto de la vitrina de /proyectos/: su texto en una mitad y sus objetos en la otra.
+// Hace lo mismo que Caso (el de la portada) con tres diferencias que solo necesita esta
+// página. Se quedó como pieza propia: meterlas en Caso era rehacer una pieza que la
+// portada usa tal cual. Si cambias cómo se cuenta un proyecto (rótulo, nombre, resumen,
+// enlace, apps), cambia las dos.
+//   · El texto arranca siempre en un origen de mitad: módulo 1 o módulo 9. Así los dos
+//     proyectos dejan el mismo canal de un módulo entre el texto y los objetos.
+//   · Los objetos van en el <slot /> tal cual: una <Escena> si se salen del margen, o un
+//     <Dispositivo> suelto si lo respetan.
+//   · `monta`: en escritorio los objetos se alinean arriba y suben --monta sobre el
+//     borde de la sección. La medida la pone la página, que sabe qué hay encima.
+// (En celular el lugar va en su renglón, igual que en Caso.)
+//
+//   <CasoVitrina proyecto={apuray} lado="derecha" apps={[…]} monta>
+//     <Escena sangra="derecha"> <Dispositivo … /> <Dispositivo … data-en="abajo-izquierda" /> </Escena>
+//   </CasoVitrina>
+//
+// Va directo dentro de la sección (trae su retícula). Si algo se sale del margen, la
+// sección lleva overflow-x: clip.
+import Rotulo from '../Rotulo.astro';
+import Icono from '../Icono.astro';
+import ListaApps from '../ListaApps.astro';
+import type { Proyecto, App } from '../../data/proyectos';
+
+interface Props {
+  proyecto: Proyecto;
+  /** De qué lado van los objetos; el texto va al otro. Alterna entre dos seguidos. */
+  lado?: 'derecha' | 'izquierda';
+  /** Sus apps públicas, con icono y ficha. */
+  apps?: App[];
+  /** id del nombre: el artículo lo usa en aria-labelledby. */
+  id?: string;
+  nivel?: 2 | 3;
+  /** En escritorio, los objetos suben --monta (variable que pone la página). */
+  monta?: boolean;
+}
+
+const { proyecto, lado = 'derecha', apps = [], id = `caso-${proyecto.id}`, nivel = 2, monta = false } = Astro.props;
+const Nombre = `h${nivel}` as 'h2' | 'h3';
+---
+
+<article class:list={['reticula', 'vcaso', `vcaso--${lado}`, { 'vcaso--monta': monta }]} aria-labelledby={id}>
+  <div class="vcaso__txt" data-rev>
+    <Rotulo acento punto="ninguno">
+      <span class="junto">{proyecto.tipo}</span>{proyecto.lugar && <><span class="vcaso__sep" aria-hidden="true"> · </span><span class="junto vcaso__lugar">{proyecto.lugar}</span></>}
+    </Rotulo>
+    <Nombre class="titulo vcaso__t" id={id}>{proyecto.nombre}</Nombre>
+    <p class="vcaso__d">{proyecto.resumen}</p>
+    {proyecto.enlace && (
+      <a class="enlace" href={proyecto.enlace.url} target="_blank" rel="noopener">{proyecto.enlace.texto}<Icono nombre="fuera" /></a>
+    )}
+    {apps.length > 0 && <ListaApps apps={apps} class="vcaso__apps" />}
+  </div>
+  <div class="vcaso__objetos"><slot /></div>
+</article>
+
+<style>
+  .vcaso { align-items: center; }
+  /* Más aire entre un proyecto y otro que en la portada: aquí cada uno es una vitrina. */
+  .vcaso + .vcaso { margin-top: calc(var(--u) * 1.7); }
+  .vcaso__objetos { min-width: 0; }
+  .vcaso__t { margin-top: 12px; }
+  .vcaso__d { margin-top: 16px; color: var(--texto-2); font-size: var(--t-entrada); line-height: 1.42; text-wrap: pretty; }
+  .vcaso__txt .enlace { margin-top: 8px; }
+  .vcaso__txt :global(.vcaso__apps) { margin-top: 18px; }
+
+  /* Dos mitades, siempre: una arranca en el módulo 1 y la otra en el 9. */
+  .vcaso--derecha .vcaso__txt { grid-column: 1 / 8; grid-row: 1; }
+  .vcaso--derecha .vcaso__objetos { grid-column: 9 / -1; grid-row: 1; }
+  .vcaso--izquierda .vcaso__objetos { grid-column: 1 / 8; grid-row: 1; }
+  .vcaso--izquierda .vcaso__txt { grid-column: 9 / -1; grid-row: 1; }
+
+  @media (min-width: 960px) {
+    .vcaso--monta .vcaso__objetos { align-self: start; margin-top: calc(var(--monta, 0px) * -1); }
+  }
+
+  /* Tableta y celular: los objetos arriba y el texto debajo. Lo que va a la derecha
+     deja un módulo libre a la izquierda (se sale por el otro lado); lo que va a la
+     izquierda respeta los dos márgenes. */
+  @media (max-width: 959px) {
+    .vcaso + .vcaso { margin-top: calc(var(--u) * 1.3); }
+    .vcaso .vcaso__txt { grid-column: 1 / -1; grid-row: 2; margin-top: calc(var(--u) * .7); }
+    .vcaso--derecha .vcaso__objetos { grid-column: 2 / -1; }
+    .vcaso--izquierda .vcaso__objetos { grid-column: 1 / -1; }
+  }
+  @media (max-width: 699px) {
+    .vcaso + .vcaso { margin-top: calc(var(--u) * 1.1); }
+    .vcaso .vcaso__txt { margin-top: 32px; }
+    .vcaso .vcaso__objetos { grid-column: 1 / -1; }
+    /* El lugar, en su renglón: "Pedidos y reparto · Coracora, Ayacucho" no cabe en una
+       línea por debajo de 360 px. */
+    .vcaso__sep { display: none; }
+    .vcaso__lugar { display: block; }
+    .vcaso__t { margin-top: 6px; }
+    .vcaso__d { margin-top: 10px; font-size: 1rem; }
+    .vcaso__txt .enlace { margin-top: 2px; }
+    .vcaso__txt :global(.vcaso__apps) { margin-top: 10px; }
+  }
+</style>

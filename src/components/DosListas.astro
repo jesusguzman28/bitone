@@ -1,0 +1,60 @@
+---
+// Dos listas enfrentadas: de un lado cuándo basta otra cosa y, del otro, cuándo
+// conviene esto. Es la franqueza de la casa cuando hay varias razones de cada lado.
+//   <DosListas
+//     a={{ rotulo: 'Te basta uno ya hecho si', puntos: ['…', '…'] }}
+//     b={{ rotulo: 'Te conviene a medida si', puntos: ['…', '…'] }}
+//   />
+// `a` es la lista neutra (punto hueco, texto secundario) y `b` la que pesa (punto
+// lleno, texto firme). Va dentro de una .reticula, o en el <slot /> de Franqueza,
+// y se asienta en los dos ejes del sitio: `a` en el módulo 1 y `b` en el 9.
+import Rotulo from './Rotulo.astro';
+
+interface Lista {
+  rotulo: string;
+  puntos: string[];
+}
+
+interface Props {
+  a: Lista;
+  b: Lista;
+  class?: string;
+}
+
+const { a, b, class: clase, ...resto } = Astro.props;
+---
+
+<div class:list={['dos', clase]} {...resto}>
+  <div class="dos__col dos__col--a">
+    <Rotulo punto="hueco" como="h3">{a.rotulo}</Rotulo>
+    <ul>{a.puntos.map((p) => <li>{p}</li>)}</ul>
+  </div>
+  <div class="dos__col dos__col--b">
+    <Rotulo acento como="h3">{b.rotulo}</Rotulo>
+    <ul>{b.puntos.map((p) => <li>{p}</li>)}</ul>
+  </div>
+</div>
+
+<style>
+  .dos { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-items: start; }
+  .dos__col { padding-top: 16px; border-top: 1px solid var(--filete-fuerte); }
+  .dos__col--a { grid-column: 1 / 8; }
+  .dos__col--b { grid-column: 9 / -1; }
+  .dos ul { margin-top: 6px; }
+  .dos li { padding-block: 12px; border-bottom: 1px solid var(--filete); line-height: 1.4; text-wrap: pretty; }
+  /* La lista queda abierta por abajo: casi siempre la sigue el filete de otra sección. */
+  .dos li:last-child { border-bottom: 0; padding-bottom: 0; }
+  .dos__col--a li { color: var(--texto-2); }
+  .dos__col--b li { font-weight: 600; }
+
+  @media (max-width: 959px) {
+    .dos__col--a, .dos__col--b { grid-column: 1 / -1; }
+    .dos__col--b { margin-top: calc(var(--u) * .4); }
+  }
+  @media (max-width: 699px) {
+    .dos__col { padding-top: 12px; }
+    .dos__col--b { margin-top: 18px; }
+    .dos ul { margin-top: 2px; }
+    .dos li { padding-block: 9px; }
+  }
+</style>

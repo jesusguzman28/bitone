@@ -1,0 +1,71 @@
+---
+// El botón principal del sitio: un módulo con el signo de WhatsApp y su rótulo.
+// Es la única forma del botón de WhatsApp en la página (el fijo es WhatsAppFijo):
+//   variante="tinta"  sobre fondos claros (por defecto): módulo rojo, cuerpo tinta
+//   variante="rojo"   sobre tinta: módulo hueso, cuerpo rojo
+//   variante="claro"  sobre el campo rojo: módulo papel, cuerpo tinta
+// Como enlace abre WhatsApp en otra pestaña con el mensaje ya escrito. Con
+// como="button" es el botón de un formulario (lo usa CierreWhatsApp).
+// Lleva data-wa: mientras uno esté a la vista, el WhatsApp fijo se retira.
+import Icono from './Icono.astro';
+import { enlaceWhatsApp } from '../data/empresa';
+
+interface Props {
+  /** Mensaje con el que se abre el chat. Sin él, el general. */
+  mensaje?: string;
+  texto?: string;
+  variante?: 'tinta' | 'rojo' | 'claro';
+  /** 'a' abre WhatsApp; 'button' envía el formulario que lo contiene. */
+  como?: 'a' | 'button';
+  /** Ocupa todo el ancho en celular. */
+  anchoEnCelular?: boolean;
+  class?: string;
+}
+
+const { mensaje, texto = 'Escríbenos por WhatsApp', variante = 'tinta', como = 'a', anchoEnCelular = true, class: clase, ...resto } = Astro.props;
+const clases = ['boton', `boton--${variante}`, { 'boton--ancho': anchoEnCelular }, clase];
+---
+
+{como === 'button' ? (
+  <button class:list={clases} type="submit" data-wa {...resto}>
+    <span class="boton__ico"><Icono nombre="whatsapp" /></span>
+    <span class="boton__txt">{texto}</span>
+  </button>
+) : (
+  <a class:list={clases} href={enlaceWhatsApp(mensaje)} target="_blank" rel="noopener" data-wa {...resto}>
+    <span class="boton__ico"><Icono nombre="whatsapp" /></span>
+    <span class="boton__txt">{texto}<span class="solo-lector"> (abre WhatsApp)</span></span>
+  </a>
+)}
+
+<style>
+  .boton {
+    --b-fondo: var(--tinta); --b-texto: var(--hueso); --b-modulo: var(--rojo); --b-ico: #fff; --b-texto-encima: var(--b-texto);
+    position: relative; isolation: isolate; display: inline-grid; grid-template-columns: 58px auto; align-items: center;
+    height: 58px; padding: 0; overflow: hidden; border: 0; border-radius: 0; background: var(--b-fondo); color: var(--b-texto);
+    text-decoration: none; text-align: left; cursor: pointer;
+    font-weight: 650; font-size: 1.0625rem; font-stretch: 105%; letter-spacing: -.005em; line-height: 1.2;
+    transition: transform .14s var(--salida);
+  }
+  /* El módulo de color: al pasar el cursor se extiende y llena el botón. */
+  .boton::before {
+    content: ""; position: absolute; inset: 0; z-index: -1; background: var(--b-modulo);
+    transform: translateX(calc(-100% + 58px)); transition: transform .32s var(--salida);
+  }
+  .boton__ico { display: grid; place-items: center; width: 58px; height: 58px; color: var(--b-ico); }
+  .boton__ico :global(svg) { width: 26px; height: 26px; }
+  .boton__txt { padding: 0 26px 0 20px; white-space: nowrap; transition: color .2s ease; }
+  .boton:active { transform: scale(.97); }
+  .boton:focus-visible { outline-offset: 4px; }
+
+  .boton--rojo { --b-fondo: var(--rojo); --b-texto: #fff; --b-modulo: var(--hueso); --b-ico: var(--tinta); --b-texto-encima: var(--tinta); }
+  .boton--claro { --b-fondo: var(--tinta); --b-texto: #fff; --b-modulo: var(--papel); --b-ico: var(--tinta); --b-texto-encima: var(--tinta); }
+
+  @media (hover: hover) and (pointer: fine) {
+    .boton:hover::before { transform: none; }
+    .boton:hover .boton__txt { color: var(--b-texto-encima); }
+  }
+  @media (max-width: 699px) {
+    .boton--ancho { display: grid; grid-template-columns: 58px 1fr; width: 100%; }
+  }
+</style>

@@ -1,4 +1,4 @@
-# BIT-ONE Perú — https://bitone.pe
+# Bit One — https://bitone.pe
 
 # Buscadores tradicionales
 User-agent: *

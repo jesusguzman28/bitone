@@ -1,0 +1,81 @@
+---
+// El friso: la idea del sitio dibujada. Se genera al compilar (lib/friso.ts).
+//   tipo="transito"  piezas sueltas que terminan tejidas (del desorden al sistema)
+//   tipo="tejido"    la cenefa completa
+// El SVG ocupa el ancho de quien lo contiene; cada casilla es un módulo.
+// Con `entrada`, las piezas tejidas llegan a su sitio una sola vez al cargar.
+import { generarFriso, type OpcionesFriso } from '../lib/friso';
+
+interface Props extends OpcionesFriso {
+  /** Las piezas llegan a su casilla al cargar la página. Solo en la portada. */
+  entrada?: boolean;
+  class?: string;
+}
+
+const { entrada = false, class: clase, columnas, filas, tipo, sentido, signo, semilla, tonoDeAbajo, sinTono, ...resto } = Astro.props;
+const dibujo = generarFriso({ columnas, filas, tipo, sentido, signo, semilla, tonoDeAbajo, sinTono });
+// Una pieza de rescate que no conserva el oro pinta esa casilla con su propio trazo
+// (.pieza--sin-oro, en base.css): en una cenefa lo lleva una sola.
+const tono = (p: { tono: string; signo: string; oro: boolean }) => `tono-${p.tono}${p.signo === 'rescate' && !p.oro ? ' pieza--sin-oro' : ''}`;
+---
+
+<svg
+  class:list={['friso', `friso--${tipo}`, { 'friso--entrada': entrada }, clase]}
+  viewBox={`0 0 ${columnas * 10} ${filas * 10}`}
+  aria-hidden="true"
+  focusable="false"
+  {...resto}
+>
+  {dibujo.map((fila, i) => (
+    <g class="friso__fila" data-fila={i + 1}>
+      {fila.huecos.map((h) => <rect class="friso__hueco" x={h.x} y={h.y} width="10" height="10" />)}
+    </g>
+  ))}
+  {dibujo.map((fila, i) => (
+    <g class="friso__fila" data-fila={i + 1}>
+      {fila.piezas.filter((p) => p.firme).map((p) =>
+        entrada ? (
+          <g transform={`translate(${p.x} ${p.y})`}>
+            <g class={`pieza pieza--firme ${tono(p)}`} style={`--d:${p.retardo}ms;--dx:${p.dx}px;--dy:${p.dy}px;--dr:${p.dr}deg`}>
+              <rect width="10" height="10" />
+              <use href={`#signo-${p.signo}`} width="10" height="10" />
+            </g>
+          </g>
+        ) : (
+          <g class={`pieza ${tono(p)}`} transform={`translate(${p.x} ${p.y})`}>
+            <rect width="10" height="10" />
+            <use href={`#signo-${p.signo}`} width="10" height="10" />
+          </g>
+        ),
+      )}
+      {/* data-col: la columna de la casilla de una pieza suelta. Quien recorta el friso
+          (la portada, en tableta) quita con él la que asomaría por el borde del recorte. */}
+      {fila.piezas.filter((p) => !p.firme).map((p) => (
+        <g data-col={p.col} transform={`translate(${p.x} ${p.y}) rotate(${p.giro} 5 5)`}>
+          <g class={`pieza pieza--suelta ${tono(p)}`}>
+            <rect width="10" height="10" />
+            <use href={`#signo-${p.signo}`} width="10" height="10" />
+          </g>
+        </g>
+      ))}
+    </g>
+  ))}
+</svg>
+
+<style>
+  .friso { display: block; width: 100%; height: auto; max-width: none; overflow: visible; }
+  .friso__hueco { fill: none; stroke: var(--linea); stroke-width: 1; vector-effect: non-scaling-stroke; }
+  /* Con entrada, cada pieza tejida va en dos capas: la de fuera la coloca y la de dentro viaja. */
+  .pieza--firme, .pieza--suelta { transform-box: fill-box; transform-origin: center; }
+
+  @keyframes asentar {
+    0% { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(var(--dr)); }
+    30% { opacity: 1; }
+    100% { opacity: 1; transform: none; }
+  }
+  /* "aparecer" está en base.css. */
+  @media (prefers-reduced-motion: no-preference) {
+    .friso--entrada .pieza--firme { animation: asentar .6s var(--salida-larga) var(--d, 0ms) both; }
+    .friso--entrada .pieza--suelta { animation: aparecer .4s ease both; }
+  }
+</style>

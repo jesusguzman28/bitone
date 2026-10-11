@@ -1,0 +1,98 @@
+---
+// Los pasos de trabajo como un tocapu de 4 x 4 que se va llenando. Explica "por
+// partes" sin una palabra, y ninguna figura queda vacía:
+//   primer paso      el plano con tres piezas sueltas (lo que se anota)
+//   pasos del medio  el tejido crece por filas; la casilla en curso va en rojo
+//   penúltimo        el paño completo; dos piezas en revisión, con contorno rojo
+//   último           el paño completo, enmarcado y con un solo bit dorado, como el logo
+//   variante="breve"     figura, paso, título y "Recibes" (portada)
+//   variante="completa"  añade qué pasa en cada paso (páginas interiores)
+// Qué figura le toca a cada paso se calcula al compilar según cuántos pasos haya (de 3
+// a 6). El dibujo es FiguraTocapu: el mismo que usa como-trabajamos/Recorrido.
+import FiguraTocapu, { type Figura } from './FiguraTocapu.astro';
+import type { Paso } from '../data/empresa';
+import type { NombreSigno } from '../lib/signos';
+
+interface Props {
+  pasos: Paso[];
+  variante?: 'breve' | 'completa';
+  /** Signo dominante del tejido: el de la página. */
+  signo?: NombreSigno;
+  /** Nivel del título de cada paso. */
+  nivel?: 3 | 4;
+  class?: string;
+}
+
+const { pasos, variante = 'breve', signo, nivel = 3, class: clase, ...resto } = Astro.props;
+const Titulo = `h${nivel}` as 'h3' | 'h4';
+const total = pasos.length;
+
+// Las tres piezas del primer paso: todavía sin tejer, giradas y en tono piedra.
+const SUELTAS = [{ n: 1, giro: -9 }, { n: 6, giro: 7 }, { n: 12, giro: -5 }];
+// Las dos piezas que se revisan en el paso de pruebas (de fondo tinta, para que el
+// contorno rojo se vea) y la casilla roja que lleva el bit dorado en el último.
+const EN_REVISION = [7, 12];
+const BIT = 10;
+
+// Cuántas casillas llenas tiene la figura de cada paso, y cómo se remata.
+const medios = total - 3;
+const figuras: Figura[] = pasos.map((_, i) => {
+  const primero = i === 0;
+  const ultimo = i === total - 1;
+  const prueba = i === total - 2 && total >= 3;
+  // Entre el primero y el de pruebas, el tejido sube de una fila (4) a diez casillas.
+  const llenas = ultimo || prueba ? 16 : primero ? 0 : medios <= 1 ? 8 : Math.round(4 + ((i - 1) * 6) / (medios - 1));
+  return {
+    llenas,
+    sueltas: primero ? SUELTAS : [],
+    revision: prueba ? EN_REVISION : [],
+    bit: ultimo ? BIT : -1,
+    marco: ultimo,
+  };
+});
+---
+
+<ol class:list={['pasos', `pasos--${variante}`, clase]} style={`--n:${total}`} {...resto}>
+  {pasos.map((paso, i) => (
+    <li class="paso" data-rev>
+      <FiguraTocapu {...figuras[i]} signo={signo} class="paso__fig" />
+      <p class="rotulo paso__rot"><b>Paso {i + 1}</b><i aria-hidden="true"> · </i>{paso.duracion}</p>
+      <Titulo class="paso__t">{paso.titulo}</Titulo>
+      {variante === 'completa' && <p class="paso__d">{paso.pasa}</p>}
+      <p class="paso__r"><span class="rotulo">Recibes</span> {paso.recibes}</p>
+    </li>
+  ))}
+</ol>
+
+<style>
+  /* Las columnas van sobre la retícula, sin separación entre ellas: cuatro pasos arrancan
+     en los módulos 1, 5, 9 y 13, como las cifras y las puertas. El aire entre una figura
+     y la siguiente lo pone el relleno de cada paso. */
+  .pasos { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); column-gap: 0; margin-inline: var(--m); }
+  /* minmax(0, 1fr): una palabra larga en un título no ensancha la columna ni su figura. */
+  .paso { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: subgrid; grid-row: span 5; align-content: start; padding-right: calc(var(--u) * .3); }
+  .paso :global(.paso__fig) { margin-bottom: 22px; }
+  .paso__rot { margin-bottom: 8px; color: var(--texto-2); }
+  .paso__rot b { font-weight: 700; color: var(--acento); }
+  .paso__rot i { font-style: normal; opacity: .5; }
+  .paso__t { font-weight: 750; font-stretch: 110%; font-size: var(--t-destacado); line-height: 1.1; letter-spacing: -.025em; text-wrap: balance; }
+  .paso__d { margin-top: 10px; color: var(--texto-2); font-size: var(--t-menor); line-height: 1.5; }
+  .paso__r { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--filete); font-size: var(--t-menor); line-height: 1.45; font-weight: 550; }
+  .paso__r .rotulo { display: block; margin-bottom: 4px; color: var(--acento); }
+
+  /* Tableta y celular: figura a la izquierda, texto a la derecha. */
+  @media (max-width: 959px) {
+    .pasos { grid-template-columns: 1fr; row-gap: calc(var(--u) * .5); }
+    .paso { grid-template-rows: none; grid-row: auto; grid-template-columns: calc(var(--u) * 2) minmax(0, 1fr); column-gap: calc(var(--u) * .5); align-items: start; padding-right: 0; }
+    .paso :global(.paso__fig) { grid-row: 1 / span 4; margin-bottom: 0; }
+    .paso > :not(.paso__fig) { grid-column: 2; }
+  }
+  @media (max-width: 699px) {
+    .pasos { row-gap: 16px; }
+    .paso { grid-template-columns: calc(var(--u) * 1.15) minmax(0, 1fr); column-gap: 14px; }
+    .paso__rot { margin-bottom: 3px; }
+    .paso__r { margin-top: 5px; padding-top: 0; border-top: 0; font-weight: 400; color: var(--texto-2); }
+    .paso__r .rotulo { display: inline; margin-right: .5em; }
+    .pasos--completa .paso__d { margin-top: 6px; }
+  }
+</style>

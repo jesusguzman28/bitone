@@ -1,0 +1,60 @@
+---
+// Las preguntas de una página: una sección menor. El título va a subtítulo, a la
+// izquierda, y el acordeón a la derecha (módulo 9). Trae su sección y su filete.
+//   <Dudas titulo="Antes de pedir una app." preguntas={dudas} grupo="apps" />
+// Tres o cuatro preguntas. Las de dinero y plazos, solo en /como-trabajamos/.
+// En el <slot /> va el remate: un enlace bajo el acordeón, en su misma columna. Es
+// donde una página de servicio manda a /como-trabajamos/ a quien termina de leer las
+// preguntas y todavía quiere saber cuánto cuesta y cuánto demora.
+//   <Dudas …>{aFondo && <a class="enlace" href={paginas.comoTrabajamos.ruta}>Cómo sale el precio<Icono nombre="derecha" /></a>}</Dudas>
+import Preguntas from './Preguntas.astro';
+import type { Pregunta } from '../data/empresa';
+
+interface Props {
+  /** Texto o renglones (frases que no se parten). */
+  titulo: string | string[];
+  preguntas: Pregunta[];
+  /** Nombre del grupo: solo una abierta a la vez. */
+  grupo?: string;
+  /** Cuál viene abierta: 0 es la primera; -1 (por defecto), ninguna. Solo cuando esa
+      respuesta dice algo que no puede quedar detrás de un clic. */
+  abierta?: number;
+  /** id de la sección (para anclas). El título lleva `${id}-titulo`. */
+  id?: string;
+  /** Sin el filete de arriba: cuando la sección anterior es un plano tinta o rojo. */
+  sinFilete?: boolean;
+}
+
+const { titulo, preguntas, grupo = 'dudas', abierta = -1, id = 'preguntas', sinFilete = false } = Astro.props;
+const renglones = Array.isArray(titulo) ? titulo : [titulo];
+---
+
+<section class:list={['seccion', { 'seccion--filete': !sinFilete }, 'dudas']} id={id} aria-labelledby={`${id}-titulo`}>
+  <div class="reticula dudas__r">
+    <h2 class="subtitulo dudas__t" id={`${id}-titulo`}>
+      {renglones.map((r, i) => <><span class="renglon">{r}</span>{i < renglones.length - 1 && ' '}</>)}
+    </h2>
+    <div class="dudas__faq">
+      <Preguntas preguntas={preguntas} grupo={grupo} abierta={abierta} />
+      {Astro.slots.has('default') && <p class="dudas__ir"><slot /></p>}
+    </div>
+  </div>
+</section>
+
+<style>
+  .dudas__r { align-items: start; }
+  .dudas__t { grid-column: 1 / 8; position: sticky; top: calc(var(--cab) + 40px); }
+  .dudas__faq { grid-column: 9 / -1; min-width: 0; }
+  .dudas__ir { margin-top: 14px; }
+  /* Si la página pone el remate con una condición (la página a la que manda todavía no
+     existe), el renglón queda vacío y no ocupa sitio. */
+  .dudas__ir:empty { display: none; }
+  @media (max-width: 959px) {
+    .dudas__t { grid-column: 1 / -1; position: static; margin-bottom: calc(var(--u) * .4); }
+    .dudas__faq { grid-column: 1 / -1; }
+  }
+  @media (max-width: 699px) {
+    .dudas__t { margin-bottom: 12px; }
+    .dudas__ir { margin-top: 8px; }
+  }
+</style>

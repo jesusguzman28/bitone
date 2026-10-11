@@ -1,0 +1,74 @@
+---
+// Compromisos como cifras grandes. Solo plazos y condiciones que la empresa
+// firma (2 horas hábiles, 1 a 3 semanas, 2 días hábiles): nunca resultados ni conteos.
+// Se colorea solo según el plano.
+//   disposicion="columnas"  hasta cuatro, una al lado de otra; para cifras cortas ("30 días")
+//   disposicion="filas"     una por renglón, la cifra a la izquierda; para cifras largas
+// En celular siempre van en filas. En tableta, cuatro columnas pasan a dos.
+// Para que dos listas en filas compartan ejes, la página fija la primera columna desde
+// la clase que le pasa (grid-template-columns en la raíz): ver /como-trabajamos/.
+interface Cifra {
+  cifra: string;
+  texto: string;
+}
+
+interface Props {
+  cifras: readonly Cifra[];
+  disposicion?: 'columnas' | 'filas';
+  /** Cómo se escribe lo que acompaña a cada cifra.
+      'rotulo' (por defecto): en mono y mayúsculas, para dos o tres palabras ("de garantía").
+      'frase': en letra de texto y minúsculas, para una frase entera ("dura el paso 1, que
+      se paga: de ahí sale tu precio"). Una frase en mono y mayúsculas se salta. */
+  texto?: 'rotulo' | 'frase';
+  class?: string;
+}
+
+const { cifras, disposicion = 'columnas', texto = 'rotulo', class: clase, ...resto } = Astro.props;
+const n = Math.min(cifras.length, 4);
+---
+
+<dl class:list={['cifras', `cifras--${disposicion}`, { 'cifras--con-frase': texto === 'frase' }, clase]} style={`--n:${n}`} data-n={n} {...resto}>
+  {cifras.map((c) => (
+    <div>
+      <dt>{c.cifra}</dt>
+      <dd class={texto === 'frase' ? 'cifras__frase' : 'rotulo'}>{c.texto}</dd>
+    </div>
+  ))}
+</dl>
+
+<style>
+  .cifras { display: grid; border-top: 1px solid var(--filete-fuerte); }
+  .cifras dt { font-weight: 800; font-stretch: 120%; font-size: var(--t-subtitulo); line-height: 1; letter-spacing: -.04em; white-space: nowrap; }
+  /* Renglones parejos: un rótulo de dos renglones no deja una palabra sola. */
+  .cifras dd { color: var(--texto-2); text-wrap: balance; }
+  /* La frase: letra de texto, a tamaño de apoyo. */
+  .cifras__frase { font-size: var(--t-menor); line-height: 1.4; }
+
+  /* Las columnas van sobre la retícula, sin separación entre ellas: a todo el ancho,
+     cuatro cifras arrancan en los módulos 1, 5, 9 y 13, y dos, en el 1 y el 9. El aire
+     entre una y la siguiente lo pone el relleno de cada una. */
+  .cifras--columnas { grid-template-columns: repeat(var(--n), minmax(0, 1fr)); column-gap: 0; padding-top: 20px; }
+  .cifras--columnas > div { padding-right: calc(var(--u) * .35); }
+  .cifras--columnas dd { margin-top: 8px; max-width: 14em; }
+
+  /* La cifra y su rótulo comparten renglón; las cifras quedan en columna. */
+  .cifras--filas { grid-template-columns: auto minmax(0, 1fr); column-gap: calc(var(--u) * .4); }
+  .cifras--filas div { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; align-items: baseline; padding-block: 13px; border-bottom: 1px solid var(--filete); }
+
+  /* Tableta: cuatro cifras de dos palabras no caben en cuatro columnas de dos módulos
+     (se montan unas sobre otras). Van de dos en dos, cada columna de cuatro módulos. */
+  @media (min-width: 700px) and (max-width: 959px) {
+    .cifras--columnas[data-n="4"] { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: calc(var(--u) * .4); }
+  }
+  @media (max-width: 699px) {
+    .cifras--columnas, .cifras--filas { grid-template-columns: auto minmax(0, 1fr); column-gap: 14px; padding-top: 0; }
+    .cifras div { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; align-items: baseline; padding-block: 9px; border-bottom: 1px solid var(--filete); }
+    .cifras--columnas > div { padding-right: 0; }
+    .cifras dt { font-size: var(--t-destacado); }
+    .cifras--columnas dd { margin: 0; max-width: none; }
+    /* Con frases, la cifra va arriba y su frase debajo, a todo el ancho: al lado, una
+       frase de diez palabras se partía en tres renglones de dos. */
+    .cifras--con-frase div { display: block; }
+    .cifras--con-frase dd { margin-top: 3px; }
+  }
+</style>

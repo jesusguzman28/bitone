@@ -1,0 +1,72 @@
+---
+// Preguntas frecuentes en acordeón. Usa <details>: funciona sin JavaScript, con
+// teclado y con lector de pantalla. El signo de la derecha es un más que se
+// vuelve menos: se entiende que se toca.
+// Con `grupo`, al abrir una se cierra la anterior (atributo name de <details>).
+import type { Pregunta } from '../data/empresa';
+
+interface Props {
+  preguntas: Pregunta[];
+  /** Cuál viene abierta: 0 es la primera; -1, ninguna. */
+  abierta?: number;
+  /** Nombre del grupo: solo una abierta a la vez. */
+  grupo?: string;
+  /** Nivel del encabezado de cada pregunta. */
+  nivel?: 3 | 4;
+  class?: string;
+}
+
+const { preguntas, abierta = -1, grupo, nivel = 3, class: clase, ...resto } = Astro.props;
+const Titulo = `h${nivel}` as 'h3' | 'h4';
+---
+
+<div class:list={['faq', clase]} {...resto}>
+  {preguntas.map((p, i) => (
+    <details name={grupo} open={i === abierta}>
+      <summary>
+        <Titulo class="faq__p">{p.pregunta}</Titulo>
+        <span class="faq__mas" aria-hidden="true"></span>
+      </summary>
+      <div class="faq__r"><p>{p.respuesta}</p></div>
+    </details>
+  ))}
+</div>
+
+<style>
+  .faq { border-top: 1px solid var(--filete-fuerte); }
+  .faq details { border-bottom: 1px solid var(--filete); }
+  .faq summary {
+    display: grid; grid-template-columns: minmax(0, 1fr) 28px; align-items: center; column-gap: 20px;
+    min-height: 44px; padding-block: 20px; cursor: pointer; list-style: none;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq__p { font-weight: 650; font-stretch: 106%; font-size: var(--t-destacado); letter-spacing: -.02em; line-height: 1.2; text-wrap: balance; }
+
+  /* El más: dos barras dentro de un módulo. Al abrir, la vertical se acuesta. */
+  .faq__mas { position: relative; width: 28px; height: 28px; box-shadow: inset 0 0 0 1.5px var(--texto); transition: background-color var(--d-toque) ease, box-shadow var(--d-toque) ease; }
+  .faq__mas::before, .faq__mas::after { content: ""; position: absolute; left: 8px; right: 8px; top: 50%; height: 2px; margin-top: -1px; background: var(--texto); transition: transform var(--d-corta) var(--salida), background-color var(--d-toque) ease; }
+  .faq__mas::after { transform: rotate(90deg); }
+  details[open] .faq__mas { background: var(--rojo); box-shadow: inset 0 0 0 1.5px var(--rojo); }
+  details[open] .faq__mas::before, details[open] .faq__mas::after { background: #fff; }
+  details[open] .faq__mas::after { transform: none; }
+
+  .faq__r { padding: 0 calc(28px + 20px) 24px 0; color: var(--texto-2); max-width: 46em; }
+  /* La única excepción del sitio a "solo transform y opacity": el acordeón anima su alto
+     (0,24 s) para que lo que viene debajo no salte. Sin eso, o con "reducir movimiento",
+     abre y cierra de golpe, que es como funciona <details> por su cuenta. */
+  @media (prefers-reduced-motion: no-preference) {
+    .faq details::details-content { block-size: 0; overflow-y: clip; transition: block-size var(--d-corta) var(--salida), content-visibility var(--d-corta) allow-discrete; }
+    .faq details[open]::details-content { block-size: auto; }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .faq summary:hover .faq__mas { background: var(--texto); }
+    .faq summary:hover .faq__mas::before, .faq summary:hover .faq__mas::after { background: var(--fondo); }
+    .faq details[open] summary:hover .faq__mas { background: var(--rojo-hondo); box-shadow: inset 0 0 0 1.5px var(--rojo-hondo); }
+    .faq details[open] summary:hover .faq__mas::before, .faq details[open] summary:hover .faq__mas::after { background: #fff; }
+  }
+  @media (max-width: 699px) {
+    .faq summary { padding-block: 13px; column-gap: 14px; }
+    .faq__r { padding-right: 0; padding-bottom: 20px; }
+  }
+</style>

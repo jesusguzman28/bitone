@@ -1,0 +1,70 @@
+---
+// App para tu negocio. El orden es el del manual (docs/SISTEMA.md, sección 2):
+//   1 · portada
+//   2 · ¿Te suena?: tres escenas de negocio, hoy y con la app (tinta)
+//   3 · la prueba: "No siempre hace falta una app", con cuatro teclas (el momento propio)
+//   4 · cómo se hace, por pasos, y el enlace al precio
+//   5 · las apps que ya se pueden abrir, en filas (tinta)
+//   6 · preguntas y cierre
+// Las dos piezas propias viven en components/apps/; los textos, en data/apps.ts.
+//
+// La primera pregunta viene abierta (`abierta={0}`): dice que publicar en iPhone se
+// cotiza aparte, y eso no puede quedar detrás de un clic.
+// El cierre pregunta por el caso, no por lo que se hace a mano (la app también puede ser
+// para los clientes): título, arranque del mensaje ("Mi caso:") y mensaje de la página.
+import Base from '../layouts/Base.astro';
+import PortadaInterior from '../components/PortadaInterior.astro';
+import TituloSeccion from '../components/TituloSeccion.astro';
+import ParHoyDespues from '../components/ParHoyDespues.astro';
+import PasosTocapu from '../components/PasosTocapu.astro';
+import Dudas from '../components/Dudas.astro';
+import CierreWhatsApp from '../components/CierreWhatsApp.astro';
+import Icono from '../components/Icono.astro';
+import PruebaApp from '../components/apps/PruebaApp.astro';
+import Estante from '../components/apps/Estante.astro';
+import { mensajes } from '../data/empresa';
+import { paginas, existe, enlaceA } from '../data/navegacion';
+import { app as d } from '../data/apps';
+
+const pagina = paginas.apps;
+---
+
+<Base
+  titulo="App para tu negocio: para tu equipo o tus clientes"
+  descripcion="Una app para tu equipo en la calle o para tus clientes, publicada a nombre de tu empresa. Y si no hace falta una app, te lo decimos antes."
+  signo={pagina.signo}
+  mensajeWhatsApp={mensajes.app}
+>
+  <PortadaInterior signo={pagina.signo} tono="tinta" tonoDeAbajo="tinta" rotulo={pagina.nombre} titulo={d.portada.titulo} entrada={d.portada.entrada} mensaje={mensajes.app} textoBoton={d.portada.boton}>
+    <a class="enlace" href="#hace-falta">{d.portada.enlace}<Icono nombre="abajo" /></a>
+  </PortadaInterior>
+
+  <!-- 1 · El problema, dicho por el dueño -->
+  <section class="seccion plano plano--tinta" aria-labelledby="t-suena">
+    <TituloSeccion id="t-suena" rotulo="¿Te suena?" titulo={d.suena.titulo} />
+    <div class="reticula"><ParHoyDespues pares={d.pares} disposicion="filas" rotuloDespues={d.rotuloDespues} class="todo" /></div>
+  </section>
+
+  <!-- 2 · La prueba: cuándo sí y cuándo no -->
+  <PruebaApp id="hace-falta" />
+
+  <!-- 3 · Cómo se hace -->
+  <section class="seccion seccion--filete" id="como" aria-labelledby="t-como">
+    <TituloSeccion id="t-como" disposicion="pila" rotulo="Cómo se hace" titulo={d.como.titulo} entrada={d.como.entrada} />
+    <PasosTocapu pasos={d.fases} variante="completa" signo={pagina.signo} />
+    {existe(paginas.comoTrabajamos.ruta) && (
+      <p class="reticula remate"><a class="enlace" href={paginas.comoTrabajamos.ruta}>{enlaceA.comoTrabajamos}<Icono nombre="derecha" /></a></p>
+    )}
+  </section>
+
+  <!-- 4 · Lo que ya está publicado -->
+  <section class="seccion plano plano--tinta" id="publicadas" aria-labelledby="t-publicadas">
+    <TituloSeccion id="t-publicadas" titulo={d.publicadas.titulo} entrada={d.publicadas.entrada} />
+    <Estante />
+  </section>
+
+  <!-- 5 · Preguntas, con la primera abierta. Sin filete: viene de un plano tinta -->
+  <Dudas titulo="Antes de pedir una app." preguntas={d.dudas} grupo="apps" abierta={0} sinFilete />
+
+  <CierreWhatsApp titulo={d.cierre.titulo} interes={d.portada.interes} ejemplo={d.portada.ejemplo} prefijo={d.cierre.prefijo} general={mensajes.app} />
+</Base>

@@ -1,14 +1,14 @@
 @echo off
 chcp 65001 >nul
-title BIT-ONE - servidor de pruebas (4322)
+title Bit One - servidor de pruebas (4322)
 cd /d "%~dp0"
 
 REM Segundo servidor de desarrollo, en el puerto 4322.
 REM
 REM Existe para poder dejar una ventana abierta todo el dia probando, sin que
-REM choque con el servidor del puerto 4321 que usa "npm run verificar" cuando
-REM revisa el sitio antes de desplegar. Dos servidores no pueden compartir
-REM puerto: el segundo en arrancar muere con "puerto en uso".
+REM choque con el servidor principal del puerto 4321 (iniciar-web.bat).
+REM Dos servidores no pueden compartir puerto: el segundo en arrancar muere
+REM con "puerto en uso".
 REM
 REM Diferencia con iniciar-web.bat, aparte del puerto:
 REM
@@ -33,7 +33,7 @@ set ESPERA=3
 
 echo.
 echo   ====================================================
-echo    BIT-ONE - servidor de pruebas
+echo    Bit One - servidor de pruebas
 echo   ====================================================
 echo.
 echo    En esta PC:     http://localhost:4322

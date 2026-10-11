@@ -1,0 +1,175 @@
+---
+// El marco de todas las páginas: <head>, salto al contenido, cabecera, pie y
+// WhatsApp fijo. Una página solo pone su contenido en el <slot />.
+import '../styles/tokens.css';
+import '../styles/base.css';
+import { getImage } from 'astro:assets';
+import Cabecera from '../components/Cabecera.astro';
+import Pie from '../components/Pie.astro';
+import WhatsAppFijo from '../components/WhatsAppFijo.astro';
+import { empresa, redes } from '../data/empresa';
+import { signos, nombresDeSigno, type NombreSigno } from '../lib/signos';
+import { simbolo, palabra } from '../lib/logo';
+import tarjeta from '../assets/marca/tarjeta.png';
+
+interface Props {
+  /** Título de la pestaña. Se le añade " · Bit One", salvo que ya lo nombre. */
+  titulo: string;
+  /** Descripción para buscadores y para compartir: una o dos frases. */
+  descripcion: string;
+  /** Signo dominante de la página: marca la cenefa del pie. */
+  signo?: NombreSigno;
+  /** Mensaje con el que abre el WhatsApp fijo en esta página. */
+  mensajeWhatsApp?: string;
+}
+
+const { titulo, descripcion, signo, mensajeWhatsApp } = Astro.props;
+const tituloCompleto = titulo.includes(empresa.marca) ? titulo : `${titulo} · ${empresa.marca}`;
+
+// La dirección canónica de la página y la de la tarjeta para compartir, con el dominio
+// donde se publica. Manda `site` de astro.config.mjs si alguien lo pone; si no, el
+// dominio de data/empresa.ts.
+const dominio = Astro.site ?? new URL(empresa.dominio);
+const canonica = new URL(Astro.url.pathname, dominio).href;
+// La tarjeta (1200 x 630) pasa por astro:assets como toda imagen, pero sale en PNG: quien
+// arma la vista previa de un enlace (WhatsApp, Facebook) no lee AVIF ni WebP de fiar.
+const og = await getImage({ src: tarjeta, width: 1200, height: 630, format: 'png' });
+const imagenOg = new URL(og.src, dominio).href;
+
+// Los datos de la empresa para buscadores. Solo lo que respalda brief/01-empresa.md:
+// sin dirección (no hay), sin año y sin el correo (es un Gmail: no se le da protagonismo).
+const datosDeEmpresa = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: empresa.marca,
+  legalName: empresa.razonSocial,
+  taxID: empresa.ruc,
+  url: dominio.href,
+  logo: new URL('/favicon.svg', dominio).href,
+  image: imagenOg,
+  telephone: `+${empresa.whatsapp}`,
+  address: { '@type': 'PostalAddress', addressLocality: 'Lima', addressCountry: 'PE' },
+  areaServed: { '@type': 'Country', name: 'Perú' },
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'sales',
+    telephone: `+${empresa.whatsapp}`,
+    availableLanguage: 'es',
+    hoursAvailable: {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      opens: '09:00',
+      closes: '19:00',
+    },
+  },
+  sameAs: redes.map((r) => r.url),
+};
+---
+
+<!doctype html>
+<html lang="es-PE">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{tituloCompleto}</title>
+    <meta name="description" content={descripcion} />
+    <link rel="canonical" href={canonica} />
+    {/* Solo la compilación se puede indexar: el servidor de desarrollo, nunca. */}
+    {!import.meta.env.PROD && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content="#F4EEE4" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- Marca que hay JavaScript: sin él, el botón "Menú" es un enlace al mapa del pie. -->
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <link rel="preload" href="/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <meta property="og:title" content={tituloCompleto} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_PE" />
+    <meta property="og:site_name" content={empresa.marca} />
+    <meta property="og:url" content={canonica} />
+    <meta property="og:image" content={imagenOg} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Bit One: del desorden al sistema. Sistemas a medida, apps y automatización para tu negocio." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(datosDeEmpresa)} />
+  </head>
+  <body>
+    <a class="salto" href="#contenido">Saltar al contenido</a>
+
+    <!-- Almacén: los cinco signos y el logo se dibujan una vez aquí; Signo, Friso,
+         PasosTocapu y Logo los toman con <use>. -->
+    <svg class="almacen" width="0" height="0" aria-hidden="true" focusable="false">
+      {nombresDeSigno.map((n) => (
+        <symbol id={`signo-${n}`} viewBox="0 0 10 10">
+          <path d={signos[n].trazo} fill="currentColor" />
+          {signos[n].oro && <path d={signos[n].oro} style="fill:var(--signo-oro, var(--oro))" />}
+        </symbol>
+      ))}
+      <symbol id="logo-simbolo" viewBox="0 0 16 16">
+        <path fill="#D91023" d={simbolo.modulo} />
+        <path fill="#F4EEE4" d={simbolo.vanos} />
+        <path fill="#E8A317" d={simbolo.bit} />
+      </symbol>
+      <symbol id="logo-palabra" viewBox={`0 0 ${palabra.ancho} 16`}>
+        <path fill="currentColor" transform={palabra.transform} d={palabra.trazo} />
+      </symbol>
+    </svg>
+
+    <div class="pagina">
+      <Cabecera rutaActual={Astro.url.pathname} />
+      <main id="contenido" tabindex="-1">
+        <slot />
+      </main>
+      <Pie signo={signo} />
+    </div>
+
+    <WhatsAppFijo mensaje={mensajeWhatsApp} />
+
+    <script>
+      // Entrada de los bloques marcados con data-rev. La página se ve completa sin
+      // esto: solo cuando la persona empieza a bajar se esconde lo que todavía está
+      // fuera de pantalla, y entra una vez al llegar.
+      const calma = matchMedia('(prefers-reduced-motion: reduce)');
+
+      // Anclas de la misma página: bajan suave (salvo que se pida menos movimiento)
+      // y llevan el foco a su destino, para quien navega con teclado.
+      // Vale para "#seccion" y para "/#seccion" cuando ya se está en esa página.
+      document.addEventListener('click', (e) => {
+        const ancla = (e.target as Element).closest<HTMLAnchorElement>('a[href*="#"]');
+        if (!ancla || !ancla.hash || ancla.origin !== location.origin || ancla.pathname !== location.pathname) return;
+        const destino = document.getElementById(decodeURIComponent(ancla.hash.slice(1)));
+        if (!destino) return;
+        e.preventDefault();
+        destino.scrollIntoView({ behavior: calma.matches ? 'auto' : 'smooth', block: 'start' });
+        history.pushState(null, '', ancla.hash);
+        if (!destino.hasAttribute('tabindex')) destino.setAttribute('tabindex', '-1');
+        destino.focus({ preventScroll: true });
+      });
+
+      const bloques = [...document.querySelectorAll<HTMLElement>('[data-rev]')];
+      if (!calma.matches && bloques.length && 'IntersectionObserver' in window) {
+        const ojo = new IntersectionObserver((entradas) => {
+          let orden = 0;
+          for (const en of entradas) {
+            if (!en.isIntersecting) continue;
+            // Los que entran juntos se escalonan 35 ms, con tope.
+            (en.target as HTMLElement).style.setProperty('--rd', `${Math.min(orden++, 3) * 35}ms`);
+            en.target.classList.add('visto');
+            ojo.unobserve(en.target);
+          }
+        }, { rootMargin: '0px 0px -6% 0px' });
+        const preparar = () => {
+          const limite = innerHeight + 40;
+          for (const b of bloques) {
+            if (b.getBoundingClientRect().top < limite) continue;
+            b.classList.add('espera');
+            ojo.observe(b);
+          }
+        };
+        addEventListener('scroll', preparar, { passive: true, once: true });
+      }
+    </script>
+  </body>
+</html>

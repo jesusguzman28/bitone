@@ -1,0 +1,80 @@
+---
+// Las puertas de entrada: los servicios como una banda de signos grandes, cada
+// uno con su nombre y su frase. En escritorio son cuatro módulos pegados (una
+// banda de tejido); en tableta y celular, filas con el signo a la izquierda.
+// Una puerta solo es enlace si su página ya existe (data/navegacion.ts): mientras
+// tanto se lee igual, sin flecha.
+//   <Puertas servicios={servicios} />
+// Trae su propio margen lateral: va directo dentro de la sección, sin .reticula.
+import Signo from './Signo.astro';
+import Icono from './Icono.astro';
+import { existe } from '../data/navegacion';
+import type { Servicio } from '../data/servicios';
+
+interface Props {
+  servicios: Servicio[];
+  /** Nivel del nombre de cada servicio. */
+  nivel?: 3 | 4;
+  class?: string;
+}
+
+const { servicios, nivel = 3, class: clase, ...resto } = Astro.props;
+const Nombre = `h${nivel}` as 'h3' | 'h4';
+---
+
+<ul class:list={['puertas', clase]} style={`--n:${servicios.length}`} {...resto}>
+  {servicios.map((s, i) => {
+    const abierta = existe(s.pagina.ruta);
+    const Caja = abierta ? 'a' : 'div';
+    return (
+      <li data-rev>
+        <Caja class:list={['puerta', { 'puerta--abierta': abierta }]} href={abierta ? s.pagina.ruta : undefined}>
+          <Signo nombre={s.signo} tono={s.tono} class="puerta__signo" />
+          <div class="puerta__txt">
+            <p class="rotulo puerta__n" aria-hidden="true">0{i + 1}</p>
+            <Nombre class="subtitulo">{s.pagina.nombre}</Nombre>
+            <p class="puerta__frase">{s.pagina.frase}</p>
+          </div>
+          {abierta && <Icono nombre="derecha" class="puerta__ir" />}
+        </Caja>
+      </li>
+    );
+  })}
+</ul>
+
+<style>
+  /* Signos de 4 x 4 módulos, pegados: forman una banda de tejido. */
+  .puertas { display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); margin-inline: var(--m); }
+  /* minmax(0, 1fr): una palabra larga ("Automatización") no ensancha la columna ni agranda su signo. */
+  .puerta { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; height: 100%; text-decoration: none; }
+  .puerta :global(.puerta__signo) { transition: transform .32s var(--salida); }
+  .puerta__txt { padding: calc(var(--u) * .3) calc(var(--u) * .3) calc(var(--u) * .1) 0; }
+  .puerta__n { margin-bottom: 8px; color: var(--rojo-hondo); }
+  /* Los nombres reservan dos renglones para que las frases queden a la misma altura. */
+  .puerta :is(h3, h4) { min-height: 2.08em; }
+  .puerta__frase { margin-top: 10px; color: var(--tinta-2); max-width: 17em; text-wrap: pretty; }
+  .puerta :global(.puerta__ir) { position: absolute; right: calc(var(--u) * .3); top: calc(var(--u) * 4.3); width: 20px; height: 20px; transition: transform .2s var(--salida); }
+  .puerta--abierta:active :global(.puerta__signo) { transform: scale(.98); }
+
+  @media (hover: hover) and (pointer: fine) {
+    .puerta--abierta:hover :global(.puerta__signo) { transform: translateY(-10px); }
+    .puerta--abierta:hover :global(.puerta__ir) { transform: translateX(6px); }
+    .puerta--abierta:hover :is(h3, h4) { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .18em; text-decoration-color: var(--rojo); }
+  }
+
+  /* Tableta y celular: filas. El signo mide lo mismo que la fila, sin banda de color sobrante. */
+  @media (max-width: 959px) {
+    .puertas { grid-template-columns: minmax(0, 1fr); border-top: 1px solid var(--tinta); }
+    .puerta { grid-template-columns: calc(var(--u) * 1.4) minmax(0, 1fr) 20px; grid-template-rows: none; align-items: center; column-gap: calc(var(--u) * .3); border-bottom: 1px solid var(--linea); }
+    .puerta__txt { padding: 0; }
+    .puerta__n { display: none; }
+    .puerta :is(h3, h4) { min-height: 0; }
+    .puerta__frase { margin-top: 4px; max-width: none; }
+    .puerta :global(.puerta__ir) { position: static; }
+  }
+  @media (max-width: 699px) {
+    .puerta { column-gap: 14px; }
+    .puerta :is(h3, h4) { font-size: 1.1875rem; line-height: 1.1; }
+    .puerta__frase { margin-top: 3px; font-size: .875rem; line-height: 1.3; }
+  }
+</style>

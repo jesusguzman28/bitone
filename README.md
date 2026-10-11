@@ -1,8 +1,9 @@
-# BIT-ONE — bitone.pe
+# Bit One — bitone.pe
 
-Web de BIT-ONE, marca de Bitone E.I.R.L. (RUC 20615736261): empresa de
-desarrollo de software en Perú. Sitio estático hecho con Astro y Tailwind,
-publicado en GitHub Pages.
+Web de Bit One, marca de Bitone E.I.R.L. (RUC 20615736261): sistemas a medida,
+apps y automatización para negocios del Perú. Sitio estático hecho con Astro,
+con CSS a mano (sin Tailwind ni frameworks de interfaz), publicado en GitHub
+Pages.
 
 ## Trabajar en la PC
 
@@ -12,7 +13,8 @@ npm run dev          # http://localhost:4321
 ```
 
 En Windows también sirve `iniciar-web.bat` (se reinicia solo si el servidor se
-cae) o `iniciar-web-4322.bat` (abre la red local para probar desde el celular).
+cae) o `iniciar-web-4322.bat` (un segundo servidor, abierto a la red local para
+probar desde el celular).
 
 ## Antes de subir
 
@@ -20,52 +22,46 @@ cae) o `iniciar-web-4322.bat` (abre la red local para probar desde el celular).
 npm run verificar
 ```
 
-Compila, revisa títulos, descripciones, H1 y enlaces, y levanta el servidor de
-desarrollo para comprobar que arranca. Si no dice "TODO EN ORDEN", no se sube.
+Compila y revisa `dist/` página por página: un solo h1, título y descripción,
+enlaces e imágenes internos, anclas, que no diga "Bitwise", que las direcciones
+de la web anterior redirijan a una página que existe y que el sitemap liste las
+nueve páginas. Si no termina con "Todo en orden", no se sube.
+
+Para revisar el diseño, con el servidor de desarrollo abierto:
+
+```bash
+node tools/set.mjs http://localhost:4321/apps/ revision/apps/set
+```
+
+Toma el juego completo de capturas de una página (escritorio, celular y la
+primera pantalla en ocho tamaños). `tools/shot.mjs` toma una captura suelta.
 
 ## Publicar
 
 Cada `git push` a `main` publica solo: el flujo `.github/workflows/publicar.yml`
-compila y sube `dist` a GitHub Pages.
+compila y sube `dist` a GitHub Pages, en bitone.pe (`public/CNAME`).
 
-Mientras bitone.pe no esté activo, la web sale en
-https://jesusguzman28.github.io/bitone/ (con `noindex`, para que Google no la
-tome como la definitiva). Para pasar al dominio:
-
-1. Apuntar los DNS de bitone.pe a GitHub Pages.
-2. Crear `public/CNAME` con la línea `bitone.pe` y subirlo.
-3. En Settings → Pages → Custom domain poner `bitone.pe` y activar HTTPS.
-
-Para comprobar la web ya publicada:
-
-```bash
-npm run revisar-produccion
-```
+`public/google87408e12b36fb90e.html` es la verificación de Search Console: no
+se borra.
 
 ## Dónde se cambia cada cosa
 
-- Contenido, datos de contacto, RUC, redes, FAQ: `src/data/site.ts`
-- Servicios y sus páginas: `src/data/servicios.ts`
-- Proyectos y apps publicadas: `src/data/proyectos.ts`, `src/data/apps.ts`
-- Política de seguridad (CSP): meta en `src/layouts/BaseLayout.astro`
-- Imagen al compartir el enlace: `scripts/make-og.py` → `public/og-default.jpg`
+- Marca, contacto, RUC, redes y mensajes de WhatsApp: `src/data/empresa.ts`
+- Textos de cada página: `src/data/` (un archivo por página) y el mapa en
+  `src/data/navegacion.ts`
+- Logo: `src/lib/logo.ts` (la palabra "Bit One" va en trazos, en Archivo 800 al
+  125 % de ancho)
+- Imagen al compartir el enlace: `src/assets/marca/tarjeta.png` (1200 x 630)
+- Direcciones de la web anterior y a dónde llevan: `astro.config.mjs`
+- Resumen para buscadores con IA: `public/llms.txt`
 
 ## Identidad visual
 
-El sitio se construye alrededor del **quipu**, el sistema de cuerdas y nudos con
-que los incas registraban información. No es adorno: en la portada cada cuerda
-es un proyecto en producción y cada nudo una tecnología con la que se hizo
-(`src/components/Hero.astro`); en Metodología las fases son nudos de una misma
-cuerda.
+Dirección "Tocapu": módulos y signos geométricos propios dentro de una
+cuadrícula, como los bits. Hueso, tinta y rojo `#D91023`, con el oro al mínimo.
+Letras: Archivo (expandida en titulares) y Martian Mono para rótulos. Las
+variables están en `src/styles/tokens.css`.
 
-- Colores: añil `#1A2044`, grana `#D91023`, maíz `#E8A317` (solo sobre añil),
-  piedra `#5B6272`, hilo `#D5D8E0`. Definidos en `src/styles/global.css`.
-- Letra: una sola familia, Archivo (variable). Titulares anchos y pesados
-  (`font-stretch` 118–125 %), texto en ancho normal.
-- Todo alineado a la izquierda sobre la misma rejilla de 1120 px.
-- Lo que se evita a propósito: pastillas, texto con degradado, etiquetas en
-  mayúsculas espaciadas, sombras difusas, íconos en cuadritos de color,
-  flechas pegadas a los enlaces y animaciones al hacer scroll. La única
-  animación es la caída de las cuerdas del quipu.
-- Las imágenes para compartir y las portadas del blog salen de
-  `scripts/make-og.py` y `scripts/make-portadas.py` con el mismo estilo.
+- Un signo por servicio y un friso que pasa del desorden al tejido.
+- El botón principal siempre lleva a WhatsApp, y WhatsApp nunca tapa texto.
+- Solo datos reales de la empresa: sin clientes, cifras ni reseñas inventados.

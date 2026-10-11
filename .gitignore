@@ -2,3 +2,9 @@ node_modules/
 dist/
 .astro/
 .env
+# Capturas de revisión: se regeneran con tools/set.mjs
+revision/
+
+# Estado local de la herramienta de capturas
+tools/.navegador/
+tools/.captura.lock/

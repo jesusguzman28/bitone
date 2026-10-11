@@ -1,0 +1,31 @@
+---
+// El logo: un módulo rojo con dos vanos y una muesca (una B) y un bit dorado
+// dentro. La palabra va en trazos, del color del texto que la rodea.
+// Los trazos viven una sola vez en el almacén de Base.astro (lib/logo.ts); aquí
+// solo se colocan con <use>.
+// Decorativo por sí solo: el enlace que lo contiene lleva el nombre accesible.
+import { palabra } from '../lib/logo';
+
+interface Props {
+  /** Solo el módulo, sin la palabra. */
+  soloSimbolo?: boolean;
+  class?: string;
+}
+
+const { soloSimbolo = false, class: clase, ...resto } = Astro.props;
+---
+
+<svg
+  class:list={['logo', clase]}
+  viewBox={soloSimbolo ? '0 0 16 16' : `0 0 ${palabra.ancho} 16`}
+  aria-hidden="true"
+  focusable="false"
+  {...resto}
+>
+  <use href="#logo-simbolo" width="16" height="16"></use>
+  {!soloSimbolo && <use href="#logo-palabra" width={palabra.ancho} height="16"></use>}
+</svg>
+
+<style>
+  .logo { display: block; height: 26px; width: auto; }
+</style>

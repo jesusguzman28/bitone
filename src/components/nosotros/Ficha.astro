@@ -1,0 +1,55 @@
+---
+// La ficha: lo formal de la empresa, en tres renglones. Es una sección callada a
+// propósito: viene después de la letra grande del trato y antes del cierre.
+// El patrón es el de las secciones menores del sitio: el título a subtítulo en la
+// mitad izquierda y la lista en la derecha (módulo 9), con el rótulo de cada renglón
+// en el 9 y su texto en el 12, los dos ejes de la página.
+// Solo dice lo que el pie no dice. No repite la razón social ni el RUC, ni el correo
+// ni las redes: todo eso lo trae el pie, una vez por página.
+// Trae su sección y su filete (la anterior también es clara).
+import { nosotros } from '../../data/nosotros';
+
+interface Props {
+  id?: string;
+}
+
+const { id = 'ficha' } = Astro.props;
+const d = nosotros.ficha;
+---
+
+<section class="seccion seccion--filete" id={id} aria-labelledby={`t-${id}`}>
+  <div class="reticula ficha">
+    <h2 class="subtitulo mitad-1" id={`t-${id}`}>{d.titulo}</h2>
+    <dl class="ficha__datos">
+      {d.datos.map((x) => (
+        <div class="ficha__dato">
+          <dt class="rotulo">{x.rotulo}</dt>
+          <dd>{x.texto}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<style>
+  .ficha { align-items: start; }
+  /* La lista hereda las columnas de la página: ocho en escritorio (del 9 al 16). */
+  .ficha__datos { grid-column: 9 / -1; display: grid; grid-template-columns: subgrid; border-top: 1px solid var(--filete-fuerte); }
+  .ficha__dato { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-items: baseline; padding-block: 16px; border-bottom: 1px solid var(--filete); }
+  .ficha__dato dt { grid-column: 1 / 4; color: var(--texto-2); }
+  .ficha__dato dd { grid-column: 4 / -1; line-height: 1.45; text-wrap: pretty; }
+
+  /* Tableta: el título arriba y la lista de lado a lado, con las mismas dos columnas. */
+  @media (max-width: 959px) {
+    .ficha__datos { grid-column: 1 / -1; margin-top: calc(var(--u) * .4); }
+  }
+  /* Celular: rótulo y texto apilados. El filete de la sección ya está encima del
+     título: el de la lista va fino, para que el título no quede entre dos líneas de tinta. */
+  @media (max-width: 699px) {
+    .ficha__datos { margin-top: 14px; border-top-color: var(--filete); }
+    .ficha__dato { padding-block: 12px 14px; }
+    .ficha__dato:last-child { padding-bottom: 0; border-bottom: 0; }
+    .ficha__dato dt, .ficha__dato dd { grid-column: 1 / -1; }
+    .ficha__dato dd { margin-top: 2px; }
+  }
+</style>

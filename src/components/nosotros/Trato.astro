@@ -1,0 +1,75 @@
+---
+// Cómo es trabajar con Bit One, dicho en cuatro frases a tamaño de título y en el
+// orden en que pasa: te escuchamos, te lo firmamos, te lo mostramos y es tuyo.
+// Es el único bloque a tamaño de título entre la portada y el cierre: el momento
+// propio de la página.
+// Es un libro mayor con letra grande: a la izquierda cuándo y qué; a la derecha, en
+// el eje de las mitades (módulo 9), qué significa. No lleva título propio: las
+// cuatro frases son el título. El punto de cada rótulo va hueco y el último, dorado:
+// el mismo bit con que termina PasosTocapu.
+// Trae su sección y su plano tinta. El detalle vive en /como-trabajamos/: el remate
+// manda ahí y a /proyectos/ (solo si esas páginas existen).
+import Rotulo from '../Rotulo.astro';
+import Icono from '../Icono.astro';
+import { nosotros } from '../../data/nosotros';
+import { paginas, existe } from '../../data/navegacion';
+
+interface Props {
+  id?: string;
+}
+
+const { id = 'trato' } = Astro.props;
+const d = nosotros.trato;
+const hayProceso = existe(paginas.comoTrabajamos.ruta);
+const hayProyectos = existe(paginas.proyectos.ruta);
+---
+
+<section class="seccion plano plano--tinta trato" id={id} aria-labelledby={`t-${id}`}>
+  <div class="reticula">
+    <Rotulo como="h2" id={`t-${id}`} class="todo">{d.rotulo}</Rotulo>
+
+    <ol class="trato__lista">
+      {d.momentos.map((m, i) => (
+        <li class="trato__fila" data-rev>
+          <Rotulo punto={i === d.momentos.length - 1 ? 'oro' : 'hueco'} class="trato__cuando">{m.cuando}</Rotulo>
+          <h3 class="titulo trato__t">{m.titulo}</h3>
+          <p class="entrada trato__txt">{m.texto}</p>
+        </li>
+      ))}
+    </ol>
+
+    {(hayProceso || hayProyectos) && (
+      <p class="trato__ir">
+        {hayProceso && <a class="enlace" href={paginas.comoTrabajamos.ruta}>{d.enlaces.proceso}<Icono nombre="derecha" /></a>}
+        {hayProyectos && <a class="enlace" href={paginas.proyectos.ruta}>{d.enlaces.proyectos}<Icono nombre="derecha" /></a>}
+      </p>
+    )}
+  </div>
+</section>
+
+<style>
+  .trato__lista { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; margin-top: clamp(18px, calc(var(--u) * .4), 34px); border-bottom: 1px solid var(--filete); }
+  .trato__fila { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-items: end; padding-block: calc(var(--u) * .4) calc(var(--u) * .46); border-top: 1px solid var(--filete); }
+  .trato__fila:first-child { border-top-color: var(--filete-fuerte); }
+  .trato__fila :global(.trato__cuando) { grid-column: 1 / 9; grid-row: 1; }
+  .trato__t { grid-column: 1 / 9; grid-row: 2; margin-top: 10px; white-space: nowrap; }
+  /* Dos renglones de entrada miden lo que un renglón de título: el texto queda a su lado. */
+  .trato__txt { grid-column: 9 / -1; grid-row: 2; max-width: 25em; padding-bottom: .14em; }
+  /* El remate va bajo los textos, en el mismo eje. */
+  .trato__ir { grid-column: 9 / -1; display: flex; flex-wrap: wrap; gap: 0 32px; margin-top: calc(var(--u) * .3); }
+
+  @media (max-width: 959px) {
+    .trato__fila { padding-block: calc(var(--u) * .34) calc(var(--u) * .4); }
+    .trato__fila :global(.trato__cuando), .trato__t, .trato__txt { grid-column: 1 / -1; grid-row: auto; }
+    .trato__txt { margin-top: 10px; padding-bottom: 0; }
+    .trato__ir { grid-column: 1 / -1; }
+  }
+  @media (max-width: 699px) {
+    /* Cada frase respira: es lo que se lee de un vistazo al bajar con el dedo. */
+    .trato__lista { margin-top: 18px; }
+    .trato__fila { padding-block: 30px 34px; }
+    .trato__t { margin-top: 8px; }
+    .trato__txt { margin-top: 10px; }
+    .trato__ir { margin-top: 16px; }
+  }
+</style>

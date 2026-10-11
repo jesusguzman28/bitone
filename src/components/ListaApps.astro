@@ -1,0 +1,43 @@
+---
+// Lista de apps publicadas: icono real de la tienda, nombre, una frase y enlace
+// a su ficha de Google Play. Sin estrellas ni descargas (ver data/proyectos.ts).
+// Los iconos son objetos, no módulos: conservan sus esquinas redondas.
+import Imagen from './Imagen.astro';
+import Icono from './Icono.astro';
+import type { App } from '../data/proyectos';
+
+interface Props {
+  apps: App[];
+  class?: string;
+}
+
+const { apps, class: clase, ...resto } = Astro.props;
+---
+
+<ul class:list={['apps', clase]} {...resto}>
+  {apps.map((app) => (
+    <li>
+      <a class="app" href={app.ficha} target="_blank" rel="noopener">
+        <Imagen src={app.icono} alt="" anchos={[96, 192]} tamanos="48px" class="app__ico" />
+        <span><b>{app.nombre}</b><small>{app.frase}</small><span class="solo-lector"> Abrir en Google Play</span></span>
+        <Icono nombre="fuera" />
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .apps { border-top: 1px solid var(--filete-fuerte); }
+  .app { display: grid; grid-template-columns: 48px minmax(0, 1fr) 16px; align-items: center; column-gap: 14px; padding-block: 10px; border-bottom: 1px solid var(--filete); text-decoration: none; }
+  .app :global(.app__ico) { width: 48px; height: 48px; border-radius: 22%; transition: transform .2s var(--salida); }
+  .app b { display: block; font-weight: 650; line-height: 1.25; }
+  .app small { display: block; font-size: var(--t-menor); line-height: 1.3; color: var(--texto-2); }
+  .app > :global(svg) { width: 16px; height: 16px; color: var(--texto-2); transition: transform .2s var(--salida), color var(--d-toque) ease; }
+  .app:active :global(.app__ico) { transform: scale(.96); }
+
+  @media (hover: hover) and (pointer: fine) {
+    .app:hover :global(.app__ico) { transform: translateY(-3px); }
+    .app:hover b { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: .22em; }
+    .app:hover > :global(svg) { transform: translate(2px, -2px); color: var(--texto); }
+  }
+</style>

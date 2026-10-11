@@ -1,0 +1,91 @@
+---
+// Un dispositivo dibujado con CSS: celular, laptop o monitor. Dentro va una
+// captura real (prop `imagen`) o contenido vivo (el <slot />).
+// En la lógica del sitio, lo construido son objetos, no módulos: por eso estos sí
+// tienen esquinas redondas y sombra, igual que las personas son lo único redondo.
+// El ancho lo decide quien lo usa (width en una clase o en --ancho); todo lo
+// demás (marco, cámara, base) se calcula en proporción.
+import Imagen from './Imagen.astro';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  tipo: 'celular' | 'laptop' | 'monitor';
+  imagen?: ImageMetadata;
+  alt?: string;
+  /** Anchos que se generan y atributo sizes: ver Imagen.astro. */
+  anchos?: number[];
+  tamanos?: string;
+  prioridad?: boolean;
+  /** Cómo entra la captura en la pantalla: 'cubre' la llena y recorta lo que sobra,
+      desde arriba (por defecto); 'entera' la enseña completa, centrada, sobre `fondo`.
+      Para un recorte que no tiene la proporción de la pantalla. */
+  encaje?: 'cubre' | 'entera';
+  /** Con 'entera': el color de fondo de la propia captura, para las franjas que sobran. */
+  fondo?: string;
+  class?: string;
+}
+
+const { tipo, imagen, alt = '', anchos, tamanos, prioridad = false, encaje = 'cubre', fondo, class: clase, ...resto } = Astro.props;
+---
+
+<div class:list={['disp', `disp--${tipo}`, clase]} {...resto}>
+  <div class="disp__cuerpo">
+    <div class:list={['disp__pantalla', { 'disp__pantalla--entera': encaje === 'entera' }]} style={fondo ? `background:${fondo}` : undefined}>
+      {imagen ? <Imagen src={imagen} alt={alt} anchos={anchos} tamanos={tamanos} prioridad={prioridad} /> : <slot />}
+    </div>
+  </div>
+  {tipo === 'laptop' && <div class="disp__base"></div>}
+  {tipo === 'monitor' && <><div class="disp__cuello"></div><div class="disp__pie"></div></>}
+</div>
+
+<style>
+  /* 1cqw = 1 % del ancho del dispositivo: así las proporciones no cambian con el tamaño. */
+  .disp { --sombra: 26, 19, 18; width: var(--ancho, 100%); container-type: inline-size; }
+  .disp__pantalla { position: relative; overflow: hidden; background: #0D0A09; }
+  .disp__pantalla :global(picture), .disp__pantalla :global(img) { display: block; width: 100%; height: 100%; }
+  .disp__pantalla :global(img) { object-fit: cover; object-position: 50% 0; }
+  .disp__pantalla--entera :global(img) { object-fit: contain; object-position: 50% 50%; }
+  /* apps/PruebaApp.astro, en celular, deja este dispositivo sin marco: pisa .disp__cuerpo,
+     su ::after y .disp__pantalla del tipo celular. Si cambias esas tres reglas, mira allá. */
+
+  /* Celular: 390 x 844, marco fino y cámara en perforación */
+  .disp--celular .disp__cuerpo {
+    position: relative; padding: 3.4cqw; border-radius: 13.5cqw;
+    background: linear-gradient(150deg, #4D4541 0%, #1A1412 36%, #2D2522 100%);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, .24), inset 0 0 0 1.3cqw #0D0A09,
+      0 4.5cqw 8cqw rgba(var(--sombra), .22), 0 14cqw 20cqw -3cqw rgba(var(--sombra), .34);
+  }
+  .disp--celular .disp__cuerpo::after {
+    content: ""; position: absolute; left: 50%; top: 5.8cqw; width: 3.4cqw; aspect-ratio: 1; margin-left: -1.7cqw;
+    border-radius: 50%; background: #08080A; box-shadow: 0 0 0 .5cqw rgba(8, 8, 10, .75);
+  }
+  .disp--celular .disp__pantalla { aspect-ratio: 390 / 844; border-radius: 10.3cqw; }
+
+  /* Laptop: pantalla 16:10 y base vista de canto */
+  .disp--laptop .disp__cuerpo {
+    position: relative; width: 86%; margin-inline: auto; padding: 1.3cqw 1.3cqw 1.7cqw;
+    border-radius: 2.1cqw 2.1cqw .4cqw .4cqw; background: #14100F;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2), 0 3cqw 7cqw rgba(var(--sombra), .22);
+  }
+  .disp--laptop .disp__pantalla { aspect-ratio: 16 / 10; border-radius: .5cqw; }
+  .disp--laptop .disp__base {
+    position: relative; height: 2.7cqw;
+    border-radius: .6cqw .6cqw 3.4cqw 3.4cqw / .6cqw .6cqw 2.2cqw 2.2cqw;
+    background: linear-gradient(180deg, #6A605B 0%, #3A312E 14%, #241D1B 62%, #15100F 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .28), 0 3.5cqw 6cqw -1.2cqw rgba(var(--sombra), .5), 0 9cqw 12cqw -3cqw rgba(var(--sombra), .32);
+  }
+  .disp--laptop .disp__base::before {
+    content: ""; position: absolute; left: 50%; top: 0; width: 15%; height: 36%; margin-left: -7.5%;
+    border-radius: 0 0 999px 999px; background: #120E0D;
+  }
+
+  /* Monitor: panel 16:10, cuello y pie */
+  .disp--monitor .disp__cuerpo {
+    position: relative; z-index: 1; padding: 1.2cqw 1.2cqw 1.4cqw; border-radius: 1.8cqw; background: #14100F;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2), 0 4cqw 8cqw rgba(var(--sombra), .26);
+  }
+  .disp--monitor .disp__pantalla { aspect-ratio: 16 / 10; border-radius: .8cqw; }
+  .disp--monitor .disp__cuello { width: 17%; height: 8.5cqw; margin: -.4cqw auto 0; background: linear-gradient(90deg, #251E1C, #5A504B 48%, #251E1C); clip-path: polygon(9% 0, 91% 0, 100% 100%, 0 100%); }
+  .disp--monitor .disp__pie { width: 36%; height: 1.6cqw; margin-inline: auto; border-radius: 1.2cqw 1.2cqw 3px 3px; background: linear-gradient(180deg, #5A504B, #241D1B); box-shadow: 0 3cqw 5cqw -1.2cqw rgba(var(--sombra), .55); }
+</style>

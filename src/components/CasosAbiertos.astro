@@ -1,0 +1,55 @@
+---
+// Los dos proyectos que se pueden abrir, cada uno con su escena de objetos y sus
+// capturas reales: ApuraY (laptop y celular) y MindBlock (monitor y el robot).
+// Los usa la portada. /proyectos/ compone los suyos con proyectos/CasoVitrina.astro
+// (otro encuadre: la laptop monta la cenefa y los robots van aparte), con las mismas
+// capturas de data/proyectos.ts.
+//   <section class="seccion obra"> <CasosAbiertos /> </section>
+//   <style> .obra { overflow: hidden; } </style>
+// La sección que los contiene lleva overflow: hidden, porque los objetos se salen
+// del margen. `nivel` es el del nombre de cada proyecto (3 por defecto).
+import Caso from './Caso.astro';
+import Dispositivo from './Dispositivo.astro';
+import Imagen from './Imagen.astro';
+import { apuray, mindblock, apps } from '../data/proyectos';
+
+interface Props {
+  nivel?: 2 | 3;
+}
+
+const { nivel = 3 } = Astro.props;
+const appsDe = (...nombres: string[]) => apps.filter((a) => nombres.includes(a.nombre));
+---
+
+<div class="abiertos">
+  <Caso proyecto={apuray} lado="derecha" apps={appsDe('Mi Tienda AP', 'Apuray')} nivel={nivel}>
+    <Dispositivo tipo="laptop" imagen={apuray.web.imagen} alt={apuray.web.alt} anchos={[640, 960, 1440]} tamanos="(max-width: 699px) 100vw, 56vw" />
+    <Dispositivo tipo="celular" imagen={apuray.celular.imagen} alt={apuray.celular.alt} anchos={[240, 390, 780]} tamanos="(max-width: 699px) 30vw, 14vw" data-en="abajo-izquierda" class="abiertos__celular" />
+  </Caso>
+
+  <Caso proyecto={mindblock} lado="izquierda" apps={appsDe('TiniBot')} nivel={nivel}>
+    <Dispositivo tipo="monitor" imagen={mindblock.juegos.imagen} alt={mindblock.juegos.alt} encaje="entera" fondo={mindblock.juegos.fondo} anchos={[480, 760]} tamanos="(max-width: 699px) 92vw, 50vw" class="abiertos__monitor" />
+    <div class="abiertos__robot" data-en="abajo-derecha"><Imagen src={mindblock.robot.imagen} alt={mindblock.robot.alt} anchos={[536]} tamanos="(max-width: 699px) 52vw, (max-width: 959px) 36vw, 23vw" /></div>
+  </Caso>
+</div>
+
+<style>
+  /* Los casos y sus escenas son componentes (Caso, Escena). Aquí, solo el tamaño
+     y el desfase de los objetos secundarios de cada escena. */
+  .abiertos :global(.abiertos__celular) { --ancho: calc(var(--u) * 2.25); margin: 0 0 calc(var(--u) * -.35) calc(var(--u) * -.5); }
+  .abiertos :global(.abiertos__monitor) { --ancho: calc(var(--u) * 9); }
+  /* El robot no pasa de 4 módulos: la foto que hay mide 536 px y más grande se ve blanda. */
+  .abiertos__robot { width: calc(var(--u) * 4); margin: 0 calc(var(--u) * -.5) calc(var(--u) * -.1) 0; filter: drop-shadow(0 calc(var(--u) * .16) calc(var(--u) * .2) rgba(26, 19, 18, .28)); }
+  .abiertos__robot :global(img) { width: 100%; height: auto; }
+
+  @media (max-width: 959px) {
+    .abiertos :global(.abiertos__monitor) { --ancho: calc(var(--u) * 6.6); }
+    .abiertos :global(.abiertos__celular) { --ancho: calc(var(--u) * 1.9); }
+    .abiertos__robot { width: calc(var(--u) * 3.6); }
+  }
+  @media (max-width: 699px) {
+    .abiertos :global(.abiertos__celular) { --ancho: calc(var(--u) * 1.75); margin: 0 0 -10px calc(var(--u) * -.9); }
+    .abiertos :global(.abiertos__monitor) { --ancho: 100%; }
+    .abiertos__robot { width: calc(var(--u) * 3.4); margin: 0 calc(var(--u) * -.8) -14px 0; }
+  }
+</style>

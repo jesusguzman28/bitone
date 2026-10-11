@@ -1,0 +1,57 @@
+---
+// La franqueza de la casa: Bit One dice cuándo no conviene contratarlo. Una
+// afirmación grande, con el último renglón en rojo, y al lado lo que significa.
+//   <Franqueza titulo={['A veces no nos necesitas.', 'Y te lo decimos.']} texto="…" />
+// En el <slot /> puede ir un <DosListas> con las razones de cada lado, o un enlace
+// (con la clase `todo`). Con `menor`, el titular va a subtítulo también en escritorio.
+// Trae su retícula: va directo dentro de una sección. Solo sobre planos claros
+// (el renglón rojo no se lee sobre tinta ni sobre rojo). Una por página.
+interface Props {
+  /** Renglones: frases que no se parten. El último va en rojo. Hasta 23 letras cada uno. */
+  titulo: string[];
+  texto?: string;
+  /** id del titular: la sección lo usa en aria-labelledby. */
+  id?: string;
+  /** 2 o 3 si el titular encabeza la sección; 0 si acompaña a otro título. */
+  nivel?: 0 | 2 | 3;
+  /** El titular a subtítulo también en escritorio: cuando la página ya tiene su
+      momento a tamaño de título justo antes (en /nosotros/, las cuatro frases del trato). */
+  menor?: boolean;
+  class?: string;
+}
+
+const { titulo, texto, id, nivel = 2, menor = false, class: clase, ...resto } = Astro.props;
+const Titulo = (nivel ? `h${nivel}` : 'p') as 'h2' | 'h3' | 'p';
+---
+
+<div class:list={['reticula', 'franco', { 'franco--menor': menor }, clase]} data-rev {...resto}>
+  <Titulo class:list={[menor ? 'subtitulo' : 'titulo', 'franco__t']} id={id}>
+    {titulo.map((r, i) => <><span class="renglon">{r}</span>{i < titulo.length - 1 && ' '}</>)}
+  </Titulo>
+  {texto && <p class="entrada franco__e">{texto}</p>}
+  <slot />
+</div>
+
+<style>
+  /* Apilado por defecto; con ancho de sobra (1280 o más), el texto pasa a nota lateral. */
+  .franco { align-items: end; }
+  .franco__t { grid-column: 1 / -1; }
+  /* El último renglón en rojo es la firma de la franqueza. apps/PruebaApp.astro lo repite
+     a mano en su titular (lleva un objeto al lado): si cambia aquí, cambia allá. */
+  .franco__t .renglon:last-child { color: var(--rojo); }
+  .franco--menor .franco__t { line-height: 1.06; }
+  .franco__e { grid-column: 1 / 9; margin-top: 16px; }
+  .franco :global(.dos) { margin-top: var(--aire-corto); }
+  @media (min-width: 1280px) {
+    .franco__t { grid-column: 1 / 12; }
+    .franco__e { grid-column: 12 / -1; margin-top: 0; padding-bottom: .2em; }
+  }
+  @media (max-width: 959px) {
+    /* A tamaño de título la frase no cabe en un renglón y se partiría a media frase. */
+    .franco__t { font-size: var(--t-subtitulo); line-height: 1.06; }
+    .franco__e { grid-column: 1 / -1; }
+  }
+  @media (max-width: 699px) {
+    .franco__e { margin-top: 10px; font-size: var(--t-texto); }
+  }
+</style>

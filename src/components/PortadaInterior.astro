@@ -1,0 +1,94 @@
+---
+// Portada de una página interior: el signo de la página en grande junto al
+// titular, una entrada, el botón de WhatsApp y una cenefa de una fila donde
+// domina ese signo. Lleva el único <h1> de la página.
+// El titular admite frases largas (las de búsqueda): es más chico que el cartel
+// de la portada y se parte solo en renglones parejos.
+// /nosotros/ no usa esta pieza: su portada es nosotros/PortadaFirmada.astro, que
+// repite esta estructura con personas en vez de signo. Si cambias una, cambia la otra
+// (la lista de lo que comparten está en la cabecera de PortadaFirmada).
+import Signo from './Signo.astro';
+import Friso from './Friso.astro';
+import Rotulo from './Rotulo.astro';
+import BotonWhatsApp from './BotonWhatsApp.astro';
+import type { NombreSigno, TonoSigno } from '../lib/signos';
+
+interface Props {
+  signo: NombreSigno;
+  tono?: TonoSigno;
+  /** Rótulo sobre el titular: qué tipo de página es ("Servicio", "Cómo trabajamos"). */
+  rotulo: string;
+  titulo: string;
+  entrada?: string;
+  /** Mensaje de WhatsApp de esta página. Sin él, el general. */
+  mensaje?: string;
+  textoBoton?: string;
+  /** Sin botón (por ejemplo, en una página que solo informa). */
+  sinBoton?: boolean;
+  /** El plano de la sección que viene justo debajo, si no es claro ('tinta'): la
+      cenefa no usa ese tono, para que sus casillas no se disuelvan en él. */
+  tonoDeAbajo?: TonoSigno;
+}
+
+const { signo, tono = 'rojo', rotulo, titulo, entrada, mensaje, textoBoton, sinBoton = false, tonoDeAbajo } = Astro.props;
+---
+
+<section class="pint" aria-labelledby="titulo-pagina">
+  <div class="reticula pint__r">
+    <div class="pint__txt">
+      <Rotulo>{rotulo}</Rotulo>
+      <h1 class="titulo pint__t" id="titulo-pagina">{titulo}</h1>
+      {entrada && <p class="entrada pint__e">{entrada}</p>}
+      {(!sinBoton || Astro.slots.has('default')) && (
+        <div class="pint__accion">
+          {!sinBoton && <BotonWhatsApp mensaje={mensaje} texto={textoBoton} />}
+          <slot />
+        </div>
+      )}
+    </div>
+    <Signo nombre={signo} tono={tono} class="pint__signo" />
+  </div>
+  <div class="pint__cenefa">
+    <Friso tipo="tejido" columnas={18} filas={1} signo={signo} semilla={33} tonoDeAbajo={tonoDeAbajo} class="pint__friso pint__friso--ancho" />
+    <Friso tipo="tejido" columnas={8} filas={1} signo={signo} semilla={8} tonoDeAbajo={tonoDeAbajo} class="pint__friso pint__friso--celular" />
+  </div>
+</section>
+
+<style>
+  .pint { padding-top: calc(var(--u) * .9); }
+  .pint__r { align-items: end; padding-bottom: calc(var(--u) * .9); }
+  .pint__txt { grid-column: 1 / 12; }
+  .pint__t { margin-top: clamp(14px, calc(var(--u) * .28), 26px); font-size: calc(var(--t-titulo) * 1.3); line-height: .96; }
+  .pint__e { margin-top: clamp(18px, calc(var(--u) * .35), 30px); max-width: 30em; }
+  .pint__accion { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 28px; margin-top: calc(var(--u) * .45); }
+  .pint__r :global(.pint__signo) { grid-column: 13 / -1; }
+  .pint__cenefa { overflow: hidden; }
+  .pint__cenefa :global(.pint__friso--celular) { display: none; }
+
+  @media (max-width: 959px) {
+    .pint__txt { grid-column: 1 / -1; grid-row: 2; }
+    /* En tableta el titular va ya al tamaño del celular (1.12): a 1.3 caben unas 14
+       letras por renglón en los ocho módulos y un titular de más de 40 se va a cuatro o
+       cinco renglones. Así caben 16 o 17, como en un título de sección. */
+    .pint__t { font-size: calc(var(--t-titulo) * 1.12); }
+    .pint__r :global(.pint__signo) { grid-column: 1 / 3; grid-row: 1; margin-bottom: calc(var(--u) * .5); }
+    .pint__cenefa :global(.pint__friso--ancho) { width: 180%; margin-left: -40%; }
+  }
+  /* Solo en tableta: el titular va con el ancho de letra del celular (108 %). Con el del
+     escritorio, un renglón de 19 letras ("funciona, y por eso") no cabe en los ocho
+     módulos y el titular se va a cuatro renglones. El tamaño no cambia. */
+  @media (min-width: 700px) and (max-width: 959px) {
+    .pint__t { font-stretch: 108%; }
+  }
+  @media (max-width: 699px) {
+    .pint { padding-top: 22px; }
+    .pint__r { padding-bottom: 28px; }
+    .pint__r :global(.pint__signo) { grid-column: 1 / 2; margin-bottom: 18px; width: calc(var(--u) * 1.25); }
+    .pint__t { line-height: 1; }
+    .pint__e { margin-top: 12px; }
+    .pint__accion { margin-top: 18px; flex-direction: column; align-items: stretch; gap: 0; }
+    .pint__accion :global(.enlace) { align-self: flex-start; }
+    .pint__cenefa :global(.pint__friso--ancho) { display: none; }
+    .pint__cenefa :global(.pint__friso--celular) { display: block; }
+  }
+</style>

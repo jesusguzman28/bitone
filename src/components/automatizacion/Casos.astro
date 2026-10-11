@@ -1,0 +1,152 @@
+---
+// Las cuatro tareas de /automatizacion/, en un libro de tres columnas: cómo se hace
+// hoy, qué se hace solo y qué sigue pasando por una persona. La tercera columna es lo
+// propio de la casa: ninguna automatización se queda sin alguien que decida.
+// Cada tarea lleva su dibujo en un módulo, hecho solo de rectángulos, como los signos:
+// una hoja de cálculo, un mensaje, un documento y dos sistemas con el tramo que los une.
+//
+// En escritorio los tres rótulos van una sola vez, arriba, y "se hace solo" arranca en
+// el módulo 9, el eje de las mitades. Son tres columnas iguales (módulos 5, 9 y 13): por
+// eso el título de la sección va en pila, sin nota lateral en el módulo 12 justo encima
+// de la columna del 13. En tableta y celular cada dato va en su renglón: el rótulo en
+// una columna (abreviado en celular; la entrada de la sección da la clave de lectura) y
+// las tres frases alineadas en otra.
+// Trae su retícula: va directo dentro de una sección clara, después del título.
+import Rotulo from '../Rotulo.astro';
+import type { Caso, Columnas, IdCaso } from '../../data/automatizacion';
+
+interface Props {
+  casos: Caso[];
+  columnas: Columnas;
+  /** Nivel del nombre de cada tarea. */
+  nivel?: 3 | 4;
+  class?: string;
+}
+
+const { casos, columnas, nivel = 3, class: clase, ...resto } = Astro.props;
+const Titulo = `h${nivel}` as 'h3' | 'h4';
+
+// Dibujos en un módulo de 10 x 10 con margen de 1, como los signos (lib/signos.ts).
+const dibujos: Record<IdCaso, string> = {
+  // Hoja de cálculo: una cabecera y cuatro celdas.
+  reporte: 'M1 1H9V9H1ZM2 3V5H4V3ZM5 3V5H8V3ZM2 6V8H4V6ZM5 6V8H8V6Z',
+  // Un mensaje con dos renglones.
+  whatsapp: 'M1 1H9V7H5V8H4V9H3V7H1ZM3 3V4H7V3ZM3 5V6H6V5Z',
+  // Un documento: dos renglones y la casilla del total.
+  facturas: 'M2 1H8V9H2ZM3 2V3H7V2ZM3 4V5H7V4ZM5 6V8H7V6Z',
+  // Dos sistemas y el tramo que falta entre uno y otro.
+  sistemas: 'M1 1H4V4H1ZM6 6H9V9H6ZM5 2H8V5H7V3H5Z',
+};
+// Los tonos del tejido: tinta con hueso, rojo con hueso, arena con tinta.
+const tonos: Record<IdCaso, 'tinta' | 'rojo' | 'arena'> = { reporte: 'tinta', whatsapp: 'rojo', facturas: 'arena', sistemas: 'tinta' };
+const partes = ['hoy', 'solo', 'persona'] as const;
+---
+
+<div class:list={['casos', 'reticula', clase]} {...resto}>
+  <!-- Los rótulos de columna, una vez. Cada dato repite el suyo para lector de pantalla. -->
+  <div class="casos__cab" aria-hidden="true">
+    <Rotulo punto="suelto" class="casos__c casos__c--hoy">{columnas.hoy.largo}</Rotulo>
+    <Rotulo acento class="casos__c casos__c--solo">{columnas.solo.largo}</Rotulo>
+    <Rotulo punto="hueco" class="casos__c casos__c--persona">{columnas.persona.largo}</Rotulo>
+  </div>
+
+  <ul class="casos__lista">
+    {casos.map((c) => (
+      <li class="caso" data-rev>
+        <svg class:list={['caso__fig', 'pieza', `tono-${tonos[c.id]}`]} viewBox="0 0 10 10" aria-hidden="true" focusable="false">
+          <rect width="10" height="10" />
+          <path d={dibujos[c.id]} fill="currentColor" fill-rule="evenodd" />
+        </svg>
+        <Titulo class="caso__t">{c.nombre}</Titulo>
+        <dl class="caso__partes">
+          {partes.map((p) => (
+            <div class:list={['caso__p', `caso__p--${p}`]}>
+              <dt class="rotulo">
+                <i class:list={['caso__pt', `caso__pt--${p}`]} aria-hidden="true"></i><span class="caso__largo">{columnas[p].largo}</span><span class="caso__corto">{columnas[p].corto}</span>
+              </dt>
+              <dd>{c[p]}</dd>
+            </div>
+          ))}
+        </dl>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  /* ---------- escritorio: un libro de cinco columnas sobre la retícula ----------
+     dibujo (1) · tarea (2 a 4) · hoy (5 a 8) · se hace solo (9 a 12) · persona (13 a 16) */
+  .casos__cab { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; padding-bottom: 12px; }
+  .casos__cab :global(.casos__c--hoy) { grid-column: 5 / 9; }
+  .casos__cab :global(.casos__c--solo) { grid-column: 9 / 13; }
+  .casos__cab :global(.casos__c--persona) { grid-column: 13 / -1; }
+
+  .casos__lista { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; border-top: 1px solid var(--filete-fuerte); }
+  .caso {
+    grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-items: start;
+    padding-block: clamp(18px, calc(var(--u) * .3), 28px); border-bottom: 1px solid var(--filete);
+  }
+  .caso__fig { grid-column: 1 / 2; display: block; width: 100%; height: auto; aspect-ratio: 1; }
+  .caso__fig path { shape-rendering: crispEdges; }
+  .caso__t {
+    grid-column: 2 / 5; padding-inline: calc(var(--u) * .35) calc(var(--u) * .4);
+    font-weight: 750; font-stretch: 110%; font-size: var(--t-destacado); line-height: 1.1; letter-spacing: -.025em; text-wrap: balance;
+  }
+  .caso__partes { grid-column: 5 / -1; display: grid; grid-template-columns: subgrid; }
+  .caso__p { position: relative; grid-column: span 4; padding-right: calc(var(--u) * .4); }
+  .caso__p:last-child { padding-right: 0; }
+  .caso dd { line-height: 1.4; text-wrap: pretty; }
+  .caso__p--hoy dd { color: var(--texto-2); }
+  .caso__p--solo dd { font-weight: 700; font-stretch: 108%; font-size: var(--t-destacado); line-height: 1.15; letter-spacing: -.02em; text-wrap: balance; }
+
+  /* El punto de cada dato: suelto (hoy, en desorden), lleno (se hace solo) y hueco (una persona). */
+  .caso dt { color: var(--texto-2); }
+  .caso__p--solo dt { color: var(--acento); }
+  .caso__pt { display: inline-block; width: .62em; height: .62em; margin-right: .75em; background: var(--rojo); }
+  .caso__pt--hoy { background: none; box-shadow: inset 0 0 0 1.5px currentColor; transform: rotate(18deg); }
+  .caso__pt--persona { background: none; box-shadow: inset 0 0 0 1.5px currentColor; }
+  .caso__corto { display: none; }
+
+  @media (min-width: 960px) {
+    /* El rótulo ya está arriba: aquí queda solo para lector de pantalla. */
+    .caso dt { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    /* La frase chica baja lo justo para compartir renglón con el nombre de la tarea. */
+    .caso__p--hoy dd, .caso__p--persona dd { padding-top: .16em; }
+  }
+  /* El escritorio angosto: el nombre va un punto más estrecho y liviano. Así "de la
+     empresa" cabe en un renglón y queda aire de verdad antes de la columna "Hoy". */
+  @media (min-width: 960px) and (max-width: 1279px) {
+    .caso__t { padding-inline: calc(var(--u) * .28) calc(var(--u) * .14); font-weight: 700; font-stretch: 105%; }
+    /* La última columna no llega al filo: una frase que cabe justa parte en dos renglones. */
+    .caso__p:last-child { padding-right: calc(var(--u) * .2); }
+  }
+
+  /* ---------- tableta: el nombre arriba y los tres datos debajo, uno por renglón: el
+     rótulo en una columna y las tres frases alineadas en otra ---------- */
+  @media (max-width: 959px) {
+    .casos__cab { display: none; }
+    .caso { row-gap: 14px; }
+    .caso__fig { grid-row: 1 / span 2; }
+    .caso__t { grid-column: 2 / -1; padding-right: 0; }
+    .caso__partes { grid-column: 2 / -1; display: block; padding-left: calc(var(--u) * .35); }
+    /* 12rem: lo que mide "Pasa a una persona" con su punto. */
+    .caso__p { display: grid; grid-template-columns: 12rem minmax(0, 1fr); column-gap: 16px; align-items: baseline; padding-right: 0; }
+    .caso__p + .caso__p { margin-top: 8px; }
+    .caso dt { white-space: nowrap; }
+  }
+
+  /* ---------- celular: dibujo y nombre en un renglón; debajo, los tres datos a todo el
+     ancho, con el rótulo abreviado ---------- */
+  @media (max-width: 699px) {
+    .caso { grid-template-columns: calc(var(--u) * .78) minmax(0, 1fr); column-gap: 14px; row-gap: 10px; padding-block: 13px 15px; }
+    .caso__fig { grid-column: 1; grid-row: 1; }
+    .caso__t { grid-column: 2; grid-row: 1; align-self: center; padding: 0; }
+    .caso__partes { grid-column: 1 / -1; grid-row: 2; padding: 0; }
+    /* 5,25rem: lo que mide "Persona" con su punto. */
+    .caso__p { grid-template-columns: 5.25rem minmax(0, 1fr); column-gap: 10px; }
+    .caso__p + .caso__p { margin-top: 6px; }
+    .caso__p--hoy dd { font-size: var(--t-menor); }
+    .caso__largo { display: none; }
+    .caso__corto { display: inline; }
+  }
+</style>

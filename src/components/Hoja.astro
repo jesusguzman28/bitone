@@ -1,0 +1,113 @@
+---
+// La hoja del acuerdo: "precio fijo por escrito" convertido en un objeto. Papel
+// con cláusulas numeradas y dos líneas de firma, y una segunda hoja asomando
+// detrás. Se pone sobre el campo rojo: <section class="plano plano--rojo">.
+// También sirve para "Qué te llevas" de una página interior: cambia título y cláusulas.
+// Las firmas dicen quién construye y quién decide. La razón social y el RUC no
+// van aquí: se escriben una sola vez por página, en el pie.
+import Logo from './Logo.astro';
+import { empresa, clausulas as clausulasBase, notaDeLaHoja, type Clausula } from '../data/empresa';
+
+interface Props {
+  titulo?: string;
+  rotulo?: string;
+  clausulas?: Clausula[];
+  /** Línea final, antes de las firmas. Con '' no se muestra. Si son varias notas que
+      no tratan de lo mismo, una lista: cada una va en su párrafo. */
+  nota?: string | readonly string[];
+  /** Solo los títulos de las cláusulas: la hoja corta de la portada. */
+  breve?: boolean;
+  /** Sin las dos líneas de firma (para hojas que no son un acuerdo). */
+  sinFirmas?: boolean;
+  /** id del título, por si la sección lo usa en aria-labelledby. */
+  id?: string;
+  nivel?: 2 | 3;
+  class?: string;
+}
+
+const {
+  titulo = 'Lo que queda por escrito',
+  rotulo = 'Se firma antes de programar',
+  clausulas = clausulasBase,
+  nota = notaDeLaHoja,
+  breve = false,
+  sinFirmas = false,
+  id = 'titulo-hoja',
+  nivel = 3,
+  class: clase,
+  ...resto
+} = Astro.props;
+const Titulo = `h${nivel}` as 'h2' | 'h3';
+const Clausula = `h${nivel + 1}` as 'h3' | 'h4';
+const notas = (typeof nota === 'string' ? [nota] : [...nota]).filter(Boolean);
+---
+
+<article class:list={['hoja', 'plano-claro', { 'hoja--breve': breve }, clase]} aria-labelledby={id} {...resto}>
+  <header class="hoja__cab">
+    <Logo soloSimbolo class="hoja__sello" />
+    <div>
+      <Titulo class="subtitulo" id={id}>{titulo}</Titulo>
+      <p class="rotulo hoja__rot">{rotulo}</p>
+    </div>
+  </header>
+
+  <ol class="hoja__clausulas">
+    {clausulas.map((c) => (
+      <li>
+        <Clausula>{c.titulo}</Clausula>
+        {!breve && <p>{c.texto}</p>}
+      </li>
+    ))}
+  </ol>
+
+  {notas.map((n) => <p class="hoja__nota">{n}</p>)}
+
+  {!sinFirmas && (
+    <footer class="hoja__firmas">
+      <p><span class="hoja__linea"></span><strong>{empresa.marca}</strong><span class="rotulo">Quien construye</span></p>
+      <p><span class="hoja__linea"></span><strong>Tu empresa</strong><span class="rotulo">Quien decide</span></p>
+    </footer>
+  )}
+</article>
+
+<style>
+  .hoja {
+    position: relative; padding: calc(var(--u) * .55) calc(var(--u) * .55) calc(var(--u) * .5);
+    /* No es una sombra: es la segunda hoja, detrás. Sin difuminados. La hoja le reserva
+       su sitio a la derecha: las dos juntas terminan en el borde de la columna, sin
+       asomar al margen ni tocar el módulo de WhatsApp. Abajo no lo reserva: quien ponga
+       algo debajo cuenta el aire desde la segunda hoja (14 px más; 10 en celular). */
+    margin-right: 14px;
+    box-shadow: 14px 14px 0 var(--arena);
+  }
+  .hoja__cab { display: flex; align-items: center; gap: 16px; padding-bottom: 20px; }
+  .hoja__cab :global(.hoja__sello) { flex: none; width: 44px; height: 44px; }
+  .hoja__rot { margin-top: 4px; color: var(--texto-2); }
+
+  .hoja__clausulas { counter-reset: c; border-top: 1px solid var(--tinta); }
+  .hoja__clausulas li { counter-increment: c; display: grid; grid-template-columns: 3.2em minmax(0, 1fr); align-items: baseline; padding-block: 13px; border-bottom: 1px solid var(--linea); }
+  .hoja__clausulas li::before { content: counter(c, decimal-leading-zero); grid-row: 1 / 3; font: 500 var(--t-rotulo)/1.9 var(--f-mono); letter-spacing: .05em; color: var(--rojo-hondo); }
+  .hoja__clausulas :is(h3, h4) { font-weight: 700; font-stretch: 108%; font-size: 1.125rem; letter-spacing: -.015em; line-height: 1.25; }
+  .hoja__clausulas p { grid-column: 2; margin-top: 2px; color: var(--tinta-2); font-size: var(--t-menor); line-height: 1.45; }
+  .hoja--breve .hoja__clausulas li { padding-block: 15px; }
+  .hoja--breve .hoja__clausulas li::before { grid-row: auto; line-height: 1.8; }
+  .hoja--breve .hoja__clausulas :is(h3, h4) { font-size: var(--t-destacado); letter-spacing: -.02em; }
+  .hoja__nota { margin-top: 18px; font-size: var(--t-menor); line-height: 1.45; font-weight: 550; text-wrap: pretty; }
+  .hoja__nota + .hoja__nota { margin-top: 10px; }
+
+  .hoja__firmas { display: grid; grid-template-columns: 1fr 1fr; column-gap: calc(var(--u) * .5); margin-top: calc(var(--u) * .6); }
+  .hoja__firmas p { display: flex; flex-direction: column; font-size: var(--t-menor); line-height: 1.3; }
+  .hoja__firmas .rotulo { margin-top: 4px; color: var(--tinta-2); }
+  .hoja__linea { display: block; height: 1px; margin-bottom: 10px; background: var(--tinta); }
+
+  @media (max-width: 699px) {
+    .hoja { padding: 22px 18px 24px; margin-right: 10px; }
+    .hoja { box-shadow: 10px 10px 0 var(--arena); }
+    .hoja__cab { padding-bottom: 16px; }
+    .hoja__cab :global(.hoja__sello) { width: 36px; height: 36px; }
+    .hoja__clausulas li { grid-template-columns: 2.6em minmax(0, 1fr); padding-block: 11px; }
+    .hoja--breve .hoja__clausulas li { padding-block: 10px; }
+    .hoja__nota { margin-top: 12px; }
+    .hoja__firmas { margin-top: 34px; column-gap: 16px; }
+  }
+</style>

@@ -1,0 +1,56 @@
+---
+// Cabeza de una sección: rótulo, título y, si hace falta, una entrada.
+//   disposicion="lado"  título a la izquierda y entrada a la derecha (por defecto)
+//   disposicion="pila"  todo apilado a la izquierda
+// Para que dos secciones seguidas no abran igual, alterna la disposición. El
+// rótulo es opcional: si el título ya dice de qué va la sección, no se pone.
+// El título acepta varios renglones: cada uno es una frase que no se parte por dentro
+// mientras quepa en el ancho.
+import Rotulo from './Rotulo.astro';
+
+interface Props {
+  titulo: string | string[];
+  /** id del título: la sección lo usa en aria-labelledby. */
+  id: string;
+  rotulo?: string;
+  entrada?: string;
+  disposicion?: 'lado' | 'pila';
+  nivel?: 2 | 3;
+  class?: string;
+}
+
+const { titulo, id, rotulo, entrada, disposicion = 'lado', nivel = 2, class: clase, ...resto } = Astro.props;
+const renglones = Array.isArray(titulo) ? titulo : [titulo];
+const Titulo = `h${nivel}` as 'h2' | 'h3';
+---
+
+<header class:list={['cabeza', `cabeza--${disposicion}`, 'reticula', clase]} {...resto}>
+  {rotulo && <Rotulo class="cabeza__rot">{rotulo}</Rotulo>}
+  <Titulo class="titulo cabeza__t" id={id}>
+    {renglones.map((r, i) => <><span class="renglon">{r}</span>{i < renglones.length - 1 && ' '}</>)}
+  </Titulo>
+  {entrada && <p class="entrada cabeza__e">{entrada}</p>}
+  {Astro.slots.has('default') && <div class="cabeza__extra"><slot /></div>}
+</header>
+
+<style>
+  .cabeza { row-gap: 0; padding-bottom: var(--aire-corto); }
+  .cabeza :global(.cabeza__rot) { grid-column: 1 / -1; margin-bottom: clamp(14px, calc(var(--u) * .28), 26px); }
+  /* Las notas laterales de todo el sitio arrancan en el módulo 12; las mitades, en el 9. */
+  .cabeza__t { grid-column: 1 / 11; }
+  .cabeza__e { grid-column: 12 / -1; align-self: end; padding-bottom: .2em; }
+  .cabeza__extra { grid-column: 12 / -1; margin-top: 12px; }
+
+  .cabeza--pila .cabeza__t { grid-column: 1 / 13; }
+  .cabeza--pila .cabeza__e { grid-column: 1 / 9; margin-top: clamp(16px, calc(var(--u) * .3), 28px); }
+  .cabeza--pila .cabeza__extra { grid-column: 1 / 9; }
+
+  @media (max-width: 959px) {
+    .cabeza__t, .cabeza--pila .cabeza__t { grid-column: 1 / -1; }
+    .cabeza__e, .cabeza--pila .cabeza__e { grid-column: 1 / 8; margin-top: 18px; }
+    .cabeza__extra, .cabeza--pila .cabeza__extra { grid-column: 1 / -1; }
+  }
+  @media (max-width: 699px) {
+    .cabeza__e, .cabeza--pila .cabeza__e { grid-column: 1 / -1; margin-top: 14px; }
+  }
+</style>

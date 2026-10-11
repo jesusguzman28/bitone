@@ -1,205 +1,53 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import PageHero from '../components/PageHero.astro';
-import { nosotros, fundadores, site } from '../data/site';
+// Nosotros. Lo que el brief respalda de las personas es nombre, rol y LinkedIn: no
+// hay biografías, estudios, años ni tamaño de equipo, y no se inventan. La razón
+// social y el RUC no van aquí: los dice el pie, una vez.
+// Guion: la frase de la casa y quienes la firman (las personas, lo único redondo de
+// la página) · cómo es trabajar con ellos, en cuatro frases (tinta) · para qué no son
+// (la franqueza, a subtítulo) · la ficha formal, en tres renglones · el cierre que
+// arma el mensaje.
+// Tres escalas de titular: la portada, el trato a título (el momento propio de la
+// página) y, a subtítulo, la franqueza y la ficha.
+// Los textos viven en data/nosotros.ts; las tres piezas propias, en components/nosotros/.
+import Base from '../layouts/Base.astro';
+import PortadaFirmada from '../components/nosotros/PortadaFirmada.astro';
+import Trato from '../components/nosotros/Trato.astro';
+import Ficha from '../components/nosotros/Ficha.astro';
+import Franqueza from '../components/Franqueza.astro';
+import DosListas from '../components/DosListas.astro';
+import CierreWhatsApp from '../components/CierreWhatsApp.astro';
+import { nosotros as d } from '../data/nosotros';
+import { paginas } from '../data/navegacion';
+
+const pagina = paginas.nosotros;
 ---
 
-<BaseLayout
-  title="Nosotros: construimos productos, no solo encargos"
-  description="BIT-ONE es la marca de Bitone E.I.R.L., empresa de desarrollo en Lima. Antes de construir para otros publicamos productos propios: ApuraY, Quipuy y MindBlock."
->
-  <PageHero title={nosotros.title} subtitle={nosotros.intro} />
+<Base titulo={d.pestana} descripcion={d.descripcion} signo={pagina.signo}>
+  <!-- 1 · La frase y quienes la firman. Debajo viene un plano tinta: tonoDeAbajo -->
+  <PortadaFirmada
+    signo={pagina.signo}
+    tonoDeAbajo="tinta"
+    rotulo={pagina.nombre}
+    titulo={d.portada.titulo}
+    tituloPersonas={d.portada.personas}
+    textoBoton={d.portada.boton}
+    dato={d.portada.dato}
+  />
 
-  <!-- Historia + Misión / Visión -->
-  <section class="surface px-6 py-[88px]">
-    <div class="mx-auto grid w-full max-w-[1120px] items-start gap-11" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
-      <div class="reveal">
-        <h2 class="mt-4 font-display text-[clamp(1.5rem,3.4vw,2.1rem)] font-bold leading-[1.1] text-dark">{nosotros.historiaTitle}</h2>
-        {nosotros.historia.map((p, i) => (
-          <p class:list={['text-[15px] leading-[1.75] text-slate-600 [text-wrap:pretty]', i === 0 ? 'mt-[18px]' : 'mt-4']}>{p}</p>
-        ))}
-      </div>
+  <!-- 2 · Cómo es trabajar con ellos -->
+  <Trato />
 
-      <div class="grid gap-[18px]">
-        <div class="reveal panel-dark rounded-[14px] p-7 text-white" style="--reveal-delay:100ms">
-          <span class="block" style="color:#E8A317">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
-          </span>
-          <h3 class="mt-3.5 font-display text-lg font-bold">Misión</h3>
-          <p class="mt-2 text-sm leading-[1.7] text-slate-400">{nosotros.mision}</p>
-        </div>
-
-        <div class="reveal card rounded-[14px] p-7" style="--reveal-delay:200ms">
-          <span class="block" style="color:#E8A317">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-          </span>
-          <h3 class="mt-3.5 font-display text-lg font-bold text-dark">Visión</h3>
-          <p class="mt-2 text-sm leading-[1.7] text-slate-500">{nosotros.vision}</p>
-        </div>
-      </div>
-    </div>
+  <!-- 3 · Para qué no son: la franqueza de la casa, en voz más baja que el trato (`menor`:
+       a subtítulo, para que el trato sea el único bloque a tamaño de título) -->
+  <section class="seccion" id="para-quien" aria-labelledby="t-franca">
+    <Franqueza id="t-franca" menor titulo={d.franca.titulo} texto={d.franca.texto}>
+      <DosListas a={d.franca.listas.a} b={d.franca.listas.b} />
+    </Franqueza>
   </section>
 
-  {/* Los fundadores.
-      Va justo después de la historia y antes de las promesas, y ese sitio no es
-      casual: la historia cuenta qué construimos, esto dice quién lo construyó, y
-      solo entonces tienen peso las promesas de cómo trabajamos. En una venta a
-      empresas se compra gente antes que método.
+  <!-- 4 · La ficha formal -->
+  <Ficha />
 
-      Cada nombre lleva su perfil de LinkedIn, que es lo que convierte
-      "ingenieros de ESAN" en algo comprobable en un clic. Misma regla que el RUC
-      del pie y que la cuenta de desarrollador de la sección de apps. */}
-  <section class="surface--alt px-6 pb-[72px] pt-[72px]">
-    <div class="w-full max-w-[860px] ml-[max(0px,calc((100%-1120px)/2))]">
-      <div class="reveal">
-        <h2 class="max-w-[520px] font-display text-[clamp(1.6rem,3.8vw,2.3rem)] font-bold leading-[1.1] text-dark">
-          Quiénes lo construyen
-        </h2>
-      </div>
-
-      <ul class="fundadores mt-9 grid list-none gap-4 p-0">
-        {fundadores.map((f, i) => (
-          <li class="reveal" style={`--reveal-delay:${i * 90}ms`}>
-            <a href={f.linkedin} target="_blank" rel="noopener" class="fundador flex items-center gap-4 no-underline">
-              {/* Iniciales y no una foto: no tenemos retratos que publicar, y una
-                  silueta genérica de banco de imágenes en la sección donde se
-                  presenta a las personas reales es peor que no poner cara. */}
-              <span class="fundador__ini" aria-hidden="true">
-                {f.nombre.split(' ').slice(0, 2).map((p) => p.charAt(0)).join('')}
-              </span>
-              <span class="min-w-0 flex-1">
-                <span class="fundador__nombre">{f.nombre}</span>
-                <span class="fundador__rol">{f.rol}</span>
-              </span>
-              <span class="fundador__in">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4V9h4v1.5A6 6 0 0 1 16 8zM2 9h4v12H2zM4 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/></svg>
-                <span class="sr-only">Perfil de {f.nombre} en LinkedIn</span>
-              </span>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
-
-  <!-- Valores -->
-  <section class="surface--alt px-6 pb-24 pt-[72px]">
-    <div class="mx-auto w-full max-w-[1120px]">
-      <div class="reveal">
-        <h2 class="mt-4 max-w-[520px] font-display text-[clamp(1.6rem,3.8vw,2.3rem)] font-bold leading-[1.1] text-dark">
-          Cómo trabajamos, en 6 promesas
-        </h2>
-      </div>
-
-      <div class="mt-11 grid gap-4" style="grid-template-columns:repeat(auto-fit,minmax(270px,1fr))">
-        {nosotros.valores.map((v, i) => (
-          <div class="reveal card card--lift rounded-[10px] p-6" style={`--reveal-delay:${i * 90}ms`}>
-            <div class="flex items-center gap-3">
-              <h3 class="m-0 font-display text-[16.5px] font-bold text-dark">{v.title}</h3>
-            </div>
-            <p class="mt-2.5 text-[13.5px] leading-[1.65] text-slate-500">{v.desc}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Escríbenos -->
-  <section class="surface--alt px-6 pb-24 pt-20">
-    <div
-      class="reveal w-full max-w-[720px] ml-[max(0px,calc((100%-1120px)/2))] rounded-[14px] p-[clamp(28px,5vw,44px)] text-white"
-      style="background:var(--color-anil)"
-    >
-      <h2 class="m-0 font-display text-[clamp(1.4rem,3.4vw,1.9rem)] font-bold tracking-[-0.02em]">Conversemos de tu proyecto</h2>
-      <p class="mt-2.5 max-w-[420px] text-sm leading-[1.6] text-slate-400">
-        Déjanos tu nombre y qué necesitas — se abre WhatsApp con el mensaje listo.
-      </p>
-
-      <form id="nos-form" class="mt-[26px] grid gap-3.5">
-        <input id="nos-nombre" class="field" type="text" placeholder="Tu nombre" aria-label="Tu nombre" />
-        <textarea id="nos-msg" class="field resize-y" rows="3" placeholder="Cuéntanos qué necesita tu empresa…" aria-label="Mensaje"></textarea>
-        <div class="mt-2">
-          <button type="submit" class="btn btn--whatsapp group !py-3 !pl-[26px] !text-[15px]">
-            Enviar por WhatsApp
-            <span class="btn__icon" aria-hidden="true">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
-            </span>
-          </button>
-        </div>
-      </form>
-    </div>
-  </section>
-</BaseLayout>
-
-<script define:vars={{ waBase: `https://wa.me/${site.whatsapp}` }}>
-  const form = document.getElementById('nos-form');
-  form?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const nombre = (document.getElementById('nos-nombre')).value.trim();
-    const msg = (document.getElementById('nos-msg')).value.trim();
-    const text = `Hola BIT-ONE${nombre ? ' soy ' + nombre + ',' : ''} quiero conversar sobre mi proyecto.${msg ? ' ' + msg : ''}`;
-    window.open(`${waBase}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
-  });
-</script>
-
-<style>
-  .fundadores { grid-template-columns: 1fr; }
-  @media (min-width: 640px) { .fundadores { grid-template-columns: repeat(2, 1fr); } }
-
-  .fundador {
-    border-radius: 8px;
-    padding: 16px 18px;
-    background: #fff;
-    box-shadow: inset 0 0 0 1px var(--hairline);
-    transition: transform 0.4s var(--ease-fluid), box-shadow 0.4s var(--ease-fluid);
-  }
-  .fundador:hover {
-    transform: translateY(-2px);
-    box-shadow:
-      inset 0 0 0 1px color-mix(in srgb, #0A66C2 40%, transparent),
-      0 18px 34px -20px rgba(10, 102, 194, 0.45);
-  }
-  .fundador:focus-visible { outline: 2px solid #0A66C2; outline-offset: 3px; }
-
-  .fundador__ini {
-    display: grid;
-    place-items: center;
-    height: 48px;
-    width: 48px;
-    flex: none;
-    border-radius: 8px;
-    font-family: var(--font-display);
-    font-size: 16px;
-    font-weight: 800;
-    color: #fff;
-    background: var(--gradient-brand);
-  }
-  .fundador__nombre {
-    display: block;
-    font-family: var(--font-display);
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.25;
-    color: var(--color-dark);
-  }
-  .fundador__rol {
-    display: block;
-    margin-top: 3px;
-    font-size: 12.5px;
-    color: #64748b;
-  }
-  /* El azul oficial de LinkedIn. Es de las pocas veces que un color de marca
-     ajena vale la pena: se reconoce antes de leer nada y dice a dónde lleva. */
-  .fundador__in {
-    display: grid;
-    place-items: center;
-    height: 34px;
-    width: 34px;
-    flex: none;
-    border-radius: 10px;
-    color: #0A66C2;
-    background: rgba(10, 102, 194, 0.09);
-  }
-
-  @media (prefers-reduced-motion: reduce) { .fundador { transition: none; } }
-</style>
+  <!-- 5 · Cierre -->
+  <CierreWhatsApp />
+</Base>

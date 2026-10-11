@@ -1,0 +1,155 @@
+---
+// El cierre de cada página: un campo donde la persona cuenta su caso y un botón que
+// abre WhatsApp con ese mensaje ya escrito. No guarda ni envía nada a ningún servidor.
+// Escribir es opcional: con el campo vacío, el botón abre WhatsApp con el mensaje de
+// la página (`general`). Sin JavaScript sigue funcionando: el formulario va directo
+// a wa.me con lo escrito.
+// Trae su propio plano (tinta) y su sección: se pone tal cual antes del pie.
+//
+// Título, ejemplo y arranque del mensaje dicen lo mismo. Por defecto preguntan por lo
+// que se hace a mano ("Hoy hacemos a mano: …"). Una página que pregunta otra cosa
+// cambia los tres: /rescate/ pregunta por el sistema ("Mi sistema: …") y /apps/, por
+// el caso ("Mi caso: …").
+import BotonWhatsApp from './BotonWhatsApp.astro';
+import { empresa, enlaceWhatsApp, mensajes, quePasaDespues } from '../data/empresa';
+
+interface Props {
+  titulo?: string | string[];
+  /** Ejemplo de lo que se puede escribir: va como ayuda sobre el campo, no dentro. */
+  ejemplo?: string;
+  /** De qué página viene: se añade al mensaje cuando la persona escribe ("Me interesa: una app"). */
+  interes?: string;
+  /** Lo que va delante de lo que escribe la persona. Tiene que responder al título. */
+  prefijo?: string;
+  /** El mensaje que sale con el campo vacío: el de la página (el mismo de su botón de
+      WhatsApp). Sin él, el general, con el interés si lo hay. */
+  general?: string;
+  /** Los renglones de "Qué pasa después", si la página necesita decir el suyo. */
+  despues?: readonly string[];
+  id?: string;
+}
+
+const {
+  titulo = ['Cuéntanos qué', 'haces a mano.'],
+  ejemplo = 'Por ejemplo: mis vendedores dictan los pedidos por WhatsApp y alguien los digita de nuevo.',
+  interes,
+  prefijo = 'Hoy hacemos a mano:',
+  general,
+  despues = quePasaDespues,
+  id = 'contacto',
+} = Astro.props;
+const renglones = Array.isArray(titulo) ? titulo : [titulo];
+const vacio = general ?? (interes ? `${mensajes.general}. Me interesa: ${interes}.` : mensajes.general);
+---
+
+<section class="cierre plano plano--tinta" id={id} aria-labelledby={`${id}-titulo`}>
+  <div class="reticula cierre__r">
+    <h2 class="cartel cartel--menor cierre__t" id={`${id}-titulo`}>
+      {renglones.map((r, i) => <><span>{r}</span>{i < renglones.length - 1 && ' '}</>)}
+    </h2>
+
+    <form class="cierre__form" action={`https://wa.me/${empresa.whatsapp}`} method="get" target="_blank" rel="noopener" data-cierre data-interes={interes} data-prefijo={prefijo} data-vacio={vacio}>
+      <label class="rotulo" for={`${id}-texto`}>Escríbelo como lo dirías</label>
+      <p class="menor cierre__ayuda" id={`${id}-ayuda`}>{ejemplo}</p>
+      <textarea id={`${id}-texto`} name="text" rows="3" aria-describedby={`${id}-ayuda`}></textarea>
+      <div class="cierre__enviar">
+        <BotonWhatsApp como="button" variante="rojo" texto="Seguir en WhatsApp" />
+        <p class="menor cierre__nota">Aquí no se guarda nada: se abre tu WhatsApp con el mensaje ya escrito.</p>
+      </div>
+    </form>
+
+    <dl class="cierre__datos">
+      <div>
+        <dt class="rotulo">O escríbenos directo</dt>
+        <dd><a class="cierre__num" href={enlaceWhatsApp(general)} target="_blank" rel="noopener" data-wa>{empresa.telefono}<span class="solo-lector"> (abre WhatsApp)</span></a></dd>
+      </div>
+      <div>
+        <dt class="rotulo">Qué pasa después</dt>
+        <dd>
+          <ol class="cierre__pasos">
+            {despues.map((paso, i) => <li><span class="rotulo" aria-hidden="true">{i + 1}</span>{paso}</li>)}
+          </ol>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<script>
+  // El mensaje sale como "Hola Bit One..." para que quien lo reciba sepa de dónde viene:
+  // el interés de la página, el arranque que responde al título y lo que escribió la
+  // persona. Con el campo vacío sale el mensaje de la página: nadie se queda sin pasar a WhatsApp.
+  for (const form of document.querySelectorAll<HTMLFormElement>('[data-cierre]')) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const texto = form.querySelector<HTMLTextAreaElement>('textarea')?.value.trim();
+      const interes = form.dataset.interes ? ` Me interesa: ${form.dataset.interes}.` : '';
+      const mensaje = texto ? `Hola Bit One.${interes} ${form.dataset.prefijo} ${texto}` : form.dataset.vacio ?? '';
+      window.open(`${form.action}?text=${encodeURIComponent(mensaje)}`, '_blank', 'noopener');
+    });
+  }
+</script>
+
+<style>
+  .cierre { padding-block: var(--aire) calc(var(--aire) * .9); }
+  .cierre__r { row-gap: calc(var(--u) * .7); align-items: start; }
+  .cierre__t { grid-column: 1 / -1; }
+
+  .cierre__form { grid-column: 1 / 10; display: grid; }
+  .cierre__form label { color: var(--texto-2); }
+  /* El ejemplo se lee como ayuda, fuera del campo: dentro parecía un mensaje ya escrito. */
+  .cierre__ayuda { margin: 6px 0 12px; color: var(--texto-2); max-width: 34em; text-wrap: pretty; }
+  .cierre__form textarea {
+    display: block; width: 100%; min-height: 116px; padding: 16px 18px; resize: none;
+    border: 0; border-radius: 0; background: var(--papel); color: var(--tinta);
+    font-size: var(--t-entrada); line-height: 1.4; box-shadow: inset 0 0 0 1.5px transparent;
+    transition: box-shadow var(--d-toque) ease;
+  }
+  .cierre__form textarea:focus-visible { outline: 2px solid var(--hueso); outline-offset: 3px; box-shadow: inset 0 0 0 1.5px var(--rojo); }
+  .cierre__enviar { display: flex; align-items: center; gap: 16px 24px; margin-top: 14px; }
+  .cierre__enviar :global(.boton) { flex: none; }
+  .cierre__nota { color: var(--texto-2); max-width: 24em; }
+
+  .cierre__datos { grid-column: 12 / -1; display: grid; border-top: 1px solid var(--filete); }
+  .cierre__datos > div { padding-block: 14px; border-bottom: 1px solid var(--filete); }
+  .cierre__datos dt { color: var(--texto-2); }
+  .cierre__datos dd { margin-top: 4px; }
+  .cierre__num { display: inline-flex; align-items: center; min-height: 44px; font-weight: 750; font-stretch: 114%; font-size: var(--t-subtitulo); letter-spacing: -.025em; text-decoration: none; white-space: nowrap; }
+  /* Tres renglones numerados: el número va en mono, como en la hoja. */
+  .cierre__pasos { display: grid; row-gap: 8px; margin-top: 8px; }
+  .cierre__pasos li { display: grid; grid-template-columns: 1.7em minmax(0, 1fr); align-items: baseline; line-height: 1.35; text-wrap: pretty; }
+  .cierre__pasos .rotulo { color: var(--texto-2); }
+
+  @media (hover: hover) and (pointer: fine) {
+    .cierre__num:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .2em; }
+  }
+  /* En escritorio las dos columnas abren en el mismo renglón: "Escríbelo como lo dirías"
+     y "O escríbenos directo". La de la derecha no lleva filete ni aire arriba. */
+  @media (min-width: 960px) {
+    .cierre__datos { border-top: 0; }
+    .cierre__datos > div:first-child { padding-top: 0; }
+  }
+  @media (max-width: 959px) {
+    .cierre__form, .cierre__datos { grid-column: 1 / -1; }
+  }
+  /* En tableta un renglón de 13 a 15 letras ("Cuéntanos qué", "sistema tienes.") va justo
+     en los ocho módulos: con la letra algo más angosta (el ancho del subtítulo) cabe con
+     holgura y el titular no se parte en tres. El tamaño no cambia. */
+  @media (min-width: 700px) and (max-width: 959px) {
+    .cierre__t { font-stretch: var(--ancho-subtitulo); }
+  }
+  @media (max-width: 699px) {
+    .cierre { padding-block: var(--aire) 22px; }
+    .cierre__r { row-gap: 18px; }
+    .cierre__t { line-height: .96; }
+    .cierre__ayuda { margin: 4px 0 10px; }
+    .cierre__form textarea { min-height: 84px; padding: 14px; }
+    .cierre__enviar { flex-direction: column; align-items: stretch; gap: 10px; }
+    .cierre__datos > div { padding-block: 10px; }
+    /* El último bloque no lleva filete: a 22 px viene la cenefa del pie, y filete y
+       cenefa se leían como dos cierres seguidos. */
+    .cierre__datos > div:last-child { border-bottom: 0; }
+    .cierre__datos dd { margin-top: 2px; }
+    .cierre__pasos { row-gap: 5px; margin-top: 6px; }
+  }
+</style>

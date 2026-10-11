@@ -1,0 +1,174 @@
+---
+// El momento propio de /como-trabajamos/: el recorrido completo, con el dinero debajo.
+// Seis tocapus que se llenan (la primera conversación y los cinco pasos) y, bajo ellos,
+// tres bloques que dicen qué se paga en cada tramo:
+//   hueco   Gratis        la primera conversación
+//   tinta   Se paga       el paso 1, con su propio precio
+//   rojo    Precio fijo   del paso 2 al 5
+// De un vistazo se ve qué es gratis, qué se paga y desde dónde se sabe el precio: donde
+// empieza el rojo. En escritorio el código va dos veces: arriba, una franja sobre las
+// figuras de cada tramo (hueca, tinta, roja), que se ve aunque la ventana sea baja; abajo,
+// los tres bloques que la explican. Los bloques se apoyan en el campo rojo que viene
+// debajo (el del acuerdo), y el de "Precio fijo" se funde con él, como la pestaña de un
+// fólder: dentro está la hoja. Por eso la sección que lo contiene no lleva aire abajo.
+//
+// Las figuras siguen la regla de PasosTocapu (ninguna queda vacía) y son el mismo dibujo
+// (FiguraTocapu): una nota suelta, tres notas, la primera fila tejida, diez casillas,
+// el paño completo con dos piezas en revisión y el paño enmarcado con su bit dorado.
+//
+// En tableta y celular cada tramo es una franja con su color y, debajo, sus momentos,
+// con ese color bajando por el costado: se ve qué pasos son de cada tramo. El filete rojo
+// de "Precio fijo" baja hasta tocar el campo rojo, como la pestaña del escritorio.
+// Trae su margen lateral: va directo dentro de la sección, sin .reticula.
+import FiguraTocapu, { type Figura } from '../FiguraTocapu.astro';
+import type { NombreSigno } from '../../lib/signos';
+import type { Tramo } from '../../data/como-trabajamos';
+
+interface Props {
+  /** Tres tramos con seis momentos en total: uno, uno y cuatro. */
+  tramos: Tramo[];
+  /** Signo dominante del tejido: el de la página. */
+  signo?: NombreSigno;
+  class?: string;
+}
+
+const { tramos, signo, class: clase, ...resto } = Astro.props;
+
+// Una figura por momento. La nota de la conversación sigue en su sitio en el paso 1,
+// donde ya son tres: lo que se anota.
+const FIGURAS: Figura[] = [
+  { llenas: 0, sueltas: [{ n: 6, giro: 7 }] },
+  { llenas: 0, sueltas: [{ n: 1, giro: -9 }, { n: 6, giro: 7 }, { n: 12, giro: -5 }] },
+  { llenas: 4 },
+  { llenas: 10 },
+  { llenas: 16, revision: [7, 12] },
+  { llenas: 16, bit: 10, marco: true },
+];
+
+// Cada momento sabe en qué columna va (escritorio) y qué figura le toca.
+let cuenta = 0;
+const vista = tramos.map((t) => ({
+  ...t,
+  momentos: t.momentos.map((m) => {
+    const orden = cuenta++;
+    return { ...m, orden, fig: FIGURAS[Math.min(orden, FIGURAS.length - 1)] };
+  }),
+}));
+---
+
+<ol class:list={['rec', clase]} role="list" {...resto}>
+  {vista.map((t) => (
+    <li class={`tramo tramo--${t.id}`} role="listitem">
+      <div class="tramo__cab">
+        <h3 class="tramo__p">{t.palabra}<span class="solo-lector">: {t.lector}</span></h3>
+        <p class="tramo__d">{t.texto}</p>
+      </div>
+      <ol class="tramo__momentos" role="list">
+        {t.momentos.map((m) => (
+          <li class="mom" style={`--c:${m.orden + 1}`} data-rev>
+            <FiguraTocapu {...m.fig} signo={signo} class="mom__fig" />
+            <p class="rotulo mom__rot"><b>{m.etiqueta}</b><span class="solo-lector">, </span><i aria-hidden="true">·</i>{' '}<span>{m.duracion}</span></p>
+            <h4 class="mom__t">{m.titulo}</h4>
+            <p class="mom__d">{m.pasa}</p>
+            <p class="mom__r"><span class="rotulo">Recibes</span> {m.recibes}</p>
+          </li>
+        ))}
+      </ol>
+    </li>
+  ))}
+</ol>
+
+<style>
+  /* ---------- escritorio: seis columnas y, debajo, los tres bloques ---------- */
+  .rec { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); column-gap: calc(var(--u) * .3); margin-inline: var(--m); }
+  /* Los tramos y sus listas no hacen caja: sus hijos se colocan en la rejilla de arriba. */
+  .tramo, .tramo__momentos { display: contents; }
+
+  /* El código del dinero, en la cabeza: una franja sobre las figuras de cada tramo, en
+     miniatura de su bloque (hueca, tinta y roja; la roja corre del paso 2 al 5). Así se ve
+     qué es gratis y qué se paga aunque los bloques queden bajo el borde de la ventana.
+     Son cajas de los tramos, que no hacen caja: van a la primera fila de la rejilla. */
+  @media (min-width: 960px) {
+    .tramo::before { content: ""; grid-row: 1; height: 6px; margin-bottom: 12px; }
+    .tramo--gratis::before { grid-column: 1; box-shadow: inset 0 0 0 1.5px var(--tinta); }
+    .tramo--paso1::before { grid-column: 2; background: var(--tinta); }
+    .tramo--fijo::before { grid-column: 3 / -1; background: var(--rojo); }
+  }
+
+  /* minmax(0, 1fr): una palabra larga en un título no ensancha la columna ni su figura. */
+  .mom { grid-column: var(--c); grid-row: 2 / span 5; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: subgrid; align-content: start; }
+  .mom :global(.mom__fig) { margin-bottom: 18px; }
+  /* El rótulo va en dos renglones: seis columnas no dan para "Paso 3 · Depende del tamaño". */
+  .mom__rot { margin-bottom: 8px; color: var(--texto-2); }
+  .mom__rot b { display: block; font-weight: 700; color: var(--acento); }
+  /* El punto es adorno: la separación que se lee y se copia es la coma oculta y el espacio. */
+  .mom__rot i { display: none; margin-inline: .7em .2em; font-style: normal; opacity: .5; }
+  .mom__t { font-weight: 750; font-stretch: 110%; font-size: var(--t-destacado); line-height: 1.1; letter-spacing: -.025em; text-wrap: balance; }
+  .mom__d { margin-top: 10px; color: var(--texto-2); font-size: var(--t-menor); line-height: 1.5; }
+  .mom__r { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--filete); font-size: var(--t-menor); line-height: 1.45; font-weight: 550; }
+  .mom__r .rotulo { display: block; margin-bottom: 4px; color: var(--acento); }
+
+  /* Los tres bloques del dinero, cada uno bajo sus columnas. Sin borde abajo: se apoyan
+     en el campo rojo. */
+  .tramo__cab { grid-row: 7; margin-top: calc(var(--u) * .45); padding: calc(var(--u) * .2) calc(var(--u) * .2) calc(var(--u) * .32); }
+  .tramo--gratis .tramo__cab { grid-column: 1; box-shadow: inset 0 1.5px 0 var(--tinta), inset 1.5px 0 0 var(--tinta), inset -1.5px 0 0 var(--tinta); }
+  .tramo--paso1 .tramo__cab { grid-column: 2; background: var(--tinta); color: var(--hueso); }
+  .tramo--fijo .tramo__cab { grid-column: 3 / -1; background: var(--rojo); color: #fff; }
+  .tramo__p { font-weight: 800; font-stretch: var(--ancho-subtitulo); font-size: var(--t-subtitulo); line-height: 1; letter-spacing: -.035em; }
+  .tramo__d { margin-top: 10px; max-width: 31em; font-size: var(--t-menor); line-height: 1.42; text-wrap: pretty; }
+  .tramo--gratis .tramo__d { color: var(--tinta-2); }
+  .tramo--paso1 .tramo__d { color: var(--hueso-2); }
+  /* El bloque ancho da para letra de entrada. */
+  .tramo--fijo .tramo__d { font-size: var(--t-entrada); line-height: 1.36; }
+
+  /* El escritorio angosto (960 a 1199): las columnas miden unos 130 px. La palabra más
+     larga de un título ("Construimos") cabe con la letra a su ancho normal. */
+  @media (min-width: 960px) and (max-width: 1199px) {
+    .mom__t { font-stretch: 100%; }
+    .tramo__cab { padding-inline: 12px; }
+  }
+
+  /* ---------- tableta y celular: cada tramo, una franja y sus momentos ---------- */
+  @media (max-width: 959px) {
+    .rec { display: block; }
+    /* --filo: el grueso del filete del tramo. --sangra: lo que entran sus momentos, igual
+       que el texto de la franja, para que figuras y palabras queden en el mismo eje. */
+    .tramo { display: block; --filo: 3px; --sangra: 20px; }
+    .tramo--gratis { --filo: 1.5px; }
+    .tramo + .tramo { margin-top: calc(var(--u) * .7); }
+    .tramo__cab { margin-top: 0; padding: 18px var(--sangra) 20px; }
+    .tramo--gratis .tramo__cab { box-shadow: inset 0 0 0 1.5px var(--tinta); }
+    .tramo--fijo .tramo__d { font-size: var(--t-menor); line-height: 1.42; }
+    /* El color del tramo baja por el costado, a lo largo de sus momentos: el contorno de
+       "Gratis", la tinta de "Se paga" y el rojo de "Precio fijo". Así los pasos 3, 4 y 5
+       siguen siendo de "Precio fijo" aunque su franja ya no esté en pantalla. */
+    .tramo__momentos {
+      display: grid; grid-template-columns: minmax(0, 1fr); row-gap: calc(var(--u) * .5);
+      padding: calc(var(--u) * .45) 0 4px calc(var(--sangra) - var(--filo));
+      border-left: var(--filo) solid var(--tinta);
+    }
+    /* El rojo no se corta: baja hasta el campo rojo del acuerdo, que viene pegado. El aire
+       de abajo lo pone aquí el tramo, no la sección. */
+    .tramo--fijo .tramo__momentos { padding-bottom: var(--aire); border-left-color: var(--rojo); }
+    /* Figura a la izquierda, texto a la derecha. */
+    .mom { grid-column: auto; grid-row: auto; grid-template-rows: none; grid-template-columns: calc(var(--u) * 2) minmax(0, 1fr); column-gap: calc(var(--u) * .5); align-items: start; }
+    .mom :global(.mom__fig) { grid-row: 1 / span 4; margin-bottom: 0; }
+    .mom > :not(.mom__fig) { grid-column: 2; }
+    .mom__rot b { display: inline; }
+    .mom__rot i { display: inline; }
+  }
+  @media (max-width: 699px) {
+    .tramo { --sangra: 14px; }
+    .tramo + .tramo { margin-top: 26px; }
+    .tramo__cab { padding-block: 12px 14px; }
+    .tramo__d { margin-top: 6px; }
+    .tramo__momentos { row-gap: 16px; padding-top: 16px; }
+    /* La figura cede lo que ocupa el filete: el texto conserva su ancho. */
+    .mom { grid-template-columns: calc(var(--u) * .92) minmax(0, 1fr); column-gap: 12px; }
+    .mom__rot { margin-bottom: 3px; }
+    .mom__d { margin-top: 6px; }
+    /* Lo que recibes sigue destacando: tinta y peso, como en escritorio. */
+    .mom__r { margin-top: 5px; padding-top: 0; border-top: 0; }
+    .mom__r .rotulo { display: inline; margin-right: .5em; }
+  }
+</style>

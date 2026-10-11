@@ -1,0 +1,23 @@
+---
+// Uno de los cinco signos, dentro de su módulo. Es decorativo: el nombre del
+// servicio siempre va escrito al lado. El tamaño lo da quien lo usa (width).
+import type { NombreSigno, TonoSigno } from '../lib/signos';
+
+interface Props {
+  nombre: NombreSigno;
+  /** Fondo y trazo del módulo. */
+  tono?: TonoSigno;
+  class?: string;
+}
+
+const { nombre, tono = 'rojo', class: clase, ...resto } = Astro.props;
+---
+
+<svg class:list={['signo', 'pieza', `tono-${tono}`, clase]} viewBox="0 0 10 10" aria-hidden="true" focusable="false" {...resto}>
+  <rect width="10" height="10"></rect>
+  <use href={`#signo-${nombre}`} width="10" height="10"></use>
+</svg>
+
+<style>
+  .signo { display: block; width: 100%; height: auto; aspect-ratio: 1; }
+</style>

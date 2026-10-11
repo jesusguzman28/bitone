@@ -1,0 +1,120 @@
+---
+// WhatsApp siempre a mano, sin tapar nunca el texto ni repetirse.
+//   Celular:    barra fija abajo, de lado a lado. La página le reserva sitio
+//               con padding-bottom (--barra-wa, en tokens.css), esté o no a la vista.
+//   Escritorio: un módulo verde en el margen derecho, fuera de la columna de contenido.
+// Es lo único verde del sitio y tiene la misma lógica que el botón principal: un
+// módulo con el signo. Mientras haya en pantalla otro botón de WhatsApp (los que
+// llevan data-wa: el de la portada, el del cierre, el del menú) se retira, para
+// que nunca se vean dos iguales; en cuanto salen, vuelve. Así siempre hay un
+// acceso a WhatsApp a la vista y nunca dos. Sin JavaScript está siempre.
+// Vive fuera de .pagina (lo coloca el layout) porque va fijo a la ventana.
+import Icono from './Icono.astro';
+import { empresa, enlaceWhatsApp } from '../data/empresa';
+
+interface Props {
+  mensaje?: string;
+}
+
+const { mensaje } = Astro.props;
+---
+
+<a class="wa" href={enlaceWhatsApp(mensaje)} target="_blank" rel="noopener" aria-label="Escribir a Bit One por WhatsApp" data-wa-fijo>
+  <span class="wa__ico"><Icono nombre="whatsapp" /></span>
+  <span class="wa__txt" aria-hidden="true">
+    <b>Escríbenos por WhatsApp</b>
+    <span class="rotulo">{empresa.respuesta}</span>
+  </span>
+</a>
+
+<script>
+  const fijo = document.querySelector<HTMLElement>('[data-wa-fijo]');
+  if (fijo) {
+    const otros = [...document.querySelectorAll<HTMLElement>('[data-wa]')];
+    if (!otros.length || !('IntersectionObserver' in window)) {
+      fijo.setAttribute('data-listo', '');
+    } else {
+      // Los botones de WhatsApp que ahora mismo se ven. Cuenta cualquier parte que asome
+      // bajo la cabecera (umbral 0): con el umbral a la mitad, un botón visto a medias y
+      // el fijo podían coincidir en la misma pantalla. Lo que queda tapado por la
+      // cabecera no cuenta: el margen de arriba es su alto.
+      const cabecera = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cab')) || 64;
+      const aLaVista = new Set<Element>();
+      const ojo = new IntersectionObserver((entradas) => {
+        for (const e of entradas) {
+          if (e.isIntersecting) aLaVista.add(e.target);
+          else aLaVista.delete(e.target);
+        }
+        const fuera = aLaVista.size > 0;
+        fijo.toggleAttribute('data-fuera', fuera);
+        // Retirado no se puede enfocar ni lo anuncia el lector de pantalla.
+        fijo.toggleAttribute('inert', fuera);
+        fijo.setAttribute('data-listo', '');
+      }, { rootMargin: `-${Math.round(cabecera)}px 0px 0px 0px`, threshold: 0 });
+      otros.forEach((o) => ojo.observe(o));
+    }
+  }
+</script>
+
+<style>
+  /* Escritorio y tableta: el módulo verde, en el margen. Sin sombra: es un módulo. */
+  .wa {
+    --lado: 52px;
+    position: fixed; z-index: var(--z-wa);
+    right: max(4px, calc((min(100vw, 1920px) / 18 - var(--lado)) / 2));
+    bottom: 20px;
+    display: grid; place-items: center; width: var(--lado); height: var(--lado);
+    background: var(--wa); color: #fff; text-decoration: none;
+    transition: translate .28s var(--salida), scale .16s var(--salida), visibility 0s;
+  }
+  .wa__ico { display: grid; place-items: center; }
+  .wa__ico :global(svg) { width: 28px; height: 28px; }
+  .wa__txt { display: none; }
+  .wa:focus-visible { outline: 2px solid var(--tinta); outline-offset: 3px; box-shadow: 0 0 0 3px var(--hueso); }
+  .wa:active { scale: .94; }
+  @media (hover: hover) and (pointer: fine) { .wa:hover { scale: 1.06; } }
+
+  /* Retirado: baja fuera de la ventana. Con JavaScript arranca retirado hasta
+     saber si hay otro botón de WhatsApp a la vista, para que no parpadee al cargar. */
+  .wa[data-fuera], :global(html.js) .wa:not([data-listo]) {
+    translate: 0 calc(100% + 24px); visibility: hidden;
+    transition: translate .28s var(--salida), scale .16s var(--salida), visibility 0s linear .28s;
+  }
+  :global(html.js) .wa:not([data-listo]) { transition: none; }
+
+  /* En escritorio y tableta, un hilo de hueso alrededor del módulo, sin difuminar: lo
+     separa del campo rojo y de los planos tinta cuando pasa junto a ellos. Sobre el
+     hueso de la página no se ve. */
+  @media (min-width: 700px) {
+    .wa { box-shadow: 0 0 0 2px var(--hueso); }
+  }
+
+  /* Margen angosto (ventanas de 960 a 1279 px): un módulo de 44 px, centrado en el margen. */
+  @media (min-width: 960px) and (max-width: 1279px) {
+    .wa { --lado: 44px; }
+    .wa__ico :global(svg) { width: 24px; height: 24px; }
+  }
+  @media (min-width: 700px) and (max-width: 959px) {
+    .wa { right: max(4px, calc((100vw / 10 - var(--lado)) / 2)); }
+  }
+
+  /* Celular: barra de lado a lado, con el módulo verde a la izquierda. */
+  @media (max-width: 699px) {
+    .wa {
+      right: 0; left: 0; bottom: 0; width: auto; height: var(--barra-wa);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      grid-template-columns: 56px minmax(0, 1fr); place-items: stretch; align-items: center;
+      background: var(--tinta); color: var(--hueso);
+      box-shadow: 0 -1px 0 var(--linea-clara);
+    }
+    .wa[data-fuera], :global(html.js) .wa:not([data-listo]) { translate: 0 100%; }
+    .wa__ico { width: 56px; height: 56px; background: var(--wa); color: #fff; }
+    .wa__txt { display: grid; grid-template-columns: minmax(0, 1fr); padding-inline: 14px 12px; line-height: 1.2; }
+    .wa__txt b { font-weight: 650; font-size: 1rem; font-stretch: 104%; }
+    /* En un celular muy angosto el rótulo se corta con puntos suspensivos antes que salirse. */
+    .wa__txt .rotulo { margin-top: 3px; font-size: .75rem; font-stretch: 78%; letter-spacing: .01em; color: var(--hueso-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .wa:focus-visible { outline: 2px solid var(--hueso); outline-offset: -4px; box-shadow: 0 -1px 0 var(--linea-clara); }
+    .wa:active, .wa:hover { scale: none; }
+    .wa:active .wa__ico { filter: brightness(.92); }
+  }
+</style>

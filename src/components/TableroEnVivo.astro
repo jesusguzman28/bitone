@@ -1,0 +1,492 @@
+---
+// El mini sistema de pedidos: una distribuidora de ejemplo que funciona de verdad.
+// Llega un pedido por WhatsApp, entra a la lista, baja el stock y sube la venta.
+// El estado inicial se pinta al compilar (lib/tablero.ts), así que se ve completo
+// sin JavaScript. Nada avanza solo, salvo una demostración única la primera vez
+// que entra en pantalla. Rojo = "ahora".
+// En celular los cuatro pasos caben en una pantalla: es el mismo HTML, compacto,
+// y se compacta más cuando la ventana es baja (las barras del navegador quitan alto).
+// El rótulo "Ejemplo · Distribuidora de abarrotes" va siempre pegado al tablero:
+// es lo que dice de qué negocio es y que los datos son de muestra.
+//
+// Los estilos son globales (prefijo tb-) porque el guion crea filas nuevas.
+import Icono from './Icono.astro';
+import { estadoInicial, productos, chat, filaPedido, filaProducto, tira, soles, ventasDe, porDespachar } from '../lib/tablero';
+
+interface Props {
+  class?: string;
+}
+
+const { class: clase, ...resto } = Astro.props;
+const estado = estadoInicial();
+---
+
+<div class:list={['tablero', 'plano-claro', clase]} data-tablero {...resto}>
+  <div class="tb-barra">
+    <p class="tb-quien"><span class="rotulo">Ejemplo</span><strong>Distribuidora de abarrotes</strong></p>
+    <div class="tb-acciones">
+      <button class="tb-reinicia" type="button" data-reiniciar>
+        <Icono nombre="reinicio" /><span>Reiniciar</span>
+      </button>
+      <button class="tb-llega" type="button" data-llega>
+        <Icono nombre="mas" /><span data-llega-txt>Llega un pedido</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="tb-cuerpo">
+    <section class="tb-col tb-col--chat" data-paso="1" aria-labelledby="tb-paso-1">
+      <h3 class="tb-cab" id="tb-paso-1"><span class="tb-n" aria-hidden="true">1</span>Llega por WhatsApp</h3>
+      <ol class="tb-chat" data-chat set:html={chat(estado)} />
+    </section>
+
+    <section class="tb-col tb-col--pedidos" data-paso="2" aria-labelledby="tb-paso-2">
+      <h3 class="tb-cab" id="tb-paso-2"><span class="tb-n" aria-hidden="true">2</span>Entra el pedido</h3>
+      <ol class="tb-pedidos" data-pedidos set:html={estado.pedidos.map(filaPedido).join('')} />
+    </section>
+
+    <section class="tb-col tb-col--almacen" data-paso="3" aria-labelledby="tb-paso-3">
+      <h3 class="tb-cab" id="tb-paso-3"><span class="tb-n" aria-hidden="true">3</span>Baja el stock</h3>
+      <ul class="tb-almacen" data-almacen set:html={productos.map((p) => filaProducto(p, estado.stock[p.id])).join('')} />
+    </section>
+
+    <section class="tb-col tb-col--ventas" data-paso="4" aria-labelledby="tb-paso-4">
+      <h3 class="tb-cab" id="tb-paso-4"><span class="tb-n" aria-hidden="true">4</span>Sube la venta</h3>
+      <div class="tb-ventas">
+        <div class="tb-ventas__cifra">
+          <p class="rotulo">Ventas de hoy</p>
+          <p class="tb-ventas__total" data-total>{soles(ventasDe(estado))}</p>
+        </div>
+        <dl class="tb-ventas__datos">
+          <div><dt>Pedidos</dt><dd data-cuantos>{estado.pedidos.length}</dd></div>
+          <div><dt>Por despachar</dt><dd data-porsalir>{porDespachar(estado)}</dd></div>
+        </dl>
+        <div class="tb-tira" data-tira aria-hidden="true" set:html={tira(estado)} />
+        <p class="tb-ventas__nota">Cada casilla es un pedido de hoy.</p>
+      </div>
+    </section>
+  </div>
+
+  <p class="solo-lector" aria-live="polite" data-aviso></p>
+</div>
+
+<script>
+  import {
+    estadoInicial, siguientePedido, quedanPedidos, ventasDe, porDespachar, estaBajo, productos,
+    burbujaEntra, burbujaSale, filaPedido, filaProducto, celdaEstado, tira, chat, soles,
+    type Estado, type Pedido,
+  } from '../lib/tablero';
+
+  const raiz = document.querySelector<HTMLElement>('[data-tablero]');
+  if (raiz) {
+    const $ = <T extends HTMLElement>(s: string) => raiz.querySelector<T>(s)!;
+    const ui = {
+      chat: $('[data-chat]'), pedidos: $('[data-pedidos]'), almacen: $('[data-almacen]'),
+      total: $('[data-total]'), cuantos: $('[data-cuantos]'), porSalir: $('[data-porsalir]'), tira: $('[data-tira]'),
+      llega: $<HTMLButtonElement>('[data-llega]'), llegaTxt: $('[data-llega-txt]'), reinicia: $<HTMLButtonElement>('[data-reiniciar]'),
+      aviso: $('[data-aviso]'),
+    };
+    const calma = matchMedia('(prefers-reduced-motion: reduce)');
+    const celular = matchMedia('(max-width: 699px)');
+    const SALIDA = 'cubic-bezier(.23, 1, .32, 1)';
+    // Cuánto dura cada paso encendido: lo justo para leerlo de corrido.
+    const RITMO = 520;
+    // Una burbuja nueva espera a que las anteriores le hagan sitio: así no se pisan.
+    // En celular solo se ve la última conversación y no hay nada que mover: entra de inmediato.
+    const sitio = () => (celular.matches ? 0 : 120);
+
+    let estado: Estado = estadoInicial();
+    // Pasos del pedido que está entrando y todavía no ocurren.
+    let pendientes: { id: number; hecho: boolean; fn: () => void }[] = [];
+    let tocado = false;
+
+    const nodo = (html: string) => { const t = document.createElement('template'); t.innerHTML = html; return t.content.firstElementChild as HTMLElement; };
+    const animar = (el: Element | null, cuadros: Keyframe[], ms = 320, espera = 0) => {
+      if (el && !calma.matches) el.animate(cuadros, { duration: ms, easing: SALIDA, delay: espera, fill: 'backwards' });
+    };
+    const entra = (el: Element | null, dy = 8, espera = 0) =>
+      animar(el, [{ opacity: 0, transform: `translateY(${dy}px)` }, { opacity: 1, transform: 'none' }], 320, espera);
+    // Inserta sin saltos: mide dónde estaba cada fila, cambia la lista y lleva cada una desde su sitio anterior.
+    const conFlip = (lista: HTMLElement, cambiar: () => void) => {
+      const antes = new Map([...lista.children].map((n) => [n, n.getBoundingClientRect().top]));
+      cambiar();
+      if (calma.matches) return;
+      for (const n of lista.children) {
+        const d = (antes.get(n) ?? NaN) - n.getBoundingClientRect().top;
+        if (d) animar(n, [{ transform: `translateY(${d}px)` }, { transform: 'none' }]);
+      }
+    };
+    // El chat en celular enseña solo la última conversación: al llegar una burbuja, la
+    // anterior se quita de golpe y no hay nada que desplazar. Moverlas las cruzaría
+    // medio segundo con la que entra.
+    const enChat = (cambiar: () => void) => (celular.matches ? cambiar() : conFlip(ui.chat, cambiar));
+    const encender = (paso: number) => {
+      raiz.querySelectorAll('[data-activo]').forEach((c) => c.removeAttribute('data-activo'));
+      if (paso) raiz.querySelector(`[data-paso="${paso}"]`)?.setAttribute('data-activo', '');
+    };
+
+    const pintarVentas = () => {
+      ui.total.textContent = soles(ventasDe(estado));
+      ui.cuantos.textContent = String(estado.pedidos.length);
+      ui.porSalir.textContent = String(porDespachar(estado));
+      ui.tira.innerHTML = tira(estado);
+    };
+    const pintarTodo = () => {
+      ui.chat.innerHTML = chat(estado);
+      ui.pedidos.innerHTML = estado.pedidos.map(filaPedido).join('');
+      ui.almacen.innerHTML = productos.map((p) => filaProducto(p, estado.stock[p.id])).join('');
+      pintarVentas();
+    };
+    const pintarBoton = () => {
+      const quedan = quedanPedidos(estado);
+      ui.llega.disabled = !quedan;
+      ui.llegaTxt.textContent = quedan ? 'Llega un pedido' : 'No hay más pedidos';
+      ui.reinicia.toggleAttribute('data-llamar', !quedan);
+    };
+
+    // El pedido deja de ser "nuevo": se apaga el paso encendido y queda esperando despacho.
+    const asentar = (p: Pedido) => {
+      encender(0);
+      if (p.estado !== 'nuevo') return;
+      p.estado = 'pendiente';
+      const fila = ui.pedidos.querySelector<HTMLElement>(`[data-n="${p.n}"]`);
+      if (fila) { fila.dataset.estado = 'pendiente'; fila.querySelector('.tb-pedido__estado')!.innerHTML = celdaEstado(p); }
+      ui.tira.innerHTML = tira(estado);
+    };
+
+    const pasosDe = (p: Pedido): [number, () => void][] => [
+      // 1 · llega el mensaje
+      [0, () => {
+        encender(1);
+        const b = nodo(burbujaEntra(p));
+        enChat(() => { ui.chat.append(b); while (ui.chat.children.length > 4) ui.chat.firstElementChild!.remove(); });
+        entra(b, 8, sitio());
+      }],
+      // 2 · entra el pedido y el sistema responde
+      [RITMO, () => {
+        encender(2);
+        estado.pedidos.unshift(p);
+        const fila = nodo(filaPedido(p));
+        conFlip(ui.pedidos, () => { ui.pedidos.prepend(fila); while (ui.pedidos.children.length > 6) ui.pedidos.lastElementChild!.remove(); });
+        entra(fila, -8);
+        const r = nodo(burbujaSale(p));
+        enChat(() => { ui.chat.append(r); while (ui.chat.children.length > 4) ui.chat.firstElementChild!.remove(); });
+        entra(r, 8, sitio());
+      }],
+      // 3 · baja el stock
+      [RITMO * 2, () => {
+        encender(3);
+        for (const [id, n] of p.items) {
+          estado.stock[id] -= n;
+          const li = ui.almacen.querySelector<HTMLElement>(`[data-id="${id}"]`);
+          const prod = productos.find((x) => x.id === id);
+          if (!li || !prod) continue;
+          const hay = estado.stock[id];
+          const bajo = estaBajo(id, hay);
+          li.toggleAttribute('data-bajo', bajo);
+          li.querySelector('[data-nota]')!.textContent = bajo ? 'Reponer' : prod.unidad;
+          li.querySelector('[data-hay]')!.textContent = String(hay);
+          const delta = li.querySelector('.tb-prod__delta')!;
+          delta.textContent = `−${n}`;
+          animar(delta, [{ opacity: 0, transform: 'translateX(6px)' }, { opacity: 1, transform: 'none', offset: 0.15 }, { opacity: 1, transform: 'none', offset: 0.8 }, { opacity: 0, transform: 'none' }], 1800);
+          animar(li.querySelector('[data-hay]'), [{ opacity: 0.2, transform: 'translateY(-6px)' }, { opacity: 1, transform: 'none' }], 360);
+        }
+      }],
+      // 4 · sube la venta
+      [RITMO * 3, () => {
+        encender(4);
+        pintarVentas();
+        animar(ui.total, [{ opacity: 0.2, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], 360);
+        animar(ui.tira.querySelector('[data-nuevo]'), [{ opacity: 0, transform: 'scale(.4)' }, { opacity: 1, transform: 'none' }], 420);
+      }],
+      // listo
+      [RITMO * 3 + 1400, () => asentar(p)],
+    ];
+
+    // Si llega otro pedido mientras el anterior sigue entrando, el anterior termina de golpe.
+    const cerrarEnCurso = () => {
+      const cola = pendientes; pendientes = [];
+      for (const t of cola) { clearTimeout(t.id); if (!t.hecho) t.fn(); }
+    };
+
+    const llegaPedido = (porVisitante: boolean) => {
+      cerrarEnCurso();
+      const p = siguientePedido(estado);
+      if (!p) return;
+      estado.llegados += 1;
+      const pasos = pasosDe(p);
+      // Con "reducir movimiento" todo ocurre de una vez; solo la etiqueta "Nuevo" espera un momento.
+      const ya = calma.matches ? pasos.length - 1 : 0;
+      pasos.slice(0, ya).forEach(([, fn]) => fn());
+      if (ya) encender(0);
+      pendientes = pasos.slice(ya).map(([ms, fn]) => {
+        const t = { id: 0, hecho: false, fn };
+        t.id = window.setTimeout(() => { t.hecho = true; fn(); }, ms);
+        return t;
+      });
+      pintarBoton();
+      if (porVisitante) {
+        ui.aviso.textContent = `Llegó el pedido ${p.codigo} de ${p.cliente} por ${soles(p.total)}. Ya está en la lista, bajó el stock y subió la venta del día.`;
+      }
+    };
+
+    // En celular, antes de la cascada el tablero se acomoda para que quepa entero en
+    // pantalla: entre la cabecera (arriba) y la barra fija de WhatsApp (abajo).
+    const acomodar = () => {
+      if (!celular.matches) return;
+      const caja = raiz.getBoundingClientRect();
+      const alto = document.documentElement.clientHeight;
+      const estilo = getComputedStyle(document.documentElement);
+      const arriba = parseFloat(estilo.scrollPaddingTop) || 0;
+      const abajo = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+      if (caja.top < arriba - 24 || caja.bottom > alto - abajo) raiz.scrollIntoView({ behavior: calma.matches ? 'auto' : 'smooth', block: 'start' });
+    };
+
+    ui.llega.addEventListener('click', () => { tocado = true; acomodar(); llegaPedido(true); });
+
+    ui.reinicia.addEventListener('click', () => {
+      tocado = true;
+      cerrarEnCurso();
+      encender(0);
+      estado = estadoInicial();
+      pintarTodo();
+      pintarBoton();
+      ui.aviso.textContent = 'Ejemplo reiniciado: vuelve a ser media mañana, con cuatro pedidos.';
+      if (document.activeElement === ui.reinicia) ui.llega.focus();
+    });
+
+    ui.pedidos.addEventListener('click', (e) => {
+      const boton = (e.target as Element).closest<HTMLElement>('[data-despachar]');
+      if (!boton) return;
+      const p = estado.pedidos.find((x) => x.n === Number(boton.dataset.despachar));
+      if (!p) return;
+      tocado = true;
+      const conTeclado = (e as MouseEvent).detail === 0;
+      p.estado = 'despachado';
+      const fila = boton.closest<HTMLElement>('.tb-pedido')!;
+      fila.dataset.estado = 'despachado';
+      const celda = fila.querySelector('.tb-pedido__estado')!;
+      celda.innerHTML = celdaEstado(p);
+      entra(celda.firstElementChild, 4);
+      ui.porSalir.textContent = String(porDespachar(estado));
+      animar(ui.porSalir, [{ opacity: 0.2, transform: 'translateY(-6px)' }, { opacity: 1, transform: 'none' }], 360);
+      ui.aviso.textContent = `Pedido ${p.codigo} despachado.`;
+      // Con teclado, el foco pasa al siguiente pedido por despachar para no perderse.
+      if (conTeclado) (ui.pedidos.querySelector<HTMLElement>('[data-despachar]') ?? ui.llega).focus();
+    });
+
+    // Demostración única: la primera vez que el tablero se ve casi entero, llega un pedido solo.
+    if (!calma.matches && 'IntersectionObserver' in window) {
+      const ojo = new IntersectionObserver(([e]) => {
+        if (!e.isIntersecting) return;
+        ojo.disconnect();
+        window.setTimeout(() => { if (!tocado && !document.hidden) llegaPedido(false); }, 700);
+      }, { threshold: 0.8 });
+      ojo.observe(raiz);
+    }
+  }
+</script>
+
+<style is:global>
+  /* Sin scroll-margin propio: html ya reserva la cabecera con scroll-padding-top. */
+  .tablero { position: relative; font-size: .9375rem; line-height: 1.4; }
+
+  /* ---------- barra ---------- */
+  .tb-barra { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 60px; padding: 8px 8px 8px 20px; border-bottom: 1px solid var(--tinta); }
+  .tb-quien { display: flex; align-items: baseline; gap: 14px; min-width: 0; }
+  .tb-quien .rotulo { flex: none; padding: 3px 8px; background: var(--tinta); color: var(--hueso); }
+  .tb-quien strong { font-weight: 650; font-stretch: 106%; font-size: 1.0625rem; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tb-acciones { display: flex; align-items: center; gap: 8px; flex: none; }
+  .tb-reinicia, .tb-llega { display: inline-flex; align-items: center; gap: 8px; height: 44px; border: 0; font-weight: 650; white-space: nowrap; }
+  .tb-reinicia svg, .tb-llega svg { width: 16px; height: 16px; }
+  .tb-reinicia { padding: 0 14px; background: none; color: var(--tinta-2); box-shadow: inset 0 0 0 1px transparent; transition: color var(--d-toque) ease, box-shadow var(--d-toque) ease; }
+  .tb-reinicia[data-llamar] { color: var(--rojo-hondo); box-shadow: inset 0 0 0 1.5px var(--rojo-hondo); }
+  .tb-llega { padding: 0 18px 0 14px; background: var(--rojo); color: #fff; transition: background-color var(--d-toque) ease, transform .14s var(--salida); }
+  .tb-llega:active:not(:disabled) { transform: scale(.97); }
+  .tb-llega:disabled { background: var(--arena); color: var(--tinta-2); cursor: default; }
+  .tb-llega:disabled svg { display: none; }
+
+  /* ---------- cuatro pasos, cuatro columnas ---------- */
+  .tb-cuerpo { display: grid; grid-template-columns: minmax(0, 23fr) minmax(0, 33fr) minmax(0, 24fr) minmax(0, 20fr); height: 436px; }
+  .tb-col { display: flex; flex-direction: column; min-width: 0; min-height: 0; border-left: 1px solid var(--linea); }
+  .tb-col:first-child { border-left: 0; }
+  .tb-cab { display: flex; align-items: center; gap: 12px; flex: none; height: 48px; padding: 0 16px; border-bottom: 1px solid var(--linea); font: 500 var(--t-rotulo)/1.2 var(--f-mono); font-stretch: 87.5%; letter-spacing: .04em; text-transform: uppercase; color: var(--tinta-2); transition: color var(--d-toque) ease; }
+  .tb-n { display: grid; place-items: center; flex: none; width: 24px; height: 24px; box-shadow: inset 0 0 0 1.5px var(--tinta); color: var(--tinta); font-weight: 700; letter-spacing: 0; transition: background-color var(--d-toque) ease, box-shadow var(--d-toque) ease, color var(--d-toque) ease; }
+  .tb-col[data-activo] .tb-cab { color: var(--tinta); }
+  .tb-col[data-activo] .tb-n { background: var(--rojo); box-shadow: inset 0 0 0 1.5px var(--rojo); color: #fff; }
+
+  /* 1 · chat */
+  .tb-col--chat { background: var(--arena); }
+  .tb-col--chat .tb-cab { background: var(--papel); }
+  /* Los mensajes viejos se pierden por arriba, como en cualquier chat. */
+  .tb-chat { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; padding: 12px 14px 14px; overflow: hidden; -webkit-mask-image: linear-gradient(transparent, #000 44px); mask-image: linear-gradient(transparent, #000 44px); }
+  .tb-burbuja { flex: none; display: flex; flex-direction: column; max-width: 92%; padding: 8px 12px 6px; }
+  .tb-burbuja b { font-size: .8125rem; font-weight: 700; color: var(--rojo-hondo); }
+  .tb-burbuja small { font: 500 .75rem/1.4 var(--f-mono); font-stretch: 87.5%; letter-spacing: .03em; text-transform: uppercase; color: var(--hueso-2); }
+  .tb-burbuja time { align-self: flex-end; margin-top: 1px; font: 500 .75rem/1.3 var(--f-mono); font-stretch: 87.5%; opacity: .7; }
+  .tb-burbuja--entra { align-self: flex-start; background: #fff; }
+  .tb-burbuja--sale { align-self: flex-end; background: var(--tinta); color: var(--hueso); }
+
+  /* 2 · pedidos */
+  .tb-pedidos { flex: 1; min-height: 0; overflow: hidden; }
+  .tb-pedido { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto 6.4rem; align-content: center; align-items: center; column-gap: 12px; row-gap: 2px; height: 62px; padding: 0 16px; border-bottom: 1px solid var(--linea); }
+  .tb-pedido::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 3px; background: var(--rojo); transform: scaleX(0); transform-origin: left; transition: transform var(--d-corta) var(--salida); }
+  .tb-pedido[data-estado="nuevo"]::before { transform: none; }
+  .tb-pedido__quien { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+  .tb-pedido__quien span { flex: none; font: 500 .75rem/1 var(--f-mono); font-stretch: 87.5%; color: var(--tinta-2); }
+  .tb-pedido__quien strong { font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tb-pedido__items { grid-column: 1; grid-row: 2; font-size: .8125rem; color: var(--tinta-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tb-pedido__total { grid-column: 2; grid-row: 1 / 3; justify-self: end; font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .tb-pedido__estado { grid-column: 3; grid-row: 1 / 3; justify-self: end; display: flex; align-items: center; }
+  .tb-pedido[data-estado="despachado"] :is(strong, .tb-pedido__total) { color: var(--tinta-2); font-weight: 500; }
+  .tb-estado { font: 500 .75rem/1 var(--f-mono); font-stretch: 87.5%; letter-spacing: .04em; text-transform: uppercase; }
+  .tb-estado--nuevo { padding: 5px 7px 4px; background: var(--rojo); color: #fff; }
+  .tb-estado--hecho { color: var(--tinta-2); }
+  .tb-estado--hecho::before { content: ""; display: inline-block; width: .62em; height: .62em; margin-right: .6em; box-shadow: inset 0 0 0 1.5px currentColor; }
+  .tb-despachar { position: relative; height: 30px; padding: 0 12px; border: 0; background: none; box-shadow: inset 0 0 0 1.5px var(--tinta); font-weight: 650; font-size: .8125rem; transition: background-color var(--d-toque) ease, color var(--d-toque) ease, transform .14s var(--salida); }
+  /* La zona de toque llega a 44 px aunque el botón se vea más bajo. */
+  .tb-despachar::after { content: ""; position: absolute; inset: -7px -6px; }
+  .tb-despachar:active { transform: scale(.96); }
+
+  /* 3 · almacén */
+  .tb-almacen { flex: 1; min-height: 0; display: grid; grid-auto-rows: 1fr; }
+  /* Sin barras de nivel: lo que avisa es el número y, cuando toca, "Reponer" en rojo. */
+  .tb-prod { display: grid; grid-template-columns: minmax(0, 1fr) 3.2em; align-items: center; column-gap: 12px; padding: 0 16px; border-bottom: 1px solid var(--linea); }
+  .tb-prod:last-child { border-bottom: 0; }
+  .tb-prod__nombre strong { display: block; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tb-prod__nombre > span { display: block; font-size: .8125rem; color: var(--tinta-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tb-corto { display: none; }
+  .tb-prod__num { position: relative; justify-self: end; font-size: 1.125rem; font-weight: 650; font-variant-numeric: tabular-nums; transition: color .3s ease; }
+  .tb-prod__num [data-hay] { display: inline-block; }
+  .tb-prod__delta { position: absolute; right: 100%; top: 50%; margin: -8px 6px 0 0; font: 600 .75rem/16px var(--f-mono); color: var(--rojo-hondo); white-space: nowrap; opacity: 0; pointer-events: none; }
+  .tb-prod[data-bajo] .tb-prod__nombre > span { color: var(--rojo-hondo); font-weight: 650; }
+  .tb-prod[data-bajo] .tb-prod__num { color: var(--rojo-hondo); }
+
+  /* 4 · ventas */
+  .tb-ventas { flex: 1; min-height: 0; display: flex; flex-direction: column; padding: 16px 16px 14px; }
+  .tb-ventas .rotulo { color: var(--tinta-2); }
+  .tb-ventas__total { margin-top: 4px; font-weight: 800; font-stretch: 112%; font-size: clamp(1.25rem, calc(var(--u) * .38), 2.125rem); line-height: 1.1; letter-spacing: -.035em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .tb-ventas__datos { margin-block: 14px; border-top: 1px solid var(--linea); }
+  .tb-ventas__datos div { display: flex; justify-content: space-between; align-items: baseline; padding-block: 9px; border-bottom: 1px solid var(--linea); }
+  .tb-ventas__datos dt { color: var(--tinta-2); }
+  .tb-ventas__datos dd { font-weight: 650; font-variant-numeric: tabular-nums; }
+  .tb-tira { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3px; margin-top: auto; }
+  .tb-tira i { display: block; aspect-ratio: 1; box-shadow: inset 0 0 0 1px var(--linea-fuerte); transition: background-color .6s ease, box-shadow .6s ease; }
+  .tb-tira i[data-lleno] { background: var(--tinta); box-shadow: none; }
+  .tb-tira i[data-nuevo] { background: var(--rojo); }
+  .tb-ventas__nota { margin-top: 8px; font-size: .8125rem; color: var(--tinta-2); }
+
+  @media (hover: hover) and (pointer: fine) {
+    .tb-llega:hover:not(:disabled) { background: var(--rojo-hondo); }
+    .tb-reinicia:hover { color: var(--tinta); box-shadow: inset 0 0 0 1px var(--linea-fuerte); }
+    .tb-despachar:hover { background: var(--tinta); color: var(--papel); }
+  }
+
+  /* ---------- columnas angostas: las filas se compactan ----------
+     El nombre del cliente y el del producto se leen enteros; el total sube al
+     primer renglón y el estado baja al segundo. */
+  @media (max-width: 1359px) {
+    .tb-pedido { grid-template-columns: minmax(0, 1fr) auto; }
+    .tb-pedido__total { grid-column: 2; grid-row: 1; }
+    /* El estado ocupa el final del segundo renglón sin ensanchar la columna del total. */
+    .tb-pedido__items { grid-column: 1 / -1; padding-right: 7rem; }
+    .tb-pedido__estado { grid-column: 1 / -1; grid-row: 2; }
+    .tb-despachar { height: 26px; padding: 0 10px; }
+    .tb-despachar::after { inset: -9px -6px; }
+  }
+
+  /* ---------- escritorio angosto (960 a 1199): la lista de pedidos gana ancho ----------
+     Lo pedido ("Arroz 3 sacos · Aceite 2 cajas") se lee entero: columna más ancha,
+     letra de 12 px y el sitio justo para cada estado. */
+  @media (max-width: 1199px) {
+    .tb-cuerpo { grid-template-columns: minmax(0, 20fr) minmax(0, 36fr) minmax(0, 24fr) minmax(0, 20fr); }
+    .tb-pedido__items { padding-right: 5.6rem; font-size: .75rem; }
+    .tb-pedido[data-estado="nuevo"] .tb-pedido__items { padding-right: 4.2rem; }
+    .tb-estado--hecho { font-stretch: 75%; letter-spacing: 0; }
+  }
+
+  /* ---------- tableta: dos y dos ---------- */
+  @media (max-width: 959px) {
+    .tb-cuerpo { grid-template-columns: repeat(2, minmax(0, 1fr)); height: auto; }
+    .tb-col { height: 380px; }
+    .tb-col:nth-child(3) { border-left: 0; }
+    .tb-col:nth-child(n+3) { border-top: 1px solid var(--linea); }
+    .tb-tira { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  }
+
+  /* ---------- celular: los cuatro pasos en una sola pantalla ----------
+     Cada paso es una franja con su número a la izquierda. Se ve lo último:
+     un mensaje y su respuesta, dos pedidos, el almacén en seis casillas y la venta. */
+  @media (max-width: 699px) {
+    /* Al acomodarse aterriza a 8 px de la cabecera, no a 20: aquí cada píxel de alto cuenta. */
+    .tablero { font-size: .875rem; scroll-margin-top: -12px; }
+    .tb-barra { display: block; min-height: 0; padding: 0; }
+    /* El rótulo del ejemplo no se esconde: una tira de arena sobre la pantalla, en mono de 12 px. */
+    .tb-quien { align-items: center; gap: 10px; height: 28px; padding: 0 10px; background: var(--arena); }
+    .tb-quien .rotulo { padding: 2px 6px; font-size: .75rem; line-height: 1.3; }
+    .tb-quien strong { font: 500 .75rem/1 var(--f-mono); font-stretch: 87.5%; letter-spacing: .04em; text-transform: uppercase; }
+    .tb-acciones { padding: 8px 10px; }
+    .tb-llega { order: 1; flex: 1; justify-content: center; height: 44px; font-size: 1rem; }
+    .tb-reinicia { order: 2; width: 44px; height: 44px; padding: 0; justify-content: center; box-shadow: inset 0 0 0 1px var(--linea-fuerte); color: var(--tinta); }
+    .tb-reinicia span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+    .tb-cuerpo { grid-template-columns: minmax(0, 1fr); }
+    .tb-col { position: relative; height: auto; padding: 8px 10px 8px 46px; border-left: 0; }
+    .tb-col:nth-child(n+2) { border-top: 1px solid var(--linea); }
+    .tb-col--chat { background: none; }
+    .tb-col--chat .tb-cab { background: none; }
+    .tb-cab { height: auto; padding: 0; border: 0; margin-bottom: 4px; font-size: .75rem; }
+    .tb-n { position: absolute; left: 10px; top: 8px; }
+
+    .tb-chat { padding: 0; gap: 4px; }
+    .tb-burbuja:nth-last-child(n+3) { display: none; }
+    .tb-burbuja { max-width: none; padding: 6px 10px; line-height: 1.3; }
+    .tb-burbuja--entra { align-self: stretch; box-shadow: inset 0 0 0 1px var(--linea); }
+    .tb-burbuja--entra b { font-size: .75rem; }
+    .tb-burbuja--sale { align-self: stretch; flex-direction: row; flex-wrap: wrap; align-items: baseline; column-gap: 8px; padding-block: 5px; font-size: .8125rem; }
+    .tb-burbuja--sale small { width: 100%; }
+    .tb-burbuja time { display: none; }
+
+    .tb-chat { -webkit-mask-image: none; mask-image: none; }
+    .tb-pedido { height: 50px; padding: 0 0 0 10px; }
+    .tb-pedido:nth-child(n+3) { display: none; }
+    .tb-pedido:nth-child(2) { border-bottom: 0; }
+    /* Lo pedido se lee entero también en 360 px: el botón de despachar, más angosto. */
+    .tb-pedido__items { padding-right: 5.4rem; }
+    .tb-pedido__estado { height: 22px; }
+    .tb-despachar { padding: 0 8px; font-size: .75rem; }
+    .tb-despachar::after { inset: -11px -6px; }
+
+    .tb-almacen { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: auto; gap: 1px; background: var(--linea); box-shadow: 0 0 0 1px var(--linea); }
+    /* Alto fijo: cuando aparece "Reponer" la casilla no crece y nada salta debajo. */
+    .tb-prod { grid-template-columns: minmax(0, 1fr) auto; column-gap: 6px; min-height: 42px; padding: 3px 8px; border: 0; background: var(--papel); }
+    .tb-largo { display: none; }
+    .tb-corto { display: inline; }
+    .tb-prod__nombre strong { font-size: .8125rem; }
+    .tb-prod__nombre > span { font-size: .75rem; visibility: hidden; height: 0; }
+    .tb-prod[data-bajo] .tb-prod__nombre > span { visibility: visible; height: auto; }
+    .tb-prod[data-bajo] { box-shadow: inset 0 -2px 0 var(--rojo); }
+    .tb-prod__num { font-size: 1.0625rem; }
+    .tb-prod__delta { right: auto; left: 0; top: auto; bottom: 100%; margin: 0; }
+
+    .tb-ventas { padding: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: end; column-gap: 14px; }
+    .tb-ventas__cifra .rotulo { display: none; }
+    .tb-ventas__total { margin: 0; font-size: 1.5rem; }
+    .tb-ventas__datos { margin: 0; border: 0; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0 12px; font-size: .8125rem; }
+    .tb-ventas__datos div { padding: 0; border: 0; gap: 5px; flex-direction: row-reverse; }
+    .tb-tira { grid-column: 1 / -1; grid-template-columns: repeat(12, minmax(0, 1fr)); margin-top: 8px; }
+    .tb-tira i { aspect-ratio: 2.4; }
+    .tb-ventas__nota { display: none; }
+  }
+
+  /* Celular con la ventana baja (las barras del navegador a la vista, o un equipo
+     chico): un solo pedido en el paso 2, para que los cuatro pasos sigan cabiendo
+     entre la cabecera y la barra de WhatsApp. Más baja todavía, se va la tira. */
+  @media (max-width: 699px) and (max-height: 799px) {
+    .tb-pedido:nth-child(n+2) { display: none; }
+    .tb-pedido:first-child { border-bottom: 0; }
+  }
+  @media (max-width: 699px) and (max-height: 639px) {
+    .tb-tira { display: none; }
+  }
+</style>

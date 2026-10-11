@@ -1,19 +1,15 @@
 import { execSync } from 'node:child_process';
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
-import tailwindcss from '@tailwindcss/vite';
+import sharp from 'sharp';
 
-// Fecha del último cambio real de contenido: el último commit que tocó src/.
-//
-// NO se usa la fecha de compilación. Un sitemap que dice "todas las páginas
-// cambiaron hoy" cada vez que se despliega es exactamente lo que hace que
-// Google deje de creerle al campo y lo ignore para todo el sitio. Con el
-// commit, si se despliega sin tocar contenido la fecha no se mueve, que es la
-// verdad.
-//
-// Si no hay git —una compilación desde un zip, por ejemplo— se cae a la fecha
-// del momento: es la mejor aproximación disponible y es preferible a romper la
-// compilación por un dato accesorio.
+// Las imágenes se procesan con un solo hilo. Es más lento, pero la máquina donde
+// se diseñó se reinicia con los picos de carga y aquí no hay prisa.
+sharp.concurrency(1);
+
+// Fecha del último cambio real de contenido: el último commit que tocó src/. No la
+// de compilación: un sitemap que dice "todo cambió hoy" en cada despliegue es lo que
+// hace que Google deje de creerle al campo. Sin git (un zip), la fecha del momento.
 function ultimoCambio() {
   try {
     return execSync('git log -1 --format=%cI -- src', { encoding: 'utf8' }).trim() || new Date().toISOString();
@@ -24,50 +20,47 @@ function ultimoCambio() {
 
 const CAMBIO_SRC = ultimoCambio();
 
-// https://astro.build/config
+// Direcciones de la web anterior de bitone.pe que ya no existen, cada una a la
+// página nueva más cercana. Siguen en Google y en enlaces compartidos: sin esto
+// darían 404. GitHub Pages no admite redirecciones de servidor, así que Astro
+// genera en cada una un HTML con meta refresh inmediato, noindex y canonical a la
+// nueva, que Google trata como redirección permanente.
+const redirecciones = {
+  '/contacto/': '/',
+  '/metodologia/': '/como-trabajamos/',
+  '/servicios/': '/',
+  '/servicios/desarrollo-de-software-a-medida/': '/sistemas/',
+  '/servicios/mantenimiento-de-software/': '/rescate/',
+  '/servicios/apps-moviles/': '/apps/',
+  '/fabrica-de-software-peru/': '/',
+  '/fabrica-de-software-lima/': '/',
+  '/fabrica-de-software-ayacucho/': '/',
+  '/blog/': '/',
+  '/blog/cuanto-cuesta-un-software-a-medida-en-peru/': '/como-trabajamos/',
+  '/blog/facturacion-electronica-sunat-integrar-a-tu-sistema/': '/sistemas/',
+  '/blog/software-a-medida-o-erp-de-paquete/': '/sistemas/',
+  '/blog/heredaste-un-sistema-sin-documentacion/': '/rescate/',
+  '/blog/app-nativa-multiplataforma-o-web/': '/apps/',
+  '/blog/caso-apuray-plataforma-de-delivery-en-provincia/': '/proyectos/',
+  '/blog/caso-quipuy-plataforma-educativa-preuniversitaria/': '/proyectos/',
+  '/blog/caso-de-excel-y-google-forms-a-una-intranet/': '/proyectos/',
+};
+
+// public/ solo lleva lo que se sirve tal cual: las fuentes, el favicon, robots.txt,
+// llms.txt, el CNAME y la verificación de Google. Las imágenes del sitio van por
+// src/assets (astro:assets las optimiza).
 export default defineConfig({
   site: 'https://bitone.pe',
-
-  // Cada página se compila como una carpeta con su index.html, y el canonical
-  // que emite BaseLayout declara la barra final. Con esto declarado, el
-  // servidor de desarrollo se comporta igual que producción: un enlace interno
-  // sin barra da 404 aquí en vez de pasar desapercibido hasta que el servidor lo
-  // resuelve con una redirección en la web publicada. Es el guardia que evita que
-  // vuelvan los enlaces sin barra. Ver la nota sobre el 307 en src/data/site.ts.
+  devToolbar: { enabled: false },
   trailingSlash: 'always',
-  // Astro 7 compacta el HTML quitando el espacio entre un texto y el enlace
-  // que lo sigue en el renglón de abajo ("están todas en<a>…"), y las frases
-  // salían pegadas en todo el sitio. Sin compactar se ve como se escribió.
-  compressHTML: false,
-  build: { format: 'directory' },
-
-  // Sin `redirects` aquí a propósito. En un build estático Astro los resuelve
-  // generando un HTML con <meta http-equiv="refresh">, que responde 200: para
-  // Google es una página duplicada, no una redirección, y no transfiere
-  // autoridad. Con el dominio nuevo (bitone.pe) no hay
-  // direcciones antiguas que redirigir, y GitHub Pages no admite reglas de
-  // redirección: si algún día hacen falta, se resuelven en el DNS o con un
-  // proxy delante, no aquí.
-  // Ya no hace falta filtrar /mockup-*: esas dos páginas de prueba se borraron.
-  // Estaban publicadas y respondían 200 en la web anterior —fuera del sitemap, pero
-  // accesibles para cualquiera con el enlace—, enseñando trabajo interno a medio
-  // hacer. Si vuelven a hacer falta, están en el historial de git.
+  redirects: redirecciones,
   integrations: [
     sitemap({
-      // El sitemap salía con 29 direcciones y ninguna fecha. Sin `lastmod`, un
-      // rastreador no tiene forma de saber qué cambió desde la última visita y
-      // acaba repasándolo todo o casi nada.
-      //
-      // Sin `changefreq` ni `priority`: Google dice desde hace años que los
-      // ignora, y son dos campos que hay que mantener a cambio de nada.
-      serialize: (item) => ({
-        ...item,
-        lastmod: CAMBIO_SRC,
-      }),
+      // Las redirecciones no van al mapa: solo las páginas que existen.
+      filter: (pagina) => !Object.keys(redirecciones).some((r) => pagina === `https://bitone.pe${r}`),
+      serialize: (item) => ({ ...item, lastmod: CAMBIO_SRC }),
     }),
   ],
-
-  vite: {
-    plugins: [tailwindcss()],
-  },
+  // host: true para poder abrirlo desde un celular en el mismo wifi.
+  server: { port: 4321, host: true },
 });

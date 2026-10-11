@@ -1,0 +1,236 @@
+/* ==========================================================================
+   Bit One · base
+   Reinicio, fuentes, letra y las pocas utilidades que comparte todo el sitio.
+   Reglas: esquinas rectas en lo que es sistema; redondo solo las personas, los
+   objetos (dispositivos) y WhatsApp. Movimiento: solo transform y opacity.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Archivo";
+  src: url("/fonts/archivo-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Martian Mono";
+  src: url("/fonts/martian-mono-latin.woff2") format("woff2");
+  font-weight: 100 800;
+  font-stretch: 75% 112.5%;
+  font-style: normal;
+  font-display: swap;
+}
+/* Mientras llega Archivo: Arial con medidas parecidas, para que el texto no salte. */
+@font-face {
+  font-family: "Archivo Respaldo";
+  src: local("Arial");
+  size-adjust: 102%;
+  ascent-override: 88%;
+  descent-override: 21%;
+  line-gap-override: 0%;
+}
+
+/* ---------- reinicio ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Lo que se enfoca o se busca con un ancla nunca queda bajo la cabecera ni bajo
+     la barra fija de WhatsApp. */
+  scroll-padding-top: calc(var(--cab) + 20px);
+  scroll-padding-bottom: calc(var(--barra-wa) + 12px);
+  background: var(--hueso);
+}
+/* Ventana muy baja (un zoom del 400 %): la cabecera deja de ir fija, ver Cabecera.astro. */
+@media (max-height: 420px) { html { scroll-padding-top: 20px; } }
+/* El menú de celular es un <dialog> modal: mientras está abierto, la página no se desplaza.
+   Es una regla de CSS, así que al cerrarse el desplazamiento vuelve solo. */
+html:has(dialog[open]) { overflow: hidden; }
+body {
+  margin: 0;
+  padding-bottom: var(--barra-wa);
+  background: var(--hueso);
+  color: var(--tinta);
+  font: 400 var(--t-texto)/1.55 var(--f-texto);
+  font-stretch: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  text-wrap: pretty;
+}
+h1, h2, h3, h4, p, ul, ol, dl, dd, figure, blockquote { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+img, svg, picture { display: block; max-width: 100%; }
+img { height: auto; }
+a { color: inherit; }
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+strong, b { font-weight: 650; }
+::selection { background: var(--rojo); color: #fff; }
+:focus-visible { outline: 2px solid var(--foco); outline-offset: 3px; }
+[tabindex="-1"]:focus { outline: none; }
+
+/* ---------- página y retícula ----------
+   .pagina es el contenedor contra el que se mide el módulo (--u). Lo que va
+   fijo a la ventana (WhatsApp) vive fuera de ella, en el layout. */
+.pagina { max-width: 1920px; margin-inline: auto; overflow-x: clip; container-type: inline-size; background: var(--hueso); }
+.reticula { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); margin-inline: var(--m); }
+
+/* ---------- planos ----------
+   Una sección elige su plano y los componentes de dentro toman sus colores. */
+.plano { background: var(--fondo); color: var(--texto); }
+.plano--hueso { --fondo: var(--hueso); }
+/* Papel es el color de los objetos (la hoja, la pantalla del tablero), no de las
+   secciones: dos secciones claras seguidas se separan con .seccion--filete. */
+.plano--papel { --fondo: var(--papel); }
+/* Sobre tinta el acento es hueso: el oro queda para el bit y las piezas del tejido. */
+.plano--tinta {
+  --fondo: var(--tinta); --texto: var(--hueso); --texto-2: var(--hueso-2); --acento: var(--hueso);
+  --filete: var(--linea-clara); --filete-fuerte: var(--hueso); --foco: var(--hueso);
+}
+.plano--rojo {
+  --fondo: var(--rojo); --texto: #fff; --texto-2: #fff; --acento: #fff;
+  --filete: var(--linea-blanca); --filete-fuerte: #fff; --foco: #fff;
+}
+/* Dentro de un plano oscuro, una hoja o una pantalla vuelve a ser clara. */
+.plano-claro {
+  --fondo: var(--papel); --texto: var(--tinta); --texto-2: var(--tinta-2); --acento: var(--rojo-hondo);
+  --filete: var(--linea); --filete-fuerte: var(--tinta); --foco: var(--tinta);
+  background: var(--fondo); color: var(--texto);
+}
+.seccion { padding-block: var(--aire); }
+/* Un filete de tinta, del ancho del contenido, entre dos secciones claras seguidas. */
+.seccion--filete { position: relative; }
+.seccion--filete::before { content: ""; position: absolute; top: 0; left: var(--m); right: var(--m); height: 1px; background: var(--filete-fuerte); }
+/* El renglón que cierra una sección (un enlace a la página que la desarrolla).
+   Si además es .reticula, lo de dentro ocupa todo el ancho: un enlace sin columna
+   asignada caería en un solo módulo y se partiría palabra por palabra. */
+.remate { margin-top: var(--aire-corto); }
+.remate.reticula > * { grid-column: 1 / -1; }
+
+/* ---------- colocación en la retícula ----------
+   Los dos orígenes del sitio, como clases: valen para un elemento y para un
+   componente (que pone la clase en su raíz). Todo el ancho, la mitad izquierda,
+   la mitad derecha (módulo 9) y la nota lateral (módulo 12). En tableta y
+   celular las cuatro ocupan todo el ancho. */
+.todo { grid-column: 1 / -1; }
+.mitad-1 { grid-column: 1 / 8; }
+.mitad-2 { grid-column: 9 / -1; }
+.nota-lado { grid-column: 12 / -1; }
+@media (max-width: 959px) { .mitad-1, .mitad-2, .nota-lado { grid-column: 1 / -1; } }
+/* Un enlace suelto en la retícula mide lo que su texto, no toda la columna. */
+.reticula > .enlace { justify-self: start; }
+
+/* ---------- letra ---------- */
+.cartel {
+  font-weight: 800; font-stretch: var(--ancho-cartel); font-size: var(--t-cartel);
+  line-height: .9; letter-spacing: -.045em;
+}
+.cartel > span { display: block; }
+/* El cartel menor: el titular del plano rojo y el del cierre. */
+.cartel--menor { font-size: var(--t-cartel-menor); line-height: .94; }
+.titulo {
+  font-weight: 800; font-stretch: var(--ancho-titulo); font-size: var(--t-titulo);
+  line-height: 1; letter-spacing: -.04em; text-wrap: balance;
+}
+/* El titular del momento propio de una página (el campo rojo de la portada y de
+   /como-trabajamos/, "Elige tu negocio."): un .titulo que en escritorio sube a cartel
+   menor. En tableta y celular sigue siendo un título. Uno por página. */
+@media (min-width: 960px) {
+  .titulo--mayor { font-size: var(--t-cartel-menor); font-stretch: var(--ancho-cartel); line-height: .94; letter-spacing: -.045em; }
+}
+.subtitulo {
+  font-weight: 750; font-stretch: var(--ancho-subtitulo); font-size: var(--t-subtitulo);
+  line-height: 1.04; letter-spacing: -.032em; text-wrap: balance;
+}
+.destacado {
+  font-weight: 700; font-stretch: 108%; font-size: var(--t-destacado);
+  line-height: 1.15; letter-spacing: -.02em; text-wrap: balance;
+}
+.entrada { font-size: var(--t-entrada); line-height: 1.42; color: var(--texto-2); text-wrap: pretty; }
+.menor { font-size: var(--t-menor); line-height: 1.5; }
+.suave { color: var(--texto-2); }
+/* Los renglones de un titular que no deben partirse por dentro */
+.renglon { display: block; }
+.junto { white-space: nowrap; }
+
+.rotulo {
+  font: 500 var(--t-rotulo)/1.5 var(--f-mono); font-stretch: 87.5%;
+  letter-spacing: .04em; text-transform: uppercase;
+}
+
+/* texto corrido de las páginas interiores */
+.prosa { max-width: 62ch; }
+.prosa > * + * { margin-top: 1em; }
+.prosa h2 { margin-top: 1.6em; }
+.prosa h3 { margin-top: 1.4em; }
+.prosa ul, .prosa ol { padding-left: 1.4em; }
+.prosa ul { list-style: square; }
+.prosa ol { list-style: decimal; }
+.prosa li + li { margin-top: .4em; }
+.prosa li::marker { color: var(--acento); }
+.prosa a { text-decoration-thickness: 1.5px; text-underline-offset: .22em; }
+
+/* ---------- el tejido: tonos de un módulo ----------
+   Los usan Signo, Friso y PasosTocapu. Cada tono es un fondo y un trazo. */
+.tono-rojo { --tono-fondo: var(--rojo); --tono-trazo: var(--hueso); }
+.tono-tinta { --tono-fondo: var(--tinta); --tono-trazo: var(--hueso); }
+.tono-papel { --tono-fondo: var(--papel); --tono-trazo: var(--rojo); }
+.tono-arena { --tono-fondo: var(--arena); --tono-trazo: var(--tinta); }
+.tono-oro { --tono-fondo: var(--oro); --tono-trazo: var(--tinta); --signo-oro: var(--rojo); }
+.tono-piedra { --tono-fondo: var(--papel); --tono-trazo: var(--piedra); }
+/* Una pieza de rescate sin su casilla dorada: la pinta con su trazo. El oro va en dosis
+   mínimas: en una cenefa lo conserva una sola pieza, y en las figuras de los pasos,
+   ninguna (el único oro es el bit del último paso). */
+.pieza--sin-oro { --signo-oro: var(--tono-trazo); }
+.pieza { color: var(--tono-trazo); }
+.pieza > rect { fill: var(--tono-fondo); shape-rendering: crispEdges; }
+.pieza.tono-piedra > rect { stroke: var(--linea); stroke-width: 1; vector-effect: non-scaling-stroke; shape-rendering: auto; }
+.almacen { position: absolute; }
+
+/* ---------- enlace con flecha ---------- */
+.enlace {
+  display: inline-flex; align-items: center; gap: .55em; min-height: 44px;
+  font-weight: 600; text-decoration: underline; text-decoration-thickness: 1.5px;
+  text-underline-offset: .28em; text-decoration-color: color-mix(in srgb, currentColor 38%, transparent);
+  transition: text-decoration-color var(--d-toque) ease;
+}
+.enlace svg { width: 1em; height: 1em; flex: none; transition: transform .2s var(--salida); }
+.enlace:active svg { transform: scale(.9); }
+@media (hover: hover) and (pointer: fine) {
+  .enlace:hover { text-decoration-color: currentColor; }
+  .enlace:hover svg { transform: translate(2px, -2px); }
+  .enlace:hover svg[data-flecha="abajo"] { transform: translateY(3px); }
+  .enlace:hover svg[data-flecha="derecha"] { transform: translateX(3px); }
+}
+
+/* ---------- accesibilidad ---------- */
+.solo-lector {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+.salto {
+  position: absolute; left: 12px; top: -80px; z-index: 100;
+  padding: 12px 16px; background: var(--tinta); color: var(--hueso); font-weight: 600;
+}
+.salto:focus { top: 12px; }
+
+/* ---------- entrada de los bloques ----------
+   La página se ve completa sin esto. El guion del layout marca con .espera solo
+   lo que aún está fuera de pantalla, y lo deja entrar una vez (.visto). */
+@keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: no-preference) {
+  [data-rev].espera { opacity: 0; transform: translateY(14px); }
+  [data-rev].espera.visto {
+    opacity: 1; transform: none;
+    transition: opacity var(--d-entrada) var(--salida), transform var(--d-entrada) var(--salida);
+    transition-delay: var(--rd, 0ms);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: .01ms !important; animation-duration: .01ms !important;
+    animation-delay: 0ms !important; scroll-behavior: auto !important;
+  }
+}

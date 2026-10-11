@@ -1,0 +1,81 @@
+---
+// Un proyecto contado como caso: qué es, dónde, qué hace, su enlace (si lo tiene)
+// y sus apps, junto a una escena de objetos con capturas reales.
+//   <Caso proyecto={apuray} lado="derecha" apps={[…]} id="caso-apuray">
+//     <Dispositivo tipo="laptop" … />
+//     <Dispositivo tipo="celular" … data-en="abajo-izquierda" class="mi-celular" />
+//   </Caso>
+// `lado` dice de qué lado va la escena (y hacia dónde se sale del margen); el
+// texto va al otro. Alterna el lado entre dos casos seguidos.
+// Va directo dentro de la sección (trae su retícula). La sección lleva overflow: hidden.
+import Rotulo from './Rotulo.astro';
+import Icono from './Icono.astro';
+import ListaApps from './ListaApps.astro';
+import Escena from './Escena.astro';
+import type { Proyecto, App } from '../data/proyectos';
+
+interface Props {
+  proyecto: Proyecto;
+  lado?: 'derecha' | 'izquierda';
+  /** Sus apps públicas, con icono y ficha. */
+  apps?: App[];
+  /** id del nombre: el artículo lo usa en aria-labelledby. */
+  id?: string;
+  nivel?: 2 | 3;
+  class?: string;
+}
+
+const { proyecto, lado = 'derecha', apps = [], id = `caso-${proyecto.id}`, nivel = 3, class: clase, ...resto } = Astro.props;
+const Nombre = `h${nivel}` as 'h2' | 'h3';
+---
+
+<article class:list={['reticula', 'caso', `caso--${lado}`, clase]} aria-labelledby={id} {...resto}>
+  <div class="caso__txt" data-rev>
+    <Rotulo acento punto="ninguno">
+      <span class="junto">{proyecto.tipo}</span>{proyecto.lugar && <><span class="caso__sep" aria-hidden="true"> · </span><span class="junto caso__lugar">{proyecto.lugar}</span></>}
+    </Rotulo>
+    <Nombre class="titulo caso__t" id={id}>{proyecto.nombre}</Nombre>
+    <p class="caso__d">{proyecto.resumen}</p>
+    {proyecto.enlace && (
+      <a class="enlace" href={proyecto.enlace.url} target="_blank" rel="noopener">{proyecto.enlace.texto}<Icono nombre="fuera" /></a>
+    )}
+    {apps.length > 0 && <ListaApps apps={apps} class="caso__apps" />}
+  </div>
+  <Escena sangra={lado} class="caso__escena"><slot /></Escena>
+</article>
+
+<style>
+  .caso { align-items: center; }
+  .caso + :global(.caso) { margin-top: calc(var(--u) * 1.1); }
+  .caso__t { margin-top: 12px; }
+  .caso__d { margin-top: 16px; color: var(--texto-2); font-size: var(--t-entrada); line-height: 1.42; text-wrap: pretty; }
+  .caso__txt .enlace { margin-top: 8px; }
+  .caso__txt :global(.caso__apps) { margin-top: 18px; }
+
+  /* Escena a la derecha: dos mitades, la escena arranca en el módulo 9.
+     Escena a la izquierda: el texto es la nota lateral y arranca en el 12. */
+  .caso--derecha .caso__txt { grid-column: 1 / 8; grid-row: 1; }
+  .caso--derecha :global(.caso__escena) { grid-column: 9 / -1; grid-row: 1; }
+  .caso--izquierda :global(.caso__escena) { grid-column: 1 / 10; grid-row: 1; }
+  .caso--izquierda .caso__txt { grid-column: 12 / -1; grid-row: 1; }
+
+  /* Tableta y celular: la escena arriba y el texto debajo. */
+  @media (max-width: 959px) {
+    .caso .caso__txt { grid-column: 1 / -1; grid-row: 2; margin-top: calc(var(--u) * .7); }
+    .caso--derecha :global(.caso__escena) { grid-column: 2 / -1; }
+    .caso--izquierda :global(.caso__escena) { grid-column: 1 / 8; }
+  }
+  @media (max-width: 699px) {
+    .caso + :global(.caso) { margin-top: calc(var(--u) * .7); }
+    .caso .caso__txt { margin-top: 32px; }
+    .caso :global(.caso__escena) { grid-column: 1 / -1; }
+    /* El lugar, en su renglón: "Pedidos y reparto · Coracora, Ayacucho" no cabe en una
+       línea por debajo de 360 px y se partía a media frase. */
+    .caso__sep { display: none; }
+    .caso__lugar { display: block; }
+    .caso__t { margin-top: 6px; }
+    .caso__d { margin-top: 10px; font-size: 1rem; }
+    .caso__txt .enlace { margin-top: 2px; }
+    .caso__txt :global(.caso__apps) { margin-top: 10px; }
+  }
+</style>

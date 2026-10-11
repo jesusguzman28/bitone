@@ -1,0 +1,85 @@
+---
+// La IA, dicha con franqueza: qué hace sola y qué decide una persona. La frase de la
+// casa ("La IA avisa. Tu gente decide.") se parte en dos campos, uno al lado del otro:
+// el rojo, que sale hasta el borde de la ventana, es lo que la IA hace sola; el claro,
+// lo que pasa a alguien del equipo. La raya entre los dos es el contenido. Cada mitad
+// se entiende sola bajo su rótulo.
+// Es el único plano rojo de la página (en la cuenta, los días van en hueso).
+// Al pie del campo rojo va, a la vista, que la IA y WhatsApp cobran aparte.
+//
+// En tableta y celular los dos campos van uno sobre otro.
+// Trae su sección: va tal cual, entre dos secciones claras. La que sigue pone su filete
+// justo debajo, y el campo rojo se asienta en él. Por eso los campos no se mueven: lo
+// que entra al bajar (data-rev) es el contenido de cada uno, no su plano.
+import Rotulo from '../Rotulo.astro';
+import { automatizacion } from '../../data/automatizacion';
+
+interface Props {
+  id?: string;
+}
+
+const { id = 'ia' } = Astro.props;
+const d = automatizacion.ia;
+---
+
+<section class="ia" id={id} aria-labelledby={`t-${id}`}>
+  <!-- El título entero, para lector de pantalla. En pantalla va partido en los dos campos. -->
+  <h2 class="solo-lector" id={`t-${id}`}>{d.titulo}</h2>
+  <div class="reticula ia__r">
+    <div class="ia__lado ia__lado--sola plano--rojo">
+      <div class="ia__dentro" data-rev>
+        <Rotulo>{d.sola.rotulo}</Rotulo>
+        <p class="titulo ia__t" aria-hidden="true">{d.sola.titulo}</p>
+        <p class="entrada ia__txt">{d.sola.texto}</p>
+        <p class="menor ia__nota">{d.sola.nota}</p>
+      </div>
+    </div>
+    <div class="ia__lado ia__lado--persona">
+      <div class="ia__dentro" data-rev>
+        <Rotulo punto="hueco">{d.persona.rotulo}</Rotulo>
+        <p class="titulo ia__t" aria-hidden="true">{d.persona.titulo}</p>
+        <p class="entrada ia__txt">{d.persona.texto}</p>
+        <p class="menor ia__nota">{d.persona.nota}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ---------- escritorio ----------
+     El campo rojo va del borde de la ventana al módulo 8 y su texto arranca en el 1,
+     con un módulo de aire a cada lado. El campo claro arranca en el 9, el eje de las
+     mitades, y abre con un filete a la altura del borde del rojo. */
+  .ia__r { align-items: stretch; }
+  .ia__lado { display: flex; padding-block: var(--aire); }
+  .ia__dentro { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; }
+  .ia__lado--sola { grid-column: 1 / 8; margin-left: calc(var(--m) * -1); padding-left: var(--m); padding-right: var(--u); background: var(--rojo); color: #fff; }
+  /* El filete se dibuja sin ocupar sitio: los dos campos abren a la misma altura. */
+  .ia__lado--persona { grid-column: 9 / -1; box-shadow: inset 0 1px 0 var(--filete-fuerte); }
+  .ia__t { margin-top: clamp(14px, calc(var(--u) * .28), 26px); }
+  /* Cada mitad del titular es un renglón: si se parte, deja de leerse como una sola frase.
+     La más larga tiene 16 letras y le sobra más de un módulo. En celular cabe sola; ahí
+     no se fuerza, por si la letra de respaldo es más ancha. */
+  @media (min-width: 700px) { .ia__t { white-space: nowrap; } }
+  .ia__txt { max-width: 21em; margin-top: clamp(16px, calc(var(--u) * .3), 28px); padding-bottom: calc(var(--u) * .55); }
+  /* Las dos notas abren a la misma altura: van al pie de su campo y las dos guardan
+     sitio para dos renglones, aunque una ocupe uno. */
+  .ia__nota { align-self: stretch; min-height: calc(13px + 3em); margin-top: auto; padding-top: 12px; border-top: 1px solid var(--filete); color: var(--texto-2); }
+  /* En el escritorio angosto la nota del campo rojo ocupa tres renglones: se guarda
+     sitio para tres en los dos campos y las notas siguen abriendo a la misma altura. */
+  @media (min-width: 960px) and (max-width: 1279px) { .ia__nota { min-height: calc(13px + 4.5em); } }
+
+  /* ---------- tableta y celular: un campo sobre otro ---------- */
+  @media (max-width: 959px) {
+    .ia__lado { padding-block: calc(var(--aire) * .85); }
+    .ia__lado--sola { grid-column: 1 / -1; margin-inline: calc(var(--m) * -1); padding-inline: var(--m); }
+    .ia__lado--persona { grid-column: 1 / -1; box-shadow: none; padding-bottom: var(--aire); }
+    .ia__txt { padding-bottom: calc(var(--u) * .4); }
+    .ia__nota { min-height: 0; }
+  }
+  @media (max-width: 699px) {
+    .ia__lado { padding-block: var(--aire); }
+    .ia__txt { margin-top: 12px; padding-bottom: 18px; font-size: var(--t-texto); }
+    .ia__nota { padding-top: 10px; }
+  }
+</style>

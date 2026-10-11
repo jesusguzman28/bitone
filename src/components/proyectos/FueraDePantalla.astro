@@ -1,0 +1,153 @@
+---
+// El momento propio de /proyectos/: lo construido que no cabe en una pantalla.
+// Sobre un plano tinta van la placa del robot TiniBot, en su ficha de papel, y los
+// dos robots, que cuelgan por debajo del plano: el titular dice que no todo se queda
+// en la pantalla, y ellos tampoco se quedan dentro del marco.
+// De la ficha a los robots va un rastro de bits (módulos de un cuarto): la orden que
+// viaja y termina en el pulsador del robot. Al entrar en pantalla los bits se
+// encienden en fila y los robots avanzan un paso, una sola vez y en un segundo. Sin
+// movimiento y sin JavaScript todo está ya en su sitio.
+//   <FueraDePantalla />
+// Trae su sección y su plano: va tal cual. La sección que sigue tiene que dejar aire
+// arriba (los robots bajan 0,75 módulos sobre ella; 0,7 en celular).
+//
+// LA ESCENA SE ASIENTA EN UNA LÍNEA: el pie de la ficha. Ahí termina la ficha, ahí
+// empiezan los robots y, en escritorio, ahí termina el texto de la izquierda.
+// Todas las medidas están en módulos y salen de las dos fotos:
+//   · robots (536 x 283): el pulsador del robot de la derecha está al 83,4 % del ancho,
+//     arriba del todo. Ahí acaba el rastro.
+//   · placa (432 x 470): su pulsador azul está al 50 % del alto. A esa altura sale el rastro.
+// Si cambia una foto o el ancho de la ficha, hay que volver a sacar --x0 y --y0.
+import Rotulo from '../Rotulo.astro';
+import Imagen from '../Imagen.astro';
+import { mindblock, placaTinibot, vitrina } from '../../data/proyectos';
+// La foto de la placa se importa aquí, que es donde se pinta (ver data/proyectos.ts).
+import placa from '../../assets/proyectos/tinibot-placa.png';
+
+interface Props {
+  id?: string;
+}
+
+const { id = 'robot' } = Astro.props;
+const d = vitrina.robot;
+// El rastro: un tramo que avanza y otro que baja. Se dibujan los bits del tramo más
+// largo (escritorio) y el celular esconde los que le sobran.
+const avanza = Array.from({ length: 10 }, (_, i) => i);
+const baja = [1, 2, 3];
+---
+
+<section class="fuera plano plano--tinta" id={id} aria-labelledby={`t-${id}`}>
+  <div class="reticula fuera__r">
+    <header class="fuera__cab">
+      <Rotulo>{d.rotulo}</Rotulo>
+      <h2 class="titulo fuera__t" id={`t-${id}`}>
+        {d.titulo.map((r, i) => <><span class="renglon">{r}</span>{i < d.titulo.length - 1 && ' '}</>)}
+      </h2>
+    </header>
+
+    <div class="fuera__txt">
+      <p class="entrada">{d.texto}</p>
+      <p class="destacado fuera__puente">{d.puente}</p>
+    </div>
+
+    <div class="fuera__escena" data-rev>
+      <figure class="fuera__ficha plano-claro">
+        <figcaption><Rotulo como="span">{placaTinibot.rotulo}</Rotulo></figcaption>
+        <Imagen src={placa} alt={placaTinibot.alt} anchos={[216, 432]} tamanos="(max-width: 699px) 29vw, (max-width: 959px) 25vw, 14vw" />
+      </figure>
+      <div class="fuera__rastro" aria-hidden="true">
+        {avanza.map((i) => <i class="fuera__bit fuera__bit--a" style={`--i:${i};--n:${i}`}></i>)}
+        {baja.map((j) => <i class="fuera__bit fuera__bit--b" style={`--j:${j};--n:${avanza.length - 1 + j}`}></i>)}
+      </div>
+      <div class="fuera__robots">
+        <Imagen src={mindblock.robot.imagen} alt={mindblock.robot.alt} anchos={[320, 536]} tamanos="(max-width: 699px) 64vw, (max-width: 959px) 40vw, 23vw" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Los robots cuelgan del plano: la sección va por encima de la que sigue.
+     --cuelga y --robots van sin unidad (son módulos) para poder hacer cuentas con ellos. */
+  .fuera {
+    --cuelga: .75;                                     /* lo que los robots bajan del plano */
+    --robots: 4;                                       /* ancho de su foto: no pasa de 4 (mide 536 px) */
+    --alto-robots: calc(var(--robots) * 283 / 536);    /* su alto, por la proporción de la foto */
+    --bit: calc(var(--u) * .25);
+    position: relative; z-index: 1; padding-top: var(--aire);
+  }
+  /* Escritorio: dos columnas que se apoyan en la misma línea de abajo. A la izquierda,
+     el titular arriba y el texto abajo; a la derecha, la escena, que ocupa las dos filas.
+     El canal entre el titular y el texto (1,2 módulos) hace que la ficha empiece a la
+     altura del segundo renglón del titular, que es el corto, y no pegada al primero. */
+  .fuera__r { align-items: start; row-gap: calc(var(--u) * 1.2); }
+  .fuera__cab { grid-column: 1 / 9; grid-row: 1; }
+  .fuera__t { margin-top: clamp(14px, calc(var(--u) * .28), 26px); }
+  /* El texto termina en el pie de la ficha: lo que queda debajo es el alto de los
+     robots menos lo que cuelgan. */
+  .fuera__txt { grid-column: 1 / 8; grid-row: 2; align-self: end; padding-bottom: calc(var(--u) * (var(--alto-robots) - var(--cuelga))); }
+  .fuera__txt .entrada { max-width: 30em; }
+  .fuera__puente { margin-top: calc(var(--u) * .35); max-width: 24em; }
+
+  /* La escena mide 8 módulos: la ficha (3), un canal (1) y los robots (4). La primera
+     fila mide --pie y la ficha se apoya en su borde de abajo; los robots van en la
+     segunda. Lo único que cuelga del plano son los robots. */
+  .fuera__escena {
+    --pie: 3.75; --x0: 3.286; --paso: .45; --ultimo: 9;
+    --y0: calc(var(--pie) - 1.612);
+    grid-column: 9 / -1; grid-row: 1 / span 2; align-self: end; position: relative;
+    display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 1fr) minmax(0, 4fr); grid-template-rows: calc(var(--u) * var(--pie)) auto;
+    margin-bottom: calc(var(--u) * var(--cuelga) * -1);
+  }
+  .fuera__ficha { grid-column: 1; grid-row: 1; align-self: end; padding: calc(var(--u) * .26); }
+  /* display: grid: el rótulo ocupa su propio alto de línea, no el del texto corrido. */
+  .fuera__ficha figcaption { display: grid; margin-bottom: calc(var(--u) * .14); }
+  /* El blanco de la foto se funde con el papel de la ficha. */
+  .fuera__ficha :global(img) { display: block; width: 100%; height: auto; mix-blend-mode: multiply; }
+  .fuera__robots { grid-column: 3; grid-row: 2; }
+  .fuera__robots :global(img) { display: block; width: 100%; height: auto; }
+
+  /* El rastro: sale de la ficha a la altura del pulsador azul (--y0), avanza hasta
+     quedar sobre el pulsador del robot (--x0 + --paso * --ultimo) y baja hasta él. */
+  .fuera__bit { position: absolute; width: var(--bit); height: var(--bit); margin: calc(var(--bit) / -2) 0 0 calc(var(--bit) / -2); background: var(--rojo); }
+  .fuera__bit--a { left: calc(var(--u) * (var(--x0) + var(--paso) * var(--i))); top: calc(var(--u) * var(--y0)); }
+  .fuera__bit--b { left: calc(var(--u) * (var(--x0) + var(--paso) * var(--ultimo))); top: calc(var(--u) * (var(--y0) + var(--paso) * var(--j))); }
+
+  /* Al entrar: la escena sube (data-rev), los bits se encienden en fila y los robots
+     avanzan un paso. Todo cabe en un segundo. Solo si el guion del layout la dejó en espera. */
+  @media (prefers-reduced-motion: no-preference) {
+    .fuera__escena.espera .fuera__bit { opacity: 0; transform: scale(.3); }
+    .fuera__escena.espera.visto .fuera__bit {
+      opacity: 1; transform: none;
+      transition: opacity .2s ease calc(var(--n) * 30ms + 150ms), transform .3s var(--salida) calc(var(--n) * 30ms + 150ms);
+    }
+    .fuera__escena.espera .fuera__robots { transform: translateX(calc(var(--u) * -.24)); }
+    .fuera__escena.espera.visto .fuera__robots { transform: none; transition: transform .5s var(--salida-larga) .5s; }
+  }
+
+  /* Tableta: la escena mide lo mismo (8 módulos) y va debajo del texto. */
+  @media (max-width: 959px) {
+    .fuera__r { row-gap: calc(var(--u) * .5); }
+    .fuera__cab { grid-column: 1 / -1; }
+    .fuera__txt { grid-column: 1 / 7; align-self: auto; padding-bottom: 0; }
+    .fuera__escena { grid-column: 1 / -1; grid-row: 3; }
+  }
+  /* Celular: 6 módulos. La ficha mide 2,3 y los robots, 4,2: se cruzan medio módulo
+     a lo ancho, así que entre el pie de la ficha y los robots queda un canal. */
+  @media (max-width: 699px) {
+    .fuera { --cuelga: .7; --robots: 4.2; }
+    .fuera__r { row-gap: 20px; }
+    .fuera__txt { grid-column: 1 / -1; }
+    .fuera__puente { margin-top: 14px; }
+    .fuera__escena {
+      --pie: 3; --x0: 2.603; --ultimo: 6;
+      --y0: calc(var(--pie) - 1.236);
+      grid-template-columns: calc(var(--u) * 1.8) minmax(0, 1fr); row-gap: calc(var(--u) * .39); margin-top: 8px;
+    }
+    .fuera__ficha { grid-column: 1 / -1; width: calc(var(--u) * 2.3); padding: calc(var(--u) * .2); }
+    .fuera__ficha figcaption { margin-bottom: 6px; }
+    .fuera__robots { grid-column: 2; }
+    /* El tramo que avanza es más corto: le sobran tres bits. */
+    .fuera__bit--a:nth-child(n + 8) { display: none; }
+  }
+</style>

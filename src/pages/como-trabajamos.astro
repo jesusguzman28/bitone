@@ -1,0 +1,163 @@
+---
+// Cómo trabajamos: la única página que habla de dinero y fechas a fondo. Las demás
+// nombran el precio una vez y enlazan aquí. Tiene que dejar claro qué es gratis, qué se
+// paga y cuándo se sabe el precio.
+// Orden: la portada · el recorrido, con el dinero arriba y abajo · el acuerdo (rojo, la
+// hoja completa) · si pides algo nuevo · los dos lados, en cifras (tinta) · preguntas · cierre.
+// Ninguna sección repite el esquema de la anterior: seis columnas y tres bloques, texto
+// y hoja, cuatro columnas en dos grupos, dos mitades de cifras, título y preguntas.
+// Tres escalas de titular: el campo rojo y el cierre a cartel menor, las secciones a
+// título y las preguntas a subtítulo.
+// El recorrido se apoya en el campo rojo: su bloque "Precio fijo" (en celular, su filete
+// rojo) se funde con él y, justo debajo, cuelga la hoja.
+import Base from '../layouts/Base.astro';
+import PortadaInterior from '../components/PortadaInterior.astro';
+import TituloSeccion from '../components/TituloSeccion.astro';
+import Rotulo from '../components/Rotulo.astro';
+import Hoja from '../components/Hoja.astro';
+import Cifras from '../components/Cifras.astro';
+import Dudas from '../components/Dudas.astro';
+import CierreWhatsApp from '../components/CierreWhatsApp.astro';
+import Recorrido from '../components/como-trabajamos/Recorrido.astro';
+import SiPides from '../components/como-trabajamos/SiPides.astro';
+import { preguntasDeProceso, notaDeLaHoja } from '../data/empresa';
+import Icono from '../components/Icono.astro';
+import { paginas, destino } from '../data/navegacion';
+import { portada, recorrido, acuerdo, nuevo, lados, remate } from '../data/como-trabajamos';
+
+const pagina = paginas.comoTrabajamos;
+---
+
+<Base
+  titulo="Cómo trabajamos: precio fijo por escrito y entregas por partes"
+  descripcion="Qué es gratis, qué se paga y cuándo sabes el precio. Cinco pasos, precio fijo por escrito y, cada dos semanas, una parte que ya puedes usar."
+  signo={pagina.signo}
+>
+  <PortadaInterior signo={pagina.signo} tono="rojo" rotulo={pagina.nombre} titulo={portada.titulo} entrada={portada.entrada} />
+
+  <!-- 1 · El recorrido: la primera conversación y los cinco pasos, con el dinero a la vista -->
+  <section class="seccion recorrido" id="pasos" aria-labelledby="t-pasos">
+    <TituloSeccion id="t-pasos" titulo={recorrido.titulo} />
+    <Recorrido tramos={recorrido.tramos} signo={pagina.signo} />
+  </section>
+
+  <!-- 2 · El acuerdo: una frase y la hoja completa, que cuelga del bloque "Precio fijo".
+       La frase y lo único que se paga aparte van juntas: en escritorio acompañan a la
+       hoja mientras se lee; en tableta y celular, la frase va arriba y lo de aparte, bajo
+       la hoja. -->
+  <section class="plano plano--rojo acuerdo" id="precio" aria-labelledby="t-precio">
+    <div class="reticula acuerdo__r">
+      <div class="acuerdo__dicho">
+        <div class="acuerdo__fijo">
+          <h2 class="titulo titulo--mayor acuerdo__t" id="t-precio">{acuerdo.titulo.map((r, i) => <><span class="renglon">{r}</span>{i < acuerdo.titulo.length - 1 && ' '}</>)}</h2>
+          <div class="acuerdo__aparte">
+            <Rotulo punto="hueco">{acuerdo.aparte.rotulo}</Rotulo>
+            <p>{acuerdo.aparte.texto}</p>
+          </div>
+        </div>
+      </div>
+      <!-- Dos notas al pie de la hoja: lo que Bit One no cobra y cómo se paga un rescate,
+           que no va por partes entregadas (/rescate/ manda aquí desde su paso 1). -->
+      <Hoja nota={[notaDeLaHoja, acuerdo.rescate]} class="acuerdo__hoja" data-rev />
+    </div>
+  </section>
+
+  <!-- 3 · Si pides algo nuevo: cuatro casos en dos grupos -->
+  <section class="seccion" id="cambios" aria-labelledby="t-cambios">
+    <TituloSeccion id="t-cambios" disposicion="pila" titulo={nuevo.titulo} entrada={nuevo.entrada} />
+    <SiPides grupos={nuevo.grupos} />
+  </section>
+
+  <!-- 4 · Los dos lados: las dos firmas de la hoja, en cifras. Lo que acompaña a cada
+       cifra es una frase entera: va en letra de texto (texto="frase"), no en rótulo. La
+       mono queda para los dos rótulos de grupo. -->
+  <section class="seccion plano plano--tinta" id="de-tu-lado" aria-labelledby="t-lados">
+    <div class="reticula lados">
+      <h2 class="titulo todo lados__t" id="t-lados">{lados.titulo}</h2>
+      <div class="mitad-1 lados__mitad">
+        <Rotulo como="h3">{lados.nuestro.rotulo}</Rotulo>
+        <Cifras cifras={lados.nuestro.cifras} disposicion="filas" texto="frase" class="lados__cifras" />
+      </div>
+      <div class="mitad-2 lados__mitad">
+        <Rotulo como="h3">{lados.tuyo.rotulo}</Rotulo>
+        <Cifras cifras={lados.tuyo.cifras} disposicion="filas" texto="frase" class="lados__cifras" />
+        <p class="menor suave lados__nota">{lados.tuyo.nota}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · Preguntas de dinero y plazos -->
+  <!-- El remate abre lo construido: quien ya leyó las condiciones quiere ver el trabajo -->
+  <Dudas titulo="Antes de firmar." preguntas={preguntasDeProceso} grupo="proceso" sinFilete>
+    <a class="enlace" href={destino(paginas.proyectos)}>{remate.proyectos}<Icono nombre="derecha" /></a>
+  </Dudas>
+
+  <CierreWhatsApp />
+</Base>
+
+<style>
+  /* ---------- 1 · el recorrido ---------- */
+  /* No lleva aire abajo: en escritorio sus tres bloques se apoyan en el campo rojo; en
+     tableta y celular, el filete rojo de "Precio fijo" baja hasta tocarlo (el aire lo
+     pone ese tramo, en Recorrido.astro). */
+  .recorrido { padding-bottom: 0; }
+
+  /* ---------- 2 · el acuerdo ---------- */
+  .acuerdo { padding-block: calc(var(--aire) * .9) calc(var(--aire) * 1.15); overflow: clip; }
+  .acuerdo__r { align-items: start; }
+  /* La columna de la izquierda mide lo que la hoja: dentro, la frase y lo de aparte bajan
+     juntas con la lectura. */
+  .acuerdo__dicho { grid-column: 1 / 8; align-self: stretch; }
+  .acuerdo__fijo { position: sticky; top: calc(var(--cab) + 40px); }
+  .acuerdo :global(.acuerdo__hoja) { grid-column: 9 / -1; }
+  .acuerdo__aparte { max-width: 27em; margin-top: calc(var(--u) * .5); padding-top: 14px; border-top: 1px solid var(--filete); }
+  .acuerdo__aparte p:last-child { margin-top: 6px; font-size: var(--t-menor); line-height: 1.5; }
+
+  /* La frase central de la página: en escritorio sube a cartel menor (.titulo--mayor), en
+     cuatro renglones que llenan la media página. */
+  /* Una ventana muy baja no da para el bloque entero: deja de ir fijo. */
+  @media (min-width: 960px) and (max-height: 540px) {
+    .acuerdo__fijo { position: static; }
+  }
+
+  /* ---------- 4 · los dos lados ---------- */
+  .lados { align-items: start; row-gap: calc(var(--u) * .6); }
+  /* La primera columna mide lo mismo en las dos listas (la cifra más larga, "2 horas
+     hábiles"): cifras y textos quedan en los mismos ejes, también cuando se apilan. */
+  .lados :global(.lados__cifras) { margin-top: 14px; grid-template-columns: calc(var(--t-subtitulo) * 8.5) minmax(0, 1fr); }
+  .lados__nota { margin-top: 14px; }
+
+  /* En escritorio las dos listas comparten renglones (subrejilla): los filetes de una
+     mitad coinciden con los de la otra aunque un texto ocupe más renglones. Filas: el
+     título, los dos rótulos, hasta cuatro cifras y la nota. */
+  @media (min-width: 960px) {
+    .lados { grid-template-rows: auto auto repeat(4, auto) auto; row-gap: 0; }
+    .lados__t { margin-bottom: calc(var(--u) * .6); }
+    .lados__mitad { grid-row: 2 / span 6; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: subgrid; }
+    .lados :global(.lados__cifras) { grid-row: 2 / span var(--n); grid-template-rows: subgrid; }
+    .lados__nota { grid-row: 6; }
+  }
+
+  @media (max-width: 959px) {
+    /* La frase y lo de aparte dejan de ir juntas: se lee la frase, la hoja y, debajo, lo
+       de aparte. */
+    .acuerdo__dicho, .acuerdo__fijo { display: contents; }
+    .acuerdo__t, .acuerdo :global(.acuerdo__hoja), .acuerdo__aparte { grid-column: 1 / -1; }
+    /* Con todo el ancho, el titular vuelve a dos renglones parejos. */
+    .acuerdo__t { margin-bottom: calc(var(--u) * .6); }
+    .acuerdo__t .renglon { display: inline; }
+    .acuerdo :global(.acuerdo__hoja) { order: 1; }
+    /* Bajo la hoja: el aire cuenta desde su segunda hoja, la que va detrás. */
+    .acuerdo__aparte { order: 2; max-width: none; margin-top: calc(var(--aire-corto) + 14px); }
+  }
+  @media (max-width: 699px) {
+    .acuerdo { padding-block: var(--aire) calc(var(--aire) * 1.2); }
+    .acuerdo__t { margin-bottom: 20px; }
+    .acuerdo__aparte { margin-top: 30px; padding-top: 12px; }
+
+    .lados { row-gap: 22px; }
+    /* En celular cada cifra lleva su frase debajo (Cifras, texto="frase"): no hay columnas que fijar. */
+    .lados :global(.lados__cifras) { margin-top: 10px; grid-template-columns: minmax(0, 1fr); }
+    .lados__nota { margin-top: 12px; }
+  }
+</style>

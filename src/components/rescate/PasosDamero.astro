@@ -1,0 +1,317 @@
+---
+// El momento propio de /rescate/: el sistema del visitante como un damero que se
+// aclara, en el orden del dueño: primero entender, después dejarlo escrito y recién
+// al final tocar.
+//   Hoy     está, funciona y nadie ve qué tiene (apagado, tres casillas fuera de sitio)
+//   Paso 1  se enciende: se mira sin tocar
+//   Paso 2  lo urgente va en rojo
+//   Paso 3  queda explicado: el nombre de cada parte y la casilla dorada (las reglas
+//           del negocio, por fin escritas). Lo urgente sigue en rojo: aún no se toca
+//   Paso 4  lo urgente vuelve a su sitio y el marco se cierra
+//
+// En escritorio el damero grande acompaña a la izquierda y cambia según el paso que
+// cruza la mitad de la ventana: no se elige nada, solo se baja. En tableta y celular
+// cada paso lleva su propio damero, con su leyenda debajo, que hace su cambio una vez
+// al entrar en pantalla; el último paso no lleva damero chico: su dibujo es el
+// grande, que cierra la lista ya terminado (así el mismo estado no sale dos veces
+// seguidas).
+//
+// Sin JavaScript, o con "reducir movimiento", nada cambia solo: el damero grande se
+// ve terminado y cada paso enseña el suyo. Solo se mueven transform y opacity.
+//
+// Va sobre un plano tinta y trae su retícula: se pone directo dentro de la sección,
+// debajo de su TituloSeccion. Uno por página.
+import Rotulo from '../Rotulo.astro';
+import Icono from '../Icono.astro';
+import Damero from './Damero.astro';
+import type { PasoDeRescate } from '../../data/rescate';
+
+interface Props {
+  /** Cómo está hoy: abre la lista, antes de los pasos. */
+  hoy: { rotulo: string; titulo: string; texto: string; pie: string };
+  /** Los cuatro pasos. El dibujo está hecho para cuatro. */
+  pasos: PasoDeRescate[];
+  /** Lo que sigue después, si se quiere: cierra la lista. */
+  despues: { rotulo: string; duracion: string; titulo: string; texto: string };
+  /** A dónde lleva el enlace del paso que lo tenga (`enlace`). Sin él, no hay enlace. */
+  href?: string;
+  /** Cómo se llama el último estado, al pie del dibujo. */
+  final: string;
+  /** El rótulo que dice que el dibujo es un ejemplo. */
+  ejemplo: string;
+  /** Los nombres de las ocho casillas llenas. */
+  nombres: readonly string[];
+  class?: string;
+}
+
+const { hoy, pasos, despues, href, final, ejemplo, nombres, class: clase, ...resto } = Astro.props;
+const ultimo = pasos.length;
+---
+
+<div class:list={['dm', 'reticula', clase]} data-damero {...resto}>
+  <div class="dm__col">
+    <div class="dm__beat dm__beat--hoy" data-tiempo data-rev>
+      <div class="dm__lado">
+        <p class="rotulo dm__rot"><i class="dm__pt dm__pt--hueco" aria-hidden="true"></i><b>{hoy.rotulo}</b></p>
+        <!-- El dibujo y su leyenda son adorno: lo que dicen está escrito en el paso. -->
+        <div class="dm__fig" aria-hidden="true">
+          <div class="dm__mini" data-estado="0"><Damero /></div>
+          <p class="rotulo dm__cap">{hoy.pie}</p>
+        </div>
+      </div>
+      <h3 class="subtitulo dm__t">{hoy.titulo}</h3>
+      <p class="entrada dm__d">{hoy.texto}</p>
+    </div>
+
+    <ol class="dm__pasos">
+      {pasos.map((p, i) => (
+        <li class:list={['dm__beat', { 'dm__beat--fin': i + 1 === ultimo }]} data-tiempo data-rev>
+          <div class="dm__lado">
+            <p class="rotulo dm__rot"><i class="dm__pt" aria-hidden="true"></i><b>Paso {i + 1}</b>{p.duracion && <span class="dm__dur"><span class="solo-lector">, </span><i aria-hidden="true"> · </i>{p.duracion}</span>}</p>
+            <div class="dm__fig" aria-hidden="true">
+              <div class="dm__mini" data-estado={i + 1}><Damero /></div>
+              {/* El damero chico no lleva nombres escritos: si la leyenda del grande habla
+                  de ellos, aquí va la suya (`pieChico`), que dice lo que sí se ve. */}
+              <p class="rotulo dm__cap">{p.pieChico ?? p.pie}</p>
+            </div>
+          </div>
+          <h3 class="subtitulo dm__t">{p.titulo}</h3>
+          <p class="entrada dm__d">{p.pasa}</p>
+          <p class="dm__r"><span class="rotulo">Recibes</span> {p.recibes}</p>
+          {p.enlace && href && <a class="enlace dm__ir" href={href}>{p.enlace}<Icono nombre="derecha" /></a>}
+        </li>
+      ))}
+    </ol>
+  </div>
+
+  <!-- El damero grande. Es dibujo: lo que dice está escrito en los pasos. -->
+  <div class="dm__mesa" data-mesa data-estado={ultimo} aria-hidden="true" data-rev>
+    <div class="dm__marco">
+      <Damero nombres={nombres} />
+      <p class="dm__pie">
+        <span class="rotulo dm__pies">
+          <span data-pie="0"><i class="dm__pt dm__pt--hueco"></i><b>{hoy.rotulo}</b> · {hoy.pie}</span>
+          {pasos.map((p, i) => (
+            <span data-pie={i + 1}><i class="dm__pt"></i><b>{i + 1 === ultimo ? final : `Paso ${i + 1}`}</b> · {p.pie}</span>
+          ))}
+        </span>
+        <Rotulo punto="hueco" como="span">{ejemplo}</Rotulo>
+      </p>
+    </div>
+  </div>
+
+  <div class="dm__beat dm__coda" data-rev>
+    <div class="dm__lado">
+      <p class="rotulo dm__rot"><i class="dm__pt dm__pt--hueco" aria-hidden="true"></i><b>{despues.rotulo}</b><span class="dm__dur"><span class="solo-lector">, </span><i aria-hidden="true"> · </i>{despues.duracion}</span></p>
+    </div>
+    <h3 class="subtitulo dm__t">{despues.titulo}</h3>
+    <p class="entrada dm__d">{despues.texto}</p>
+  </div>
+</div>
+
+<script>
+  // Dos cosas, y las dos son un añadido: sin este guion el damero grande se ve
+  // terminado y cada paso enseña el suyo.
+  //  1. En escritorio, el damero grande toma el estado del paso que cruza la mitad
+  //     de la ventana ("en vivo").
+  //  2. En tableta y celular, cada damero chico hace su cambio una vez, cuando ya
+  //     está bien dentro de la pantalla (por encima de la barra de WhatsApp), y el
+  //     grande hace el del último paso.
+  // Con "reducir movimiento" no hace ninguna de las dos.
+  const raiz = document.querySelector<HTMLElement>('[data-damero]');
+  const mesa = raiz?.querySelector<HTMLElement>('[data-mesa]');
+  if (raiz && mesa) {
+    const tiempos = [...raiz.querySelectorAll<HTMLElement>('[data-tiempo]')];
+    const final = mesa.dataset.estado ?? '4';
+    const ancho = matchMedia('(min-width: 960px)');
+    const calma = matchMedia('(prefers-reduced-motion: reduce)');
+    let vivo = false;
+    let pedido = 0;
+
+    const medir = () => {
+      pedido = 0;
+      if (!vivo) return;
+      const linea = innerHeight * 0.5;
+      let n = 0;
+      tiempos.forEach((t, i) => { if (t.getBoundingClientRect().top <= linea) n = i; });
+      if (mesa.dataset.estado === String(n)) return;
+      mesa.dataset.estado = String(n);
+      tiempos.forEach((t, i) => t.classList.toggle('es-actual', i === n));
+    };
+    const alMover = () => { if (!pedido) pedido = requestAnimationFrame(medir); };
+
+    const ajustar = () => {
+      const debe = ancho.matches && !calma.matches;
+      if (debe === vivo) return;
+      vivo = debe;
+      raiz.classList.toggle('dm--vivo', vivo);
+      if (vivo) {
+        addEventListener('scroll', alMover, { passive: true });
+        addEventListener('resize', alMover);
+        mesa.dataset.estado = '';
+        medir();
+      } else {
+        removeEventListener('scroll', alMover);
+        removeEventListener('resize', alMover);
+        mesa.dataset.estado = final;
+        tiempos.forEach((t) => t.classList.remove('es-actual'));
+      }
+    };
+    ancho.addEventListener('change', ajustar);
+    calma.addEventListener('change', ajustar);
+    ajustar();
+
+    if (!calma.matches && 'IntersectionObserver' in window) {
+      const ojo = new IntersectionObserver((entradas) => {
+        for (const en of entradas) {
+          // Hace su cambio cuando ya se ve bien. Y también si quedó arriba sin haberse
+          // visto entero (un salto de página lo pasó de largo): nunca se queda a medias.
+          if (en.intersectionRatio < 0.6 && en.boundingClientRect.top > innerHeight * 0.2) continue;
+          en.target.classList.add('ya');
+          ojo.unobserve(en.target);
+        }
+      }, { rootMargin: '0px 0px -14% 0px', threshold: [0, 0.2, 0.4, 0.6, 0.8, 1] });
+      const chicos = [...raiz.querySelectorAll<HTMLElement>('.dm__mini')];
+      // El grande solo hace su entrada donde va quieto, al final de la lista.
+      for (const d of vivo ? chicos : [...chicos, mesa]) {
+        // Un damero que no se pinta (el chico del último paso, en tableta y celular) no entra.
+        if (!d.offsetParent) continue;
+        if (d.getBoundingClientRect().top < innerHeight * 0.7) continue;
+        d.classList.add('antes');
+        ojo.observe(d);
+      }
+    }
+  }
+</script>
+
+<style>
+  /* ---------- los estados: cinco variables que lee Damero.astro ---------- */
+  .dm [data-estado="0"] { --v-luz: 0; --v-urg: 0; --v-suelta: 1; --v-nom: 0; --v-fin: 0; }
+  .dm [data-estado="1"] { --v-luz: 1; --v-urg: 0; --v-suelta: 1; --v-nom: 0; --v-fin: 0; }
+  .dm [data-estado="2"] { --v-luz: 1; --v-urg: 1; --v-suelta: 1; --v-nom: 0; --v-fin: 0; }
+  .dm [data-estado="3"] { --v-luz: 1; --v-urg: 1; --v-suelta: 1; --v-nom: 1; --v-fin: 0; }
+  .dm [data-estado="4"] { --v-luz: 1; --v-urg: 0; --v-suelta: 0; --v-nom: 1; --v-fin: 1; }
+
+  /* ---------- composición: el damero a la izquierda, los pasos desde el módulo 9 ---------- */
+  .dm { align-items: start; }
+  .dm__col { grid-column: 9 / -1; grid-row: 1; }
+  .dm__coda { grid-column: 9 / -1; grid-row: 2; }
+  /* El damero acompaña mientras pasan los pasos. Nunca es más alto que la ventana. */
+  .dm__mesa { grid-column: 1 / 8; grid-row: 1 / span 2; align-self: start; position: sticky; top: calc(var(--cab) + 28px); }
+  .dm__marco { width: min(100%, max(220px, calc(100svh - var(--cab) - 128px))); }
+
+  .dm__pie { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 20px; margin-top: 16px; }
+  .dm__pie > :global(*) { white-space: nowrap; }
+  .dm__pies { display: grid; color: var(--texto-2); }
+  .dm__pies > span { grid-area: 1 / 1; opacity: 0; }
+  .dm__pies b { font-weight: 700; color: var(--texto); }
+  .dm__mesa[data-estado="0"] [data-pie="0"],
+  .dm__mesa[data-estado="1"] [data-pie="1"],
+  .dm__mesa[data-estado="2"] [data-pie="2"],
+  .dm__mesa[data-estado="3"] [data-pie="3"],
+  .dm__mesa[data-estado="4"] [data-pie="4"] { opacity: 1; }
+
+  /* ---------- un tiempo: a la izquierda su rótulo (módulo 9), a la derecha lo que pasa (módulo 12) ----------
+     La última fila es flexible: si el lado (rótulo, damero chico y leyenda) mide más que
+     el texto, lo que sobra queda abajo y no se reparte entre los párrafos. */
+  .dm__beat {
+    display: grid; grid-template-columns: calc(var(--u) * 3) minmax(0, 1fr); grid-template-rows: auto auto auto 1fr; align-items: start;
+    padding-block: calc(var(--u) * .36) calc(var(--u) * .78); border-top: 1px solid var(--filete);
+  }
+  .dm__beat--hoy { border-top-color: var(--filete-fuerte); }
+  .dm__lado { grid-column: 1; grid-row: 1 / span 4; align-self: first baseline; }
+  .dm__t, .dm__d, .dm__r, .dm__ir { grid-column: 2; }
+  .dm__t { align-self: first baseline; }
+
+  .dm__rot { color: var(--texto-2); }
+  .dm__rot b { font-weight: 700; color: var(--texto); }
+  .dm__dur { display: block; padding-left: calc(.62em + .75em); }
+  .dm__dur i { display: none; font-style: normal; opacity: .5; }
+  /* El punto: un módulo en miniatura, como el de Rotulo. */
+  .dm__pt { display: inline-block; width: .62em; height: .62em; margin-right: .75em; vertical-align: .02em; background: var(--rojo); }
+  .dm__pt--hueco { background: none; box-shadow: inset 0 0 0 1.5px currentColor; }
+  /* El damero chico y, debajo, lo que se ve en él: sin leyenda eran cuadritos sueltos. */
+  .dm__fig { margin-top: 16px; }
+  .dm__mini { width: calc(var(--u) * 2); }
+  .dm__cap { margin-top: 8px; color: var(--texto-2); text-wrap: balance; }
+
+  .dm__d { margin-top: clamp(10px, calc(var(--u) * .16), 16px); max-width: 27em; }
+  .dm__r { margin-top: clamp(14px, calc(var(--u) * .24), 22px); padding-top: 12px; border-top: 1px solid var(--filete); max-width: 30em; font-weight: 550; line-height: 1.45; text-wrap: pretty; }
+  .dm__r .rotulo { display: block; margin-bottom: 4px; color: var(--texto-2); }
+  .dm__ir { margin-top: 10px; justify-self: start; }
+  .dm__coda { padding-bottom: 0; }
+
+  /* ---------- en vivo (escritorio, con guion): manda el damero grande ---------- */
+  .dm--vivo .dm__fig { display: none; }
+  /* El punto del paso que se está leyendo va lleno; los demás, huecos. */
+  .dm--vivo [data-tiempo]:not(.es-actual) .dm__pt { background: none; box-shadow: inset 0 0 0 1.5px currentColor; }
+  .dm--vivo [data-tiempo].es-actual .dm__pt { background: var(--rojo); box-shadow: none; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .dm__pies > span { transition: opacity .2s ease; }
+    /* Al entrar en pantalla, cada damero chico pasa del estado anterior al suyo. */
+    .dm__mini, .dm__mesa { --v-espera: .12s; }
+    .dm--vivo .dm__mesa { --v-espera: 0s; }
+    .dm__mini.antes:not(.ya)[data-estado="1"] { --v-luz: 0; }
+    .dm__mini.antes:not(.ya)[data-estado="2"] { --v-urg: 0; }
+    .dm__mini.antes:not(.ya)[data-estado="3"] { --v-nom: 0; }
+    /* El último: lo urgente, todavía en rojo y fuera de sitio, vuelve y el marco se cierra. */
+    .dm__mini.antes:not(.ya)[data-estado="4"],
+    .dm__mesa.antes:not(.ya) { --v-urg: 1; --v-suelta: 1; --v-fin: 0; }
+  }
+  /* Una ventana muy baja no da para un dibujo fijo. */
+  @media (max-height: 519px) { .dm__mesa { position: static; } }
+
+  /* ---------- tableta: cada paso con su damero a la izquierda; el grande cierra ---------- */
+  @media (max-width: 959px) {
+    .dm__col, .dm__coda { grid-column: 1 / -1; grid-row: auto; }
+    .dm__mesa { grid-column: 1 / 7; grid-row: auto; position: static; margin-block: calc(var(--u) * .2) calc(var(--u) * .5); }
+    .dm__marco { width: auto; }
+
+    .dm__beat { grid-template-columns: calc(var(--u) * 2) minmax(0, 1fr); grid-template-rows: auto auto auto auto 1fr; column-gap: calc(var(--u) * .5); padding-block: calc(var(--u) * .34) calc(var(--u) * .44); }
+    .dm__lado { display: contents; }
+    .dm__fig { grid-column: 1; grid-row: 1 / span 5; margin-top: 4px; }
+    .dm__mini { width: auto; }
+    .dm__rot, .dm__t, .dm__d, .dm__r, .dm__ir { grid-column: 2; }
+    /* Los títulos de paso bajan a destacado: en tableta y celular la franqueza y las
+       preguntas van a subtítulo, y seis títulos de paso no pueden pesar lo mismo que
+       los de las dos secciones que siguen. */
+    .dm__t { align-self: start; margin-top: 6px; font-size: var(--t-destacado); line-height: 1.15; letter-spacing: -.02em; }
+    .dm__dur { display: inline; padding-left: 0; }
+    .dm__dur i { display: inline; }
+    /* Sin dibujo propio, a todo el ancho: "Después" y el último paso, cuyo dibujo es
+       el damero grande que viene justo debajo. */
+    .dm__coda, .dm__beat--fin { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; }
+    .dm__beat--fin .dm__fig { display: none; }
+    .dm__coda .dm__rot, .dm__coda .dm__t, .dm__coda .dm__d,
+    .dm__beat--fin .dm__rot, .dm__beat--fin .dm__t, .dm__beat--fin .dm__d, .dm__beat--fin .dm__r, .dm__beat--fin .dm__ir { grid-column: 1; }
+  }
+
+  /* ---------- celular: el damero y, a su lado, el paso y su título; debajo, la leyenda y el texto ---------- */
+  @media (max-width: 699px) {
+    .dm__mesa { grid-column: 1 / -1; margin-block: 6px 26px; }
+    .dm__pie { margin-top: 12px; }
+
+    .dm__beat { grid-template-rows: none; column-gap: 18px; padding-block: 18px 20px; }
+    .dm__fig { display: contents; }
+    .dm__mini { grid-column: 1; grid-row: 1 / span 2; }
+    .dm__rot { grid-row: 1; align-self: end; }
+    /* El plazo va en su renglón: "Paso 3 · 2 a 4 semanas" no cabe junto al dibujo a 360 px. */
+    .dm__dur { display: block; padding-left: calc(.62em + .75em); }
+    .dm__dur i { display: none; }
+    .dm__t { grid-row: 2; margin-top: 4px; }
+    .dm__cap { grid-column: 1 / -1; grid-row: 3; margin-top: 10px; }
+    .dm__d, .dm__r, .dm__ir { grid-column: 1 / -1; }
+    .dm__d { margin-top: 8px; font-size: var(--t-texto); line-height: 1.5; }
+    /* Aquí el filete de "Recibes" mediría lo mismo que el que separa los pasos: se quita. */
+    .dm__r { margin-top: 12px; padding-top: 0; border-top: 0; }
+    .dm__r .rotulo { margin-bottom: 2px; }
+    .dm__ir { margin-top: 4px; }
+    /* Sin dibujo: el rótulo y su plazo en un renglón, y todo en una columna. */
+    .dm__coda .dm__rot, .dm__beat--fin .dm__rot { grid-row: auto; align-self: start; }
+    .dm__coda .dm__dur, .dm__beat--fin .dm__dur { display: inline; padding-left: 0; }
+    .dm__coda .dm__dur i, .dm__beat--fin .dm__dur i { display: inline; }
+    .dm__coda .dm__t, .dm__beat--fin .dm__t { grid-row: auto; }
+    .dm__coda .dm__d, .dm__beat--fin .dm__d { margin-top: 10px; }
+  }
+</style>

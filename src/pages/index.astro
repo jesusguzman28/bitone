@@ -1,67 +1,318 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Hero from '../components/Hero.astro';
-import Servicios from '../components/Servicios.astro';
-import Proyectos from '../components/Proyectos.astro';
-import AppsProduccion from '../components/AppsProduccion.astro';
-import Resenas from '../components/Resenas.astro';
-import FAQ from '../components/FAQ.astro';
-import GuiasHome from '../components/GuiasHome.astro';
-import CTA from '../components/CTA.astro';
-import { site, faqs } from '../data/site';
+// Portada. Corta a propósito: cada sección dice una cosa y, si su página ya
+// existe, enlaza a ella. Orden: titular, sistema funcionando, qué hacemos, lo
+// construido, cómo trabajamos, lo que queda por escrito, personas, preguntas y cierre.
+// Aquí solo vive la composición de esta página; las piezas son componentes.
+import Base from '../layouts/Base.astro';
+import Friso from '../components/Friso.astro';
+import BotonWhatsApp from '../components/BotonWhatsApp.astro';
+import Icono from '../components/Icono.astro';
+import Rotulo from '../components/Rotulo.astro';
+import Signo from '../components/Signo.astro';
+import TituloSeccion from '../components/TituloSeccion.astro';
+import TableroEnVivo from '../components/TableroEnVivo.astro';
+import ParHoyDespues from '../components/ParHoyDespues.astro';
+import Puertas from '../components/Puertas.astro';
+import CasosAbiertos from '../components/CasosAbiertos.astro';
+import Franqueza from '../components/Franqueza.astro';
+import FilaLibro from '../components/FilaLibro.astro';
+import PasosTocapu from '../components/PasosTocapu.astro';
+import Cifras from '../components/Cifras.astro';
+import Hoja from '../components/Hoja.astro';
+import Equipo from '../components/Equipo.astro';
+import Dudas from '../components/Dudas.astro';
+import CierreWhatsApp from '../components/CierreWhatsApp.astro';
+import { empresa, pasos, compromisos, cuandoSaleElPrecio, paresDePortada, preguntasDePortada } from '../data/empresa';
+import { servicios, porNegocio, cuandoNo } from '../data/servicios';
+import { enTexto } from '../data/proyectos';
+import { paginas, existe, enlaceA } from '../data/navegacion';
 
-// Las preguntas frecuentes de la portada, en el mismo @graph que el resto. El
-// componente <FAQ> solo dibuja; el dato estructurado se declara aquí para que
-// la página tenga un único bloque de JSON-LD y el nodo pueda referenciarse por
-// @id como los demás.
-const schema = [
-  {
-    '@type': 'FAQPage',
-    '@id': site.domain + '/#faq',
-    mainEntity: faqs.map((f) => ({
-      '@type': 'Question',
-      name: f.q,
-      acceptedAnswer: { '@type': 'Answer', text: f.a },
-    })),
-  },
-];
+const internos = enTexto.filter((p) => p.acceso === 'interno');
+// La franja "por negocio" solo es un enlace cuando su página existe.
+const hayNegocios = existe(porNegocio.pagina.ruta);
+const Negocio = hayNegocios ? 'a' : 'div';
 ---
 
-<BaseLayout
-  schema={schema}
+<Base
+  titulo="Bit One: del desorden al sistema. Software a medida en Lima, Perú"
+  descripcion="Sistemas a medida, apps y automatización para negocios del Perú. Lo que hoy llevas en Excel, WhatsApp y cuadernos pasa a un sistema hecho para ti."
 >
-  <Hero />
-  <Servicios />
+  <!-- 1 · Portada -->
+  <section class="portada" aria-labelledby="titulo-portada">
+    <div class="reticula portada__r">
+      <h1 class="cartel portada__t" id="titulo-portada"><span>Del desorden</span> <span>al sistema.</span></h1>
+      <p class="portada__bajada">Lo que hoy llevas en <strong>Excel, WhatsApp y cuadernos</strong> pasa a un sistema hecho para tu negocio.</p>
+      <div class="portada__accion">
+        <BotonWhatsApp />
+        <a class="enlace" href="#en-vivo">Míralo funcionando<Icono nombre="abajo" /></a>
+      </div>
+      <p class="rotulo portada__datos">
+        <span>{empresa.ciudad}<i aria-hidden="true"> · </i>{empresa.horario}</span>
+        <span>{empresa.respuesta}</span>
+      </p>
+    </div>
+    <div class="portada__friso">
+      <Friso tipo="transito" columnas={18} filas={4} semilla={12} entrada class="portada__friso-ancho" />
+      <Friso tipo="transito" sentido="vertical" columnas={8} filas={4} semilla={4} tonoDeAbajo="tinta" entrada class="portada__friso-celular" />
+    </div>
+  </section>
 
-  {/* Los dos bloques de prueba, juntos y en este orden: primero las
-      plataformas con su dirección, después las apps que salieron de ellas con
-      su ficha de tienda. Van entre los servicios y las cifras a propósito —los
-      servicios dicen qué hacemos, las cifras dicen qué prometemos, y esto de en
-      medio es lo único que el visitante puede comprobar por su cuenta antes de
-      escribirnos—. Una promesa después de una prueba pesa bastante más que al
-      revés.
+  <!-- 2 · Míralo funcionando -->
+  <section class="seccion plano plano--tinta envivo" id="en-vivo" aria-labelledby="titulo-envivo">
+    <TituloSeccion
+      id="titulo-envivo"
+      rotulo="Un ejemplo, con datos de muestra"
+      titulo={['Tu negocio ya no', 'cabe en un Excel.']}
+      entrada="Mira el sistema de una distribuidora de abarrotes: haz que llegue un pedido."
+    />
+    <div class="reticula">
+      <TableroEnVivo class="envivo__tablero" />
+      <ParHoyDespues pares={paresDePortada} class="envivo__pares" />
+      <div class="envivo__nota" data-rev>
+        <Rotulo>El tuyo</Rotulo>
+        <p class="destacado">Se construye alrededor de cómo trabajas: tus productos, tus precios, tus reglas.</p>
+      </div>
+    </div>
+  </section>
 
-      Aquí arriba iba el banner de marcas, el carrusel con los logotipos. Se quitó
-      al entrar <Proyectos>: enseñaba exactamente los mismos cinco nombres
-      pasando de largo, sin decir qué es cada uno ni llevar a ninguna parte, y
-      tres pantallas más abajo volvían a salir con su descripción y su enlace.
-      Entre un nombre que desfila y una tarjeta que se puede abrir, no hay
-      discusión.
+  <!-- 3 · Qué hacemos -->
+  <section class="seccion oferta" id="servicios" aria-labelledby="titulo-oferta">
+    <TituloSeccion id="titulo-oferta" disposicion="pila" titulo={['Cuatro formas', 'de poner orden.']} />
+    <Puertas servicios={servicios} />
+    <Negocio class:list={['reticula', 'negocio', { 'negocio--abierto': hayNegocios }]} href={hayNegocios ? porNegocio.pagina.ruta : undefined} data-rev>
+      <Signo nombre={porNegocio.signo} tono={porNegocio.tono} class="negocio__signo" />
+      <h3 class="subtitulo negocio__q">{porNegocio.pregunta}</h3>
+      <p class="negocio__frase">{hayNegocios ? porNegocio.promesa : porNegocio.sinPagina}{hayNegocios && <Icono nombre="derecha" />}</p>
+    </Negocio>
+    <Franqueza titulo={cuandoNo.titulo} texto={cuandoNo.texto} nivel={0} class="oferta__franco" />
+  </section>
 
-      Y aquí iba también <SolucionesNegocio />: la parrilla de los 12 rubros
-      —pollerías, bodegas, barberías— que enlazaba a las landings de página web.
-      Se fue con ellas. */}
-  <Proyectos
-    title="Lo que hemos construido, con su dirección"
-    subtitle="Lo que ha construido esta empresa de desarrollo: plataformas públicas que puedes abrir ahora mismo e intranets con acceso por usuario. Entra y compruébalo tú."
-  />
-  <AppsProduccion />
+  <!-- 4 · Lo construido -->
+  <section class="seccion seccion--filete obra" id="construido" aria-labelledby="titulo-obra">
+    <TituloSeccion id="titulo-obra" rotulo="Lo que hemos construido" titulo={['No nos creas.', 'Ábrelo.']} />
 
-  {/* Va después de los números y antes de las preguntas: los números dicen lo
-      que prometemos nosotros, la reseña lo dice quien ya pagó. Mientras no haya
-      ninguna cargada, el componente no dibuja nada. */}
-  <Resenas />
-  <GuiasHome />
-  <FAQ />
-  <CTA />
-</BaseLayout>
+    <CasosAbiertos />
+
+    <div class="reticula mas">
+      <h3 class="subtitulo mas__t">Y dos sistemas de uso interno.</h3>
+      <!-- libro--nota: la lista ocupa la mitad derecha y su texto arranca en el módulo 12 -->
+      <ul class="libro libro--nota mas__lista">
+        {internos.map((p) => <FilaLibro titulo={p.nombre} rotulo={p.tipo} acento nivel={4} data-rev>{p.resumen}</FilaLibro>)}
+      </ul>
+      {existe(paginas.proyectos.ruta) && (
+        <a class="enlace mas__ir" href={paginas.proyectos.ruta}>{enlaceA.proyectos}<Icono nombre="derecha" /></a>
+      )}
+    </div>
+  </section>
+
+  <!-- 5 · Cómo trabajamos -->
+  <section class="seccion seccion--filete proceso" id="como-trabajamos" aria-labelledby="titulo-proceso">
+    <TituloSeccion id="titulo-proceso" disposicion="pila" rotulo="Cómo trabajamos" titulo={['Cada dos semanas,', 'algo funcionando.']} />
+    <PasosTocapu pasos={pasos} />
+  </section>
+
+  <!-- 6 · Precio: lo que queda por escrito. Es el único lugar de la portada que explica el precio. -->
+  <section class="plano plano--rojo acuerdo" id="precio" aria-labelledby="titulo-acuerdo">
+    <div class="reticula acuerdo__r">
+      <div class="acuerdo__cab">
+        <Rotulo>Precio y condiciones</Rotulo>
+        {/* "Antes de construir", no "antes de empezar": el precio fijo sale del paso 1, que
+            se paga. Es la misma palabra del titular de /como-trabajamos/. */}
+        <h2 class="titulo titulo--mayor acuerdo__t" id="titulo-acuerdo"><span class="renglon">Precio fijo.</span> <span class="renglon">Por escrito.</span> <span class="renglon">Antes de construir.</span></h2>
+      </div>
+      <div class="acuerdo__txt">
+        <p class="entrada">{cuandoSaleElPrecio}</p>
+        <Cifras cifras={compromisos} disposicion="filas" texto="frase" class="acuerdo__cifras" />
+        {existe(paginas.comoTrabajamos.ruta) && (
+          <a class="enlace acuerdo__ir" href={paginas.comoTrabajamos.ruta}>{enlaceA.comoTrabajamos}<Icono nombre="derecha" /></a>
+        )}
+      </div>
+      <Hoja breve nota="" class="acuerdo__hoja" data-rev />
+    </div>
+  </section>
+
+  <!-- 7 · Personas -->
+  <section class="seccion personas" id="nosotros" aria-labelledby="titulo-personas">
+    <div class="reticula personas__r">
+      <h2 class="subtitulo personas__t" id="titulo-personas">Hablas directo con quien hace tu sistema.</h2>
+      <Equipo class="personas__gente" />
+    </div>
+  </section>
+
+  <!-- 8 · Preguntas -->
+  <Dudas titulo={['Lo que todo dueño', 'pregunta antes.']} preguntas={preguntasDePortada} grupo="portada" />
+
+  <!-- 9 · Cierre -->
+  <CierreWhatsApp />
+</Base>
+
+<style>
+  /* Dos orígenes para toda la página: las mitades arrancan en el módulo 9 y las
+     notas laterales en el 12 (ver también TituloSeccion, Caso y CierreWhatsApp). */
+
+  /* ---------- 1 · portada ---------- */
+  .portada {
+    --filas: 3;
+    --t-bajada: clamp(1.125rem, calc(var(--u) * .275), 1.6rem);
+    /* Lo que sobra de alto en la primera pantalla una vez puestos el titular, la
+       bajada, el botón y el friso. Parte de eso va de aire sobre el titular, para que
+       no quede pegado a la cabecera cuando la ventana da para más. */
+    --sobra: calc(100svh - var(--cab) - var(--t-cartel) * 1.8 - var(--u) * (var(--filas) + .84) - var(--t-bajada) * 2.68 - 52px);
+    position: relative; z-index: 1;
+    padding-top: clamp(calc(var(--u) * .2), calc(var(--sobra) * .6), calc(var(--u) * .5));
+  }
+  .portada__r { align-items: start; }
+  .portada__t { grid-column: 1 / -1; margin-left: -.05em; }
+  .portada__accion { grid-column: 1 / 9; grid-row: 2 / 4; display: flex; align-items: center; flex-wrap: wrap; gap: 6px 28px; margin-top: calc(var(--u) * .42); }
+  /* La bajada arranca en la columna donde empieza el tejido del friso. */
+  .portada__bajada { grid-column: 9 / -1; grid-row: 2; margin-top: calc(var(--u) * .42); font-size: var(--t-bajada); line-height: 1.34; text-wrap: balance; }
+  .portada__bajada strong { font-weight: 700; }
+  .portada__datos { grid-column: 9 / -1; grid-row: 3; margin-top: 14px; color: var(--tinta-2); }
+  .portada__datos span { display: block; }
+  .portada__datos i { font-style: normal; opacity: .5; }
+
+  /* El friso muestra siempre filas enteras. Cuántas, según la forma de la ventana:
+     así titular, bajada y botón caben sin bajar en cualquier pantalla. */
+  .portada__friso { height: calc(var(--u) * var(--filas)); margin-top: calc(var(--u) * .42); }
+  .portada__friso :global(.portada__friso-celular) { display: none; }
+  .portada__friso :global([data-fila="4"]) { display: none; }
+  @media (min-width: 960px) and (min-aspect-ratio: 19/10) {
+    .portada { --filas: 2; }
+    .portada__friso :global([data-fila="3"]) { display: none; }
+  }
+  @media (min-width: 960px) and (max-aspect-ratio: 33/20) {
+    .portada { --filas: 4; }
+    .portada__friso :global([data-fila="4"]) { display: inline; }
+  }
+
+  @keyframes subir { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: no-preference) {
+    .portada__t span { animation: subir .56s var(--salida-larga) both; }
+    .portada__t span + span { animation-delay: .07s; }
+    .portada__accion, .portada__bajada, .portada__datos { animation: aparecer .45s ease .16s both; }
+  }
+
+  /* ---------- 2 · en vivo ---------- */
+  .envivo { padding-top: calc(var(--aire) * .9); }
+  .envivo :global(.envivo__tablero) { grid-column: 1 / -1; }
+  /* Los dos pares, en la mitad izquierda: arrancan en los módulos 1 y 5, los mismos ejes
+     de las puertas de la sección que sigue. */
+  .envivo :global(.envivo__pares) { grid-column: 1 / 9; margin-top: calc(var(--u) * .7); }
+  /* La nota comparte el filete de arriba con los dos pares: los tres abren en la misma línea. */
+  .envivo__nota { grid-column: 12 / -1; align-self: start; margin-top: calc(var(--u) * .7); padding-top: 18px; border-top: 1px solid var(--filete-fuerte); }
+  .envivo__nota .destacado { margin-top: 8px; }
+
+  /* ---------- 3 · qué hacemos ---------- */
+  /* La franja por tipo de negocio no es una puerta más: va aparte, con su filete y una pregunta. */
+  .negocio { align-items: center; margin-top: calc(var(--u) * .7); border-top: 1px solid var(--tinta); border-bottom: 1px solid var(--linea); text-decoration: none; }
+  .negocio :global(.negocio__signo) { grid-column: 1 / 2; }
+  .negocio__q { grid-column: 2 / 9; padding-inline: calc(var(--u) * .35); }
+  .negocio__frase { grid-column: 9 / -1; display: flex; align-items: center; justify-content: space-between; gap: 16px; color: var(--tinta-2); font-size: var(--t-entrada); }
+  .negocio__frase :global(svg) { flex: none; width: 20px; height: 20px; color: var(--tinta); transition: transform .2s var(--salida); }
+
+  /* La franqueza es un componente; aquí, solo su aire dentro de esta sección. */
+  .oferta :global(.oferta__franco) { margin-top: calc(var(--u) * 1.1); }
+
+  @media (hover: hover) and (pointer: fine) {
+    .negocio--abierto:hover .negocio__frase :global(svg) { transform: translateX(6px); }
+    .negocio--abierto:hover h3 { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .18em; text-decoration-color: var(--rojo); }
+  }
+
+  /* ---------- 4 · lo construido ---------- */
+  /* Los dos casos y sus escenas son un componente (CasosAbiertos). Los objetos se
+     salen del margen: la sección corta lo que sobra. */
+  .obra { overflow: hidden; }
+
+  .mas { margin-top: calc(var(--u) * 1.3); align-items: start; row-gap: 18px; }
+  .mas__t { grid-column: 1 / 8; }
+  .mas__lista { grid-column: 9 / -1; }
+  .mas__ir { grid-column: 9 / -1; justify-self: start; }
+
+  /* ---------- 6 · precio ---------- */
+  .acuerdo { padding-block: calc(var(--aire) * 1.05) calc(var(--aire) * 1.15); overflow: clip; }
+  .acuerdo__r { align-items: start; row-gap: calc(var(--u) * .7); }
+  .acuerdo__cab { grid-column: 1 / -1; }
+  .acuerdo__t { margin-top: clamp(14px, calc(var(--u) * .28), 26px); }
+  .acuerdo__t .renglon { white-space: nowrap; }
+  .acuerdo__txt { grid-column: 1 / 8; position: sticky; top: calc(var(--cab) + 40px); }
+  .acuerdo__txt .entrada { max-width: 27em; }
+  .acuerdo__txt :global(.acuerdo__cifras) { margin-top: calc(var(--u) * .5); }
+  .acuerdo__ir { margin-top: calc(var(--u) * .3); }
+  .acuerdo :global(.acuerdo__hoja) { grid-column: 9 / -1; }
+  /* El clímax de la página: en escritorio su titular sube a cartel menor (.titulo--mayor),
+     a todo el ancho. */
+
+  /* ---------- 7 · personas ---------- */
+  /* Rompe la fórmula "título a la izquierda, lista a la derecha": una fila de tres a todo el ancho. */
+  .personas__r { row-gap: calc(var(--u) * .5); }
+  .personas__t, .personas__r :global(.personas__gente) { grid-column: 1 / -1; }
+
+  /* ==========================================================================
+     Tableta: 700 a 959
+     ========================================================================== */
+  @media (max-width: 959px) {
+    .portada { padding-top: calc(var(--u) * .35); }
+    .portada__bajada { grid-column: 1 / 8; grid-row: 2; }
+    .portada__accion { grid-column: 1 / -1; grid-row: 3; }
+    .portada__datos { grid-column: 1 / -1; grid-row: 4; }
+    /* Se ve la franja central del friso: cinco columnas sueltas y cinco tejidas. Las
+       piezas sueltas de la columna que queda justo fuera (la cuarta) no se pintan: giradas,
+       asomaban una astilla por el borde izquierdo, que parecía un defecto. */
+    .portada__friso { overflow: hidden; margin-top: calc(var(--u) * .5); }
+    .portada__friso :global(.portada__friso-ancho) { width: 180%; margin-left: -40%; }
+    .portada__friso :global(.portada__friso-ancho [data-col="3"]) { display: none; }
+
+    .envivo :global(.envivo__pares), .envivo__nota { grid-column: 1 / -1; }
+    .envivo__nota { margin-top: calc(var(--u) * .3); }
+
+    .negocio :global(.negocio__signo) { grid-column: 1 / 2; grid-row: 1 / 3; }
+    .negocio__q { grid-column: 2 / -1; padding-block: 14px 0; }
+    .negocio__frase { grid-column: 2 / -1; padding: 4px calc(var(--u) * .35) 14px; font-size: var(--t-texto); }
+
+    .mas__t, .mas__lista, .mas__ir { grid-column: 1 / -1; }
+
+    .acuerdo__txt { grid-column: 1 / -1; position: static; }
+    .acuerdo :global(.acuerdo__hoja) { grid-column: 1 / -1; }
+  }
+  /* En tableta, "Antes de construir." (19 letras) va justo en los ocho módulos: con la
+     letra algo más angosta (el ancho del subtítulo) cabe con holgura, como el titular
+     del cierre. El tamaño no cambia. */
+  @media (min-width: 700px) and (max-width: 959px) {
+    .acuerdo__t { font-stretch: var(--ancho-subtitulo); }
+  }
+
+  /* ==========================================================================
+     Celular: hasta 699
+     ========================================================================== */
+  @media (max-width: 699px) {
+    .portada { --filas: 4; padding-top: 22px; }
+    .portada__bajada { grid-column: 1 / -1; margin-top: 16px; font-size: 1.0625rem; line-height: 1.4; }
+    .portada__accion { margin-top: 18px; flex-direction: column; align-items: stretch; gap: 0; }
+    .portada__accion .enlace { align-self: flex-start; }
+    .portada__datos { margin-top: 4px; }
+    .portada__friso { height: auto; margin-top: 18px; overflow: visible; }
+    .portada__friso :global(.portada__friso-ancho) { display: none; }
+    .portada__friso :global(.portada__friso-celular) { display: block; }
+    .portada__friso :global([data-fila="4"]) { display: inline; }
+
+    .envivo :global(.envivo__pares) { margin-top: 14px; }
+    .envivo__nota { margin-top: 4px; padding-top: 14px; }
+    .envivo__nota .destacado { margin-top: 4px; }
+
+    /* La quinta fila no es un servicio: aire, filete de tinta, signo chico y una pregunta. */
+    .negocio { margin-top: 22px; grid-template-columns: calc(var(--u) * .78) minmax(0, 1fr); column-gap: 14px; align-items: center; padding-block: 12px; }
+    .negocio :global(.negocio__signo) { grid-column: 1; grid-row: 1 / 3; }
+    .negocio__q { grid-column: 2; padding: 0; font-size: 1.0625rem; line-height: 1.2; }
+    .negocio__frase { grid-column: 2; padding: 3px 0 0; font-size: .875rem; line-height: 1.3; }
+    .oferta :global(.oferta__franco) { margin-top: calc(var(--u) * .55); }
+
+    .mas { margin-top: calc(var(--u) * .6); row-gap: 8px; }
+
+    .acuerdo { padding-block: var(--aire) calc(var(--aire) * 1.3); }
+    .acuerdo__r { row-gap: 16px; }
+    .acuerdo__txt :global(.acuerdo__cifras) { margin-top: 14px; }
+    .acuerdo__ir { margin-top: 8px; }
+
+    .personas__r { row-gap: 18px; }
+  }
+</style>

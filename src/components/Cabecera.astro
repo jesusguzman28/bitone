@@ -1,0 +1,212 @@
+---
+// Cabecera del sitio. Sale entera de data/navegacion.ts (mapa): solo pinta
+// enlaces que llevan a algún sitio. Los servicios que ya tienen página se agrupan
+// en un desplegable; mientras no haya ninguna, "Servicios" es un enlace a esa
+// sección de la portada.
+//   Escritorio: una línea. El desplegable es un <details>, que funciona sin
+//               JavaScript; el guion solo lo cierra al salir.
+//   Celular:    marca y el botón "Menú", que abre un <dialog> modal: el navegador
+//               atrapa el foco, Escape lo cierra y el foco vuelve al botón.
+import Logo from './Logo.astro';
+import Signo from './Signo.astro';
+import Icono from './Icono.astro';
+import BotonWhatsApp from './BotonWhatsApp.astro';
+import { empresa, enlaceWhatsApp } from '../data/empresa';
+import { mapa, esActual } from '../data/navegacion';
+import { servicios, porNegocio } from '../data/servicios';
+
+interface Props {
+  /** Ruta de la página que se está viendo (Astro.url.pathname). */
+  rutaActual: string;
+}
+
+const { rutaActual } = Astro.props;
+const actual = (ruta?: string) => (ruta && esActual(ruta, rutaActual) ? 'page' : undefined);
+const enServicios = mapa.servicios.some((p) => esActual(p.ruta, rutaActual));
+// El tono de cada signo en los menús es el mismo que en la portada.
+const tonoDe = (ruta: string) => servicios.find((s) => s.pagina.ruta === ruta)?.tono ?? porNegocio.tono;
+---
+
+<header class="cab">
+  <div class="cab__dentro">
+    <a class="cab__marca" href="/" aria-label="Bit One, ir al inicio"><Logo /></a>
+
+    <nav class="cab__nav" aria-label="Principal">
+      {mapa.servicios.length > 0 && (
+        <details class="cab__grupo" data-desplegable>
+          <summary class:list={[{ 'es-actual': enServicios }]}>Servicios<Icono nombre="abajo" class="cab__pico" /></summary>
+          <ul class="cab__lista">
+            {mapa.servicios.map((p) => (
+              <li>
+                <a href={p.ruta} aria-current={actual(p.ruta)}>
+                  <Signo nombre={p.signo} tono={tonoDe(p.ruta)} />
+                  <span><b>{p.nombre}</b><small>{p.frase}</small></span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+      {mapa.enlaces.map((e) => <a class="cab__enlace" href={e.href} aria-current={actual(e.ruta)}>{e.nombre}</a>)}
+    </nav>
+
+    <a class="cab__tel" href={enlaceWhatsApp()} target="_blank" rel="noopener">
+      <Icono nombre="whatsapp" /><span class="solo-lector">WhatsApp: </span>{empresa.telefono}
+    </a>
+
+    <button class="cab__menu" type="button" aria-haspopup="dialog" aria-controls="menu" data-abrir-menu>
+      Menú<Icono nombre="menu" />
+    </button>
+    <a class="cab__menu cab__menu--sin-js" href="#mapa">Menú<Icono nombre="abajo" /></a>
+  </div>
+
+  <dialog class="menu" id="menu" aria-label="Menú del sitio">
+    <div class="menu__cab">
+      <a class="cab__marca" href="/" aria-label="Bit One, ir al inicio"><Logo /></a>
+      <button class="cab__menu" type="button" autofocus data-cerrar-menu>Cerrar<Icono nombre="cerrar" /></button>
+    </div>
+    <nav class="menu__nav" aria-label="Menú">
+      {mapa.servicios.length > 0 && (
+        <Fragment>
+          <p class="rotulo menu__rot">Servicios</p>
+          <ul class="menu__servicios">
+            {mapa.servicios.map((p) => (
+              <li>
+                <a href={p.ruta} aria-current={actual(p.ruta)}>
+                  <Signo nombre={p.signo} tono={tonoDe(p.ruta) === 'tinta' ? 'papel' : tonoDe(p.ruta)} />
+                  <span>{p.nombre}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </Fragment>
+      )}
+      <ul class:list={['menu__otros', { 'menu__otros--solos': !mapa.servicios.length }]}>
+        {mapa.enlaces.map((e) => <li><a href={e.href} aria-current={actual(e.ruta)}>{e.nombre}</a></li>)}
+      </ul>
+    </nav>
+    <div class="menu__pie">
+      <BotonWhatsApp variante="rojo" />
+      <p class="rotulo">{empresa.ciudad} · {empresa.horario}</p>
+    </div>
+  </dialog>
+</header>
+
+<script>
+  // Menú de celular: el <dialog> ya resuelve foco, Escape y fondo inerte.
+  const menu = document.querySelector<HTMLDialogElement>('#menu');
+  const abrir = document.querySelector<HTMLButtonElement>('[data-abrir-menu]');
+  if (menu && abrir) {
+    abrir.addEventListener('click', () => { if (!menu.open) menu.showModal(); });
+    menu.querySelector('[data-cerrar-menu]')?.addEventListener('click', () => menu.close());
+    // Un enlace del menú lleva a otra página o a un ancla: en los dos casos el menú se cierra.
+    menu.addEventListener('click', (e) => { if ((e.target as Element).closest('a')) menu.close(); });
+    // Si la ventana crece hasta el tamaño de escritorio, el menú de celular no debe quedar abierto.
+    matchMedia('(min-width: 960px)').addEventListener('change', (e) => { if (e.matches && menu.open) menu.close(); });
+  }
+
+  // Desplegable de servicios: se cierra al hacer clic fuera, al salir con el teclado y con Escape.
+  const grupo = document.querySelector<HTMLDetailsElement>('[data-desplegable]');
+  if (grupo) {
+    const titular = grupo.querySelector('summary');
+    document.addEventListener('click', (e) => { if (grupo.open && !grupo.contains(e.target as Node)) grupo.open = false; });
+    // Al salir el foco se mira dónde quedó, un cuadro después y no con relatedTarget:
+    // Safari no da foco a un enlace al pulsarlo con el ratón, y cerrar en ese
+    // instante se comería el clic. Tampoco se cierra con el puntero dentro de la lista.
+    grupo.addEventListener('focusout', () => {
+      requestAnimationFrame(() => {
+        if (grupo.open && !grupo.contains(document.activeElement) && !grupo.matches(':hover')) grupo.open = false;
+      });
+    });
+    grupo.addEventListener('keydown', (e) => { if (e.key === 'Escape' && grupo.open) { grupo.open = false; titular?.focus(); } });
+  }
+</script>
+
+<style>
+  .cab { position: sticky; top: 0; z-index: var(--z-cab); background: var(--hueso); border-bottom: 1px solid var(--linea); }
+  /* Ventana muy baja (zoom del 400 %): la cabecera se va con la página y deja sitio al contenido. */
+  @media (max-height: 420px) { .cab { position: static; } }
+  .cab__dentro { display: flex; align-items: center; gap: clamp(16px, 2.4cqw, 40px); height: var(--cab); margin-inline: var(--m); }
+  .cab__marca { display: flex; align-items: center; min-height: 44px; margin-right: auto; }
+
+  .cab__nav { display: flex; align-items: center; gap: clamp(18px, 2.2cqw, 34px); }
+  .cab__enlace, .cab__grupo summary {
+    position: relative; display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+    font-size: .9688rem; font-weight: 550; text-decoration: none; white-space: nowrap; cursor: pointer;
+  }
+  .cab__enlace::after, .cab__grupo summary::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 8px; height: 2px; background: var(--rojo);
+    transform: scaleX(0); transform-origin: left; transition: transform .22s var(--salida);
+  }
+  .cab__enlace[aria-current="page"]::after, .cab__grupo summary.es-actual::after, .cab__grupo[open] summary::after { transform: none; }
+  .cab__grupo { position: relative; }
+  .cab__grupo summary { list-style: none; }
+  .cab__grupo summary::-webkit-details-marker { display: none; }
+  .cab__grupo :global(.cab__pico) { width: 12px; height: 12px; transition: transform var(--d-corta) var(--salida); }
+  .cab__grupo[open] :global(.cab__pico) { transform: rotate(180deg); }
+
+  .cab__lista {
+    position: absolute; top: calc(100% + 10px); left: -20px; width: 428px; padding: 8px;
+    background: var(--papel); border: 1px solid var(--tinta);
+  }
+  .cab__lista a { display: grid; grid-template-columns: 44px 1fr; align-items: center; gap: 14px; padding: 8px; text-decoration: none; transition: background-color var(--d-toque) ease; }
+  .cab__lista b { display: block; font-weight: 650; font-stretch: 106%; letter-spacing: -.01em; line-height: 1.2; }
+  .cab__lista small { display: block; margin-top: 2px; font-size: .875rem; line-height: 1.3; color: var(--tinta-2); }
+  .cab__lista a[aria-current="page"] b { text-decoration: underline; text-decoration-color: var(--rojo); text-decoration-thickness: 2px; text-underline-offset: .25em; }
+
+  .cab__tel { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; font: 600 .8125rem/1 var(--f-mono); font-stretch: 87.5%; letter-spacing: .02em; text-decoration: none; white-space: nowrap; }
+  /* El teléfono es un dato, no un botón: va en tinta. El rojo queda para el botón principal. */
+  .cab__tel :global(svg) { width: 18px; height: 18px; transition: transform .2s var(--salida); }
+
+  .cab__menu { display: none; align-items: center; gap: 10px; height: 44px; padding: 0 2px 0 10px; border: 0; background: none; font-weight: 650; font-size: 1rem; }
+  .cab__menu :global(svg) { width: 20px; height: 20px; }
+
+  @media (hover: hover) and (pointer: fine) {
+    .cab__enlace:hover::after, .cab__grupo summary:hover::after { transform: none; }
+    .cab__lista a:hover { background: var(--arena); }
+    .cab__tel:hover { text-decoration: underline; text-underline-offset: .3em; }
+    .cab__tel:hover :global(svg) { transform: scale(1.1); }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .cab__grupo[open] .cab__lista { animation: baja .2s var(--salida); }
+    .menu[open] { animation: baja var(--d-corta) var(--salida); }
+  }
+  @keyframes baja { from { opacity: 0; transform: translateY(-6px); } }
+
+  /* Tableta y celular: la navegación pasa al menú. */
+  @media (max-width: 959px) {
+    .cab__nav, .cab__tel { display: none; }
+    .cab__menu { display: inline-flex; }
+    .cab__menu--sin-js { display: none; text-decoration: none; }
+    :global(html:not(.js)) .cab__menu--sin-js { display: inline-flex; }
+    :global(html:not(.js)) .cab__menu[data-abrir-menu] { display: none; }
+  }
+
+  /* ---------- el menú de celular ---------- */
+  .menu {
+    --foco: var(--hueso);
+    /* El mismo margen que la página, para que la marca no salte al abrir. */
+    --mm: calc(100vw / 10);
+    inset: 0; width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 0 var(--mm) calc(24px + env(safe-area-inset-bottom, 0px));
+    border: 0; background: var(--tinta); color: var(--hueso); overflow-y: auto;
+  }
+  .menu:not([open]) { display: none; }
+  @media (max-width: 699px) { .menu { --mm: calc(100vw / 22); } }
+  .menu::backdrop { background: var(--tinta); }
+  .menu__cab { display: flex; align-items: center; height: var(--cab); }
+  .menu .cab__menu { display: inline-flex; color: var(--hueso); }
+  .menu__rot { margin: 18px 0 8px; color: var(--hueso-2); }
+  .menu__servicios { border-top: 1px solid var(--linea-clara); }
+  .menu__servicios a { display: grid; grid-template-columns: 44px 1fr; align-items: center; gap: 16px; min-height: 60px; border-bottom: 1px solid var(--linea-clara); font-weight: 700; font-stretch: 110%; font-size: 1.25rem; letter-spacing: -.025em; text-decoration: none; }
+  .menu__otros { margin-top: 10px; }
+  .menu__otros a { display: flex; align-items: center; min-height: 48px; font-weight: 600; font-size: 1.125rem; text-decoration: none; }
+  /* Mientras no haya páginas de servicio, estos enlaces son todo el menú: van grandes. */
+  .menu__otros--solos { margin-top: 18px; border-top: 1px solid var(--linea-clara); }
+  .menu__otros--solos a { min-height: 60px; border-bottom: 1px solid var(--linea-clara); font-weight: 700; font-stretch: 110%; font-size: 1.25rem; letter-spacing: -.025em; }
+  /* La página actual se marca con un filo rojo (no con oro), dibujado en el margen del
+     menú: la fila no se mueve y su signo y su nombre siguen en la columna de las demás. */
+  .menu a[aria-current="page"] { position: relative; }
+  .menu a[aria-current="page"]::before { content: ""; position: absolute; left: -14px; top: 0; bottom: 0; width: 4px; background: var(--rojo); }
+  .menu__pie { margin-top: 22px; }
+  .menu__pie .rotulo { margin-top: 16px; color: var(--hueso-2); }
+</style>

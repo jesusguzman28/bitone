@@ -1,0 +1,308 @@
+---
+// La cuenta: el momento propio de /automatizacion/. Quien lee pone cuántas horas a la
+// semana se le van en una tarea y ve cuántas son al año y cuántos días de trabajo.
+// Es solo aritmética con su número: horas x 52 semanas, y eso entre 8 horas por día.
+// No promete ahorro (el brief lo prohíbe): dice lo que hoy se va, y que no todo vuelve.
+//
+// El dibujo es un plano de 260 módulos, 26 por fila: cada uno es un día de trabajo,
+// cada fila son cuatro horas a la semana y el plano entero es un año. Se llenan de
+// izquierda a derecha, en hueso: aquí el rojo queda para lo que se toca (la barra, la
+// tecla marcada, el botón) y no se confunde con el campo rojo de la IA, más abajo.
+// Con una hora impar el último módulo queda a la mitad.
+//
+// El número con el que arranca es un ejemplo y va rotulado así. No se escribe en el
+// mensaje de WhatsApp hasta que la persona toca las horas, y mientras tanto el botón
+// no dice "mi cuenta". Tocar es mover la barra, usar los botones o tocar la barra o el
+// número sin cambiarlos (quien de verdad pierde las horas del ejemplo las acepta así).
+// Desde ahí el rótulo dice "Tu cuenta" y el botón lleva su número y su tarea.
+//
+// Sin JavaScript no hay mandos (no harían nada): queda el ejemplo, rotulado, y el botón
+// abre WhatsApp con el mensaje de la página. Solo se mueven transform y opacity.
+// Trae su sección y su plano (tinta): va tal cual, entre dos secciones claras.
+import Rotulo from '../Rotulo.astro';
+import Icono from '../Icono.astro';
+import BotonWhatsApp from '../BotonWhatsApp.astro';
+import { automatizacion } from '../../data/automatizacion';
+import { mensajes } from '../../data/empresa';
+
+interface Props {
+  /** id de la sección: la portada baja hasta aquí. */
+  id?: string;
+}
+
+const { id = 'cuenta' } = Astro.props;
+const d = automatizacion.cuenta;
+const teclas = automatizacion.casos.lista;
+const { min, max, ejemplo } = d.horas;
+
+// Un módulo por día de trabajo: con el máximo de horas se llena el plano entero.
+const COLUMNAS = 26;
+const modulos = Math.ceil((max * d.semanas) / d.jornada);
+const anio = ejemplo * d.semanas;
+const dias = anio / d.jornada;
+const llenos = Math.floor(dias);
+const medio = dias > llenos;
+---
+
+<section
+  class="cuenta plano plano--tinta" id={id} aria-labelledby={`t-${id}`} data-cuenta
+  data-base={mensajes.automatizacion} data-otra={d.tarea.otra} data-semanas={d.semanas} data-jornada={d.jornada}
+  data-propia={d.estado.propia} data-boton-propia={d.boton.propia} data-nota-propia={d.nota.propia}
+>
+  <div class="reticula cuenta__r">
+    <header class="cuenta__cab">
+      <Rotulo>{d.rotulo}</Rotulo>
+      <h2 class="titulo cuenta__t" id={`t-${id}`}>
+        {d.titulo.map((r, i) => <><span class="renglon">{r}</span>{i < d.titulo.length - 1 && ' '}</>)}
+      </h2>
+      <p class="entrada cuenta__e">{d.entrada}</p>
+    </header>
+
+    <div class="cuenta__mandos">
+      <fieldset class="tarea">
+        <legend class="solo-lector">{d.tarea.leyenda}</legend>
+        <p class="rotulo tarea__rot" aria-hidden="true">{d.tarea.leyenda}</p>
+        <div class="tarea__teclas">
+          {teclas.map((t) => (
+            <label class="tecla">
+              <input class="solo-lector" type="radio" name={`${id}-tarea`} value={t.id} data-dice={t.dice} />
+              <span class="tecla__cara"><i class="tecla__marca" aria-hidden="true"></i>{t.tecla}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <div class="horas">
+        <!-- El rótulo y el número son la etiqueta de la barra: tocarlos es tocar la barra. -->
+        <label class="horas__cab" for={`${id}-horas`}>
+          <span class="rotulo horas__rot">{d.horas.rotulo}</span>
+          <span class="horas__valor" aria-hidden="true" data-horas>{ejemplo}</span>
+        </label>
+        <button class="horas__paso" type="button" data-paso="-1" aria-label={d.horas.menos}><Icono nombre="menos" /></button>
+        <input class="horas__barra" id={`${id}-horas`} type="range" min={min} max={max} step="1" value={ejemplo} aria-valuetext={`${ejemplo} horas a la semana`} />
+        <button class="horas__paso" type="button" data-paso="1" aria-label={d.horas.mas}><Icono nombre="mas" /></button>
+      </div>
+    </div>
+
+    <div class="cuenta__salida">
+      <p class="rotulo cuenta__estado">
+        <i class="cuenta__pt" aria-hidden="true"></i><span data-estado>{d.estado.ejemplo}</span><i class="cuenta__sep" aria-hidden="true"> · </i><span data-regla>{ejemplo} horas × {d.semanas} semanas</span>
+      </p>
+      <output class="suma" for={`${id}-horas`}>
+        <span class="suma__n" data-anio>{anio}</span>
+        <span class="suma__u">{d.anio}</span>
+        <span class="suma__d"><i class="suma__pt" aria-hidden="true"></i><span><b data-dias>{llenos} días{medio && ' y medio'}</b> {d.dias}</span></span>
+      </output>
+      <div class="dias" aria-hidden="true" data-plano data-rev style={`--cols:${COLUMNAS}`}>
+        {Array.from({ length: modulos }, (_, i) => <i class:list={{ lleno: i < llenos, medio: medio && i === llenos }} style={`--i:${i}`}></i>)}
+      </div>
+      <p class="rotulo cuenta__cuadro">{d.cuadro}</p>
+      <p class="menor cuenta__franca">{d.franca}</p>
+    </div>
+
+    <div class="cuenta__accion">
+      <BotonWhatsApp variante="rojo" mensaje={mensajes.automatizacion} texto={d.boton.ejemplo} />
+      <p class="menor cuenta__nota" data-nota>{d.nota.ejemplo}</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Pone al día la cuenta, el plano de días y el mensaje de WhatsApp. El ejemplo no se
+  // envía: el mensaje lleva las horas solo cuando la persona ya puso las suyas.
+  for (const raiz of document.querySelectorAll<HTMLElement>('[data-cuenta]')) {
+    const barra = raiz.querySelector<HTMLInputElement>('input[type="range"]');
+    if (!barra) continue;
+    const tareas = [...raiz.querySelectorAll<HTMLInputElement>('input[type="radio"]')];
+    const boton = raiz.querySelector<HTMLAnchorElement>('a[data-wa]');
+    const plano = raiz.querySelector<HTMLElement>('[data-plano]');
+    const modulos = plano ? [...plano.children] : [];
+    const en = (nombre: string) => raiz.querySelector<HTMLElement>(`[data-${nombre}]`);
+    const [vHoras, vAnio, vDias, vEstado, vRegla, vNota] = ['horas', 'anio', 'dias', 'estado', 'regla', 'nota'].map(en);
+    // El texto del botón: su primer nodo de texto (lo demás es el aviso para lector de pantalla).
+    const rotuloBoton = [...(boton?.querySelector('.boton__txt')?.childNodes ?? [])].find((n) => n.nodeType === Node.TEXT_NODE);
+    const base = boton?.href.split('?')[0];
+    const semanas = Number(raiz.dataset.semanas);
+    const jornada = Number(raiz.dataset.jornada);
+    let propia = false;
+
+    const pintar = () => {
+      const h = Number(barra.value);
+      const anio = h * semanas;
+      const dias = anio / jornada;
+      const llenos = Math.floor(dias);
+      const medio = dias > llenos;
+      const horas = h === 1 ? '1 hora' : `${h} horas`;
+
+      if (vHoras) vHoras.textContent = String(h);
+      if (vAnio) vAnio.textContent = String(anio);
+      if (vDias) vDias.textContent = `${llenos} días${medio ? ' y medio' : ''}`;
+      if (vRegla) vRegla.textContent = `${horas} × ${semanas} semanas`;
+      // Mientras es el ejemplo, el botón y la nota no prometen una cuenta que no va en el mensaje.
+      if (propia) {
+        if (vEstado) vEstado.textContent = raiz.dataset.propia ?? '';
+        if (rotuloBoton) rotuloBoton.textContent = raiz.dataset.botonPropia ?? '';
+        if (vNota) vNota.textContent = raiz.dataset.notaPropia ?? '';
+      }
+      raiz.classList.toggle('propia', propia);
+      barra.setAttribute('aria-valuetext', `${horas} a la semana`);
+      modulos.forEach((m, i) => {
+        m.classList.toggle('lleno', i < llenos);
+        m.classList.toggle('medio', medio && i === llenos);
+      });
+
+      const tarea = tareas.find((t) => t.checked)?.dataset.dice;
+      let mensaje = raiz.dataset.base ?? '';
+      if (propia) mensaje += `. ${h === 1 ? 'Se nos va 1 hora' : `Se nos van ${h} horas`} a la semana en ${tarea ?? raiz.dataset.otra}: ${anio} horas al año.`;
+      else if (tarea) mensaje += `. Hoy hacemos a mano: ${tarea}.`;
+      if (boton && base) boton.href = `${base}?text=${encodeURIComponent(mensaje)}`;
+    };
+
+    // Desde que la persona cambia las horas, la cuenta es suya. El plano deja de entrar
+    // módulo por módulo: al arrastrar, responde al momento.
+    const tocar = () => {
+      propia = true;
+      plano?.classList.remove('espera');
+    };
+
+    barra.addEventListener('input', () => { tocar(); pintar(); });
+    // Aceptar el número del ejemplo: tocar la barra sin moverla, o su rótulo y su número
+    // (son su etiqueta: el clic llega a la barra). Con teclado, Enter sobre la barra.
+    const aceptar = () => {
+      if (propia) return;
+      tocar();
+      pintar();
+    };
+    barra.addEventListener('click', aceptar);
+    barra.addEventListener('pointerup', aceptar);
+    barra.addEventListener('keydown', (e) => { if (e.key === 'Enter') aceptar(); });
+    for (const paso of raiz.querySelectorAll<HTMLButtonElement>('[data-paso]')) {
+      paso.addEventListener('click', () => {
+        if (paso.dataset.paso === '1') barra.stepUp(); else barra.stepDown();
+        tocar();
+        pintar();
+      });
+    }
+    for (const t of tareas) t.addEventListener('change', pintar);
+    // Al volver atrás el navegador repone las horas y la tarea: la cuenta se pone al día.
+    addEventListener('pageshow', () => {
+      if (barra.value !== barra.defaultValue) tocar();
+      pintar();
+    });
+  }
+</script>
+
+<style>
+  /* ---------- la composición (escritorio) ----------
+     Dos mitades sobre los dos ejes del sitio. A la izquierda, lo que se pregunta: el
+     titular, los mandos y el botón. Desde el módulo 9, lo que sale: la cifra y el plano
+     de días. El rótulo de cada mitad comparte renglón, y el titular y la cifra arrancan
+     a la misma altura. */
+  .cuenta { padding-block: var(--aire); }
+  .cuenta__r { align-items: start; grid-template-rows: auto auto 1fr; }
+  .cuenta__cab { grid-column: 1 / 8; grid-row: 1; }
+  .cuenta__t { margin-top: clamp(14px, calc(var(--u) * .28), 26px); }
+  .cuenta__e { margin-top: clamp(14px, calc(var(--u) * .28), 24px); }
+  .cuenta__mandos { grid-column: 1 / 8; grid-row: 2; display: grid; grid-template-columns: minmax(0, 1fr); row-gap: clamp(20px, calc(var(--u) * .36), 30px); margin-top: var(--aire-corto); }
+  /* La nota va siempre debajo del botón: el texto del botón cambia de largo cuando la
+     cuenta pasa a ser tuya, y así nada más se mueve de sitio. */
+  .cuenta__accion { grid-column: 1 / 8; grid-row: 3; align-self: end; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: start; row-gap: 10px; margin-top: calc(var(--u) * .55); }
+  .cuenta__salida { grid-column: 9 / -1; grid-row: 1 / span 3; }
+  .cuenta__nota { color: var(--texto-2); }
+  /* Sin guion los mandos no harían nada y la nota no sería verdad. */
+  :global(html:not(.js)) .cuenta__mandos, :global(html:not(.js)) .cuenta__nota { display: none; }
+
+  /* ---------- la tarea: cuatro teclas, huecas hasta que se marca una ---------- */
+  .tarea { min-width: 0; margin: 0; padding: 0; border: 0; }
+  .tarea__rot, .horas__rot { color: var(--texto-2); }
+  .tarea__teclas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-top: 10px; }
+  .tecla { position: relative; display: block; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .tecla__cara {
+    display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 6px 14px;
+    box-shadow: inset 0 0 0 1px var(--hueso-2); font-weight: 600; font-size: var(--t-menor); line-height: 1.2;
+    transition: background-color var(--d-toque) ease, color var(--d-toque) ease, transform .14s var(--salida);
+  }
+  .tecla__marca { flex: none; width: 10px; height: 10px; box-shadow: inset 0 0 0 1.5px currentColor; }
+  .tecla input:checked + .tecla__cara { background: var(--hueso); color: var(--tinta); box-shadow: none; }
+  .tecla input:checked + .tecla__cara .tecla__marca { background: var(--rojo); box-shadow: none; }
+  .tecla input:focus-visible + .tecla__cara { outline: 2px solid var(--foco); outline-offset: 2px; }
+
+  /* ---------- las horas: menos, la barra y más; el número, arriba a la derecha ---------- */
+  .horas { display: grid; grid-template-columns: 48px minmax(0, 1fr) 48px; align-items: center; column-gap: 16px; row-gap: 8px; }
+  .horas__cab { grid-column: 1 / -1; display: flex; align-items: baseline; justify-content: space-between; gap: 16px; cursor: pointer; }
+  .horas__valor { font-weight: 800; font-stretch: 120%; font-size: var(--t-subtitulo); line-height: 1; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+  .horas__paso {
+    display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border: 0; border-radius: 0;
+    background: none; color: var(--texto); box-shadow: inset 0 0 0 1.5px var(--texto);
+    transition: background-color var(--d-toque) ease, color var(--d-toque) ease, transform .14s var(--salida);
+  }
+  .horas__paso :global(svg) { width: 18px; height: 18px; }
+  /* La barra: una línea y un módulo rojo, que es lo que se mueve. */
+  .horas__barra { -webkit-appearance: none; appearance: none; display: block; width: 100%; min-width: 0; height: 48px; margin: 0; padding: 0; border-radius: 0; background: none; cursor: pointer; }
+  .horas__barra::-webkit-slider-runnable-track { height: 2px; background: var(--hueso-2); }
+  .horas__barra::-moz-range-track { height: 2px; background: var(--hueso-2); }
+  .horas__barra::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 28px; height: 28px; margin-top: -13px; border: 0; border-radius: 0; background: var(--rojo); }
+  .horas__barra::-moz-range-thumb { width: 28px; height: 28px; border: 0; border-radius: 0; background: var(--rojo); }
+  .horas__barra:focus-visible { outline: 2px solid var(--foco); outline-offset: 2px; }
+
+  /* ---------- lo que sale: la cifra y el plano de días ---------- */
+  .cuenta__estado { color: var(--texto-2); }
+  /* El punto del rótulo: hueco mientras es un ejemplo, lleno cuando la cuenta es tuya. */
+  .cuenta__pt { display: inline-block; width: .62em; height: .62em; margin-right: .75em; vertical-align: .02em; box-shadow: inset 0 0 0 1.5px currentColor; }
+  .cuenta.propia .cuenta__pt { background: var(--rojo); box-shadow: none; }
+  .cuenta__sep { font-style: normal; opacity: .5; }
+  .suma { display: grid; grid-template-columns: minmax(0, 1fr); margin-top: clamp(8px, calc(var(--u) * .16), 14px); }
+  /* La cifra más grande de la página. Los dígitos ocupan lo mismo: nada salta al cambiar. */
+  .suma__n { margin-left: -.05em; font-weight: 800; font-stretch: var(--ancho-cartel); font-size: var(--t-cartel); line-height: .9; letter-spacing: -.045em; font-variant-numeric: tabular-nums; }
+  .suma__u { margin-top: .16em; font-weight: 750; font-stretch: var(--ancho-subtitulo); font-size: var(--t-subtitulo); line-height: 1.04; letter-spacing: -.032em; }
+  .suma__d { display: flex; align-items: center; gap: .55em; margin-top: clamp(18px, calc(var(--u) * .4), 30px); font-size: var(--t-destacado); line-height: 1.15; letter-spacing: -.02em; white-space: nowrap; }
+  .suma__d b { font-weight: 750; font-stretch: 108%; }
+  /* El punto es la clave del plano: lleva el color de un día lleno. */
+  .suma__pt { flex: none; width: .62em; height: .62em; background: var(--texto); }
+
+  .dias { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: 3px; margin-top: 12px; }
+  .dias i { position: relative; aspect-ratio: 1; box-shadow: inset 0 0 0 1px var(--filete); }
+  /* Los días que se van, en hueso lleno. El rojo queda para lo que se toca. */
+  .dias i::before { content: ""; position: absolute; inset: 0; background: var(--texto); opacity: 0; }
+  .dias .lleno::before { opacity: 1; }
+  .dias .medio::before { opacity: 1; transform: scaleX(.5); transform-origin: 0 50%; }
+  .cuenta__cuadro { margin-top: 10px; color: var(--texto-2); }
+  .cuenta__franca { margin-top: clamp(12px, calc(var(--u) * .24), 20px); max-width: 30em; color: var(--texto-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .dias i::before { transition: opacity .16s ease; }
+    /* Al entrar en pantalla los días del ejemplo se llenan uno por uno, una sola vez. */
+    .dias.espera .lleno::before, .dias.espera .medio::before { opacity: 0; }
+    .dias.espera.visto .lleno::before, .dias.espera.visto .medio::before { opacity: 1; transition-delay: calc(var(--rd, 0ms) + var(--i) * 14ms); }
+    .tecla:active .tecla__cara, .horas__paso:active { transform: scale(.97); }
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .tecla:hover input:not(:checked) + .tecla__cara { box-shadow: inset 0 0 0 2px var(--hueso); }
+    .horas__paso:hover { background: var(--texto); color: var(--fondo); }
+  }
+
+  /* ---------- tableta: una columna; las cuatro teclas en un renglón ---------- */
+  @media (max-width: 959px) {
+    .cuenta__r { grid-template-rows: none; }
+    .cuenta__cab, .cuenta__mandos, .cuenta__salida, .cuenta__accion { grid-column: 1 / -1; grid-row: auto; }
+    .cuenta__salida { margin-top: calc(var(--u) * .6); }
+    .cuenta__accion { align-self: start; }
+    .tarea__teclas { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+
+  /* ---------- celular: las horas, la cifra y el plano caben juntos en la pantalla ---------- */
+  @media (max-width: 699px) {
+    .cuenta__e { margin-top: 10px; font-size: var(--t-texto); }
+    .cuenta__mandos { margin-top: 20px; row-gap: 18px; }
+    .tarea__teclas { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 8px; }
+    .tecla__cara { min-height: 46px; padding-inline: 12px; }
+    .horas { column-gap: 14px; row-gap: 6px; }
+    .cuenta__salida { margin-top: 26px; }
+    .suma__n { font-size: calc(var(--t-cartel) * 1.4); }
+    .suma__d { margin-top: 16px; }
+    .dias { gap: 2px; margin-top: 10px; }
+    .cuenta__cuadro { margin-top: 8px; }
+    .cuenta__franca { margin-top: 10px; }
+    .cuenta__accion { justify-items: stretch; row-gap: 8px; margin-top: 20px; }
+  }
+</style>

@@ -1,0 +1,134 @@
+---
+// Proyectos: la vitrina. Aquí mandan los objetos.
+//   1 · Los dos proyectos que tienen algo que abrir, con sus capturas reales y sus apps
+//       de Google Play. ApuraY: laptop y celular que se salen por la derecha; en
+//       escritorio la laptop monta un módulo entero sobre la cenefa de la portada.
+//       MindBlock: un monitor dentro del margen, sin los robots (salen justo debajo).
+//       Los compone esta página con CasoVitrina (components/proyectos/): es un Caso
+//       con el texto siempre en un origen de mitad y los objetos que pueden montar.
+//   2 · El momento propio (FueraDePantalla): la placa y los robots de MindBlock sobre
+//       un plano tinta. Los robots cuelgan del plano.
+//   3 · Los demás, en texto y a todo el ancho (sin captura ni enlace: ver
+//       data/proyectos.ts). La última fila es la del lector: "El tuyo".
+// Las apps van con su proyecto: no hay otra lista aparte (esa es de /apps/).
+// Sin años, tecnologías, cifras ni "clientes": se describe qué hace cada sistema.
+import Base from '../layouts/Base.astro';
+import PortadaInterior from '../components/PortadaInterior.astro';
+import CasoVitrina from '../components/proyectos/CasoVitrina.astro';
+import FueraDePantalla from '../components/proyectos/FueraDePantalla.astro';
+import Escena from '../components/Escena.astro';
+import Dispositivo from '../components/Dispositivo.astro';
+import Icono from '../components/Icono.astro';
+import FilaLibro from '../components/FilaLibro.astro';
+import CierreWhatsApp from '../components/CierreWhatsApp.astro';
+import { paginas, destino } from '../data/navegacion';
+import { apuray, mindblock, apps, enTexto, vitrina as d } from '../data/proyectos';
+
+const pagina = paginas.proyectos;
+const appsDe = (...nombres: string[]) => apps.filter((a) => nombres.includes(a.nombre));
+const tuyo = d.otros.tuyo;
+---
+
+<Base
+  titulo="Proyectos: lo que hemos construido"
+  descripcion={d.portada.descripcion}
+  signo={pagina.signo}
+  mensajeWhatsApp={d.portada.mensaje}
+>
+  <PortadaInterior
+    signo={pagina.signo}
+    tono="papel"
+    rotulo={pagina.nombre}
+    titulo={d.portada.titulo}
+    entrada={d.portada.entrada}
+    mensaje={d.portada.mensaje}
+    textoBoton={d.portada.boton}
+  />
+
+  <!-- 1 · Los dos que tienen algo que abrir. Las dos capturas de ApuraY entran en la
+       primera pantalla: son las únicas con prioridad. -->
+  <div class="seccion obra" id="abiertos">
+    <CasoVitrina proyecto={apuray} lado="derecha" apps={appsDe('Mi Tienda AP', 'Apuray')} monta>
+      <Escena sangra="derecha">
+        <Dispositivo tipo="laptop" imagen={apuray.web.imagen} alt={apuray.web.alt} anchos={[640, 960, 1440]} tamanos="(max-width: 699px) 78vw, (max-width: 959px) 74vw, 51vw" prioridad class="obra__laptop" />
+        <Dispositivo tipo="celular" imagen={apuray.celular.imagen} alt={apuray.celular.alt} anchos={[240, 390, 780]} tamanos="(max-width: 699px) 25vw, (max-width: 959px) 18vw, 12vw" prioridad data-en="abajo-izquierda" class="obra__celular" />
+      </Escena>
+    </CasoVitrina>
+
+    <CasoVitrina proyecto={mindblock} lado="izquierda" apps={appsDe('TiniBot')}>
+      <Dispositivo tipo="monitor" imagen={mindblock.juegos.imagen} alt={mindblock.juegos.alt} encaje="entera" fondo={mindblock.juegos.fondo} anchos={[480, 760]} tamanos="(max-width: 699px) 89vw, (max-width: 959px) 78vw, 38vw" />
+    </CasoVitrina>
+  </div>
+
+  <!-- 2 · Lo que no se queda en la pantalla: la placa y los robots -->
+  <FueraDePantalla id="robot" />
+
+  <!-- 3 · Los demás, en texto. Y el del lector -->
+  <section class="seccion mas" id="mas" aria-labelledby="t-mas">
+    <div class="reticula mas__r">
+      <h2 class="subtitulo mas__t" id="t-mas">
+        {d.otros.titulo.map((r, i) => <><span class="renglon">{r}</span>{i < d.otros.titulo.length - 1 && ' '}</>)}
+      </h2>
+      <p class="suave mas__nota">{d.otros.nota}</p>
+      <!-- libro--mitades: el nombre en la primera mitad y el texto desde el módulo 9; los
+           enlaces de "El tuyo" van bajo su texto, en ese mismo eje -->
+      <ul class="libro libro--mitades todo mas__libro">
+        {enTexto.map((p) => <FilaLibro titulo={p.nombre} rotulo={p.tipo} acento data-rev>{p.resumen}</FilaLibro>)}
+        <FilaLibro titulo={tuyo.nombre} rotulo={tuyo.rotulo} acento class="mas__tuyo" data-rev>
+          {tuyo.texto}
+          <div slot="fin" class="mas__enlaces">
+            <a class="enlace menor" href={destino(paginas.negocios)}>{tuyo.enlaces.rubro}<Icono nombre="derecha" /></a>
+            <a class="enlace menor" href={destino(paginas.comoTrabajamos)}>{tuyo.enlaces.proceso}<Icono nombre="derecha" /></a>
+          </div>
+        </FilaLibro>
+      </ul>
+    </div>
+  </section>
+
+  <CierreWhatsApp interes={d.cierre.interes} general={d.portada.mensaje} />
+</Base>
+
+<style>
+  /* ---------- 1 · los que se abren ---------- */
+  /* Los objetos de ApuraY se salen por la derecha (la sección corta lo que sobra) y, en
+     escritorio, suben sobre la cenefa de la portada: por eso el corte es solo a lo
+     ancho y la sección va por encima de la portada.
+     --monta: el aire de la sección más un módulo, que es el alto de la cenefa. La laptop
+     la tapa entera desde una línea de módulo, sin rebanar ninguna casilla. */
+  .obra { --monta: calc(var(--aire) + var(--u)); position: relative; z-index: 1; overflow-x: clip; padding-bottom: calc(var(--aire) * 1.2); }
+  .obra :global(.obra__celular) { --ancho: calc(var(--u) * 2.25); margin: 0 0 calc(var(--u) * -.35) calc(var(--u) * -.5); }
+  /* La tapa de la laptop mide el 86 % del dispositivo (11 módulos), centrada: empieza
+     0,77 módulos después. Con 0,23 más, su borde cae en la línea del módulo 10. */
+  @media (min-width: 960px) {
+    .obra :global(.obra__laptop) { margin-left: calc(var(--u) * .23); }
+  }
+
+  /* ---------- 3 · los demás ---------- */
+  /* Arriba a la derecha cuelgan los robots del plano anterior: el aire de arriba los salva. */
+  .mas { padding-top: calc(var(--aire) * 1.2); }
+  .mas__r { align-items: end; }
+  .mas__t { grid-column: 1 / 8; }
+  .mas__nota { grid-column: 1 / 8; margin-top: 12px; max-width: 24em; }
+  .mas__libro { margin-top: calc(var(--u) * .5); }
+  /* La fila del lector: su nombre va en el color de acento. El color se pone en la
+     fila y lo hereda el nombre; los dos enlaces vuelven al color del texto. */
+  .mas :global(.mas__tuyo) { color: var(--acento); }
+  .mas__enlaces { display: flex; flex-wrap: wrap; gap: 0 28px; color: var(--texto); }
+  /* Con ancho de sobra, la nota pasa al eje de las notas (módulo 12), a la altura del título. */
+  @media (min-width: 1280px) {
+    .mas__nota { grid-column: 12 / -1; grid-row: 1; margin-top: 0; }
+  }
+
+  @media (max-width: 959px) {
+    .obra :global(.obra__celular) { --ancho: calc(var(--u) * 1.9); }
+    .mas { padding-top: calc(var(--aire) + var(--u) * .6); }
+    .mas__t, .mas__nota { grid-column: 1 / -1; }
+  }
+  @media (max-width: 699px) {
+    .obra { padding-bottom: calc(var(--u) * .9); }
+    .obra :global(.obra__celular) { --ancho: calc(var(--u) * 1.75); margin: 0 0 -10px calc(var(--u) * -.9); }
+    .mas { padding-top: calc(var(--aire) + var(--u) * 1); }
+    .mas__nota { margin-top: 8px; }
+    .mas__libro { margin-top: 18px; }
+  }
+</style>
