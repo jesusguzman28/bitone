@@ -13,7 +13,14 @@ import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
 
 const DIST = fileURLToPath(new URL('../dist/', import.meta.url));
-const PAGINAS = ['/', '/sistemas/', '/apps/', '/automatizacion/', '/rescate/', '/negocios/', '/proyectos/', '/como-trabajamos/', '/nosotros/'];
+const PAGINAS = ['/', '/rescate/', '/proyectos/', '/como-trabajamos/', '/nosotros/'];
+// Las que viven en bitwise.pe: aquí solo queda la redirección (astro.config.mjs).
+const REDIRIGIDAS = {
+  '/sistemas/': 'https://bitwise.pe/servicios/desarrollo-de-software-a-medida/',
+  '/apps/': 'https://bitwise.pe/servicios/apps-moviles/',
+  '/automatizacion/': 'https://bitwise.pe/automatizacion/',
+  '/negocios/': 'https://bitwise.pe/soluciones/',
+};
 // Lo que el sitio no debe decir ni enlazar (ver docs/SISTEMA.md).
 const PROHIBIDO = [
   [/https?:\/\/(www\.)?quipuy\.pe/i, 'enlace a quipuy.pe'],
@@ -29,6 +36,13 @@ const fallos = [];
 const avisos = [];
 const archivoDe = (ruta) => join(DIST, ruta.replace(/^\//, ''), ruta.endsWith('/') ? 'index.html' : '');
 const html = new Map();
+for (const [p, destino] of Object.entries(REDIRIGIDAS)) {
+  const f = archivoDe(p);
+  if (!existsSync(f)) { fallos.push(`${p}: falta la redirección a ${destino}`); continue; }
+  const h = readFileSync(f, 'utf8');
+  if (!h.includes(destino)) fallos.push(`${p}: la redirección no lleva a ${destino}`);
+  if (!/http-equiv="refresh"/i.test(h)) fallos.push(`${p}: la redirección no es inmediata (falta meta refresh)`);
+}
 for (const p of PAGINAS) {
   const f = archivoDe(p);
   if (!existsSync(f)) { fallos.push(`${p}: no se compiló`); continue; }
@@ -96,22 +110,22 @@ if (existsSync(astro)) {
   const css = archivos.filter((a) => a.n.endsWith('.css')).reduce((s, a) => s + gzipSync(readFileSync(join(astro, a.n))).length, 0);
   console.log(`\n_astro: ${archivos.length} archivos · imagen más pesada ${pesada ? Math.round(pesada.kb) : 0} kB · CSS ${(css / 1000).toFixed(1)} kB comprimido`);
 }
-// Fuera de las nueve páginas solo hay redirecciones de la web anterior (astro.config.mjs),
-// y cada una lleva a una de las nueve.
+// Fuera de las cinco páginas solo hay redirecciones (astro.config.mjs): a una de las
+// cinco o a bitwise.pe.
 const htmlSueltos = (dir, base = '/') => readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
   e.isDirectory() ? (e.name === '_astro' ? [] : htmlSueltos(join(dir, e.name), `${base}${e.name}/`)) : e.name === 'index.html' ? [base] : []);
 let redirecciones = 0;
 for (const ruta of htmlSueltos(DIST)) {
   if (PAGINAS.includes(ruta)) continue;
   const destino = (readFileSync(archivoDe(ruta), 'utf8').match(/http-equiv="refresh" content="0;url=([^"]+)"/) || [])[1];
-  if (!destino) fallos.push(`${ruta}: página que no es de las nueve ni una redirección`);
-  else if (!PAGINAS.includes(destino)) fallos.push(`${ruta}: redirige a ${destino}, que no es una de las nueve`);
+  if (!destino) fallos.push(`${ruta}: página que no es de las cinco ni una redirección`);
+  else if (!PAGINAS.includes(destino) && !destino.startsWith('https://bitwise.pe/')) fallos.push(`${ruta}: redirige a ${destino}, que no es una de las cinco ni bitwise.pe`);
   else redirecciones++;
 }
 const mapa = existsSync(join(DIST, 'sitemap-0.xml')) ? readFileSync(join(DIST, 'sitemap-0.xml'), 'utf8') : '';
 const enMapa = [...mapa.matchAll(/<loc>https:\/\/bitone\.pe([^<]*)<\/loc>/g)].map((m) => m[1]);
 if (!existsSync(join(DIST, 'sitemap-index.xml'))) fallos.push('falta sitemap-index.xml');
-if (enMapa.length !== PAGINAS.length || PAGINAS.some((p) => !enMapa.includes(p))) fallos.push(`el sitemap lista ${enMapa.join(', ') || 'nada'} (deben ser las nueve páginas)`);
+if (enMapa.length !== PAGINAS.length || PAGINAS.some((p) => !enMapa.includes(p))) fallos.push(`el sitemap lista ${enMapa.join(', ') || 'nada'} (deben ser las cinco páginas)`);
 console.log(`redirecciones de la web anterior: ${redirecciones} · sitemap: ${enMapa.length} páginas`);
 console.log(`enlaces a otros sitios (${externos.size}): ${[...externos].map((e) => e.replace(/^https?:\/\//, '').slice(0, 46)).join(' · ')}`);
 
