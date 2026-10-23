@@ -74,7 +74,9 @@ for (const [p, h] of html) {
   for (const [re, nombre] of PROHIBIDO) if (re.test(h)) fallos.push(`${p}: ${nombre}`);
   // La marca anterior no se cuela en textos, títulos ni etiquetas. Las direcciones de
   // las redes sí la llevan (bitwise_peru) y no cuentan.
-  if (/bitwise/i.test(h.replace(/https?:\/\/[^\s"'<>]+/g, ''))) fallos.push(`${p}: dice "Bitwise" (la marca ahora es Bit One)`);
+  // Bitwise es el sitio principal de la casa: se nombra y se enlaza a propósito (pie y
+  // datos de empresa). Lo que no debe pasar es que una página hable de "Bitwise" como
+  // si fuera otra empresa: se revisa a mano, no aquí.
 
   const scripts = [...h.matchAll(/<script[^>]*\ssrc="([^"]+)"/g)].map((m) => m[1]);
   const enLinea = [...h.matchAll(/<script(?![^>]*\ssrc=)[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]).join('');

@@ -41,10 +41,13 @@ const imagenOg = new URL(og.src, dominio).href;
 const datosDeEmpresa = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: empresa.marca,
+  // La marca de la casa es Bitwise; Bit One es el nombre de este sitio y de la empresa
+  // legal. Un solo nodo de empresa para los dos dominios, con el principal como url.
+  name: 'Bitwise',
+  alternateName: [empresa.marca, 'Bitwise Perú'],
   legalName: empresa.razonSocial,
   taxID: empresa.ruc,
-  url: dominio.href,
+  url: empresa.sitioPrincipal,
   logo: new URL('/favicon.svg', dominio).href,
   image: imagenOg,
   telephone: `+${empresa.whatsapp}`,
@@ -62,7 +65,7 @@ const datosDeEmpresa = {
       closes: '19:00',
     },
   },
-  sameAs: redes.map((r) => r.url),
+  sameAs: [empresa.sitioPrincipal, ...redes.map((r) => r.url)],
   // Los tres se enseñan en la portada y en /nosotros/. Quien tiene sitio personal lleva el
   // @id del nodo Person que declara allá, y así las dos entidades quedan unidas.
   founder: cofundadores.map((c) => ({

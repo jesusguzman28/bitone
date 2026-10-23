@@ -12,7 +12,7 @@ import Signo from './Signo.astro';
 import Icono from './Icono.astro';
 import BotonWhatsApp from './BotonWhatsApp.astro';
 import { empresa, enlaceWhatsApp } from '../data/empresa';
-import { mapa, esActual } from '../data/navegacion';
+import { mapa, esActual, enlaceDe } from '../data/navegacion';
 import { servicios, porNegocio } from '../data/servicios';
 
 interface Props {
@@ -38,7 +38,7 @@ const tonoDe = (ruta: string) => servicios.find((s) => s.pagina.ruta === ruta)?.
           <ul class="cab__lista">
             {mapa.servicios.map((p) => (
               <li>
-                <a href={p.ruta} aria-current={actual(p.ruta)}>
+                <a href={enlaceDe(p.ruta)} aria-current={actual(p.ruta)}>
                   <Signo nombre={p.signo} tono={tonoDe(p.ruta)} />
                   <span><b>{p.nombre}</b><small>{p.frase}</small></span>
                 </a>
@@ -72,7 +72,7 @@ const tonoDe = (ruta: string) => servicios.find((s) => s.pagina.ruta === ruta)?.
           <ul class="menu__servicios">
             {mapa.servicios.map((p) => (
               <li>
-                <a href={p.ruta} aria-current={actual(p.ruta)}>
+                <a href={enlaceDe(p.ruta)} aria-current={actual(p.ruta)}>
                   <Signo nombre={p.signo} tono={tonoDe(p.ruta) === 'tinta' ? 'papel' : tonoDe(p.ruta)} />
                   <span>{p.nombre}</span>
                 </a>

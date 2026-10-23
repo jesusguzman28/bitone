@@ -8,7 +8,7 @@
 // Trae su propio margen lateral: va directo dentro de la sección, sin .reticula.
 import Signo from './Signo.astro';
 import Icono from './Icono.astro';
-import { existe } from '../data/navegacion';
+import { existe, enlaceDe } from '../data/navegacion';
 import type { Servicio } from '../data/servicios';
 
 interface Props {
@@ -28,7 +28,7 @@ const Nombre = `h${nivel}` as 'h3' | 'h4';
     const Caja = abierta ? 'a' : 'div';
     return (
       <li data-rev>
-        <Caja class:list={['puerta', { 'puerta--abierta': abierta }]} href={abierta ? s.pagina.ruta : undefined}>
+        <Caja class:list={['puerta', { 'puerta--abierta': abierta }]} href={abierta ? enlaceDe(s.pagina.ruta) : undefined}>
           <Signo nombre={s.signo} tono={s.tono} class="puerta__signo" />
           <div class="puerta__txt">
             <p class="rotulo puerta__n" aria-hidden="true">0{i + 1}</p>
