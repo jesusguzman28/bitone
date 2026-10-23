@@ -131,4 +131,4 @@ console.log(`enlaces a otros sitios (${externos.size}): ${[...externos].map((e) 
 
 if (avisos.length) console.log(`\nAVISOS (${avisos.length})\n- ${avisos.join('\n- ')}`);
 if (fallos.length) { console.log(`\nFALLOS (${fallos.length})\n- ${fallos.join('\n- ')}`); process.exit(1); }
-console.log('\nTodo en orden: nueve páginas, sin enlaces rotos ni imágenes caídas.');
+console.log('\nTodo en orden: cinco páginas, sin enlaces rotos ni imágenes caídas.');
