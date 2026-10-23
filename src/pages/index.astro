@@ -25,7 +25,7 @@ import CierreWhatsApp from '../components/CierreWhatsApp.astro';
 import { empresa, pasos, compromisos, cuandoSaleElPrecio, paresDePortada, preguntasDePortada } from '../data/empresa';
 import { servicios, porNegocio, cuandoNo } from '../data/servicios';
 import { enTexto } from '../data/proyectos';
-import { paginas, existe, enlaceA } from '../data/navegacion';
+import { paginas, existe, enlaceA, enlaceDe } from '../data/navegacion';
 
 const internos = enTexto.filter((p) => p.acceso === 'interno');
 // La franja "por negocio" solo es un enlace cuando su página existe.
@@ -79,7 +79,7 @@ const Negocio = hayNegocios ? 'a' : 'div';
   <section class="seccion oferta" id="servicios" aria-labelledby="titulo-oferta">
     <TituloSeccion id="titulo-oferta" disposicion="pila" titulo={['Cuatro formas', 'de poner orden.']} />
     <Puertas servicios={servicios} />
-    <Negocio class:list={['reticula', 'negocio', { 'negocio--abierto': hayNegocios }]} href={hayNegocios ? porNegocio.pagina.ruta : undefined} data-rev>
+    <Negocio class:list={['reticula', 'negocio', { 'negocio--abierto': hayNegocios }]} href={hayNegocios ? enlaceDe(porNegocio.pagina.ruta) : undefined} data-rev>
       <Signo nombre={porNegocio.signo} tono={porNegocio.tono} class="negocio__signo" />
       <h3 class="subtitulo negocio__q">{porNegocio.pregunta}</h3>
       <p class="negocio__frase">{hayNegocios ? porNegocio.promesa : porNegocio.sinPagina}{hayNegocios && <Icono nombre="derecha" />}</p>

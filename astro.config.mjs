@@ -25,22 +25,30 @@ const CAMBIO_SRC = ultimoCambio();
 // darían 404. GitHub Pages no admite redirecciones de servidor, así que Astro
 // genera en cada una un HTML con meta refresh inmediato, noindex y canonical a la
 // nueva, que Google trata como redirección permanente.
+// Las páginas de servicio viven en bitwise.pe, el sitio principal de la casa: aquí
+// solo quedan la portada (con la demo), rescate, proyectos, cómo trabajamos y
+// nosotros. Así los dos sitios no compiten en Google por lo mismo.
+const BITWISE = 'https://bitwise.pe';
 const redirecciones = {
+  '/sistemas/': `${BITWISE}/servicios/desarrollo-de-software-a-medida/`,
+  '/apps/': `${BITWISE}/servicios/apps-moviles/`,
+  '/automatizacion/': `${BITWISE}/automatizacion/`,
+  '/negocios/': `${BITWISE}/soluciones/`,
   '/contacto/': '/',
   '/metodologia/': '/como-trabajamos/',
-  '/servicios/': '/',
-  '/servicios/desarrollo-de-software-a-medida/': '/sistemas/',
+  '/servicios/': `${BITWISE}/servicios/`,
+  '/servicios/desarrollo-de-software-a-medida/': `${BITWISE}/servicios/desarrollo-de-software-a-medida/`,
   '/servicios/mantenimiento-de-software/': '/rescate/',
-  '/servicios/apps-moviles/': '/apps/',
+  '/servicios/apps-moviles/': `${BITWISE}/servicios/apps-moviles/`,
   '/fabrica-de-software-peru/': '/',
   '/fabrica-de-software-lima/': '/',
   '/fabrica-de-software-ayacucho/': '/',
-  '/blog/': '/',
-  '/blog/cuanto-cuesta-un-software-a-medida-en-peru/': '/como-trabajamos/',
-  '/blog/facturacion-electronica-sunat-integrar-a-tu-sistema/': '/sistemas/',
-  '/blog/software-a-medida-o-erp-de-paquete/': '/sistemas/',
+  '/blog/': `${BITWISE}/blog/`,
+  '/blog/cuanto-cuesta-un-software-a-medida-en-peru/': `${BITWISE}/blog/cuanto-cuesta-desarrollar-software-a-medida-en-peru/`,
+  '/blog/facturacion-electronica-sunat-integrar-a-tu-sistema/': `${BITWISE}/soluciones/sistema-de-ventas-y-facturacion/`,
+  '/blog/software-a-medida-o-erp-de-paquete/': `${BITWISE}/blog/software-a-medida-vs-saas-cuando-conviene-cada-uno/`,
   '/blog/heredaste-un-sistema-sin-documentacion/': '/rescate/',
-  '/blog/app-nativa-multiplataforma-o-web/': '/apps/',
+  '/blog/app-nativa-multiplataforma-o-web/': `${BITWISE}/blog/cuanto-cuesta-una-app-movil-en-peru/`,
   '/blog/caso-apuray-plataforma-de-delivery-en-provincia/': '/proyectos/',
   '/blog/caso-quipuy-plataforma-educativa-preuniversitaria/': '/proyectos/',
   '/blog/caso-de-excel-y-google-forms-a-una-intranet/': '/proyectos/',

@@ -6,7 +6,7 @@
 import Logo from './Logo.astro';
 import Friso from './Friso.astro';
 import { empresa, redes, enlaceWhatsApp, aclaracionNombres } from '../data/empresa';
-import { mapa } from '../data/navegacion';
+import { mapa, enlaceDe } from '../data/navegacion';
 import type { NombreSigno } from '../lib/signos';
 
 interface Props {
@@ -36,7 +36,7 @@ const conServicios = mapa.servicios.length > 0;
     {conServicios && (
       <nav class="pie__col pie__col--servicios" aria-label="Servicios, en el pie">
         <p class="rotulo pie__rot">Servicios</p>
-        <ul>{mapa.servicios.map((p) => <li><a href={p.ruta}>{p.nombre}</a></li>)}</ul>
+        <ul>{mapa.servicios.map((p) => <li><a href={enlaceDe(p.ruta)}>{p.nombre}</a></li>)}</ul>
       </nav>
     )}
 
@@ -61,6 +61,7 @@ const conServicios = mapa.servicios.length > 0;
 
     <div class="pie__legal">
       <p class="pie__nombres">{aclaracionNombres}</p>
+      <p class="rotulo">Sitio principal: <a class="pie__correo" href={empresa.sitioPrincipal}>bitwise.pe</a></p>
       <p class="rotulo">© {anio} {empresa.marca} · Hecho en Lima</p>
       <p class="rotulo"><a class="pie__correo" href={`mailto:${empresa.correo}`}>{empresa.correo}</a></p>
     </div>

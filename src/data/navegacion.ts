@@ -17,16 +17,19 @@ export interface Pagina {
   signo: NombreSigno;
   /** Sección de la portada que resume esta página: a donde lleva el enlace mientras no exista. */
   ancla: string;
+  /** Si la página vive en bitwise.pe (el sitio principal), su dirección allá. El enlace
+      lleva ahí y la ruta local redirige (astro.config.mjs). */
+  externo?: string;
 }
 
 export const paginas = {
   inicio: { ruta: '/', nombre: 'Inicio', frase: 'Del desorden al sistema.', signo: 'medida', ancla: '' },
-  sistemas: { ruta: '/sistemas/', nombre: 'Sistema a medida', frase: 'Pedidos, almacén y ventas en un solo lugar.', signo: 'medida', ancla: 'servicios' },
-  apps: { ruta: '/apps/', nombre: 'App para tu negocio', frase: 'Para tu equipo en la calle o para tus clientes.', signo: 'app', ancla: 'servicios' },
-  automatizacion: { ruta: '/automatizacion/', nombre: 'Automatización', frase: 'Lo que hoy haces a mano, se hace solo.', signo: 'greca', ancla: 'servicios' },
+  sistemas: { ruta: '/sistemas/', nombre: 'Sistema a medida', frase: 'Pedidos, almacén y ventas en un solo lugar.', signo: 'medida', ancla: 'servicios', externo: 'https://bitwise.pe/servicios/desarrollo-de-software-a-medida/' },
+  apps: { ruta: '/apps/', nombre: 'App para tu negocio', frase: 'Para tu equipo en la calle o para tus clientes.', signo: 'app', ancla: 'servicios', externo: 'https://bitwise.pe/servicios/apps-moviles/' },
+  automatizacion: { ruta: '/automatizacion/', nombre: 'Automatización', frase: 'Lo que hoy haces a mano, se hace solo.', signo: 'greca', ancla: 'servicios', externo: 'https://bitwise.pe/automatizacion/' },
   rescate: { ruta: '/rescate/', nombre: 'Rescate de un sistema', frase: 'Arreglamos o mantenemos el sistema que ya tienes.', signo: 'rescate', ancla: 'servicios' },
   // Los cuatro rubros, en el orden de la página (data/negocios.ts): la bodega va al final.
-  negocios: { ruta: '/negocios/', nombre: 'Para tu negocio', frase: 'Distribuidora, ferretería, restaurante, bodega.', signo: 'enlace', ancla: 'servicios' },
+  negocios: { ruta: '/negocios/', nombre: 'Para tu negocio', frase: 'Distribuidora, ferretería, restaurante, bodega.', signo: 'enlace', ancla: 'servicios', externo: 'https://bitwise.pe/soluciones/' },
   // No dice "se puede abrir": hoy solo se abren apuray.pe y tres fichas de Google Play.
   proyectos: { ruta: '/proyectos/', nombre: 'Proyectos', frase: 'Sistemas y apps hechos por Bit One.', signo: 'app', ancla: 'construido' },
   comoTrabajamos: { ruta: '/como-trabajamos/', nombre: 'Cómo trabajamos', frase: 'Proceso, precio, plazos y garantía.', signo: 'greca', ancla: 'como-trabajamos' },
@@ -45,11 +48,17 @@ const construidas = new Set(
   }),
 );
 
-/** ¿Ya existe la página de esta ruta? */
-export const existe = (ruta: string): boolean => construidas.has(ruta);
+// Rutas que viven en bitwise.pe: su dirección allá.
+const externos = new Map(Object.values(paginas).filter((p) => 'externo' in p).map((p) => [p.ruta, (p as Pagina).externo as string]));
+
+/** ¿Ya existe la página de esta ruta? Cuenta la que vive en bitwise.pe. */
+export const existe = (ruta: string): boolean => construidas.has(ruta) || externos.has(ruta);
+
+/** El enlace a una ruta: la dirección en bitwise.pe si vive allá; si no, la ruta local. */
+export const enlaceDe = (ruta: string): string => externos.get(ruta) ?? ruta;
 
 /** A dónde lleva hoy el enlace a una página: a ella si existe; si no, a su sección de la portada. */
-export const destino = (pagina: Pagina): string => (existe(pagina.ruta) ? pagina.ruta : `/#${pagina.ancla}`);
+export const destino = (pagina: Pagina): string => (existe(pagina.ruta) ? enlaceDe(pagina.ruta) : `/#${pagina.ancla}`);
 
 /* ---------- menús ---------- */
 

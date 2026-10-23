@@ -24,6 +24,8 @@ export const empresa = {
   /** El dominio donde se publica. De aquí salen la dirección canónica de cada página
       y la de la tarjeta para compartir (Base.astro), si astro.config.mjs no trae `site`. */
   dominio: 'https://bitone.pe',
+  /** El sitio principal de la casa: ahí viven los servicios y lo que sale en Google. */
+  sitioPrincipal: 'https://bitwise.pe/',
 } as const;
 
 /** Une con espacios que no se parten: "RUC 20615736261" no queda a caballo entre dos
@@ -36,7 +38,7 @@ const junto = (texto: string) => texto.replaceAll(' ', '\u00A0');
     su número van cada uno unido. Antes llevaba "(BIT ONE en Google Play)" porque la
     marca era otra; con Bit One la tienda ya dice el mismo nombre. */
 export const aclaracionNombres =
-  `${empresa.marca} es la marca de ${junto(empresa.razonSocial)}, ${junto(`RUC ${empresa.ruc}`)}.`;
+  `${empresa.marca} y Bitwise son marcas de ${junto(empresa.razonSocial)}, ${junto(`RUC ${empresa.ruc}`)}.`;
 
 // Las cuentas conservan el usuario de antes (bitwise_peru): son las que existen. Si se
 // renombran, se cambian aquí.
@@ -50,11 +52,11 @@ export const redes = [
 /* ---------- WhatsApp ---------- */
 
 export const mensajes = {
-  general: 'Hola Bit One, quiero conversar sobre un sistema para mi empresa',
-  sistema: 'Hola Bit One, quiero conversar sobre un sistema para mi empresa',
-  app: 'Hola Bit One, quiero cotizar una app para mi empresa',
-  automatizacion: 'Hola Bit One, quiero automatizar un proceso de mi empresa',
-  rescate: 'Hola Bit One, tengo un sistema que necesita mantenimiento',
+  general: 'Hola, vengo de bitone.pe y quiero conversar sobre un sistema para mi empresa',
+  sistema: 'Hola, vengo de bitone.pe y quiero conversar sobre un sistema para mi empresa',
+  app: 'Hola, vengo de bitone.pe y quiero cotizar una app para mi empresa',
+  automatizacion: 'Hola, vengo de bitone.pe y quiero automatizar un proceso de mi empresa',
+  rescate: 'Hola, vengo de bitone.pe y tengo un sistema que necesita mantenimiento',
 } as const;
 
 /** Arma el enlace de WhatsApp. Sin mensaje, usa el general. Con '' abre el chat vacío. */
