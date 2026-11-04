@@ -5,6 +5,11 @@ apps y automatización para negocios del Perú. Sitio estático hecho con Astro,
 con CSS a mano (sin Tailwind ni frameworks de interfaz), publicado en GitHub
 Pages.
 
+Desde noviembre de 2026 se publica desde este repositorio
+(`gaelguzman2000/bitone-web`): cada cambio en `main` sale en bitone.pe con el
+workflow "Publicar web". Antes salía de `jesusguzman28/bitone`. El laboratorio
+de diseño vive aparte, en el repositorio privado `gaelguzman2000/bitone-new`.
+
 ## Trabajar en la PC
 
 ```bash
