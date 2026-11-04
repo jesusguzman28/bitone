@@ -72,7 +72,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       // Las redirecciones no van al mapa: solo las páginas que existen.
-      filter: (pagina) => !Object.keys(redirecciones).some((r) => pagina === `https://bitone.pe${r}`),
+      filter: (pagina) => pagina !== 'https://bitone.pe/demo/' && !Object.keys(redirecciones).some((r) => pagina === `https://bitone.pe${r}`),
       serialize: (item) => ({ ...item, lastmod: CAMBIO_SRC }),
     }),
   ],

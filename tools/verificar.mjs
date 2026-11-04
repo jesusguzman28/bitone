@@ -15,6 +15,9 @@ import { gzipSync } from 'node:zlib';
 const DIST = fileURLToPath(new URL('../dist/', import.meta.url));
 // En mantenimiento (noviembre de 2026): solo la portada.
 const PAGINAS = ['/'];
+// Páginas de prueba para que el dueño las revise: se compilan y se revisan,
+// pero llevan noindex y no van al sitemap.
+const PRUEBAS = ['/demo/'];
 // Las que viven en bitwise.pe: aquí solo queda la redirección (astro.config.mjs).
 const REDIRIGIDAS = {
   '/sistemas/': 'https://bitwise.pe/servicios/desarrollo-de-software-a-medida/',
@@ -44,7 +47,7 @@ for (const [p, destino] of Object.entries(REDIRIGIDAS)) {
   if (!h.includes(destino)) fallos.push(`${p}: la redirección no lleva a ${destino}`);
   if (!/http-equiv="refresh"/i.test(h)) fallos.push(`${p}: la redirección no es inmediata (falta meta refresh)`);
 }
-for (const p of PAGINAS) {
+for (const p of [...PAGINAS, ...PRUEBAS]) {
   const f = archivoDe(p);
   if (!existsSync(f)) { fallos.push(`${p}: no se compiló`); continue; }
   html.set(p, readFileSync(f, 'utf8'));
@@ -117,7 +120,7 @@ const htmlSueltos = (dir, base = '/') => readdirSync(dir, { withFileTypes: true 
   e.isDirectory() ? (e.name === '_astro' ? [] : htmlSueltos(join(dir, e.name), `${base}${e.name}/`)) : e.name === 'index.html' ? [base] : []);
 let redirecciones = 0;
 for (const ruta of htmlSueltos(DIST)) {
-  if (PAGINAS.includes(ruta)) continue;
+  if (PAGINAS.includes(ruta) || PRUEBAS.includes(ruta)) continue;
   const destino = (readFileSync(archivoDe(ruta), 'utf8').match(/http-equiv="refresh" content="0;url=([^"]+)"/) || [])[1];
   if (!destino) fallos.push(`${ruta}: página que no es la portada ni una redirección`);
   else if (!PAGINAS.includes(destino) && !destino.startsWith('https://bitwise.pe/')) fallos.push(`${ruta}: redirige a ${destino}, que no es la portada ni bitwise.pe`);

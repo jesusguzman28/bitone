@@ -1,0 +1,392 @@
+---
+// Landing de prueba (noviembre de 2026): cuatro historias animadas que muestran
+// cómo trabaja un sistema, de principio a fin, con notificaciones como las del
+// celular. Es para que el dueño la revise antes de llevarla a bitwise.pe: va con
+// noindex y fuera del sitemap. Todo es HTML y CSS, sin imágenes: el texto de las
+// pantallas sale perfecto y en soles.
+import '../styles/tokens.css';
+import { empresa, enlaceWhatsApp } from '../data/empresa';
+
+type Paso = { ico: string; color: string; app: string; t: string; d: string; h: string; l?: string };
+type Historia = {
+  id: string;
+  etiqueta: string;
+  servicio: string;
+  titulo: string;
+  pasos: Paso[];
+  final: { grande: string; chico: string; nota: string };
+};
+
+const historias: Historia[] = [
+  {
+    id: 'pedido',
+    etiqueta: 'Pedido por WhatsApp',
+    servicio: 'Sistema a medida · ERP',
+    titulo: 'Del WhatsApp a la entrega, sin escribir nada a mano',
+    pasos: [
+      { ico: '💬', color: '#25D366', app: 'WhatsApp', t: 'Nuevo pedido · Bodega Rosita', d: '2 sacos de arroz 5 kg y 1 caja de aceite', h: '11:02', l: 'Llega el pedido por WhatsApp' },
+      { ico: '📋', color: '#D91023', app: 'Tu sistema', t: 'Pedido #1042 registrado', d: 'Asignado a reparto, zona Surco', h: '11:02' },
+      { ico: '📦', color: '#E8A317', app: 'Almacén', t: 'Stock actualizado', d: 'Arroz 5 kg: 48 → 46 sacos', h: '11:03' },
+      { ico: '🧾', color: '#2563EB', app: 'SUNAT', t: 'Boleta electrónica emitida', d: 'B001-1042 · S/ 198.40', h: '11:03' },
+      { ico: '🛵', color: '#16A34A', app: 'Reparto', t: 'Pedido entregado ✔', d: 'Recibido por Rosa M.', h: '11:42' },
+    ],
+    final: { grande: 'S/ 3,482.50', chico: 'Ventas de hoy · 23 pedidos', nota: '↑ 12% más que ayer' },
+  },
+  {
+    id: 'reporte',
+    etiqueta: 'Reporte automático',
+    servicio: 'Automatización de Excel y reportes',
+    titulo: 'El reporte de ventas se arma solo cada mañana',
+    pasos: [
+      { ico: '📄', color: '#16A34A', app: 'Correo', t: 'ventas_lunes.xlsx', d: 'Recibido de Caja', h: '6:58', l: 'Llega el Excel de caja' },
+      { ico: '📄', color: '#16A34A', app: 'Correo', t: 'almacen_lunes.xlsx', d: 'Recibido de Almacén', h: '6:59', l: 'Llega el Excel de almacén' },
+      { ico: '⚙️', color: '#D91023', app: 'Tu sistema', t: 'Juntando los datos', d: '3 archivos · 1,284 filas revisadas', h: '7:00' },
+      { ico: '📊', color: '#E8A317', app: 'Reportes', t: 'Gráfico listo', d: 'Ventas por tienda y por producto', h: '7:00' },
+      { ico: '🔔', color: '#2563EB', app: 'Reportes', t: 'Tu reporte de ayer está listo', d: 'Enviado a gerencia por correo', h: '7:01' },
+    ],
+    final: { grande: '0 horas', chico: 'armando el reporte a mano', nota: 'Llega solo, todos los días a las 7:00' },
+  },
+  {
+    id: 'cita',
+    etiqueta: 'Citas por WhatsApp',
+    servicio: 'Bot de WhatsApp',
+    titulo: 'La cita se agenda sola, aunque sean las 11 de la noche',
+    pasos: [
+      { ico: '💬', color: '#25D366', app: 'WhatsApp', t: 'Lucía Torres', d: 'Hola, ¿tienen cita para mañana?', h: '10:47 p. m.', l: 'La paciente escribe de noche' },
+      { ico: '🤖', color: '#D91023', app: 'Asistente', t: 'Respuesta automática', d: 'Sí: 10:00, 11:30 o 4:00 p. m. ¿Cuál prefieres?', h: '10:47 p. m.', l: 'El bot le ofrece horarios' },
+      { ico: '💬', color: '#25D366', app: 'WhatsApp', t: 'Lucía Torres', d: 'La de las 10:00, por favor', h: '10:48 p. m.', l: 'Ella elige uno' },
+      { ico: '✅', color: '#16A34A', app: 'Agenda', t: 'Cita confirmada', d: 'Jueves 10:00 a. m. · Dra. Ramos', h: '10:48 p. m.' },
+      { ico: '🔔', color: '#2563EB', app: 'Agenda', t: 'Recordatorio enviado', d: '"Te esperamos mañana a las 10:00"', h: 'Mié 6:00 p. m.' },
+    ],
+    final: { grande: '24 horas', chico: 'atendiendo, sin contratar a nadie', nota: 'Esta cita se agendó a las 10:48 p. m.' },
+  },
+  {
+    id: 'stock',
+    etiqueta: 'Stock bajo',
+    servicio: 'Sistema de inventario',
+    titulo: 'El sistema pide la mercadería antes de que se acabe',
+    pasos: [
+      { ico: '🛒', color: '#D91023', app: 'Caja', t: 'Venta registrada', d: '10 bolsas de cemento · S/ 295.00', h: '9:15' },
+      { ico: '⚠️', color: '#E8A317', app: 'Almacén', t: 'Stock bajo · Cemento', d: 'Quedan 5 bolsas (mínimo: 20)', h: '9:15' },
+      { ico: '📨', color: '#2563EB', app: 'Compras', t: 'Orden de compra enviada', d: 'OC-0318 · 80 bolsas · Distribuidora Andina', h: '9:16' },
+      { ico: '🚚', color: '#2563EB', app: 'Compras', t: 'El proveedor confirmó', d: 'Llega mañana antes de las 10:00', h: '9:40' },
+      { ico: '✅', color: '#16A34A', app: 'Almacén', t: 'Mercadería recibida', d: 'Cemento: 85 bolsas en stock', h: 'Mañana 9:52' },
+    ],
+    final: { grande: '0 veces', chico: 'le dijiste "no hay" a un cliente', nota: 'El pedido salió solo, a tiempo' },
+  },
+];
+
+const titulo = 'Mira cómo trabaja un sistema hecho para tu negocio';
+const descripcion = 'Cuatro ejemplos de principio a fin: pedidos por WhatsApp, reportes automáticos, citas y stock. Así trabaja un sistema a medida.';
+const bitwise = 'https://bitwise.pe/';
+---
+
+<!doctype html>
+<html lang="es-PE">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{titulo}</title>
+    <meta name="description" content={descripcion} />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#0B0F1A" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
+  </head>
+  <body>
+    <header class="barra">
+      <span class="marca">{empresa.marca}</span>
+      <a class="barra__wa" href={enlaceWhatsApp()}>Escríbenos</a>
+    </header>
+
+    <main>
+      <section class="portada">
+        <div class="texto">
+          <p class="antetitulo">Así trabaja un sistema a medida</p>
+          <h1>Llega el pedido. <span class="calido">Lo demás se hace solo.</span></h1>
+          <p class="bajada">Cuatro procesos que ves todos los días, de principio a fin.</p>
+        </div>
+
+        <div class="controles">
+          <div class="pestanas" role="tablist" aria-label="Ejemplos">
+            {historias.map((h, i) => (
+              <button type="button" role="tab" class:list={['pestana', i === 0 && 'activa']} data-h={i} aria-selected={i === 0 ? 'true' : 'false'}>
+                <span class="pestana__txt">{h.etiqueta}</span>
+                <span class="pestana__barra"><span class="pestana__relleno"></span></span>
+              </button>
+            ))}
+          </div>
+
+          <div class="relato" aria-live="polite">
+            {historias.map((h, i) => (
+              <div class:list={['relato__h', i === 0 && 'activa']} data-h={i}>
+                <p class="servicio">{h.servicio}</p>
+                <h2>{h.titulo}</h2>
+                <ol class="pasos">
+                  {h.pasos.map((p, j) => (
+                    <li data-p={j}><span class="pasos__marca" aria-hidden="true"></span>{p.l ?? p.t}</li>
+                  ))}
+                </ol>
+              </div>
+            ))}
+          </div>
+          <p class="pista">Toca una pestaña o desliza el celular.</p>
+        </div>
+
+        <div class="escena">
+          <div class="halo" aria-hidden="true"></div>
+          <div class="celular" id="celular">
+            <div class="celular__pantalla">
+              <div class="celular__estado"><span id="hora">{historias[0].pasos[0].h}</span><span class="celular__isla"></span><span>5G ▮▮▮</span></div>
+              <p class="celular__app" id="servicio">{historias[0].servicio}</p>
+              <ul class="notis" id="notis"></ul>
+              <div class="final" id="final" aria-hidden="true">
+                <p class="final__grande" id="final-grande"></p>
+                <p class="final__chico" id="final-chico"></p>
+                <p class="final__nota" id="final-nota"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cierre">
+        <h2>¿Cuál de estos pasa en tu negocio?</h2>
+        <p>Te decimos cómo se haría en tu caso, con precio fijo por escrito.</p>
+        <a class="boton" href={enlaceWhatsApp('Hola, vi los ejemplos en bitone.pe y quiero un sistema para mi negocio')}>Escríbenos por WhatsApp</a>
+      </section>
+    </main>
+
+    <footer class="pie">
+      <p>Desarrollado por <a href={bitwise}>Bitwise</a>, empresa de software en Lima, Perú.</p>
+    </footer>
+
+    <script type="application/json" id="datos" set:html={JSON.stringify(historias)} />
+    <script is:inline>
+      (() => {
+        const H = JSON.parse(document.getElementById('datos').textContent);
+        const calma = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const PASO = 1500;   // ms entre notificación y notificación
+        const FINAL = 3200;  // ms que se queda el resultado
+        const notis = document.getElementById('notis');
+        const final = document.getElementById('final');
+        const hora = document.getElementById('hora');
+        const servicio = document.getElementById('servicio');
+        const tabs = [...document.querySelectorAll('.pestana')];
+        const relatos = [...document.querySelectorAll('.relato__h')];
+        let cur = 0, timers = [];
+
+        const limpiar = () => { timers.forEach(clearTimeout); timers = []; };
+        const despues = (ms, fn) => timers.push(setTimeout(fn, ms));
+
+        const tarjeta = (p) => {
+          const li = document.createElement('li');
+          li.className = 'noti';
+          li.innerHTML =
+            '<span class="noti__ico" style="background:' + p.color + '">' + p.ico + '</span>' +
+            '<span class="noti__cuerpo"><span class="noti__cab"><b></b><time></time></span>' +
+            '<strong></strong><span class="noti__d"></span></span>';
+          li.querySelector('b').textContent = p.app;
+          li.querySelector('time').textContent = p.h;
+          li.querySelector('strong').textContent = p.t;
+          li.querySelector('.noti__d').textContent = p.d;
+          return li;
+        };
+
+        const duracion = (h) => h.pasos.length * PASO + FINAL;
+
+        const jugar = (n) => {
+          limpiar();
+          cur = (n + H.length) % H.length;
+          const h = H[cur];
+          tabs.forEach((t, i) => {
+            const activa = i === cur;
+            t.classList.remove('activa');
+            t.setAttribute('aria-selected', activa ? 'true' : 'false');
+            if (activa) { void t.offsetWidth; t.style.setProperty('--dur', duracion(h) + 'ms'); t.classList.add('activa'); }
+          });
+          relatos.forEach((r, i) => r.classList.toggle('activa', i === cur));
+          const lis = relatos[cur].querySelectorAll('.pasos li');
+          lis.forEach((li) => li.classList.remove('hecho'));
+          servicio.textContent = h.servicio;
+          notis.innerHTML = '';
+          final.classList.remove('visible');
+          document.getElementById('final-grande').textContent = h.final.grande;
+          document.getElementById('final-chico').textContent = h.final.chico;
+          document.getElementById('final-nota').textContent = h.final.nota;
+
+          if (calma) {
+            h.pasos.forEach((p, j) => { notis.prepend(tarjeta(p)); lis[j].classList.add('hecho'); });
+            hora.textContent = h.pasos[h.pasos.length - 1].h.replace(/^(Mié|Mañana)\s+/, '');
+            return;
+          }
+          h.pasos.forEach((p, j) => {
+            despues(350 + j * PASO, () => {
+              const li = tarjeta(p);
+              notis.prepend(li);
+              requestAnimationFrame(() => li.classList.add('entra'));
+              while (notis.children.length > 3) notis.lastElementChild.remove();
+              hora.textContent = p.h.replace(/^(Mié|Mañana)\s+/, '');
+              lis[j].classList.add('hecho');
+            });
+          });
+          despues(350 + h.pasos.length * PASO - 400, () => final.classList.add('visible'));
+          despues(duracion(h), () => jugar(cur + 1));
+        };
+
+        tabs.forEach((t, i) => t.addEventListener('click', () => jugar(i)));
+
+        // Deslizar el celular con el dedo: izquierda, siguiente; derecha, anterior.
+        const cel = document.getElementById('celular');
+        let x0 = 0, y0 = 0;
+        cel.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+        cel.addEventListener('touchend', (e) => {
+          const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+          if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.2) return;
+          jugar(cur + (dx < 0 ? 1 : -1));
+        }, { passive: true });
+
+        jugar(0);
+      })();
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  @font-face {
+    font-family: 'Archivo';
+    src: url('/fonts/archivo-latin.woff2') format('woff2');
+    font-weight: 100 900;
+    font-display: swap;
+  }
+  * { box-sizing: border-box; }
+  html { background: #0B0F1A; color: #fff; -webkit-text-size-adjust: 100%; }
+  body { margin: 0; font-family: 'Archivo', system-ui, sans-serif; line-height: 1.45; }
+  a { color: inherit; }
+
+  .barra {
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: 1120px; margin: 0 auto; padding: 18px 20px;
+  }
+  .marca { font-weight: 800; letter-spacing: .02em; font-size: 1.15rem; }
+  .barra__wa {
+    text-decoration: none; font-weight: 700; font-size: .92rem;
+    padding: 9px 16px; border-radius: 999px; background: #1DA851;
+  }
+
+  .portada {
+    max-width: 1120px; margin: 0 auto; padding: 8px 20px 40px;
+    display: grid; gap: 28px; align-items: center;
+  }
+  /* En el celular: titular, el teléfono animado y después las pestañas. En
+     computadora: texto y pestañas a la izquierda, teléfono a la derecha. */
+  .portada { gap: 18px; }
+  .escena { order: 2; }
+  .controles { order: 3; }
+  @media (min-width: 900px) {
+    .portada { grid-template-columns: 1.05fr .95fr; column-gap: 56px; row-gap: 0; padding-top: 32px; }
+    .texto { grid-column: 1; grid-row: 1; align-self: end; }
+    .controles { grid-column: 1; grid-row: 2; align-self: start; }
+    .escena { grid-column: 2; grid-row: 1 / span 2; }
+  }
+  .pista { margin: 10px 0 0; color: rgba(255,255,255,.5); font-size: .85rem; }
+  @media (min-width: 900px) { .pista { display: none; } }
+
+  .antetitulo { margin: 0 0 10px; color: #E8A317; font-weight: 700; font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; }
+  h1 { margin: 0; font-size: clamp(2rem, 6.4vw, 3.4rem); line-height: 1.05; font-weight: 800; letter-spacing: -.02em; }
+  .calido { background: linear-gradient(90deg, #FF4D5E, #E8A317); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .bajada { margin: 12px 0 0; color: rgba(255,255,255,.72); font-size: 1.05rem; max-width: 34em; }
+
+  .pestanas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  @media (min-width: 560px) { .pestanas { grid-template-columns: repeat(4, 1fr); } }
+  .pestana {
+    position: relative; text-align: left; cursor: pointer; font: inherit; color: rgba(255,255,255,.7);
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+    border-radius: 14px; padding: 10px 12px 14px; min-height: 52px;
+    transition: background-color .25s, color .25s, border-color .25s;
+  }
+  .pestana__txt { font-size: .86rem; font-weight: 700; line-height: 1.2; display: block; }
+  .pestana.activa { color: #fff; background: rgba(217,16,35,.18); border-color: rgba(255,77,94,.45); }
+  .pestana__barra { position: absolute; left: 12px; right: 12px; bottom: 7px; height: 3px; border-radius: 2px; background: rgba(255,255,255,.14); overflow: hidden; }
+  .pestana__relleno { display: block; height: 100%; background: linear-gradient(90deg, #D91023, #E8A317); transform: scaleX(0); transform-origin: left; }
+  .pestana.activa .pestana__relleno { animation: avance var(--dur, 10s) linear forwards; }
+  @keyframes avance { to { transform: scaleX(1); } }
+
+  .relato { margin-top: 22px; min-height: 230px; }
+  @media (min-width: 900px) { .pestanas { margin-top: 22px; } }
+  .relato__h { display: none; }
+  .relato__h.activa { display: block; animation: aparece .45s ease both; }
+  @keyframes aparece { from { opacity: 0; transform: translateY(6px); } }
+  .servicio { margin: 0; color: #FF8A95; font-weight: 700; font-size: .85rem; }
+  .relato h2 { margin: 4px 0 12px; font-size: 1.3rem; line-height: 1.2; }
+  .pasos { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .pasos li { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,.45); transition: color .3s; font-size: .98rem; }
+  .pasos__marca { flex: none; width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(255,255,255,.25); transition: background-color .3s, border-color .3s; }
+  .pasos li.hecho { color: #fff; }
+  .pasos li.hecho .pasos__marca { background: #16A34A; border-color: #16A34A; box-shadow: inset 0 0 0 3px #0B0F1A; }
+  @media (max-width: 899px) { .relato { display: none; } }
+
+  .escena { position: relative; display: grid; place-items: center; padding: 10px 0; }
+  .halo { position: absolute; inset: 8% 10%; background: radial-gradient(closest-side, rgba(217,16,35,.45), rgba(232,163,23,.18) 55%, transparent); filter: blur(30px); }
+  .celular {
+    position: relative; width: min(300px, 80vw); aspect-ratio: 9 / 16.5;
+    border-radius: 46px; padding: 11px; background: #1a1d26;
+    box-shadow: 0 0 0 2px #2b2f3a, 0 40px 80px -30px rgba(0,0,0,.8);
+    touch-action: pan-y;
+  }
+  .celular__pantalla {
+    position: relative; height: 100%; border-radius: 36px; overflow: hidden;
+    background: linear-gradient(160deg, #3a0d16 0%, #1b1530 45%, #0d1a2b 100%);
+    padding: 14px 12px;
+  }
+  .celular__estado { white-space: nowrap; display: flex; align-items: center; justify-content: space-between; font-size: .8rem; font-weight: 700; padding: 2px 10px 0; }
+  .celular__isla { width: 90px; height: 24px; border-radius: 999px; background: #000; }
+  .celular__app { text-align: center; margin: 26px 0 14px; font-size: .78rem; color: rgba(255,255,255,.6); font-weight: 600; letter-spacing: .04em; }
+
+  .notis { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .noti {
+    display: flex; gap: 10px; padding: 11px 12px; border-radius: 18px;
+    background: rgba(246,246,248,.97); color: #111;
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    box-shadow: 0 8px 20px -10px rgba(0,0,0,.5);
+    opacity: 0; transform: translateY(-14px) scale(.96);
+    transition: opacity .45s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1);
+  }
+  .noti.entra { opacity: 1; transform: none; }
+  .noti__ico { flex: none; width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; font-size: 18px; }
+  .noti__cuerpo { min-width: 0; display: grid; gap: 1px; }
+  .noti__cab { display: flex; justify-content: space-between; gap: 8px; font-size: .7rem; color: #555; }
+  .noti__cab b { font-weight: 700; text-transform: uppercase; letter-spacing: .03em; }
+  .noti strong { font-size: .86rem; line-height: 1.2; }
+  .noti__d { font-size: .8rem; color: #333; line-height: 1.25; }
+
+  .final {
+    position: absolute; left: 12px; right: 12px; bottom: 16px;
+    border-radius: 22px; padding: 18px 16px; text-align: center;
+    background: linear-gradient(135deg, #D91023, #E8541A 60%, #E8A317);
+    box-shadow: 0 20px 40px -18px rgba(217,16,35,.8);
+    opacity: 0; transform: translateY(24px) scale(.97);
+    transition: opacity .5s ease, transform .6s cubic-bezier(.22,1,.36,1);
+  }
+  .final.visible { opacity: 1; transform: none; }
+  .final p { margin: 0; }
+  .final__grande { font-size: 2.1rem; font-weight: 800; line-height: 1.05; }
+  .final__chico { font-size: .95rem; font-weight: 600; }
+  .final__nota { margin-top: 6px !important; font-size: .78rem; opacity: .9; }
+
+  .cierre { text-align: center; padding: 40px 20px 56px; max-width: 640px; margin: 0 auto; }
+  .cierre h2 { margin: 0 0 8px; font-size: clamp(1.5rem, 4.5vw, 2.1rem); }
+  .cierre p { margin: 0 0 22px; color: rgba(255,255,255,.72); }
+  .boton { display: inline-block; text-decoration: none; font-weight: 800; padding: 15px 26px; border-radius: 999px; background: #1DA851; box-shadow: 0 12px 30px -12px rgba(29,168,81,.8); }
+  .boton:focus-visible, .pestana:focus-visible, .barra__wa:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
+  .pie { text-align: center; padding: 22px 20px 32px; border-top: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.6); font-size: .9rem; }
+  .pie a { color: #FF8A95; font-weight: 700; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .noti { opacity: 1; transform: none; transition: none; }
+    .final { opacity: 1; transform: none; transition: none; }
+    .pestana.activa .pestana__relleno { animation: none; transform: scaleX(1); }
+    .relato__h.activa { animation: none; }
+  }
+</style>
