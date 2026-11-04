@@ -29,16 +29,23 @@ const CAMBIO_SRC = ultimoCambio();
 // solo quedan la portada (con la demo), rescate, proyectos, cómo trabajamos y
 // nosotros. Así los dos sitios no compiten en Google por lo mismo.
 const BITWISE = 'https://bitwise.pe';
+// Noviembre de 2026: bitone.pe queda en mantenimiento, con una sola página (la
+// portada). Las páginas que tenía pasan a su equivalente en bitwise.pe; las que
+// llevaban a una de ellas se reapuntan directo, sin cadenas.
 const redirecciones = {
+  '/rescate/': `${BITWISE}/servicios/mantenimiento-de-software/`,
+  '/proyectos/': `${BITWISE}/proyectos/`,
+  '/como-trabajamos/': `${BITWISE}/metodologia/`,
+  '/nosotros/': `${BITWISE}/nosotros/`,
   '/sistemas/': `${BITWISE}/servicios/desarrollo-de-software-a-medida/`,
   '/apps/': `${BITWISE}/servicios/apps-moviles/`,
   '/automatizacion/': `${BITWISE}/automatizacion/`,
   '/negocios/': `${BITWISE}/soluciones/`,
   '/contacto/': '/',
-  '/metodologia/': '/como-trabajamos/',
+  '/metodologia/': `${BITWISE}/metodologia/`,
   '/servicios/': `${BITWISE}/servicios/`,
   '/servicios/desarrollo-de-software-a-medida/': `${BITWISE}/servicios/desarrollo-de-software-a-medida/`,
-  '/servicios/mantenimiento-de-software/': '/rescate/',
+  '/servicios/mantenimiento-de-software/': `${BITWISE}/servicios/mantenimiento-de-software/`,
   '/servicios/apps-moviles/': `${BITWISE}/servicios/apps-moviles/`,
   '/fabrica-de-software-peru/': '/',
   '/fabrica-de-software-lima/': '/',
@@ -47,11 +54,11 @@ const redirecciones = {
   '/blog/cuanto-cuesta-un-software-a-medida-en-peru/': `${BITWISE}/blog/cuanto-cuesta-desarrollar-software-a-medida-en-peru/`,
   '/blog/facturacion-electronica-sunat-integrar-a-tu-sistema/': `${BITWISE}/soluciones/sistema-de-ventas-y-facturacion/`,
   '/blog/software-a-medida-o-erp-de-paquete/': `${BITWISE}/blog/software-a-medida-vs-saas-cuando-conviene-cada-uno/`,
-  '/blog/heredaste-un-sistema-sin-documentacion/': '/rescate/',
+  '/blog/heredaste-un-sistema-sin-documentacion/': `${BITWISE}/servicios/mantenimiento-de-software/`,
   '/blog/app-nativa-multiplataforma-o-web/': `${BITWISE}/blog/cuanto-cuesta-una-app-movil-en-peru/`,
-  '/blog/caso-apuray-plataforma-de-delivery-en-provincia/': '/proyectos/',
-  '/blog/caso-quipuy-plataforma-educativa-preuniversitaria/': '/proyectos/',
-  '/blog/caso-de-excel-y-google-forms-a-una-intranet/': '/proyectos/',
+  '/blog/caso-apuray-plataforma-de-delivery-en-provincia/': `${BITWISE}/proyectos/`,
+  '/blog/caso-quipuy-plataforma-educativa-preuniversitaria/': `${BITWISE}/proyectos/`,
+  '/blog/caso-de-excel-y-google-forms-a-una-intranet/': `${BITWISE}/proyectos/`,
 };
 
 // public/ solo lleva lo que se sirve tal cual: las fuentes, el favicon, robots.txt,
