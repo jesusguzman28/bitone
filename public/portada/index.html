@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Bitwise · Automatiza tus procesos</title>
+<meta name="description" content="Cuatro ejemplos de principio a fin: pedidos por WhatsApp, reportes automáticos, citas y stock. Así trabaja un sistema a medida.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+html{--bo-grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+html,body{margin:0;background:#EFEEEA;color:#121110;-webkit-font-smoothing:antialiased;}
+*{box-sizing:border-box;}
+a{color:inherit;text-underline-offset:3px;}
+a:hover{color:#B83A12;}
+@keyframes bo-fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes bo-pulse{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes bd-fade{from{opacity:0}to{opacity:1}}
+@keyframes bd-up{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes bd-pop{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes bd-word{from{opacity:0;transform:translateY(70%) rotate(2deg);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes bd-bgin{from{opacity:0}to{opacity:1}}
+@keyframes bd-kb{from{transform:scale(1.06)}to{transform:scale(1)}}
+@keyframes bd-load{from{transform:scale(1.08);filter:blur(16px) brightness(.45)}to{transform:scale(1);filter:blur(0) brightness(.85)}}
+@keyframes bd-bar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes bd-spin{to{transform:rotate(360deg)}}
+@keyframes bd-panel{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
+@keyframes bd-sheet{from{opacity:0;transform:translateY(60px)}to{opacity:1;transform:none}}
+@keyframes bd-check{from{opacity:0;transform:scale(0) rotate(-30deg)}to{opacity:1;transform:none}}
+@property --bd-ang{syntax:'<angle>';inherits:false;initial-value:0deg;}
+@keyframes bd-ring{to{--bd-ang:360deg}}
+@keyframes bd-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes bd-land{0%{opacity:0;transform:translateY(-16px) scale(.9)}60%{opacity:1;transform:translateY(2px) scale(1.04)}100%{opacity:1;transform:none}}
+@keyframes bd-row{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+@keyframes bd-beat{0%,70%,100%{transform:scale(1)}80%{transform:scale(1.18)}90%{transform:scale(0.96)}}
+::selection{background:#E8501F;color:#FFFFFF;}
+@media (prefers-reduced-motion: reduce){.bd-a{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important}}
+</style>
+</helmet>
+
+<div onTouchStart="{{ heroTS }}" onTouchEnd="{{ heroTE }}" style="position:relative;height:{{ heroRootH }};min-height:100dvh;overflow:{{ heroOverflow }};background:#0C0B0E;color:#FFFFFF;font-family:'Plus Jakarta Sans',system-ui,sans-serif;">
+
+  <sc-if value="{{ heroWide }}" hint-placeholder-val="{{ true }}">
+    <sc-for list="{{ heroBgs }}" as="hb" hint-placeholder-count="3">
+      <img src="{{ hb.src }}" alt="{{ hb.alt }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ hb.pos }};opacity:{{ hb.op }};transform:translateX({{ hb.x }}) scale({{ hb.scale }});transition:opacity 1.1s ease,transform 1.6s cubic-bezier(0.22,1,0.36,1);">
+    </sc-for>
+    <div aria-hidden="true" style="position:absolute;inset:0;background:linear-gradient(90deg, rgba(12,11,14,0.78) 0%, rgba(12,11,14,0.45) 42%, rgba(12,11,14,0.08) 75%);pointer-events:none;"></div>
+    <div aria-hidden="true" style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(12,11,14,0.5) 0%, rgba(12,11,14,0) 20%, rgba(12,11,14,0) 72%, rgba(12,11,14,0.65) 100%);pointer-events:none;"></div>
+
+    <header style="position:absolute;top:16px;left:0;right:0;z-index:5;display:flex;justify-content:center;padding:0 16px;">
+      <nav aria-label="Principal" style="display:flex;align-items:center;gap:28px;padding:7px 7px 7px 14px;border-radius:999px;background:#F6F5F3;box-shadow:0 10px 28px -14px rgba(0,0,0,0.6);color:#17161A;">
+        <a href="https://bitwise.pe/" style="display:flex;align-items:center;gap:9px;color:#17161A;text-decoration:none;" style-hover="color:#17161A;">
+          <img src="assets/bitwise-mark.png" alt="" width="30" height="30" style="display:block;width:30px;height:30px;border-radius:8px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.12rem;letter-spacing:-0.01em;">Bitwise</span>
+        </a>
+        <div style="display:flex;align-items:center;gap:26px;font-size:0.92rem;font-weight:500;">
+          <sc-for list="{{ navLinks }}" as="nl" hint-placeholder-count="5">
+            <a href="{{ nl.href }}" style="color:#4A4850;text-decoration:none;" style-hover="color:#C51D25;">{{ nl.label }}</a>
+          </sc-for>
+        </div>
+        <a href="https://bitwise.pe/contacto/" style="display:flex;align-items:center;gap:10px;padding:9px 9px 9px 18px;border-radius:999px;background:#E0242C;color:#FFFFFF;font-weight:700;font-size:0.92rem;text-decoration:none;transition:background-color .2s ease;" style-hover="background:#C51D25;color:#FFFFFF;" style-focus="outline:2px solid #17161A;outline-offset:3px;">
+          Cotizar
+          <span style="width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.22);display:flex;align-items:center;justify-content:center;"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3.5 8.5l5-5M4.5 3.5h4v4"></path></svg></span>
+        </a>
+      </nav>
+    </header>
+
+    <main style="position:absolute;z-index:3;inset:0;display:flex;align-items:center;padding:96px max(24px, 13vw) 104px;pointer-events:none;">
+      <div style="pointer-events:auto;width:100%;max-width:470px;display:flex;flex-direction:column;align-items:center;gap:24px;padding:34px 36px;border-radius:26px;background:rgba(18,16,22,0.76);border:1px solid rgba(255,255,255,0.14);box-shadow:0 30px 60px -30px rgba(0,0,0,0.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);text-align:center;">
+        <h1 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(2rem, 2.6vw, 2.7rem);line-height:1.08;letter-spacing:-0.03em;text-wrap:balance;">
+          <span style="display:block;">Automatiza tus procesos</span>
+          <span aria-live="polite" style="display:grid;">
+            <sc-for list="{{ heroLines }}" as="hl" hint-placeholder-count="3">
+              <span aria-hidden="{{ hl.hidden }}" style="grid-area:1/1;background:linear-gradient(90deg, #FF4F6A 0%, #FF7A3D 55%, #FFA62B 100%);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:{{ hl.op }};transform:translateY({{ hl.y }});filter:blur({{ hl.blur }});transition:opacity .6s cubic-bezier(0.22,1,0.36,1),transform .7s cubic-bezier(0.22,1,0.36,1),filter .6s ease;">{{ hl.text }}</span>
+            </sc-for>
+          </span>
+        </h1>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+          <a href="{{ waHero }}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;padding:6px 6px 6px 22px;border-radius:999px;background:#15803D;color:#FFFFFF;font-weight:700;font-size:0.98rem;text-decoration:none;box-shadow:0 14px 30px -16px rgba(0,0,0,0.75);transition:background-color .2s ease,transform .2s ease;" style-hover="background:#126B33;color:#FFFFFF;transform:translateY(-1px);" style-focus="outline:2px solid #FFFFFF;outline-offset:3px;">
+            Escríbenos por WhatsApp
+            <span style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.22);display:flex;align-items:center;justify-content:center;"><svg width="19" height="19" viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"></path></svg></span>
+          </a>
+          <button ref="{{ demoBtnRef }}" onClick="{{ openDemo }}" class="bd-a" style="position:relative;display:flex;align-items:center;gap:12px;padding:5px 22px 5px 5px;border-radius:999px;border:2px solid transparent;background:linear-gradient(#1A1720, #1A1720) padding-box, conic-gradient(from var(--bd-ang), #FF4F6A, #FFA62B, #FFFFFF, #FF4F6A) border-box;animation:bd-ring 3.2s linear infinite;color:#FFFFFF;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.98rem;cursor:pointer;transition:background-color .2s ease,border-color .2s ease;" style-hover="background:rgba(255,255,255,0.14);border-color:#FFFFFF;" style-focus="outline:2px solid #FFFFFF;outline-offset:3px;">
+            <span class="bd-a" style="width:36px;height:36px;border-radius:50%;background:#FFFFFF;display:flex;align-items:center;justify-content:center;animation:bd-beat 2.6s ease-in-out 1.5s infinite;"><svg width="12" height="12" viewBox="0 0 12 12" fill="#E0242C" aria-hidden="true"><path d="M3 1.6v8.8a.6.6 0 0 0 .9.5l7-4.4a.6.6 0 0 0 0-1L3.9 1.1a.6.6 0 0 0-.9.5z"></path></svg></span>
+            Quiero ver una demostración
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <div style="position:absolute;z-index:4;left:0;right:0;bottom:26px;display:flex;justify-content:center;align-items:center;gap:10px;padding:0 84px 0 16px;">
+      <button onClick="{{ heroPrev }}" aria-label="Imagen anterior" style="flex:none;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,0.35);background:rgba(12,11,14,0.55);color:#FFFFFF;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background-color .2s ease,border-color .2s ease;" style-hover="background:rgba(12,11,14,0.85);border-color:#FFFFFF;" style-focus="outline:2px solid #FFFFFF;outline-offset:2px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button>
+      <div role="tablist" aria-label="Servicios" style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;">
+        <sc-for list="{{ heroChips }}" as="hc" hint-placeholder-count="3">
+          <button role="tab" aria-selected="{{ hc.on }}" onClick="{{ hc.go }}" style="position:relative;overflow:hidden;padding:9px 18px;border-radius:999px;border:1px solid {{ hc.border }};background:{{ hc.bg }};color:#FFFFFF;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.92rem;cursor:pointer;transition:background-color .3s ease,border-color .3s ease;" style-hover="border-color:#FFFFFF;" style-focus="outline:2px solid #FFFFFF;outline-offset:2px;">{{ hc.label }}<span aria-hidden="true" style="position:absolute;left:14px;right:14px;bottom:4px;height:2px;border-radius:1px;overflow:hidden;">{{ hc.bar }}</span></button>
+        </sc-for>
+      </div>
+      <button onClick="{{ heroNext }}" aria-label="Imagen siguiente" style="flex:none;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,0.35);background:rgba(12,11,14,0.55);color:#FFFFFF;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background-color .2s ease,border-color .2s ease;" style-hover="background:rgba(12,11,14,0.85);border-color:#FFFFFF;" style-focus="outline:2px solid #FFFFFF;outline-offset:2px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ heroNarrow }}" hint-placeholder-val="{{ false }}">
+    <div style="min-height:100dvh;display:flex;flex-direction:column;gap:14px;padding:14px 14px 100px;background:radial-gradient(120% 55% at 50% 0%, #2B1A22 0%, rgba(12,11,14,0) 70%), #0C0B0E;">
+      <header style="position:relative;z-index:6;">
+        <nav aria-label="Principal" style="display:flex;align-items:center;justify-content:space-between;padding:8px 8px 8px 14px;border-radius:22px;background:rgba(246,245,243,0.92);color:#17161A;box-shadow:0 10px 28px -14px rgba(0,0,0,0.6);">
+          <a href="https://bitwise.pe/" style="display:flex;align-items:center;gap:9px;color:#17161A;text-decoration:none;">
+            <img src="assets/bitwise-mark.png" alt="" width="30" height="30" style="display:block;width:30px;height:30px;border-radius:8px;">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem;">Bitwise</span>
+          </a>
+          <button onClick="{{ toggleNav }}" aria-expanded="{{ navOpenStr }}" aria-label="Menú" style="width:44px;height:44px;border:0;border-radius:12px;background:transparent;color:#17161A;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-focus="outline:2px solid #E0242C;outline-offset:2px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="{{ navIcon }}"></path></svg></button>
+        </nav>
+        <sc-if value="{{ navOpen }}" hint-placeholder-val="{{ false }}">
+          <div class="bd-a" style="position:absolute;top:calc(100% + 8px);left:0;right:0;display:flex;flex-direction:column;padding:8px;border-radius:20px;background:#F6F5F3;color:#17161A;box-shadow:0 24px 40px -18px rgba(0,0,0,0.7);animation:bd-up .3s cubic-bezier(0.22,1,0.36,1) both;">
+            <sc-for list="{{ navLinks }}" as="nl" hint-placeholder-count="5">
+              <a href="{{ nl.href }}" style="padding:13px 14px;border-radius:12px;color:#17161A;text-decoration:none;font-weight:600;" style-hover="background:#ECEAE6;color:#17161A;">{{ nl.label }}</a>
+            </sc-for>
+            <a href="https://bitwise.pe/contacto/" style="margin-top:6px;padding:13px 14px;border-radius:999px;background:#E0242C;color:#FFFFFF;text-decoration:none;font-weight:700;text-align:center;">Cotizar</a>
+          </div>
+        </sc-if>
+      </header>
+
+      <div onTouchStart="{{ heroTS }}" onTouchEnd="{{ heroTE }}" style="position:relative;height:min(46vh, 400px);min-height:260px;border-radius:24px;overflow:hidden;background:#1A1714;touch-action:pan-y;">
+        <sc-for list="{{ heroBgs }}" as="hb" hint-placeholder-count="3">
+          <img src="{{ hb.src }}" alt="{{ hb.alt }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ hb.posM }};opacity:{{ hb.op }};transform:translateX({{ hb.x }}) scale({{ hb.scale }});transition:opacity .9s ease,transform 1.2s cubic-bezier(0.22,1,0.36,1);">
+        </sc-for>
+        <div aria-hidden="true" style="position:absolute;left:0;right:0;bottom:0;height:70px;background:linear-gradient(180deg, rgba(12,11,14,0) 0%, rgba(12,11,14,0.6) 100%);"></div>
+        <button onClick="{{ heroPrev }}" aria-label="Imagen anterior" style="position:absolute;left:0;top:0;bottom:40px;width:40%;border:0;background:transparent;cursor:pointer;" style-focus="outline:2px solid #FFFFFF;outline-offset:-4px;"></button>
+        <button onClick="{{ heroNext }}" aria-label="Imagen siguiente" style="position:absolute;right:0;top:0;bottom:40px;width:60%;border:0;background:transparent;cursor:pointer;" style-focus="outline:2px solid #FFFFFF;outline-offset:-4px;"></button>
+        <div role="tablist" aria-label="Servicios" style="position:absolute;left:0;right:0;bottom:8px;display:flex;justify-content:center;gap:4px;">
+          <sc-for list="{{ heroChips }}" as="hc" hint-placeholder-count="3">
+            <button role="tab" aria-selected="{{ hc.on }}" aria-label="{{ hc.label }}" onClick="{{ hc.go }}" style="width:44px;height:24px;padding:0;border:0;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-focus="outline:2px solid #FFFFFF;outline-offset:0;"><span style="position:relative;display:block;width:34px;height:4px;border-radius:2px;overflow:hidden;background:rgba(255,255,255,0.45);">{{ hc.bar }}</span></button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:center;gap:20px;padding:26px 18px;border-radius:24px;background:rgba(18,16,22,0.8);border:1px solid rgba(255,255,255,0.14);text-align:center;">
+        <h1 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.8rem, 8vw, 2.3rem);line-height:1.08;letter-spacing:-0.03em;text-wrap:balance;">
+          <span style="display:block;">Automatiza tus procesos</span>
+          <span aria-live="polite" style="display:grid;">
+            <sc-for list="{{ heroLines }}" as="hl" hint-placeholder-count="3">
+              <span aria-hidden="{{ hl.hidden }}" style="grid-area:1/1;background:linear-gradient(90deg, #FF4F6A 0%, #FF7A3D 55%, #FFA62B 100%);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:{{ hl.op }};transform:translateY({{ hl.y }});filter:blur({{ hl.blur }});transition:opacity .6s cubic-bezier(0.22,1,0.36,1),transform .7s cubic-bezier(0.22,1,0.36,1),filter .6s ease;">{{ hl.text }}</span>
+            </sc-for>
+          </span>
+        </h1>
+        <div style="width:100%;display:flex;flex-direction:column;gap:10px;">
+          <a href="{{ waHero }}" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:12px;padding:6px 6px 6px 20px;border-radius:999px;background:#15803D;color:#FFFFFF;font-weight:700;font-size:0.98rem;text-decoration:none;" style-focus="outline:2px solid #FFFFFF;outline-offset:3px;">
+            <span style="flex:1;text-align:center;">Escríbenos por WhatsApp</span>
+            <span style="flex:none;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.22);display:flex;align-items:center;justify-content:center;"><svg width="19" height="19" viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"></path></svg></span>
+          </a>
+          <button onClick="{{ openDemo }}" class="bd-a" style="position:relative;display:flex;align-items:center;gap:12px;padding:5px 20px 5px 5px;border-radius:999px;border:2px solid transparent;background:linear-gradient(#1A1720, #1A1720) padding-box, conic-gradient(from var(--bd-ang), #FF4F6A, #FFA62B, #FFFFFF, #FF4F6A) border-box;animation:bd-ring 3.2s linear infinite;color:#FFFFFF;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.98rem;cursor:pointer;" style-focus="outline:2px solid #FFFFFF;outline-offset:3px;">
+            <span class="bd-a" style="flex:none;width:38px;height:38px;border-radius:50%;background:#FFFFFF;display:flex;align-items:center;justify-content:center;animation:bd-beat 2.6s ease-in-out 1.5s infinite;"><svg width="12" height="12" viewBox="0 0 12 12" fill="#E0242C" aria-hidden="true"><path d="M3 1.6v8.8a.6.6 0 0 0 .9.5l7-4.4a.6.6 0 0 0 0-1L3.9 1.1a.6.6 0 0 0-.9.5z"></path></svg></span>
+            <span style="flex:1;text-align:center;">Quiero ver una demostración</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <a href="{{ waHero }}" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp" style="position:fixed;z-index:5;right:18px;bottom:18px;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 26px -12px rgba(0,0,0,0.6);" style-hover="background:#1FBF5F;" style-focus="outline:2px solid #FFFFFF;outline-offset:3px;">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"></path></svg>
+  </a>
+
+    <div aria-hidden="{{ stageHidden }}" style="position:fixed;inset:0;z-index:{{ stageZ }};visibility:{{ stageVis }};height:100dvh;overflow:hidden;background:#2A2420;font-family:'Archivo',system-ui,sans-serif;color:#121110;">
+      <sc-for list="{{ bgs }}" as="bg" hint-placeholder-count="4">
+        <img src="{{ bg.src }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ bg.pos }};opacity:{{ bg.op }};transform:scale({{ bg.scale }});transition:opacity 1.1s ease,transform 8s ease-out;">
+      </sc-for>
+      <div aria-hidden="true" style="position:absolute;inset:0;background:rgba(18,17,16,0.32);pointer-events:none;"></div>
+      <div aria-hidden="true" style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(18,17,16,0.28) 0%, rgba(18,17,16,0) 22%, rgba(18,17,16,0) 70%, rgba(18,17,16,0.22) 100%);pointer-events:none;z-index:1;"></div>
+
+      <div role="group" aria-label="Ver el sistema en" style="position:absolute;top:{{ togTop }};left:{{ togLeft }};transform:translateX(-50%);z-index:9;display:flex;padding:3px;border-radius:10px;background:rgba(255,255,255,0.94);box-shadow:0 6px 20px -8px rgba(0,0,0,0.4);">
+        <button aria-pressed="{{ isPhone }}" onClick="{{ setPhone }}" style="display:flex;align-items:center;gap:7px;padding:7px 14px;border-radius:8px;border:0;cursor:pointer;font-family:'Archivo',sans-serif;font-size:0.86rem;font-weight:650;background:{{ phoneBtnBg }};color:{{ phoneBtnColor }};transition:background-color .2s ease,color .2s ease;" style-focus="outline:3px solid #E8501F;outline-offset:2px;">
+          <span aria-hidden="true" style="width:9px;height:14px;border-radius:2.5px;border:1.6px solid currentColor;"></span>
+          Celular
+        </button>
+        <button aria-pressed="{{ isWeb }}" onClick="{{ setWeb }}" style="display:flex;align-items:center;gap:7px;padding:7px 14px;border-radius:8px;border:0;cursor:pointer;font-family:'Archivo',sans-serif;font-size:0.86rem;font-weight:650;background:{{ webBtnBg }};color:{{ webBtnColor }};transition:background-color .2s ease,color .2s ease;" style-focus="outline:3px solid #E8501F;outline-offset:2px;">
+          <span aria-hidden="true" style="width:15px;height:11px;border-radius:2px;border:1.6px solid currentColor;"></span>
+          Web
+        </button>
+      </div>
+
+      <div ref="{{ stageRef }}" onTouchStart="{{ onTS }}" onTouchEnd="{{ onTE }}" style="position:absolute;top:{{ inTop }};left:{{ inLeft }};right:{{ inRight }};bottom:{{ inBottom }};z-index:2;touch-action:pan-y;user-select:none;pointer-events:none;">
+
+        <sc-if value="{{ isPhone }}" hint-placeholder-val="{{ true }}">
+          <div style="position:absolute;left:50%;top:50%;z-index:2;width:{{ phoneW }};aspect-ratio:9/16.5;transform:{{ mainT }};transition:transform .9s cubic-bezier(0.22,1,0.36,1);pointer-events:auto;">
+            <div style="position:relative;width:100%;height:100%;border-radius:56px;padding:3px;background:{{ frameBg }};box-shadow:0 50px 70px -30px rgba(0,0,0,0.7),0 20px 30px -14px rgba(0,0,0,0.45),inset 0 0 0 1px rgba(255,255,255,0.28);">
+              <span aria-hidden="true" style="position:absolute;left:-2px;top:17%;width:3px;height:4.5%;border-radius:2px 0 0 2px;background:{{ frameBg }};"></span>
+              <span aria-hidden="true" style="position:absolute;left:-2px;top:25%;width:3px;height:8.5%;border-radius:2px 0 0 2px;background:{{ frameBg }};"></span>
+              <span aria-hidden="true" style="position:absolute;left:-2px;top:35.5%;width:3px;height:8.5%;border-radius:2px 0 0 2px;background:{{ frameBg }};"></span>
+              <span aria-hidden="true" style="position:absolute;right:-2px;top:28%;width:3px;height:13%;border-radius:0 2px 2px 0;background:{{ frameBg }};"></span>
+              <div style="height:100%;border-radius:53px;background:#050505;padding:8px;">
+                <div id="bo-story" role="tabpanel" aria-live="polite" aria-label="{{ panelLabel }}" style="position:relative;height:100%;border-radius:45px;overflow:hidden;color:#FFFFFF;font-family:-apple-system,BlinkMacSystemFont,'Archivo',sans-serif;background:radial-gradient(120% 45% at 50% 112%, rgba(76,130,255,0.8) 0%, rgba(76,130,255,0) 70%), radial-gradient(85% 38% at 0% 28%, rgba(45,212,191,0.4) 0%, rgba(45,212,191,0) 70%), radial-gradient(70% 30% at 100% 60%, rgba(167,139,250,0.35) 0%, rgba(167,139,250,0) 70%), linear-gradient(180deg, #0A1430 0%, #0C1A3C 55%, #13245A 100%);">
+                  <div aria-hidden="true" style="position:absolute;inset:0;background-image:var(--bo-grain);opacity:0.16;mix-blend-mode:overlay;pointer-events:none;"></div>
+                  <div style="position:absolute;top:0;left:0;right:0;height:46px;display:flex;align-items:center;justify-content:flex-end;padding:4px 22px 0;z-index:3;">
+                    <span style="display:flex;align-items:center;gap:5px;">
+                      <span style="display:flex;align-items:flex-end;gap:1.5px;height:10px;">
+                        <span style="width:3px;height:4px;border-radius:1px;background:#FFFFFF;"></span>
+                        <span style="width:3px;height:6px;border-radius:1px;background:#FFFFFF;"></span>
+                        <span style="width:3px;height:8px;border-radius:1px;background:#FFFFFF;"></span>
+                        <span style="width:3px;height:10px;border-radius:1px;background:rgba(255,255,255,0.4);"></span>
+                      </span>
+                      <span style="font-size:11px;font-weight:700;">5G</span>
+                      <span style="width:23px;height:11px;border-radius:3.5px;border:1.2px solid rgba(255,255,255,0.5);padding:1.2px;"><span style="display:block;width:64%;height:100%;border-radius:1.8px;background:#FFFFFF;"></span></span>
+                    </span>
+                  </div>
+                  <div aria-hidden="true" style="position:absolute;top:10px;left:50%;transform:translateX(-50%);width:31%;height:28px;border-radius:20px;background:#000000;z-index:4;"></div>
+                  <div style="position:absolute;top:7%;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:2px;z-index:2;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5" fill="#FFFFFF"></rect><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"></path></svg>
+                    <span style="margin-top:4px;font-size:calc({{ phoneW }} * 0.05);font-weight:600;color:#FFFFFF;white-space:nowrap;">{{ dateLabel }}</span>
+                    <span style="font-size:calc({{ phoneW }} * 0.25);font-weight:700;letter-spacing:-0.02em;line-height:1;color:#FFFFFF;white-space:nowrap;font-variant-numeric:tabular-nums;">{{ clockMain }}</span>
+                  </div>
+                  <div ref="{{ phoneStackRef }}" style="position:absolute;top:33%;left:9px;right:9px;bottom:72px;z-index:2;overflow:hidden;"></div>
+                  <div ref="{{ phoneResultRef }}" style="position:absolute;left:9px;right:9px;bottom:72px;z-index:3;"></div>
+                  <span aria-hidden="true" style="position:absolute;left:9%;bottom:22px;width:40px;height:40px;border-radius:50%;background:rgba(20,18,16,0.5);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;z-index:2;">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h8v4l-2 3v11h-4V10L8 7z"></path></svg>
+                  </span>
+                  <span aria-hidden="true" style="position:absolute;right:9%;bottom:22px;width:40px;height:40px;border-radius:50%;background:rgba(20,18,16,0.5);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;z-index:2;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"></path><circle cx="12" cy="13.5" r="3.2"></circle></svg>
+                  </span>
+                  <div aria-hidden="true" style="position:absolute;bottom:7px;left:50%;transform:translateX(-50%);width:34%;height:4.5px;border-radius:3px;background:rgba(255,255,255,0.85);z-index:3;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isWeb }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;left:50%;top:50%;z-index:2;width:{{ webW }};height:100%;transform:{{ mainT }};transition:transform .9s cubic-bezier(0.22,1,0.36,1);pointer-events:auto;">
+            <div id="bo-story" role="tabpanel" aria-live="polite" aria-label="{{ panelLabel }}" style="width:100%;height:100%;border-radius:12px;overflow:hidden;background:#FFFFFF;box-shadow:0 40px 70px -30px rgba(0,0,0,0.6),0 0 0 1px rgba(0,0,0,0.12);display:flex;flex-direction:column;font-family:'Archivo',sans-serif;color:#121110;">
+              <div style="flex:none;display:flex;align-items:center;gap:12px;padding:8px 12px;background:#F1F0ED;border-bottom:1px solid #DEDCD7;">
+                <span style="flex:none;display:flex;gap:6px;">
+                  <span style="width:10px;height:10px;border-radius:50%;background:#D2CFC8;"></span>
+                  <span style="width:10px;height:10px;border-radius:50%;background:#D2CFC8;"></span>
+                  <span style="width:10px;height:10px;border-radius:50%;background:#D2CFC8;"></span>
+                </span>
+                <span style="flex:1;min-width:0;text-align:center;font-size:11.5px;color:#57544E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ webUrl }}</span>
+                <span style="flex:none;width:42px;"></span>
+              </div>
+              <div style="flex:1;min-height:0;display:flex;">
+                <sc-if value="{{ portalRail }}" hint-placeholder-val="{{ false }}">
+                  <nav aria-label="Menú del sistema" style="flex:none;width:58px;border-right:1px solid {{ sideBorder }};display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 0;background:{{ sideBg }};color:{{ sideText }};">
+                    <span style="width:32px;height:32px;border-radius:9px;background:{{ accent }};color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;margin-bottom:8px;">{{ bizInitial }}</span>
+                    <sc-for list="{{ navItems }}" as="nv" hint-placeholder-count="6">
+                      <span title="{{ nv.label }}" style="position:relative;width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:{{ nv.bg }};color:{{ nv.color }};">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ nv.icon }}"></path></svg>
+                        <sc-if value="{{ nv.on }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:{{ accent }};"></span></sc-if>
+                      </span>
+                    </sc-for>
+                  </nav>
+                </sc-if>
+                <sc-if value="{{ portalSide }}" hint-placeholder-val="{{ true }}">
+                  <nav aria-label="Menú del sistema" style="flex:none;width:188px;border-right:1px solid {{ sideBorder }};display:flex;flex-direction:column;gap:18px;padding:16px 12px;background:{{ sideBg }};color:{{ sideText }};transition:background-color .5s ease;">
+                    <span style="display:flex;align-items:center;gap:9px;padding:0 4px;">
+                      <span style="flex:none;width:30px;height:30px;border-radius:9px;background:{{ accent }};color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;">{{ bizInitial }}</span>
+                      <span style="display:flex;flex-direction:column;min-width:0;">
+                        <span style="font-size:13px;font-weight:800;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ bizName }}</span>
+                        <span style="font-size:11px;color:{{ sideMuted }};">{{ bizPlace }}</span>
+                      </span>
+                    </span>
+                    <div style="display:flex;flex-direction:column;gap:2px;">
+                      <span style="padding:0 8px 4px;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:{{ sideMuted }};">Menú</span>
+                      <sc-for list="{{ navItems }}" as="nv" hint-placeholder-count="8">
+                        <div style="display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:8px;background:{{ nv.bg }};font-size:12.5px;font-weight:{{ nv.weight }};color:{{ nv.color }};transition:background-color .3s ease;">
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none;"><path d="{{ nv.icon }}"></path></svg>
+                          <span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ nv.label }}</span>
+                          <sc-if value="{{ nv.on }}" hint-placeholder-val="{{ false }}"><span style="flex:none;min-width:18px;padding:1px 6px;border-radius:999px;background:{{ accent }};color:#FFFFFF;font-size:11px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;">{{ nv.badge }}</span></sc-if>
+                        </div>
+                      </sc-for>
+                    </div>
+                    <span style="margin-top:auto;display:flex;align-items:center;gap:7px;padding:0 6px;font-size:11px;color:{{ sideMuted }};">
+                      <img src="assets/bitwise-mark.png" alt="" width="16" height="16" style="display:block;width:16px;height:16px;border-radius:4px;">
+                      Desarrollado por Bitwise
+                    </span>
+                  </nav>
+                </sc-if>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;">
+                  <div style="flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:{{ portalHeadPad }};border-bottom:1px solid #E6E4DF;">
+                    <span style="display:flex;align-items:baseline;gap:10px;min-width:0;">
+                      <span style="font-size:{{ titleSize }};font-weight:850;font-stretch:80%;letter-spacing:-0.01em;">{{ pageTitle }}</span>
+                      <span style="font-size:12px;color:#57544E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ service }}</span>
+                    </span>
+                    <span style="flex:none;display:flex;align-items:center;gap:10px;">
+                      <sc-if value="{{ webWide }}" hint-placeholder-val="{{ true }}">
+                        <span aria-hidden="true" style="display:flex;align-items:center;gap:7px;width:210px;padding:6px 10px;border-radius:8px;background:#F4F3F0;border:1px solid #E6E4DF;font-size:12px;color:#6E6A63;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4.5 4.5"></path></svg>{{ searchPh }}</span>
+                      </sc-if>
+                      <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums;">
+                        <span style="width:6px;height:6px;border-radius:50%;background:#177A41;animation:bo-pulse 1.6s ease-in-out infinite;"></span>
+                        {{ clockMain }}{{ clockSuffix }}
+                      </span>
+                      <span aria-hidden="true" style="position:relative;width:30px;height:30px;border-radius:8px;border:1px solid #E6E4DF;display:flex;align-items:center;justify-content:center;color:#121110;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16.5v-5.5a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"></path><path d="M10 21h4"></path></svg><span style="position:absolute;top:5px;right:6px;width:7px;height:7px;border-radius:50%;background:#E0242C;border:1.5px solid #FFFFFF;"></span></span>
+                      <img src="{{ ownerAvatar }}" alt="{{ ownerName }}" width="28" height="28" style="display:block;width:28px;height:28px;border-radius:50%;object-fit:cover;object-position:50% 20%;">
+                    </span>
+                  </div>
+                  <div aria-hidden="true" style="flex:none;display:{{ toolDisp }};align-items:center;gap:8px;padding:{{ toolPad }};border-bottom:1px solid #E6E4DF;">
+                    <span style="display:flex;padding:2px;border-radius:8px;background:#F1F0ED;font-size:11.5px;font-weight:700;">
+                      <span style="padding:4px 10px;border-radius:6px;background:#FFFFFF;box-shadow:0 1px 2px rgba(0,0,0,0.12);">Hoy</span>
+                      <span style="padding:4px 10px;color:#57544E;">Semana</span>
+                      <span style="padding:4px 10px;color:#57544E;">Mes</span>
+                    </span>
+                    <span style="flex:1;"></span>
+                    <sc-if value="{{ webWide }}" hint-placeholder-val="{{ true }}">
+                      <span style="display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:8px;border:1px solid #DEDCD7;font-size:11.5px;font-weight:700;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"></path></svg>Exportar</span>
+                    </sc-if>
+                    <span style="display:flex;align-items:center;gap:6px;padding:5px 11px;border-radius:8px;background:{{ accent }};color:#FFFFFF;font-size:11.5px;font-weight:700;white-space:nowrap;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>{{ newLabel }}</span>
+                  </div>
+                  <div style="flex:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-bottom:1px solid #E6E4DF;">
+                    <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="3">
+                      <div style="min-width:0;display:flex;flex-direction:column;gap:2px;padding:{{ kpiPad }};border-left:1px solid {{ k.sep }};">
+                        <span style="font-size:{{ kpiLabelSize }};color:#57544E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ k.label }}</span>
+                        <span style="font-size:{{ kpiValSize }};font-weight:800;font-stretch:85%;letter-spacing:-0.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums;color:{{ k.color }};transition:color .5s ease;">{{ k.value }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <div style="flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr);">
+                    <div style="min-height:0;min-width:0;display:flex;flex-direction:column;gap:12px;padding:{{ colPad }};">
+                      <sc-if value="{{ wPedido }}" hint-placeholder-val="{{ false }}">
+                        <div style="flex:1.5;min-height:0;display:grid;grid-template-columns:{{ kGrid }};grid-auto-rows:minmax(0,1fr);gap:8px;">
+                          <sc-for list="{{ kanCols }}" as="kc" hint-placeholder-count="4">
+                            <div style="min-width:0;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:6px;padding:8px;border-radius:10px;background:{{ kc.bg }};transition:background-color .5s ease;">
+                              <span style="display:flex;justify-content:space-between;gap:6px;font-size:11.5px;font-weight:800;"><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ kc.name }}</span><span style="color:#57544E;font-variant-numeric:tabular-nums;">{{ kc.count }}</span></span>
+                              <sc-for list="{{ kc.cards }}" as="kd" hint-placeholder-count="2">
+                                <div class="bd-a" style="flex:none;padding:8px 9px;border-radius:9px;background:#FFFFFF;border:1.5px solid {{ kd.border }};box-shadow:{{ kd.shadow }};font-size:11.5px;line-height:1.35;animation:{{ kd.anim }};">
+                                  <span style="display:flex;justify-content:space-between;align-items:center;gap:6px;"><span style="font-weight:800;">{{ kd.id }}</span><sc-if value="{{ kd.hasTag }}" hint-placeholder-val="{{ false }}"><span style="min-width:0;padding:1px 7px;border-radius:999px;background:#E9F5EE;color:#126B33;font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ kd.tag }}</span></sc-if></span>
+                                  <span style="display:block;margin-top:2px;color:#3F3C37;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ kd.who }}</span>
+                                  <span style="display:block;margin-top:1px;font-weight:800;font-variant-numeric:tabular-nums;">{{ kd.total }}</span>
+                                </div>
+                              </sc-for>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </sc-if>
+                      <sc-if value="{{ wFactura }}" hint-placeholder-val="{{ false }}">
+                        <div style="flex:1.5;min-height:0;display:flex;flex-direction:column;border:1px solid #E6E4DF;border-radius:10px;overflow:hidden;">
+                          <div style="flex:none;display:grid;grid-template-columns:{{ fCols }};gap:8px;padding:8px 12px;background:#F4F3F0;font-size:11px;font-weight:800;color:#57544E;"><span>Comprobante</span><span style="display:{{ fCliDisp }};">Cliente</span><span style="text-align:right;">Total</span><span>SUNAT</span></div>
+                          <sc-for list="{{ fRows }}" as="fr" hint-placeholder-count="4">
+                            <div class="bd-a" style="flex:none;display:grid;grid-template-columns:{{ fCols }};gap:8px;align-items:center;padding:8px 12px;border-top:1px solid #EDEBE7;background:{{ fr.bg }};font-size:12px;transition:background-color .6s ease;animation:bd-row .55s cubic-bezier(0.22,1,0.36,1) backwards;">
+                              <span style="font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;">{{ fr.id }}</span>
+                              <span style="display:{{ fCliDisp }};min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ fr.who }}</span>
+                              <span style="text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;">{{ fr.total }}</span>
+                              <span><span style="display:inline-block;padding:2px 8px;border-radius:999px;background:{{ fr.stBg }};color:{{ fr.stColor }};font-size:11px;font-weight:800;white-space:nowrap;transition:background-color .4s ease,color .4s ease;">{{ fr.st }}</span></span>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </sc-if>
+                      <sc-if value="{{ wCitas }}" hint-placeholder-val="{{ false }}">
+                        <div style="flex:1.5;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:5px;">
+                          <span style="flex:none;display:flex;justify-content:space-between;gap:8px;font-size:12px;font-weight:800;"><span>Jueves · Dra. Ramos</span><span style="color:#57544E;font-weight:600;">{{ cFree }}</span></span>
+                          <sc-for list="{{ cSlots }}" as="cs" hint-placeholder-count="6">
+                            <div style="flex:none;display:grid;grid-template-columns:56px minmax(0,1fr);gap:8px;align-items:center;">
+                              <span style="font-size:11.5px;color:#57544E;font-variant-numeric:tabular-nums;">{{ cs.time }}</span>
+                              <div style="min-width:0;display:flex;justify-content:space-between;gap:8px;padding:6px 10px;border-radius:8px;background:{{ cs.bg }};border:1.5px {{ cs.line }} {{ cs.border }};color:{{ cs.color }};font-size:12px;font-weight:{{ cs.weight }};transition:background-color .5s ease,border-color .5s ease,color .5s ease;">
+                                <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ cs.label }}</span>
+                                <span style="flex:none;font-weight:600;">{{ cs.note }}</span>
+                              </div>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </sc-if>
+                      <sc-if value="{{ wReporte }}" hint-placeholder-val="{{ false }}">
+                        <div style="flex:1.5;min-height:0;display:grid;grid-template-columns:{{ rCols }};gap:10px;">
+                          <div style="min-width:0;min-height:0;display:{{ rFilesDisp }};flex-direction:column;gap:7px;padding:10px;border:1px solid #E6E4DF;border-radius:10px;">
+                            <span style="font-size:12px;font-weight:800;">Archivos de hoy</span>
+                            <sc-for list="{{ rFiles }}" as="rf" hint-placeholder-count="3">
+                              <div style="display:flex;align-items:center;gap:8px;font-size:11.5px;opacity:{{ rf.op }};transition:opacity .5s ease;">
+                                <span style="flex:none;width:24px;height:24px;border-radius:6px;background:#177A41;color:#FFFFFF;font-size:9px;font-weight:900;display:flex;align-items:center;justify-content:center;" aria-hidden="true">XLS</span>
+                                <span style="flex:1;min-width:0;display:flex;flex-direction:column;"><span style="font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ rf.name }}</span><span style="color:#57544E;">{{ rf.from }}</span></span>
+                                <span style="flex:none;padding:1px 7px;border-radius:999px;background:{{ rf.stBg }};color:{{ rf.stColor }};font-size:11px;font-weight:700;">{{ rf.st }}</span>
+                              </div>
+                            </sc-for>
+                            <span style="margin-top:auto;display:flex;flex-direction:column;gap:4px;font-size:11px;color:#57544E;">
+                              <span>{{ rMergeLabel }}</span>
+                              <span style="height:5px;border-radius:3px;background:#ECEAE6;overflow:hidden;"><span style="display:block;height:100%;width:{{ rMerge }};background:{{ accent }};transition:width 1.2s cubic-bezier(0.22,1,0.36,1);"></span></span>
+                            </span>
+                          </div>
+                          <div style="min-width:0;min-height:0;display:flex;flex-direction:column;gap:8px;padding:10px;border:1px solid #E6E4DF;border-radius:10px;">
+                            <span style="display:flex;justify-content:space-between;align-items:center;gap:6px;"><span style="font-size:12px;font-weight:800;">Ventas por tienda</span><span style="padding:1px 8px;border-radius:999px;background:{{ rChipBg }};color:{{ rChipColor }};font-size:11px;font-weight:700;white-space:nowrap;">{{ rChip }}</span></span>
+                            <div style="flex:1;min-height:60px;display:flex;align-items:flex-end;gap:10px;padding-top:6px;border-bottom:1px solid #E6E4DF;">
+                              <sc-for list="{{ rBars }}" as="rb" hint-placeholder-count="4">
+                                <div style="flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px;">
+                                  <span style="font-size:11px;font-weight:700;color:#3F3C37;opacity:{{ rb.op }};transition:opacity .4s ease .6s;font-variant-numeric:tabular-nums;">{{ rb.val }}</span>
+                                  <span style="width:100%;max-width:38px;height:{{ rb.h }};border-radius:5px 5px 0 0;background:{{ rb.color }};transition:height .9s cubic-bezier(0.22,1,0.36,1) {{ rb.delay }};"></span>
+                                </div>
+                              </sc-for>
+                            </div>
+                            <div style="display:flex;gap:10px;">
+                              <sc-for list="{{ rBars }}" as="rb" hint-placeholder-count="4">
+                                <span style="flex:1;text-align:center;font-size:11px;color:#57544E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ rb.name }}</span>
+                              </sc-for>
+                            </div>
+                          </div>
+                        </div>
+                      </sc-if>
+                      <div style="flex:{{ lowFlex }};min-height:0;display:grid;grid-template-columns:{{ lowCols }};gap:12px;">
+                      <div style="min-width:0;min-height:0;display:{{ movDisp }};flex-direction:column;">
+                      <span style="flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;"><span style="font-size:12px;font-weight:800;color:#121110;">Últimos movimientos</span><span style="display:flex;align-items:center;gap:5px;padding:2px 8px;border-radius:999px;background:#E9F5EE;color:#126B33;font-size:11px;font-weight:800;"><span style="width:6px;height:6px;border-radius:50%;background:#177A41;animation:bo-pulse 1.4s ease-in-out infinite;"></span>En vivo</span></span>
+                      <div style="position:relative;flex:1;min-height:0;margin-top:6px;">
+                        <div ref="{{ webStackRef }}" style="position:absolute;inset:0;"></div>
+                        <div ref="{{ webResultRef }}" style="position:absolute;left:0;right:0;bottom:0;z-index:2;"></div>
+                      </div>
+                      </div>
+                    <div style="min-height:0;min-width:0;display:{{ chatDisp }};flex-direction:column;background:#EFE8DE;border:1px solid #E6E4DF;border-radius:12px;overflow:hidden;">
+                      <div style="flex:none;display:flex;align-items:center;gap:9px;padding:9px 12px;background:#FFFFFF;border-bottom:1px solid #E6E4DF;">
+                        <img src="{{ wcAvatar }}" alt="" width="30" height="30" style="flex:none;display:block;width:30px;height:30px;border-radius:50%;object-fit:cover;object-position:50% 25%;">
+                        <span style="min-width:0;display:flex;flex-direction:column;">
+                          <span style="font-size:12.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ wcName }}</span>
+                          <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:#126B33;font-weight:700;"><img src="assets/whatsapp.png" alt="" width="13" height="13" style="display:block;">Chat de WhatsApp</span>
+                        </span>
+                        <span style="margin-left:auto;flex:none;display:flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;background:#EEF2FF;color:#3730A3;font-size:11px;font-weight:800;"><svg width="12" height="12" viewBox="0 0 24 24" fill="#4338CA" aria-hidden="true"><path d="M12 2.5l2.2 6.3 6.3 2.2-6.3 2.2L12 19.5l-2.2-6.3L3.5 11l6.3-2.2z"></path></svg>IA respondiendo</span>
+                      </div>
+                      <div ref="{{ wChatRef }}" role="log" aria-live="polite" aria-label="Conversación de WhatsApp" style="flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;gap:7px;padding:10px 12px 8px;"></div>
+                      <div style="flex:none;display:flex;align-items:center;gap:7px;padding:7px 10px;background:#F7F6F3;border-top:1px solid #E6E4DF;">
+                        <div style="flex:1;min-width:0;min-height:30px;display:flex;align-items:center;padding:5px 11px;border-radius:999px;background:#FFFFFF;border:1px solid #DEDCD7;font-size:12px;color:#6E6A63;">La IA responde sola, día y noche</div>
+                        <span aria-hidden="true" style="flex:none;width:30px;height:30px;border-radius:50%;background:#1FAF5A;display:flex;align-items:center;justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"></path></svg></span>
+                      </div>
+                    </div>
+                    <div style="min-height:0;min-width:0;display:{{ botDisp }};flex-direction:column;background:#F7F6F3;border:1px solid #E6E4DF;border-radius:12px;overflow:hidden;">
+                      <div style="flex:none;display:flex;align-items:center;gap:9px;padding:10px 12px;">
+                        <img src="assets/robot.png" alt="" width="24" height="24" style="display:block;width:24px;height:24px;">
+                        <span style="display:flex;flex-direction:column;min-width:0;">
+                          <span style="font-size:12.5px;font-weight:750;">Asistente</span>
+                          <span style="font-size:11px;color:#57544E;white-space:nowrap;">Te avisa y te sugiere mejoras</span>
+                        </span>
+                      </div>
+                      <div ref="{{ botRef }}" style="flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;gap:7px;padding:4px 12px 10px;"></div>
+                      <div style="flex:none;display:flex;align-items:center;gap:7px;padding:8px 10px;border-top:1px solid #E6E4DF;">
+                        <div style="flex:1;min-width:0;min-height:30px;display:flex;align-items:center;padding:5px 11px;border-radius:8px;background:#FFFFFF;border:1px solid #DEDCD7;font-size:12px;">
+                          <span ref="{{ botInputRef }}" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></span>
+                          <span ref="{{ botPhRef }}" style="color:#6E6A63;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Escríbele al asistente</span>
+                        </div>
+                        <span ref="{{ botSendRef }}" style="flex:none;width:30px;height:30px;border-radius:8px;background:#121110;display:flex;align-items:center;justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"></path></svg></span>
+                      </div>
+                      </div>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <div aria-hidden="true" style="position:absolute;left:50%;top:50%;z-index:3;width:{{ phoneW }};aspect-ratio:9/16.5;transform:{{ custT }};opacity:{{ custOp }};transition:transform .9s cubic-bezier(0.22,1,0.36,1),opacity .6s ease;pointer-events:none;">
+          <div style="position:relative;width:100%;height:100%;border-radius:56px;padding:3px;background:linear-gradient(135deg, #E2C9AE 0%, #9C7F64 18%, #CDB194 40%, #7D634B 62%, #BFA284 82%, #EAD5BE 100%);box-shadow:0 50px 70px -30px rgba(0,0,0,0.7),0 20px 30px -14px rgba(0,0,0,0.45),inset 0 0 0 1px rgba(255,255,255,0.3);">
+            <div style="height:100%;border-radius:53px;background:#050505;padding:8px;">
+              <div style="position:relative;height:100%;border-radius:45px;overflow:hidden;background:#000000;color:#FFFFFF;display:flex;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,'Archivo',sans-serif;">
+                <div style="position:absolute;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:4px 22px 0 26px;z-index:3;">
+                  <span style="font-weight:600;font-size:14px;white-space:nowrap;">{{ clockMain }}</span>
+                  <span style="display:flex;align-items:center;gap:5px;">
+                    <svg width="15" height="12" viewBox="0 0 24 20" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M2.5 7a14 14 0 0 1 19 0M5.8 10.5a9 9 0 0 1 12.4 0M9 14a4.5 4.5 0 0 1 6 0"></path><circle cx="12" cy="17.5" r="1.2" fill="#FFFFFF"></circle></svg>
+                    <span style="width:23px;height:11px;border-radius:3.5px;border:1.2px solid rgba(255,255,255,0.5);padding:1.2px;"><span style="display:block;width:55%;height:100%;border-radius:1.8px;background:#FFFFFF;"></span></span>
+                  </span>
+                </div>
+                <div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);width:31%;height:28px;border-radius:20px;background:#000000;z-index:4;"></div>
+                <div style="flex:none;position:relative;padding:46px 12px 8px;background:#1C1C1E;border-bottom:0.5px solid rgba(255,255,255,0.12);display:grid;grid-template-columns:28px minmax(0,1fr) 28px;align-items:center;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3EC26E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+                  <span style="display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0;">
+                    <img src="{{ chatAvatar }}" alt="" width="36" height="36" style="display:block;width:36px;height:36px;border-radius:50%;object-fit:cover;object-position:50% 25%;">
+                    <span style="font-size:10.5px;font-weight:600;color:#FFFFFF;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;">{{ chatName }} ›</span>
+                  </span>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3EC26E" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6.5" width="13" height="11" rx="2.5"></rect><path d="M15.5 10.5 21.5 7v10l-6-3.5z"></path></svg>
+                </div>
+                <div ref="{{ chatRef }}" style="flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;gap:5px;padding:10px 10px 8px;"></div>
+                <div style="flex:none;display:flex;align-items:center;gap:7px;padding:6px 9px 24px;">
+                  <span style="flex:none;width:28px;height:28px;border-radius:50%;background:#2C2C2E;display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C7C7CC" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span>
+                  <div style="flex:1;min-width:0;min-height:30px;display:flex;align-items:center;gap:6px;padding:5px 6px 5px 12px;border-radius:16px;border:1px solid #3A3A3C;font-size:12.5px;line-height:1.3;color:#FFFFFF;">
+                    <span ref="{{ inputRef }}" style="flex:1;min-width:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;"></span>
+                    <span ref="{{ placeholderRef }}" style="flex:1;color:#8E8E93;">Mensaje</span>
+                    <span ref="{{ micRef }}" style="flex:none;display:flex;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8E8E93" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"></path></svg></span>
+                    <span ref="{{ sendRef }}" style="flex:none;width:24px;height:24px;border-radius:50%;background:#2FB565;display:none;align-items:center;justify-content:center;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"></path></svg></span>
+                  </div>
+                </div>
+                <div style="position:absolute;bottom:7px;left:50%;transform:translateX(-50%);width:34%;height:4.5px;border-radius:3px;background:rgba(255,255,255,0.85);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div ref="{{ flyRef }}" aria-hidden="true" style="position:absolute;inset:0;z-index:8;pointer-events:none;"></div>
+      </div>
+
+      <sc-if value="{{ dPlayWide }}" hint-placeholder-val="{{ false }}">
+        <div class="bd-a" style="position:absolute;top:0;left:0;bottom:0;width:380px;z-index:10;display:flex;flex-direction:column;background:#F3F2EE;color:#121110;overflow-y:auto;box-shadow:12px 0 40px -24px rgba(0,0,0,0.6);animation:bd-panel .6s cubic-bezier(0.22,1,0.36,1) both;">
+          <div style="flex:none;padding:22px 26px 0;">
+            <button onClick="{{ goPick }}" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;border:1.5px solid #121110;background:transparent;color:#121110;font-family:'Archivo',sans-serif;font-size:0.86rem;font-weight:700;cursor:pointer;" style-hover="background:#121110;color:#FFFFFF;" style-focus="outline:3px solid #E8501F;outline-offset:2px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>Otros procesos</button>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:26px;padding:28px 26px 32px;">
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <h2 class="bd-a" style="margin:0;font-weight:900;font-stretch:68%;text-transform:uppercase;font-size:2.7rem;line-height:0.92;letter-spacing:-0.01em;animation:bd-up .6s cubic-bezier(0.22,1,0.36,1) .1s both;">{{ dTitle }}</h2>
+              <span class="bd-a" style="font-size:0.9rem;color:#57544E;animation:bd-up .6s cubic-bezier(0.22,1,0.36,1) .16s both;">{{ dMeta }}</span>
+            </div>
+            <span style="font-size:0.82rem;color:#57544E;margin-bottom:-14px;">Toca un paso para verlo desde ahí.</span>
+            <ol aria-label="Pasos del proceso" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;">
+              <sc-for list="{{ steps }}" as="st" hint-placeholder-count="5">
+                <li class="bd-a" style="position:relative;margin-bottom:6px;animation:bd-row .5s cubic-bezier(0.22,1,0.36,1) {{ st.delay }} backwards;">
+                  <button onClick="{{ st.go }}" aria-current="{{ st.aria }}" aria-label="Ver desde el paso {{ st.n }}: {{ st.label }}" style="width:100%;border:0;cursor:pointer;text-align:left;font-family:inherit;position:relative;display:grid;grid-template-columns:36px minmax(0,1fr);column-gap:14px;align-items:center;padding:8px 10px;border-radius:14px;background:{{ st.rowBg }};box-shadow:{{ st.rowShadow }};transform:translateX({{ st.rowX }});transition:background-color .45s ease,box-shadow .45s ease,transform .45s cubic-bezier(0.22,1,0.36,1);" style-hover="background:#FFFFFF;" style-focus="outline:3px solid #E8501F;outline-offset:2px;">
+                  <sc-if value="{{ st.hasLine }}" hint-placeholder-val="{{ true }}">
+                    <span aria-hidden="true" style="position:absolute;left:27px;top:46px;height:20px;width:2px;border-radius:1px;background:#D8D5CE;overflow:hidden;"><span style="display:block;width:100%;height:{{ st.lineFill }};background:#E8501F;transition:height .5s ease .1s;"></span></span>
+                  </sc-if>
+                  <span style="position:relative;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ st.circleBg }};border:2px solid {{ st.circleBorder }};color:{{ st.circleColor }};font-weight:800;font-size:0.9rem;transition:background-color .35s ease,border-color .35s ease,color .35s ease;">
+                    <sc-if value="{{ st.isDone }}" hint-placeholder-val="{{ false }}">
+                      <svg class="bd-a" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="animation:bd-check .45s cubic-bezier(0.34,1.56,0.64,1) both;"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+                    </sc-if>
+                    <sc-if value="{{ st.notDone }}" hint-placeholder-val="{{ true }}">{{ st.n }}</sc-if>
+                  </span>
+                  <span style="font-size:1rem;line-height:1.3;font-weight:{{ st.weight }};color:{{ st.textColor }};transition:color .4s ease;">{{ st.label }}</span>
+                                  </button>
+                </li>
+              </sc-for>
+            </ol>
+            <sc-if value="{{ sDone }}" hint-placeholder-val="{{ false }}">
+              <div class="bd-a" style="display:flex;flex-direction:column;gap:14px;padding:18px;border-radius:16px;background:#FFFFFF;box-shadow:0 18px 40px -24px rgba(0,0,0,0.5);animation:bd-up .55s cubic-bezier(0.22,1,0.36,1) backwards;">
+                <span style="font-weight:850;font-size:1.1rem;line-height:1.25;">¿Quieres esto en tu negocio?</span>
+                <a href="{{ waDone }}" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 18px;border-radius:999px;background:#177A41;color:#FFFFFF;text-decoration:none;font-family:'Archivo',sans-serif;font-weight:800;font-size:0.98rem;" style-hover="background:#12632F;color:#FFFFFF;" style-focus="outline:3px solid #E8501F;outline-offset:2px;"><img src="assets/whatsapp.png" alt="" width="22" height="22" style="display:block;flex:none;">Escríbenos por WhatsApp</a>
+                <span style="display:flex;flex-wrap:wrap;gap:8px;">
+                  <button onClick="{{ goPick }}" style="flex:1;padding:10px 14px;border-radius:999px;border:1.5px solid #121110;background:#FFFFFF;color:#121110;font-family:'Archivo',sans-serif;font-weight:750;font-size:0.88rem;cursor:pointer;" style-hover="background:#EFEEEA;" style-focus="outline:3px solid #E8501F;outline-offset:2px;">Ver otro proceso</button>
+                  <button onClick="{{ replay }}" style="padding:10px 14px;border-radius:999px;border:0;background:transparent;color:#121110;font-family:'Archivo',sans-serif;font-weight:750;font-size:0.88rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px;" style-focus="outline:3px solid #E8501F;outline-offset:2px;">Repetir</button>
+                </span>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ dPlayNarrow }}" hint-placeholder-val="{{ false }}">
+        <div class="bd-a" style="position:absolute;top:0;left:0;right:0;height:60px;z-index:10;display:flex;align-items:center;gap:12px;padding:0 60px 0 12px;background:#F3F2EE;color:#121110;box-shadow:0 8px 24px -16px rgba(0,0,0,0.6);animation:bd-fade .4s ease both;">
+          <button onClick="{{ goPick }}" aria-label="Otros procesos" style="flex:none;width:40px;height:40px;border-radius:50%;border:1.5px solid #121110;background:transparent;color:#121110;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-focus="outline:3px solid #E8501F;outline-offset:2px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg></button>
+          <span style="min-width:0;font-weight:900;font-stretch:72%;text-transform:uppercase;font-size:1.35rem;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ dTitle }}</span>
+        </div>
+        <div class="bd-a" style="position:absolute;left:0;right:0;bottom:0;z-index:10;min-height:150px;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:16px 16px 18px;border-radius:22px 22px 0 0;background:#F3F2EE;color:#121110;box-shadow:0 -12px 30px -18px rgba(0,0,0,0.6);animation:bd-sheet .55s cubic-bezier(0.22,1,0.36,1) both;">
+          <div style="display:flex;gap:6px;">
+            <sc-for list="{{ steps }}" as="st" hint-placeholder-count="5">
+              <button onClick="{{ st.go }}" aria-label="Ver desde el paso {{ st.n }}: {{ st.label }}" style="flex:1;height:22px;padding:0;border:0;background:transparent;cursor:pointer;display:flex;align-items:center;" style-focus="outline:2px solid #E8501F;outline-offset:1px;"><span style="width:100%;height:5px;border-radius:3px;background:#D8D5CE;overflow:hidden;"><span style="display:block;height:100%;width:{{ st.seg }};background:#E8501F;transition:width .5s cubic-bezier(0.22,1,0.36,1);"></span></span></button>
+            </sc-for>
+          </div>
+          <sc-if value="{{ sNotDone }}" hint-placeholder-val="{{ true }}">
+            <div aria-live="polite" style="display:grid;">
+              <sc-for list="{{ steps }}" as="st" hint-placeholder-count="5">
+                <div aria-hidden="{{ st.mHidden }}" style="grid-area:1/1;display:flex;align-items:center;gap:12px;opacity:{{ st.mOp }};transform:translateY({{ st.mY }});transition:opacity .45s ease,transform .5s cubic-bezier(0.22,1,0.36,1);">
+                  <span style="flex:none;width:36px;height:36px;border-radius:50%;background:#C2410C;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-weight:800;">{{ st.n }}</span>
+                  <span style="display:flex;flex-direction:column;gap:2px;min-width:0;">
+                    <span style="font-size:0.78rem;font-weight:700;color:#57544E;">Paso {{ st.n }} de {{ stepCount }}</span>
+                    <span style="font-weight:750;font-size:1.02rem;line-height:1.3;">{{ st.label }}</span>
+                  </span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ sDone }}" hint-placeholder-val="{{ false }}">
+            <div class="bd-a" style="display:flex;flex-direction:column;gap:8px;animation:bd-up .5s cubic-bezier(0.22,1,0.36,1) backwards;">
+              <a href="{{ waDone }}" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 16px;border-radius:999px;background:#177A41;color:#FFFFFF;text-decoration:none;font-family:'Archivo',sans-serif;font-weight:800;font-size:0.98rem;" style-focus="outline:3px solid #E8501F;outline-offset:2px;"><img src="assets/whatsapp.png" alt="" width="22" height="22" style="display:block;flex:none;">Quiero esto en mi negocio</a>
+              <span style="display:flex;gap:8px;">
+                <button onClick="{{ goPick }}" style="flex:1;padding:10px 12px;border-radius:999px;border:1.5px solid #121110;background:#FFFFFF;color:#121110;font-family:'Archivo',sans-serif;font-weight:750;font-size:0.88rem;cursor:pointer;" style-focus="outline:3px solid #E8501F;outline-offset:2px;">Ver otro proceso</button>
+                <button onClick="{{ replay }}" style="padding:10px 12px;border-radius:999px;border:0;background:transparent;color:#121110;font-family:'Archivo',sans-serif;font-weight:750;font-size:0.88rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px;" style-focus="outline:3px solid #E8501F;outline-offset:2px;">Repetir</button>
+              </span>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ dPlay }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ goPick }}" aria-label="Cerrar esta demostración" style="position:absolute;top:8px;right:10px;z-index:11;width:46px;height:46px;border-radius:50%;border:0;background:#B91C1C;color:#FFFFFF;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px -6px rgba(0,0,0,0.5);" style-hover="background:#991B1B;" style-focus="outline:3px solid #E8501F;outline-offset:2px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+      </sc-if>
+    </div>
+
+
+  <sc-if value="{{ demoOpen }}" hint-placeholder-val="{{ false }}">
+    <div ref="{{ dlgRef }}" tabIndex="-1" role="dialog" aria-modal="true" aria-label="Demostración de Bitwise" style="position:fixed;inset:0;z-index:100;background:#0E0C0B;color:#FFFFFF;font-family:'Archivo',system-ui,sans-serif;overflow:hidden;outline:none;">
+
+      <sc-if value="{{ dIntro }}" hint-placeholder-val="{{ true }}">
+        <div style="position:absolute;inset:0;overflow:hidden;">
+          <sc-for list="{{ introBgs }}" as="ib" hint-placeholder-count="3">
+            <img class="bd-a" src="{{ ib.src }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ ib.pos }};animation:bd-bgin 1.4s ease {{ ib.delay }} both, bd-kb 7s ease-out {{ ib.delay }} both;">
+          </sc-for>
+          <div aria-hidden="true" style="position:absolute;inset:0;background:radial-gradient(80% 70% at 50% 55%, rgba(14,12,11,0.55) 0%, rgba(14,12,11,0.92) 100%);"></div>
+          <div style="position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:24px 18px;text-align:center;">
+            <h2 style="margin:0;font-weight:900;font-stretch:68%;text-transform:uppercase;font-size:clamp(2.8rem, 9vw, 6rem);line-height:0.92;letter-spacing:-0.01em;">
+              <span style="display:block;overflow:hidden;padding-bottom:0.06em;"><span class="bd-a" style="display:inline-block;animation:bd-word .8s cubic-bezier(0.22,1,0.36,1) .35s both;">¿Qué proceso</span></span>
+              <span style="display:block;overflow:hidden;padding-bottom:0.06em;"><span class="bd-a" style="display:inline-block;animation:bd-word .8s cubic-bezier(0.22,1,0.36,1) .6s both;">quieres ver</span></span>
+              <span style="display:block;overflow:hidden;padding-bottom:0.06em;"><span class="bd-a" style="display:inline-block;color:#E8501F;animation:bd-word .8s cubic-bezier(0.22,1,0.36,1) .85s both;">en acción?</span></span>
+            </h2>
+            <button class="bd-a" onClick="{{ goPick }}" style="display:flex;align-items:center;gap:10px;padding:14px 24px;border-radius:999px;border:0;background:#FFFFFF;color:#121110;font-family:'Archivo',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;animation:bd-up .6s ease 1.6s backwards;" style-hover="background:#E8501F;color:#FFFFFF;" style-focus="outline:3px solid #E8501F;outline-offset:3px;">Elegir proceso<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ dPick }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;display:grid;grid-template-columns:{{ pickCols }};background:#0E0C0B;">
+          <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+            <div aria-hidden="true" style="position:relative;overflow:hidden;background:#1A1714;">
+              <sc-for list="{{ svcCards }}" as="sv" hint-placeholder-count="6">
+                <img src="{{ sv.img }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ sv.pos }};opacity:{{ sv.op }};transform:scale({{ sv.scale }});transition:opacity .7s cubic-bezier(0.22,1,0.36,1),transform 1.4s cubic-bezier(0.22,1,0.36,1);">
+              </sc-for>
+              <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(14,12,11,0.1) 0%, rgba(14,12,11,0.25) 40%, rgba(14,12,11,0.93) 100%);"></div>
+              <div style="position:absolute;left:40px;right:40px;bottom:44px;display:flex;flex-direction:column;gap:18px;">
+                <span style="font-weight:900;font-stretch:68%;text-transform:uppercase;font-size:clamp(2.6rem, 4.4vw, 4.4rem);line-height:0.92;letter-spacing:-0.01em;text-wrap:balance;">{{ pvTitle }}</span>
+                <ol style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;">
+                  <sc-for list="{{ pvSteps }}" as="ps" hint-placeholder-count="5">
+                    <li style="display:flex;align-items:center;gap:10px;font-size:1rem;line-height:1.3;color:#EDEAE5;"><span style="flex:none;width:6px;height:6px;border-radius:50%;background:#E8501F;"></span>{{ ps.label }}</li>
+                  </sc-for>
+                </ol>
+              </div>
+            </div>
+          </sc-if>
+          <div style="min-width:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.3) transparent;">
+            <div style="max-width:640px;margin:0 auto;padding:{{ pickPad }};display:flex;flex-direction:column;gap:28px;">
+              <div style="display:flex;flex-direction:column;gap:10px;padding-right:52px;">
+                <h2 class="bd-a" style="margin:0;font-weight:900;font-stretch:72%;text-transform:uppercase;font-size:clamp(2.2rem, 4vw, 3.4rem);line-height:0.95;letter-spacing:-0.01em;animation:bd-up .6s cubic-bezier(0.22,1,0.36,1) both;">Elige un proceso</h2>
+              </div>
+              <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;border-top:1px solid rgba(255,255,255,0.14);">
+                <sc-for list="{{ svcCards }}" as="sv" hint-placeholder-count="6">
+                  <li class="bd-a" style="border-bottom:1px solid rgba(255,255,255,0.14);animation:bd-row .55s cubic-bezier(0.22,1,0.36,1) {{ sv.delay }} backwards;">
+                    <button onClick="{{ sv.pick }}" onMouseEnter="{{ sv.hover }}" onFocus="{{ sv.hover }}" style="width:100%;display:grid;grid-template-columns:{{ thumbW }} minmax(0,1fr) 24px;align-items:center;gap:16px;margin:6px 0;padding:10px;border:0;border-radius:12px;background:{{ sv.bg }};color:#FFFFFF;text-align:left;cursor:pointer;font-family:'Archivo',sans-serif;transition:background-color .25s ease;" style-hover="background:rgba(255,255,255,0.08);" style-focus="outline:3px solid #E8501F;outline-offset:2px;">
+                      <span aria-hidden="true" style="width:52px;height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;background:{{ sv.iconBg }};box-shadow:inset 0 1px 0 rgba(255,255,255,0.35), 0 8px 18px -10px rgba(0,0,0,0.8), 0 0 0 {{ sv.ring }} rgba(255,255,255,0.85);transform:scale({{ sv.iconScale }});transition:box-shadow .25s ease,transform .3s cubic-bezier(0.34,1.56,0.64,1);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ sv.icon }}"></path></svg></span>
+                      <span style="min-width:0;display:flex;flex-direction:column;gap:4px;">
+                        <span style="font-size:1.22rem;font-weight:850;font-stretch:88%;line-height:1.1;">{{ sv.title }}</span>
+                        <span style="font-size:0.9rem;line-height:1.4;color:#CFCAC2;text-wrap:pretty;">{{ sv.sum }}</span>
+                      </span>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{ sv.arrow }}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform:translateX({{ sv.ax }});transition:stroke .25s ease,transform .25s cubic-bezier(0.22,1,0.36,1);"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+                    </button>
+                  </li>
+                </sc-for>
+              </ul>
+              <a href="{{ waOther }}" target="_blank" rel="noopener" class="bd-a" style="display:grid;grid-template-columns:{{ thumbW }} minmax(0,1fr) 24px;align-items:center;gap:16px;padding:10px;border-radius:12px;background:#177A41;color:#FFFFFF;text-decoration:none;font-family:'Archivo',sans-serif;animation:bd-row .55s cubic-bezier(0.22,1,0.36,1) .5s backwards;transition:background-color .25s ease;" style-hover="background:#12632F;color:#FFFFFF;" style-focus="outline:3px solid #FFFFFF;outline-offset:3px;">
+                <span style="width:{{ thumbW }};height:{{ thumbH }};border-radius:10px;background:rgba(255,255,255,0.14);display:flex;align-items:center;justify-content:center;"><img src="assets/whatsapp.png" alt="" width="36" height="36" style="display:block;width:36px;height:36px;"></span>
+                <span style="min-width:0;display:flex;flex-direction:column;gap:4px;">
+                  <span style="font-size:1.22rem;font-weight:850;font-stretch:88%;line-height:1.1;">¿Tu proceso es otro?</span>
+                  <span style="font-size:0.9rem;line-height:1.35;color:#FFFFFF;">Cuéntanos cuál por WhatsApp y te decimos cómo se haría.</span>
+                </span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ dLoad }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;overflow:hidden;">
+          <img class="bd-a" src="{{ dImg }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ dPos }};animation:bd-load 2.8s cubic-bezier(0.22,1,0.36,1) both;">
+          <div aria-hidden="true" style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(14,12,11,0.4) 0%, rgba(14,12,11,0.8) 100%);"></div>
+          <div role="status" aria-live="polite" style="position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;text-align:center;">
+            <span class="bd-a" aria-hidden="true" style="width:56px;height:56px;border-radius:50%;border:3px solid rgba(255,255,255,0.25);border-top-color:#E8501F;animation:bd-spin .9s linear infinite;"></span>
+            <h2 class="bd-a" style="margin:0;font-weight:900;font-stretch:70%;text-transform:uppercase;font-size:clamp(2.2rem, 6vw, 4.6rem);line-height:0.95;animation:bd-word .8s cubic-bezier(0.22,1,0.36,1) .1s both;">{{ dTitle }}</h2>
+            <span style="font-size:1rem;color:#E4E1DC;min-height:1.4em;">{{ loadLabel }}</span>
+            <span aria-hidden="true" style="width:min(320px, 70vw);height:4px;border-radius:2px;background:rgba(255,255,255,0.2);overflow:hidden;"><span class="bd-a" style="display:block;height:100%;background:#E8501F;transform-origin:left center;animation:bd-bar 2.6s linear both;"></span></span>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ dExit }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;overflow-y:auto;">
+          <img class="bd-a" src="{{ exitImg }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ exitPos }};filter:brightness(0.5);animation:bd-kb 6s ease-out both;">
+          <div aria-hidden="true" style="position:absolute;inset:0;background:radial-gradient(70% 70% at 50% 50%, rgba(14,12,11,0.5) 0%, rgba(14,12,11,0.92) 100%);"></div>
+          <div style="position:relative;min-height:100%;display:flex;align-items:center;justify-content:center;padding:32px 18px;">
+            <div class="bd-a" style="display:flex;flex-direction:column;align-items:center;gap:30px;text-align:center;animation:bd-up .7s cubic-bezier(0.22,1,0.36,1) both;">
+              <h2 style="margin:0;font-weight:900;font-stretch:70%;text-transform:uppercase;font-size:clamp(3rem, 9vw, 6rem);line-height:0.92;letter-spacing:-0.01em;">¿Te pareció bien?</h2>
+              <a href="{{ exitWa }}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;padding:16px 26px 16px 18px;border-radius:12px;background:#177A41;color:#FFFFFF;text-decoration:none;font-weight:800;font-size:1.08rem;box-shadow:0 14px 30px -12px rgba(0,0,0,0.7);" style-hover="background:#12632F;color:#FFFFFF;" style-focus="outline:3px solid #FFFFFF;outline-offset:3px;">
+                <img src="assets/whatsapp.png" alt="" width="26" height="26" style="display:block;">
+                Sí, contáctanos por WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ dShowX }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ xAction }}" aria-label="{{ xLabel }}" style="position:absolute;top:12px;right:14px;z-index:5;width:48px;height:48px;border-radius:50%;border:0;background:#B91C1C;color:#FFFFFF;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px -10px rgba(0,0,0,0.7);" style-hover="background:#991B1B;" style-focus="outline:3px solid #E8501F;outline-offset:2px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+      </sc-if>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;autoplay&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Animación&quot;},&quot;finish&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Titanio negro&quot;,&quot;Titanio natural&quot;,&quot;Titanio desierto&quot;],&quot;default&quot;:&quot;Titanio negro&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Celular&quot;}}">
+const G = '#2DB66A', R = '#D9572F', A = '#E3A23B', B = '#3D7BD9';
+const IMG = { wa: 'assets/whatsapp.png', robot: 'assets/robot.png', rosa: 'assets/rosa.png', lucia: 'assets/lucia.png', owner: 'assets/duenio.png', dra: 'assets/dra-ramos.png' };
+const BIZ = {
+  huerta: { name: 'Restaurante La Huerta', place: 'Miraflores, Lima', url: 'app.lahuerta.pe', owner: 'Julio', avatar: IMG.owner },
+  julio: { name: 'Abarrotes Don Julio', place: 'Surco, Lima', url: 'app.donjulio.pe', owner: 'Julio', avatar: IMG.owner },
+  ramos: { name: 'Consultorio Dra. Ramos', place: 'Miraflores, Lima', url: 'app.consultorioramos.pe', owner: 'Dra. Ramos', avatar: IMG.dra },
+  maestro: { name: 'Ferretería El Maestro', place: 'Los Olivos, Lima', url: 'app.ferreteriaelmaestro.pe', owner: 'Julio', avatar: IMG.owner }
+};
+const STORIES = [
+  { tab: 'Pedido por WhatsApp', meta: 'Sistema a medida', service: 'Sistema a medida · ERP', biz: BIZ.julio, date: 'miércoles, 4 de noviembre', chat: { name: 'Abarrotes Don Julio', avatar: IMG.owner }, n: [
+    { k: 'wa', p: IMG.rosa, c: G, a: 'WhatsApp', ti: 'Nuevo pedido · Bodega Rosita', d: '2 sacos de arroz 5 kg y 1 caja de aceite', t: '11:02', step: 'Llega el pedido por WhatsApp' },
+    { k: 'clip', c: R, a: 'Sistema', ti: 'Pedido #1042 registrado', d: 'Asignado a reparto, zona Surco', t: '11:02' },
+    { k: 'box', c: A, a: 'Almacén', ti: 'Stock actualizado', d: 'Arroz 5 kg: 48 → 46 sacos', t: '11:03' },
+    { k: 'receipt', c: B, a: 'SUNAT', ti: 'Boleta electrónica emitida', d: 'B001-1042 · S/ 198.40', t: '11:03' },
+    { k: 'truck', c: G, a: 'Reparto', ti: 'Pedido entregado', d: 'Recibido por Rosa M.', t: '11:42' }
+  ], r: ['S/ 3,482.50', 'Ventas de hoy · 23 pedidos', 'Nadie escribió nada a mano'],
+  acts: [[0, 'mode', 'phone'], [500, 'type', 'Hola, quiero 2 sacos de arroz 5 kg y 1 caja de aceite'], [2500, 'send'], [2900, 'fly', 'in'], [3000, 'mode', 'solo'], [3800, 'notif', 0], [5400, 'notif', 1], [6900, 'notif', 2], [7700, 'mode', 'dual'], [8600, 'notif', 3], [8900, 'fly', 'out'], [9800, 'recv', 'Tu boleta B001-1042 · S/ 198.40'], [10300, 'notif', 4], [10600, 'fly', 'out'], [11500, 'recv', 'Tu pedido llegó. ¡Gracias por tu compra, Rosa!'], [12100, 'result']] },
+  { tab: 'Reporte automático', meta: 'Excel y reportes', service: 'Automatización de Excel y reportes', biz: BIZ.julio, date: 'martes, 3 de noviembre', n: [
+    { k: 'file', c: G, a: 'Correo', ti: 'ventas_lunes.xlsx', d: 'Recibido de Caja', t: '6:58', step: 'Llega el Excel de caja' },
+    { k: 'file', c: G, a: 'Correo', ti: 'almacen_lunes.xlsx', d: 'Recibido de Almacén', t: '6:59', step: 'Llega el Excel de almacén' },
+    { k: 'gear', c: R, a: 'Sistema', ti: 'Juntando los datos', d: '3 archivos · 1,284 filas revisadas', t: '7:00' },
+    { k: 'chart', c: A, a: 'Reportes', ti: 'Gráfico listo', d: 'Ventas por tienda y por producto', t: '7:00' },
+    { k: 'bell', c: B, a: 'Reportes', ti: 'Tu reporte de ayer está listo', d: 'Enviado a gerencia por correo', t: '7:01' }
+  ], r: ['0 horas', 'armando el reporte a mano', 'Llega solo, todos los días a las 7:00'],
+  acts: [[0, 'mode', 'solo'], [350, 'notif', 0], [1850, 'notif', 1], [3350, 'notif', 2], [4850, 'notif', 3], [6350, 'notif', 4], [6900, 'download'], [8800, 'result']] },
+  { tab: 'Citas por WhatsApp', meta: 'Bot de WhatsApp', service: 'Bot de WhatsApp', biz: BIZ.ramos, date: 'martes, 3 de noviembre', chat: { name: 'Consultorio Dra. Ramos', avatar: IMG.dra }, n: [
+    { k: 'wa', p: IMG.lucia, c: G, a: 'WhatsApp', ti: 'Lucía Torres', d: 'Hola, ¿tienen cita para mañana?', t: '10:47 p. m.', step: 'La paciente escribe de noche' },
+    { k: 'robot', c: R, a: 'Asistente', ti: 'Respuesta automática', d: 'Sí: 10:00, 11:30 o 4:00 p. m. ¿Cuál prefieres?', t: '10:47 p. m.', step: 'El bot le ofrece horarios' },
+    { k: 'wa', p: IMG.lucia, c: G, a: 'WhatsApp', ti: 'Lucía Torres', d: 'La de las 10:00, por favor', t: '10:48 p. m.', step: 'Ella elige uno' },
+    { k: 'check', c: G, a: 'Agenda', ti: 'Cita confirmada', d: 'Jueves 10:00 a. m. · Dra. Ramos', t: '10:48 p. m.' },
+    { k: 'bell', c: B, a: 'Agenda', ti: 'Recordatorio enviado', d: '"Te esperamos mañana a las 10:00"', t: 'Mié 6:00 p. m.' }
+  ], r: ['24 horas', 'atendiendo, sin contratar a nadie', 'Esta cita se agendó a las 10:48 p. m.'],
+  acts: [[0, 'mode', 'phone'], [500, 'type', 'Hola, ¿tienen cita para mañana?'], [1900, 'send'], [2200, 'fly', 'in'], [2300, 'mode', 'solo'], [3100, 'notif', 0], [4200, 'notif', 1], [4300, 'mode', 'dual'], [4900, 'fly', 'out'], [5400, 'recv', 'Sí: 10:00, 11:30 o 4:00 p. m. ¿Cuál prefieres?'], [6200, 'type', 'La de las 10:00, por favor'], [7400, 'send'], [7700, 'fly', 'in'], [8600, 'notif', 2], [9800, 'notif', 3], [10500, 'fly', 'out'], [11000, 'recv', 'Cita confirmada: jueves 10:00 a. m. con la Dra. Ramos'], [12000, 'day', 'Miércoles 6:00 p. m.'], [12300, 'notif', 4], [12600, 'fly', 'out'], [13500, 'recv', 'Te esperamos mañana a las 10:00'], [14100, 'result']] },
+  { tab: 'Stock bajo', meta: 'Inventario', service: 'Sistema de inventario', biz: BIZ.maestro, date: 'miércoles, 4 de noviembre', n: [
+    { k: 'cart', c: R, a: 'Caja', ti: 'Venta registrada', d: '10 bolsas de cemento · S/ 295.00', t: '9:15' },
+    { k: 'warn', c: A, a: 'Almacén', ti: 'Stock bajo · Cemento', d: 'Quedan 5 bolsas (mínimo: 20)', t: '9:15' },
+    { k: 'send', c: B, a: 'Compras', ti: 'Orden de compra enviada', d: 'OC-0318 · 80 bolsas · Distribuidora Andina', t: '9:16' },
+    { k: 'truck', c: B, a: 'Compras', ti: 'El proveedor confirmó', d: 'Llega mañana antes de las 10:00', t: '9:40' },
+    { k: 'check', c: G, a: 'Almacén', ti: 'Mercadería recibida', d: 'Cemento: 85 bolsas en stock', t: 'Mañana 9:52' }
+  ], r: ['0 veces', 'le dijiste "no hay" a un cliente', 'El pedido salió solo, a tiempo'] },
+  { tab: 'Ventas web conectadas', meta: 'Integración de sistemas', service: 'Integración de sistemas', biz: BIZ.julio, date: 'jueves, 5 de noviembre', n: [
+    { k: 'cart', c: B, a: 'Tienda online', ti: 'Nueva venta web #W-218', d: '1 caja de aceite y 3 kg de azúcar · S/ 96.50', t: '8:21', step: 'Entra una venta por la tienda online' },
+    { k: 'box', c: A, a: 'Almacén', ti: 'Stock descontado', d: 'El mismo stock de la bodega, sin cuadrar a mano', t: '8:21' },
+    { k: 'receipt', c: B, a: 'SUNAT', ti: 'Boleta electrónica emitida', d: 'B001-1077 · S/ 96.50', t: '8:21' },
+    { k: 'check', c: G, a: 'Banco', ti: 'Pago conciliado', d: 'Yape S/ 96.50 · cruzado con la venta W-218', t: '8:23', step: 'El pago del banco se cruza solo' },
+    { k: 'chart', c: R, a: 'Contabilidad', ti: 'Asiento registrado', d: 'Listo para tu contador, sin digitar', t: '8:23' }
+  ], r: ['1 sistema', 'en vez de 4 que no se hablan', 'Web, almacén, SUNAT y banco al día'] },
+  { tab: 'App de reparto', meta: 'Apps móviles', service: 'App móvil a medida', biz: BIZ.julio, date: 'jueves, 5 de noviembre', n: [
+    { k: 'clip', c: R, a: 'Sistema', ti: 'Ruta del día lista', d: '12 entregas ordenadas por zona · Surco y Barranco', t: '9:00', step: 'El repartidor recibe su ruta en la app' },
+    { k: 'truck', c: G, a: 'App Reparto', ti: 'Carlos salió a repartir', d: 'Primera parada: Bodega Rosita', t: '9:12' },
+    { k: 'wa', p: IMG.rosa, c: G, a: 'WhatsApp', ti: 'Aviso a Bodega Rosita', d: 'Tu pedido llega en 10 minutos', t: '9:31', step: 'El cliente recibe un aviso automático' },
+    { k: 'check', c: G, a: 'App Reparto', ti: 'Entregado con foto y firma', d: 'Cobrado S/ 198.40 en efectivo', t: '9:42' },
+    { k: 'chart', c: B, a: 'Reportes', ti: 'Ruta cerrada', d: '12 de 12 entregas · caja cuadrada', t: '13:05' }
+  ], r: ['12 de 12', 'entregas del día, con prueba', 'Sin llamadas de "¿dónde está mi pedido?"'] },
+  { webToast: 'María Paredes', tab: 'Facturación electrónica', meta: 'Ventas y facturación', service: 'Facturación electrónica · SUNAT', biz: BIZ.huerta, date: 'viernes, 6 de noviembre', chat: { name: 'Restaurante La Huerta', avatar: IMG.owner }, n: [
+    { k: 'cart', c: R, a: 'Caja', ti: 'Venta registrada · Mesa 4', d: '3 menús y bebidas · S/ 186.00', t: '13:42', step: 'Se registra la venta en caja' },
+    { k: 'wa', p: IMG.lucia, c: G, a: 'WhatsApp', ti: 'María pide factura', d: 'Envió su RUC 20601234567', t: '13:43', step: 'El cliente pide factura por WhatsApp' },
+    { k: 'receipt', c: B, a: 'Facturación', ti: 'Factura F001-00873 armada', d: 'Base S/ 157.63 · IGV S/ 28.37', t: '13:44', step: 'El sistema arma la factura con el RUC' },
+    { k: 'check', c: G, a: 'SUNAT', ti: 'Aceptada por SUNAT', d: 'Constancia (CDR) guardada', t: '13:44', step: 'SUNAT la acepta en segundos' },
+    { k: 'send', c: A, a: 'Correo', ti: 'PDF y XML enviados', d: 'A María y a tu contador', t: '13:45', step: 'Se imprime y llega al cliente y al contador' }
+  ], r: ['8 seg', 'para emitir una factura', 'Sin digitar RUC, montos ni IGV a mano'],
+  acts: [[0, 'mode', 'phone'], [500, 'type', 'Hola, ¿me dan factura? Mesa 4. RUC 20601234567'], [2500, 'send'], [2800, 'fly', 'in'], [2900, 'mode', 'solo'], [3800, 'notif', 0], [4800, 'notif', 1], [6000, 'notif', 2], [6900, 'sunat'], [8400, 'notif', 3], [9100, 'mode', 'dual'], [9500, 'print'], [11000, 'fly', 'out'], [11900, 'recv', 'Tu factura F001-00873 fue aceptada por SUNAT. Te enviamos el PDF y el XML.'], [12600, 'notif', 4], [13400, 'result']] }
+];
+STORIES.forEach((s) => {
+  if (!s.acts) { s.acts = [[0, 'mode', 'solo']]; s.n.forEach((_, k) => s.acts.push([350 + 1500 * k, 'notif', k])); s.acts.push([7000, 'result']); }
+  s.total = s.acts[s.acts.length - 1][0] + 3200;
+});
+STORIES[0].client = { name: 'Bodega Rosita · Rosa', avatar: IMG.rosa };
+STORIES[2].client = { name: 'Lucía Torres', avatar: IMG.lucia };
+STORIES[6].client = { name: 'María Paredes', avatar: IMG.lucia };
+const KPI = [
+  [['Pedidos de hoy', ['22', '23', '23', '23', '23', '23']], ['Ventas de hoy', ['S/ 3,284.10', 'S/ 3,284.10', 'S/ 3,284.10', 'S/ 3,284.10', 'S/ 3,482.50', 'S/ 3,482.50']], ['Arroz 5 kg', ['48 sacos', '48 sacos', '48 sacos', '46 sacos', '46 sacos', '46 sacos']]],
+  [['Archivos recibidos', ['0 de 3', '1 de 3', '2 de 3', '3 de 3', '3 de 3', '3 de 3']], ['Filas revisadas', ['0', '0', '0', '1,284', '1,284', '1,284']], ['Reporte de ayer', ['Pendiente', 'Pendiente', 'Pendiente', 'Armando', 'Listo', 'Enviado']]],
+  [['Citas para mañana', ['6', '6', '6', '6', '7', '7']], ['Horarios libres', ['3', '3', '3', '3', '2', '2']], ['Mensajes atendidos', ['14', '15', '16', '17', '18', '19']]],
+  [['Cemento en stock', ['15 bolsas', '5 bolsas', '5 bolsas', '5 bolsas', '5 bolsas', '85 bolsas']], ['Órdenes de compra', ['Ninguna', 'Ninguna', 'Ninguna', '1 enviada', '1 confirmada', 'Recibida']], ['Ventas de hoy', ['S/ 1,840.00', 'S/ 2,135.00', 'S/ 2,135.00', 'S/ 2,135.00', 'S/ 2,135.00', 'S/ 2,135.00']]],
+  [['Ventas web de hoy', ['8', '9', '9', '9', '9', '9']], ['Boletas emitidas', ['41', '41', '41', '42', '42', '42']], ['Pagos por conciliar', ['3', '3', '3', '3', '2', '2']]],
+  [['Entregas de hoy', ['0 de 12', '0 de 12', '0 de 12', '0 de 12', '1 de 12', '12 de 12']], ['Repartidores en ruta', ['0', '0', '1', '1', '1', '0']], ['Cobrado en ruta', ['S/ 0.00', 'S/ 0.00', 'S/ 0.00', 'S/ 0.00', 'S/ 198.40', 'S/ 2,416.80']]],
+  [['Facturas de hoy', ['41', '41', '41', '42', '42', '42']], ['Ventas de hoy', ['S/ 3,980.00', 'S/ 4,166.00', 'S/ 4,166.00', 'S/ 4,166.00', 'S/ 4,166.00', 'S/ 4,166.00']], ['Aceptadas por SUNAT', ['41 de 41', '41 de 41', '41 de 41', '41 de 42', '42 de 42', '42 de 42']]]
+];
+const NAV = ['Inicio', 'Pedidos', 'Facturación', 'Clientes', 'Almacén', 'Agenda', 'Reportes', 'Integraciones'];
+const NAV_ICON = {
+  Inicio: 'M4 11.5 12 5l8 6.5V20h-5v-5H9v5H4z', Pedidos: 'M7 4.5h10v16H7zM9.5 9h5M9.5 13h5M9.5 17h3', Facturación: 'M6 3h12v18l-2-1.4-2 1.4-2-1.4-2 1.4-2-1.4L6 21zM9 8h6M9 12h6M9 16h3',
+  Clientes: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4.5 20.5a7.5 7.5 0 0 1 15 0', Almacén: 'M3.5 7.8 12 3.2l8.5 4.6v8.4L12 20.8l-8.5-4.6zM3.5 7.8 12 12.4l8.5-4.6M12 12.4v8.4',
+  Agenda: 'M4 6.5h16v13.5H4zM4 10.5h16M8.5 3.5v5M15.5 3.5v5', Reportes: 'M4 20.5h16M6.5 17v-5M11.5 17V7M16.5 17v-8', Integraciones: 'M9 7H5v4M15 17h4v-4M5 11a7 7 0 0 0 12 5M19 13a7 7 0 0 0-12-5',
+  Reparto: 'M2.5 6.5h11v9.5h-11zM13.5 10h4l3 3v3h-7'
+};
+Object.assign(NAV_ICON, {
+  Mesas: 'M4 9h16M6 9v10M18 9v10M9 13h6', Caja: 'M4 9h16v11H4zM7 9V5h10v4M8 14h3M14 14h2', Productos: 'M3.5 7.8 12 3.2l8.5 4.6v8.4L12 20.8l-8.5-4.6zM3.5 7.8 12 12.4l8.5-4.6M12 12.4v8.4',
+  Contador: 'M7 3.5h10v17H7zM9.5 7h5M9.5 11h.01M12 11h.01M14.5 11h.01M9.5 14.5h.01M12 14.5h.01M14.5 14.5h.01', Pacientes: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4.5 20.5a7.5 7.5 0 0 1 15 0',
+  Mensajes: 'M4 5h16v11H9l-5 4z', Doctores: 'M12 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM5 20.5a7 7 0 0 1 14 0M12 14v4M10 16h4', Tablero: 'M4 4h7v7H4zM13 4h7v4h-7zM13 10h7v10h-7zM4 13h7v7H4z',
+  Archivos: 'M4 6.5h6l2 2h8v11H4z', Alertas: 'M6 16.5v-5.5a6 6 0 0 1 12 0v5.5l1.5 1.5h-15zM10 21h4', Tiendas: 'M4 9.5 6 4h12l2 5.5M4 9.5h16v10.5H4zM9.5 20v-5h5v5',
+  Ajustes: 'M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1'
+});
+const NAVS = { 0: ['Inicio', 'Pedidos', 'Clientes', 'Almacén', 'Reparto', 'Reportes'], 6: ['Inicio', 'Mesas', 'Caja', 'Facturación', 'Productos', 'Contador'], 2: ['Inicio', 'Agenda', 'Pacientes', 'Mensajes', 'Doctores', 'Reportes'], 1: ['Tablero', 'Archivos', 'Reportes', 'Alertas', 'Tiendas', 'Ajustes'] };
+const SEARCH = { 0: 'Buscar pedido o cliente…', 6: 'Buscar RUC o comprobante…', 2: 'Buscar paciente…', 1: 'Buscar reporte o archivo…' };
+const GREEN = ['#E9F5EE', '#126B33'], AMBER = ['#FEF3C7', '#92400E'], GRAY = ['#ECEAE6', '#57544E'];
+const NEW_LABEL = { Pedidos: 'Nuevo pedido', Facturación: 'Nueva factura', Agenda: 'Nueva cita', Reportes: 'Nuevo reporte', Almacén: 'Nuevo ingreso', Integraciones: 'Nueva conexión', Reparto: 'Nueva ruta' };
+const PAGE = ['Pedidos', 'Reportes', 'Agenda', 'Almacén', 'Integraciones', 'Reparto', 'Facturación'];
+const BOT_HELLO = 'Buen día. Te aviso lo importante y te sugiero mejoras.';
+const BOT = [
+  { after: 1, m: 'Registré el pedido #1042 de Bodega Rosita y lo mandé a reparto.', tip: 'Bodega Rosita pide arroz cada lunes. ¿Le programo su pedido para que no tenga que escribir?', reply: 'Sí, prográmalo', done: 'Listo. Cada lunes a las 9:00 le confirmo su pedido por WhatsApp.' },
+  { after: 2, m: 'Revisé 1,284 filas y encontré 3 ventas duplicadas en Caja. Ya las marqué.', tip: 'La tienda de Surco vendió 18% menos ayer. ¿Te digo por qué?', reply: 'Sí, dime', done: 'Faltó aceite 2 días. Te sugiero subir el mínimo a 30 cajas.' },
+  { after: 1, m: 'Respondí a Lucía en 8 segundos con los 3 horarios libres.', tip: '4 de cada 10 citas llegan de noche. ¿Activo recordatorios para todas?', reply: 'Sí, actívalos', done: 'Hecho. Cada paciente recibirá un aviso el día anterior.' },
+  { after: 1, m: 'El cemento bajó del mínimo. Preparé la orden con Distribuidora Andina.', tip: 'Este mes el cemento se vendió 2 veces más rápido. ¿Subo el mínimo a 30 bolsas?', reply: 'Sí, súbelo', done: 'Listo. Te aviso antes de que vuelva a bajar.' },
+  { after: 1, m: 'La venta web #W-218 ya está en almacén, SUNAT y banco.', tip: 'Tienes 2 pagos de Yape sin pedido asociado. ¿Te los muestro?', reply: 'Sí, muéstralos', done: 'Son de Bodega Lucho. Ya los asigné a sus pedidos de ayer.' },
+  { after: 1, m: 'Ordené las 12 entregas por zona. Ahorras 40 minutos de ruta.', tip: 'Los martes hay 30% más pedidos en Barranco. ¿Agrego un segundo repartidor ese día?', reply: 'Sí, agrégalo', done: 'Listo. Desde el martes salen 2 rutas.' },
+  { after: 2, m: 'Armé la factura F001-00873 con el RUC que envió María.', tip: '3 facturas de ayer no llegaron a tu contador. ¿Se las envío ahora?', reply: 'Sí, envíalas', done: 'Listo. Tu contador ya tiene las 3 facturas y el registro de ventas.' }
+];
+STORIES.forEach((s, i) => {
+  s.kpi = KPI[i]; s.page = PAGE[i]; s.bot = BOT[i];
+  const b = BOT[i];
+  const tN = (k) => s.acts.find((a) => a[1] === 'notif' && a[2] === k)[0];
+  const t1 = tN(b.after) + 500;
+  const T = Math.max(tN(4) + 500, t1 + 1900);
+  const ty = T + 1500, sd = ty + b.reply.length * 45 + 350;
+  s.bacts = [[t1, 'bdots'], [t1 + 700, 'bmsg', b.m], [T, 'bdots'], [T + 700, 'bmsg', b.tip], [ty, 'otype', b.reply], [sd, 'osend'], [sd + 300, 'bdots'], [sd + 1000, 'bmsg', b.done]];
+  s.totalWeb = Math.max(s.total, sd + 1000 + 2600);
+});
+const GRAD = {
+  [G]: 'linear-gradient(160deg,#5EDC8C 0%,#1E9E55 100%)',
+  [R]: 'linear-gradient(160deg,#F2916A 0%,#C9472A 100%)',
+  [A]: 'linear-gradient(160deg,#F7CB6A 0%,#DE8F1E 100%)',
+  [B]: 'linear-gradient(160deg,#76A8F4 0%,#2D63CF 100%)'
+};
+const PATHS = {
+  wa: '<path d="M12 3.5a8.5 8.5 0 0 0-7.4 12.7L3.5 20.5l4.4-1.1A8.5 8.5 0 1 0 12 3.5z"/>',
+  robot: '<rect x="4.5" y="8" width="15" height="11.5" rx="3.5"/><path d="M12 4.5V8"/><path d="M9.3 13.5h.01M14.7 13.5h.01" stroke-width="2.8"/>',
+  clip: '<rect x="5.5" y="4.5" width="13" height="16.5" rx="2"/><rect x="9" y="2.5" width="6" height="4" rx="1.2"/><path d="M9 11.5h6M9 15.5h4"/>',
+  box: '<path d="M3.5 7.8 12 3.2l8.5 4.6v8.4L12 20.8l-8.5-4.6z"/><path d="M3.5 7.8 12 12.4l8.5-4.6M12 12.4v8.4"/>',
+  receipt: '<path d="M6 3h12v18l-2-1.4-2 1.4-2-1.4-2 1.4-2-1.4L6 21z"/><path d="M9 8h6M9 12h6M9 16h3"/>',
+  truck: '<path d="M2.5 6.5h11v9.5h-11z"/><path d="M13.5 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>',
+  file: '<path d="M6 2.5h8l4.5 4.5v14.5H6z"/><path d="M14 2.5V7h4.5"/><path d="M9.5 12.5l4 5M13.5 12.5l-4 5"/>',
+  gear: '<circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>',
+  chart: '<path d="M4 20.5h16"/><rect x="5" y="12" width="3" height="6" rx=".8"/><rect x="10.5" y="7" width="3" height="11" rx=".8"/><rect x="16" y="4" width="3" height="14" rx=".8"/>',
+  bell: '<path d="M6 16.5v-5.5a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"/><path d="M10 21h4"/>',
+  check: '<circle cx="12" cy="12" r="9"/><path d="M8 12.3l2.8 2.8L16.2 9.6"/>',
+  cart: '<path d="M2.5 4h2.5l2.4 11h10.7l2.2-7.5H6.2"/><circle cx="9.5" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/>',
+  warn: '<path d="M12 3.5 21.5 20h-19z"/><path d="M12 10v4.5"/><path d="M12 17.3h.01" stroke-width="2.6"/>',
+  send: '<path d="M21 3 3 10.5l7.2 3.3L13.5 21z"/><path d="M21 3 10.2 13.8"/>'
+};
+const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
+const SYS = "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Archivo', system-ui, sans-serif";
+const FINISH = {
+  'Titanio negro': 'linear-gradient(135deg, #6B6B6E 0%, #2A2A2D 20%, #4D4D51 42%, #1E1E21 64%, #46464A 84%, #7A7A7E 100%)',
+  'Titanio natural': 'linear-gradient(135deg, #C9C3B8 0%, #77726A 18%, #B3AEA3 40%, #5E5A53 62%, #A6A196 82%, #D8D3CA 100%)',
+  'Titanio desierto': 'linear-gradient(135deg, #E2C9AE 0%, #9C7F64 18%, #CDB194 40%, #7D634B 62%, #BFA284 82%, #EAD5BE 100%)'
+};
+const CHECK_PATH = 'M5 12.5l4.5 4.5L19 7.5';
+const DOT_PATH = 'M12 12h.01';
+const stripDay = (t) => t.replace(/^(Mié|Mañana)\s+/, '');
+const css = (el, s) => { el.style.cssText = s; return el; };
+const mk = (tag, s, txt) => { const e = css(document.createElement(tag), s || ''); if (txt != null) e.textContent = txt; return e; };
+const img = (src, s) => { const e = css(document.createElement('img'), s); e.src = src; e.alt = ''; return e; };
+const svg = (k, s, color, sw) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${color || '#FFFFFF'}" stroke-width="${sw || 2}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PATHS[k] || ''}</svg>`;
+const appIcon = (n, size, r) => {
+  if (n.p) {
+    const w = mk('div', `position:relative;flex:none;width:${size}px;height:${size}px;`);
+    w.append(img(n.p, `display:block;width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;object-position:50% 25%;`));
+    const bs = Math.round(size * 0.44);
+    w.append(img(IMG.wa, `position:absolute;right:-3px;bottom:-3px;width:${bs}px;height:${bs}px;filter:drop-shadow(0 1px 1px rgba(0,0,0,0.35));`));
+    w.setAttribute('aria-hidden', 'true');
+    return w;
+  }
+  if (n.k === 'wa') { const e = img(IMG.wa, `flex:none;display:block;width:${size}px;height:${size}px;`); e.setAttribute('aria-hidden', 'true'); return e; }
+  const el = mk('div', `flex:none;width:${size}px;height:${size}px;border-radius:${r}px;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 1px 0 rgba(255,255,255,0.4),inset 0 -1px 0 rgba(0,0,0,0.12),0 1px 2px rgba(0,0,0,0.15);`);
+  el.setAttribute('aria-hidden', 'true');
+  if (n.k === 'robot') { el.style.background = '#FFFFFF'; el.append(img(IMG.robot, `display:block;width:${Math.round(size * 0.72)}px;height:${Math.round(size * 0.72)}px;`)); return el; }
+  el.style.background = GRAD[n.c] || n.c;
+  el.innerHTML = svg(n.k, Math.round(size * 0.56));
+  return el;
+};
+const lineIcon = (n) => {
+  if (n.p) { const e = img(n.p, 'flex:none;display:block;width:26px;height:26px;border-radius:50%;object-fit:cover;object-position:50% 25%;'); e.setAttribute('aria-hidden', 'true'); return e; }
+  const el = mk('div', 'flex:none;width:26px;height:26px;display:flex;align-items:center;justify-content:center;');
+  el.setAttribute('aria-hidden', 'true');
+  el.innerHTML = svg(n.k, 18, '#121110', 1.8);
+  return el;
+};
+
+const DLOAD = 2700, DINTRO = 3800;
+const DIMG = [['assets/hero-4.jpg', '70% 40%'], ['assets/hero-2.jpg', '74% 40%'], ['assets/hero-3.jpg', '50% 40%'], ['assets/hero-2.jpg', '74% 40%'], ['assets/hero-2.jpg', '74% 40%'], ['assets/hero-4.jpg', '74% 45%'], ['assets/hero-1.jpg', '50% 35%']];
+const DEMO_IDX = [0, 6, 2, 1];
+const DICON = { 0: 'M12 3.5a8.5 8.5 0 0 0-7.4 12.7L3.5 20.5l4.4-1.1A8.5 8.5 0 1 0 12 3.5zM8.5 10.5h7M8.5 13.5h4', 6: 'M6 3h12v18l-2-1.4-2 1.4-2-1.4-2 1.4-2-1.4L6 21zM9 8h6M9 12h6M9 16h3', 2: 'M4 6.5h16v13.5H4zM4 10.5h16M8.5 3.5v5M15.5 3.5v5M9 15.5l2 2 4-4', 1: 'M4 20.5h16M6.5 17v-4M11.5 17v-6M16.5 17v-8M5 10.5l5-4 4 3 6-5' };
+const DSUM = { 0: 'El cliente pide por WhatsApp y el sistema registra, descuenta stock y emite la boleta.', 6: 'De la venta en caja a la factura aceptada por SUNAT, impresa y enviada en segundos.', 2: 'Un bot responde de noche, agenda la cita y le recuerda al paciente.', 1: 'Los Excel de cada área se juntan y tu reporte llega solo a las 7:00.' };
+const DGRAD = { 0: 'linear-gradient(150deg, #34D399 0%, #15803D 100%)', 6: 'linear-gradient(150deg, #FB7185 0%, #B91C1C 100%)', 2: 'linear-gradient(150deg, #38BDF8 0%, #0E7490 100%)', 1: 'linear-gradient(150deg, #A78BFA 0%, #4338CA 100%)' };
+const THEME = {
+  0: { accent: '#15803D', sideBg: '#F1F7F2', sideText: '#121110', sideMuted: '#4F5B52', sideBorder: '#DDE8DF', navOn: '#DCEFE1', navOnText: '#0F5A2B', navText: '#3F4A42' },
+  6: { accent: '#B91C1C', sideBg: '#2A1414', sideText: '#FFFFFF', sideMuted: '#D9BFBB', sideBorder: '#2A1414', navOn: '#4A2222', navOnText: '#FFFFFF', navText: '#E8D6D3' },
+  2: { accent: '#0E7490', sideBg: '#EFF7F9', sideText: '#121110', sideMuted: '#4A5B60', sideBorder: '#D6E7EC', navOn: '#D3ECF2', navOnText: '#0B5568', navText: '#3E4D52' },
+  1: { accent: '#4338CA', sideBg: '#1E1B4B', sideText: '#FFFFFF', sideMuted: '#C7C4EE', sideBorder: '#1E1B4B', navOn: '#312E81', navOnText: '#FFFFFF', navText: '#DCDAF6' }
+};
+const THEME_DEF = { accent: '#121110', sideBg: '#FBFAF8', sideText: '#121110', sideMuted: '#57544E', sideBorder: '#E6E4DF', navOn: '#EDEBE6', navOnText: '#121110', navText: '#57544E' };
+const DACT = { 0: ['WhatsApp', 'Stock', 'Boleta', 'Reparto'], 6: ['Caja', 'RUC', 'SUNAT', 'PDF y XML'], 2: ['Bot 24/7', 'Agenda', 'Recordatorio'], 1: ['Excel', 'Gráficos', 'Envío diario'] };
+const HERO = [
+  { chip: 'Sistema a medida', line: 'y ten más tiempo libre.', src: 'assets/hero-1.jpg', pos: '50% 35%', posM: '72% 35%', alt: 'Asesor cerrando una venta con dos clientes' },
+  { chip: 'Sistemas web', line: 'y libérate de la carga manual.', src: 'assets/hero-2.jpg', pos: '72% 40%', posM: '74% 40%', alt: 'Operaria revisando el inventario de un almacén' },
+  { chip: 'Apps móviles', line: 'y controla tu negocio desde el celular.', src: 'assets/hero-4.jpg', pos: '70% 40%', posM: '72% 40%', alt: 'Encargado revisando un pedido en su celular' }
+];
+const DTAG = ['El pedido llega y todo lo demás se hace solo', 'El reporte del día se arma y llega solo', 'El bot agenda citas a cualquier hora', 'El sistema repone antes de que se acabe', 'Web, almacén, SUNAT y banco conectados', 'Rutas, avisos y entregas con prueba'];
+
+class Component extends DCLogic {
+  state = {
+    demo: null, hs: 0, hRun: 0, navOpen: false, dSvc: 0, dHover: 0, dt: 0, sDone: false, seen: false,
+    story: 0, shown: 0, run: 0, mode: 'solo', device: 'phone',
+    vw: typeof window !== 'undefined' ? window.innerWidth : 1200,
+    vh: typeof window !== 'undefined' ? window.innerHeight : 860,
+    sw: 700, sh: 700,
+    reduced: typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false
+  };
+  stageRef = React.createRef(); flyRef = React.createRef();
+  phoneStackRef = React.createRef(); phoneResultRef = React.createRef();
+  webStackRef = React.createRef(); webResultRef = React.createRef();
+  chatRef = React.createRef(); inputRef = React.createRef(); placeholderRef = React.createRef(); sendRef = React.createRef(); micRef = React.createRef();
+  tablistRef = React.createRef();
+  wChatRef = React.createRef(); botRef = React.createRef(); botInputRef = React.createRef(); botPhRef = React.createRef(); botSendRef = React.createRef();
+  pend = {}; timers = []; cards = []; touch = null;
+  dlgRef = React.createRef(); demoBtnRef = React.createRef(); dIv = null; dTo = null;
+
+  dClear() { if (this.dIv) { clearInterval(this.dIv); this.dIv = null; } if (this.dTo) { clearTimeout(this.dTo); this.dTo = null; } }
+  dTick() {
+    if (this.dIv) return;
+    this.dIv = setInterval(() => {
+      const st = this.state;
+      if (st.demo === 'load' && st.dt >= DLOAD) { this.dPlayStart(); return; }
+      this.setState({ dt: st.dt + 100 });
+    }, 100);
+  }
+  lockScroll(on) { document.documentElement.style.overflow = on ? 'hidden' : ''; document.body.style.overflow = on ? 'hidden' : ''; }
+  focusDlg() { requestAnimationFrame(() => { const d = this.dlgRef.current; if (d) d.focus({ preventScroll: true }); }); }
+  openDemo() {
+    this.dClear(); this.lockScroll(true); if (this.state.navOpen) this.setState({ navOpen: false });
+    this.setState({ demo: 'intro', dt: 0, sDone: false }, () => this.focusDlg());
+    this.dTo = setTimeout(() => { if (this.state.demo === 'intro') this.goPick(); }, this.state.reduced ? 1500 : DINTRO);
+  }
+  goPick() { this.dClear(); this.clearTimers(); this.setState({ demo: 'pick', dt: 0, sDone: false, dHover: this.state.dSvc }, () => this.focusDlg()); }
+  pickSvc(k) { this.dClear(); this.clearTimers(); this.setState({ demo: 'load', dSvc: k, dt: 0, sDone: false }, () => { this.focusDlg(); this.dTick(); }); }
+  dPlayStart() {
+    this.dClear(); this.clearTimers();
+    this.setState({ demo: 'play', seen: true, device: 'web' }, () => requestAnimationFrame(() => { this.measure && this.measure(); this.startStory(this.state.dSvc); }));
+  }
+  exitDemo() { this.dClear(); this.clearTimers(); this.setState({ demo: 'exit', sDone: false }, () => this.focusDlg()); }
+  closeDemo() {
+    this.dClear(); this.clearTimers(); this.lockScroll(false);
+    this.setState({ demo: null, sDone: false }, () => { const b = this.demoBtnRef.current; if (b) b.focus(); });
+  }
+  heroRun() { clearInterval(this.hIv); this.hIv = setInterval(() => { if (!this.state.demo) this.setState((s) => ({ hs: (s.hs + 1) % HERO.length, hRun: s.hRun + 1 })); }, 7000); }
+  heroGo(k) { this.setState((s) => ({ hs: (k + HERO.length) % HERO.length, hRun: s.hRun + 1 })); this.heroRun(); }
+
+  componentDidMount() {
+    document.documentElement.lang = 'es-PE';
+    this.onDemoKey = (e) => { if (e.key !== 'Escape' || !this.state.demo) return; e.preventDefault(); const d = this.state.demo; if (d === 'exit') this.closeDemo(); else if (d === 'play') this.goPick(); else this.exitDemo(); };
+    window.addEventListener('keydown', this.onDemoKey);
+    if (window.parent !== window) window.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !this.state.demo) window.parent.postMessage('bw-close-demo', '*'); });
+    this.measure = () => {
+      const st = this.stageRef.current;
+      const next = { vw: window.innerWidth, vh: window.innerHeight, sw: st ? st.clientWidth : this.state.sw, sh: st ? st.clientHeight : this.state.sh };
+      if (next.vw !== this.state.vw || next.vh !== this.state.vh || next.sw !== this.state.sw || next.sh !== this.state.sh) this.setState(next, () => requestAnimationFrame(() => this.layout()));
+    };
+    window.addEventListener('resize', this.measure);
+    window.addEventListener('load', this.measure);
+    this.ro = new ResizeObserver(this.measure);
+    this.ro.observe(document.documentElement);
+    if (this.stageRef.current) this.ro.observe(this.stageRef.current);
+    this.mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    this.onMq = () => this.setState({ reduced: this.mq.matches }, () => { if (this.state.demo === 'play') this.startStory(this.state.story); });
+    this.mq.addEventListener && this.mq.addEventListener('change', this.onMq);
+    requestAnimationFrame(this.measure); setTimeout(this.measure, 0); setTimeout(this.measure, 300);
+    this.setState({ vw: window.innerWidth, vh: window.innerHeight });
+    this.heroRun();
+  }
+  componentWillUnmount() {
+    this.clearTimers();
+    clearInterval(this.hIv);
+    this.dClear(); this.lockScroll(false);
+    window.removeEventListener('keydown', this.onDemoKey);
+    window.removeEventListener('resize', this.measure);
+    window.removeEventListener('load', this.measure);
+    this.ro && this.ro.disconnect();
+    this.mq && this.mq.removeEventListener && this.mq.removeEventListener('change', this.onMq);
+  }
+  clearTimers() { this.timers.forEach(clearTimeout); this.timers = []; this.pend = {}; }
+  later(ms, fn) { this.timers.push(setTimeout(fn, ms)); }
+  web() { return this.state.device === 'web'; }
+  maxCards() {
+    if (!this.web()) return 3;
+    const h = this.webStackRef.current ? this.webStackRef.current.clientHeight : 300;
+    return Math.max(2, Math.min(5, Math.floor((h - 70) / 50)));
+  }
+  stackEl() { return (this.web() ? this.webStackRef : this.phoneStackRef).current; }
+  resultEl() { return (this.web() ? this.webResultRef : this.phoneResultRef).current; }
+
+  clearAll() {
+    this.cards = [];
+    [this.phoneStackRef, this.webStackRef, this.phoneResultRef, this.webResultRef, this.flyRef].forEach((r) => { if (r.current) { r.current.innerHTML = ''; r.current.style.overflowY = ''; } });
+    if (this.chatRef.current) { this.chatRef.current.innerHTML = ''; this.chatRef.current.appendChild(this.makeDay('Hoy ' + stripDay(STORIES[this.state.story].n[0].t))); }
+    this.setInput(''); this.setInput('', 'bot');
+    this.dotsEl = null;
+    this.wcTyping = null;
+    if (this.wChatRef.current) { this.wChatRef.current.innerHTML = ''; this.wChatRef.current.appendChild(mk('div', 'align-self:center;padding:3px 10px;border-radius:8px;background:rgba(255,255,255,0.85);font-size:11px;color:#4A4850;', 'Hoy')); }
+    if (this.botRef.current) { this.botRef.current.innerHTML = ''; this.botRef.current.appendChild(this.botBubble(BOT_HELLO, false)); }
+  }
+
+  inputs(key) { return key === 'bot' ? [this.botInputRef, this.botPhRef] : [this.inputRef, this.placeholderRef]; }
+  setInput(t, key) {
+    const [i, p] = this.inputs(key);
+    if (i.current) { i.current.textContent = t; i.current.style.display = t ? '' : 'none'; }
+    if (p.current) p.current.style.display = t ? 'none' : '';
+    if (key !== 'bot') {
+      if (this.micRef.current) this.micRef.current.style.display = t ? 'none' : 'flex';
+      if (this.sendRef.current) this.sendRef.current.style.display = t ? 'flex' : 'none';
+    }
+  }
+  takePending(key) {
+    const p = this.pend[key]; if (!p) return '';
+    p.timers.forEach(clearTimeout); this.pend[key] = null;
+    return p.text;
+  }
+  typeText(text, key) {
+    const per = key === 'bot' ? 45 : 34;
+    const p = { text, timers: [] };
+    this.pend[key || 'cust'] = p;
+    for (let i = 1; i <= text.length; i++) {
+      const id = setTimeout(() => this.setInput(text.slice(0, i), key), i * per);
+      p.timers.push(id); this.timers.push(id);
+    }
+  }
+
+  botBubble(text, owner) {
+    return mk('div', `align-self:${owner ? 'flex-end' : 'flex-start'};max-width:90%;padding:${owner ? '7px 10px' : '2px 0'};border-radius:10px 10px 3px 10px;background:${owner ? '#121110' : 'transparent'};color:${owner ? '#FFFFFF' : '#121110'};font-size:12.5px;line-height:1.4;`, text);
+  }
+  botDots() {
+    const el = mk('div', 'align-self:flex-start;display:flex;gap:4px;padding:6px 0;');
+    for (let i = 0; i < 3; i++) el.append(mk('span', `width:5px;height:5px;border-radius:50%;background:#6E6A63;animation:bo-pulse 1s ease-in-out ${i * 0.15}s infinite;`));
+    return el;
+  }
+  bAdd(el) { const c = this.botRef.current; if (!c) return; c.appendChild(el); this.pop(el); }
+
+  makeCard(n) {
+    if (this.web()) {
+      const el = mk('div', `position:absolute;top:0;left:0;right:0;display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid #EDEBE7;background:#FFFFFF;font-family:'Archivo',sans-serif;will-change:transform,opacity;`);
+      const body = mk('div', 'flex:1;min-width:0;display:flex;flex-direction:column;gap:1px;');
+      body.append(mk('div', 'font-size:13px;font-weight:700;color:#121110;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', n.ti), mk('div', 'font-size:12px;color:#57544E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', n.a + ' · ' + n.d));
+      el.append(lineIcon(n), body, mk('span', 'flex:none;font-size:11.5px;color:#57544E;white-space:nowrap;font-variant-numeric:tabular-nums;', n.t));
+      return el;
+    }
+    const sm = (this.phoneStackRef.current ? this.phoneStackRef.current.clientWidth : 280) < 240;
+    const el = mk('div', `position:absolute;top:0;left:0;right:0;display:flex;gap:${sm ? 8 : 10}px;align-items:center;padding:${sm ? '8px 9px' : '10px 12px'};border-radius:${sm ? 16 : 20}px;background:rgba(18,30,62,0.55);backdrop-filter:blur(24px) saturate(1.6);-webkit-backdrop-filter:blur(24px) saturate(1.6);border:0.5px solid rgba(255,255,255,0.1);box-shadow:0 10px 24px -12px rgba(0,0,0,0.6);color:#FFFFFF;font-family:${SYS};will-change:transform,opacity;`);
+    el.setAttribute('aria-label', n.a + ': ' + n.ti + '. ' + n.d);
+    const body = mk('div', 'flex:1;min-width:0;display:flex;flex-direction:column;gap:1px;');
+    const top = mk('div', 'display:flex;justify-content:space-between;align-items:flex-start;gap:8px;');
+    top.append(mk('span', `min-width:0;font-size:${sm ? 11.5 : 13}px;font-weight:650;line-height:1.2;`, n.ti), mk('span', `flex:none;font-size:${sm ? 10 : 11}px;color:rgba(255,255,255,0.7);white-space:nowrap;`, stripDay(n.t)));
+    body.append(top, mk('div', `font-size:${sm ? 11 : 12.5}px;color:#FFFFFF;line-height:1.25;`, n.d));
+    el.append(appIcon(n, sm ? 28 : 36, sm ? 7 : 9), body);
+    return el;
+  }
+
+  makeResult(r) {
+    if (this.web()) {
+      const el = mk('div', `display:flex;align-items:flex-end;justify-content:space-between;gap:6px 16px;flex-wrap:wrap;padding:12px 0 2px;border-top:2px solid #121110;background:#FFFFFF;font-family:'Archivo',sans-serif;color:#121110;`);
+      const left = mk('div', 'display:flex;flex-direction:column;gap:2px;min-width:0;');
+      left.append(mk('div', 'font-size:2rem;font-weight:900;font-stretch:75%;letter-spacing:-0.01em;line-height:1;', r[0]), mk('div', 'font-size:13px;color:#3F3C37;', r[1]));
+      el.append(left, mk('div', 'font-size:12px;font-weight:700;color:#B83A12;', r[2]));
+      return el;
+    }
+    const el = mk('div', `display:flex;flex-direction:column;gap:3px;padding:12px 14px 13px;border-radius:24px;background:rgba(8,14,32,0.8);backdrop-filter:blur(26px) saturate(1.4);-webkit-backdrop-filter:blur(26px) saturate(1.4);border:0.5px solid rgba(255,255,255,0.12);box-shadow:0 18px 36px -14px rgba(0,0,0,0.6);color:#FFFFFF;font-family:${SYS};`);
+    el.append(
+      mk('span', "font-family:'Archivo',sans-serif;font-size:1.9rem;font-weight:900;font-stretch:75%;line-height:1;white-space:nowrap;", r[0]),
+      mk('div', 'font-size:12.5px;font-weight:600;line-height:1.3;color:#FFFFFF;', r[1]),
+      mk('div', 'margin-top:4px;font-size:11px;font-weight:700;color:#9CC2FF;', r[2])
+    );
+    return el;
+  }
+
+  sunatCard() {
+    const layer = this.flyRef.current; if (!layer) return;
+    const el = mk('div', "position:absolute;left:50%;top:6px;width:max-content;display:flex;align-items:center;gap:10px;padding:10px 16px 10px 10px;border-radius:14px;background:#FFFFFF;color:#121110;font-family:'Archivo',sans-serif;box-shadow:0 20px 40px -18px rgba(0,0,0,0.6);z-index:2;");
+    const badge = mk('span', 'flex:none;padding:6px 8px;border-radius:8px;background:#B91C1C;color:#FFFFFF;font-weight:900;font-size:12px;letter-spacing:0.04em;', 'SUNAT');
+    const ic = mk('span', 'flex:none;width:22px;height:22px;border-radius:50%;border:3px solid #D8D5CE;border-top-color:#2D63CF;');
+    const spin = ic.animate([{ transform: 'rotate(0deg)' }, { transform: 'rotate(360deg)' }], { duration: 800, iterations: Infinity });
+    const tx = mk('span', 'display:flex;flex-direction:column;');
+    const t1 = mk('span', 'font-size:13px;font-weight:800;white-space:nowrap;', 'Validando comprobante…'), t2 = mk('span', 'font-size:11.5px;color:#57544E;white-space:nowrap;', 'F001-00873 · S/ 186.00');
+    tx.append(t1, t2); el.append(badge, ic, tx); layer.appendChild(el);
+    el.animate([{ opacity: 0, transform: 'translate(-50%, -16px) scale(.95)' }, { opacity: 1, transform: 'translate(-50%, 0) scale(1)' }], { duration: 450, easing: EASE, fill: 'both' });
+    this.later(1200, () => {
+      spin.cancel();
+      css(ic, 'flex:none;width:22px;height:22px;border-radius:50%;background:#177A41;display:flex;align-items:center;justify-content:center;');
+      ic.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+      ic.animate([{ transform: 'scale(0)' }, { transform: 'scale(1.25)' }, { transform: 'scale(1)' }], { duration: 420, easing: 'ease-out' });
+      t1.textContent = 'Aceptada por SUNAT'; t2.textContent = 'Constancia (CDR) recibida';
+    });
+    this.later(3400, () => { const a = el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 400, fill: 'forwards' }); a.onfinish = () => el.remove(); });
+  }
+
+  printTicket() {
+    const layer = this.flyRef.current; if (!layer) return;
+    const w = 186;
+    const wrap = mk('div', `position:absolute;left:50%;bottom:4px;width:${w}px;display:flex;flex-direction:column;align-items:center;z-index:3;filter:drop-shadow(0 24px 30px rgba(0,0,0,0.45));`);
+    const paper = mk('div', `width:${w - 30}px;height:0;overflow:hidden;background:#FFFFFF;color:#121110;display:flex;flex-direction:column;justify-content:flex-end;`);
+    const inner = mk('div', "padding:10px 11px 8px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:9.5px;line-height:1.5;");
+    const row = (a, b, bold) => { const r = mk('div', `display:flex;justify-content:space-between;gap:6px;${bold ? 'font-weight:800;font-size:10.5px;' : ''}`); r.append(mk('span', '', a), mk('span', '', b)); return r; };
+    inner.append(
+      mk('div', 'text-align:center;font-weight:800;font-size:10.5px;', 'RESTAURANTE LA HUERTA'),
+      mk('div', 'text-align:center;color:#57544E;', 'FACTURA ELECTRÓNICA'),
+      mk('div', 'text-align:center;font-weight:800;', 'F001-00873'),
+      mk('div', 'border-top:1px dashed #9A968F;margin:5px 0;'),
+      row('3 Menú del día', '105.00'), row('Bebidas', '81.00'), row('Op. gravada', '157.63'), row('IGV 18%', '28.37'),
+      mk('div', 'border-top:1px dashed #9A968F;margin:5px 0;'),
+      row('TOTAL S/', '186.00', true)
+    );
+    const foot = mk('div', 'display:flex;align-items:center;gap:8px;margin-top:6px;');
+    foot.append(mk('span', 'flex:none;width:34px;height:34px;background:conic-gradient(#121110 25%, #FFFFFF 0 50%, #121110 0 75%, #FFFFFF 0) 0 0/8px 8px;outline:2px solid #121110;outline-offset:-2px;'), mk('span', 'font-weight:800;color:#177A41;', 'ACEPTADA POR SUNAT'));
+    inner.append(foot); paper.append(inner);
+    const body = mk('div', `position:relative;width:${w}px;height:46px;border-radius:12px 12px 10px 10px;background:linear-gradient(180deg,#34333A 0%,#1B1A1F 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:space-between;padding:0 12px;`);
+    body.append(mk('span', 'position:absolute;top:5px;left:14px;right:14px;height:4px;border-radius:2px;background:#09090B;'));
+    body.append(mk('span', "margin-top:8px;font-family:'Archivo',sans-serif;font-size:10.5px;font-weight:700;color:#D6D3DB;", 'Impresora · Caja 1'));
+    const led = mk('span', 'margin-top:8px;width:7px;height:7px;border-radius:50%;background:#34D399;');
+    led.animate([{ opacity: 1 }, { opacity: 0.25 }, { opacity: 1 }], { duration: 600, iterations: 4 });
+    body.append(led);
+    wrap.append(paper, body); layer.appendChild(wrap);
+    wrap.animate([{ opacity: 0, transform: 'translate(-50%, 40px)' }, { opacity: 1, transform: 'translate(-50%, 0)' }], { duration: 500, easing: EASE, fill: 'both' });
+    this.later(500, () => {
+      const h = inner.offsetHeight;
+      paper.animate([{ height: '0px' }, { height: h + 'px' }], { duration: 1600, easing: 'steps(14, end)', fill: 'forwards' });
+    });
+  }
+
+  makeDay(t) { return mk('div', 'align-self:center;font-size:10px;font-weight:600;color:rgba(255,255,255,0.6);padding:2px 0 4px;', t); }
+
+  makeBubble(text, out, time) {
+    const el = mk('div', `align-self:${out ? 'flex-end' : 'flex-start'};max-width:80%;padding:7px 11px 5px;border-radius:17px;background:${out ? '#1C6B46' : '#262529'};color:#FFFFFF;font-size:12.5px;line-height:1.3;`);
+    el.append(mk('div', '', text));
+    const meta = mk('div', 'display:flex;justify-content:flex-end;gap:3px;font-size:9.5px;color:rgba(255,255,255,0.65);margin-top:1px;', time);
+    if (out) meta.append(mk('span', 'color:#53BDEB;font-weight:700;letter-spacing:-2px;', '✓✓'));
+    el.append(meta);
+    return el;
+  }
+
+  pop(el) {
+    el.style.opacity = '0'; el.style.transform = 'translateY(8px) scale(0.96)';
+    void el.offsetHeight;
+    el.style.transition = `transform .45s ${EASE}, opacity .35s ease`;
+    el.style.opacity = '1'; el.style.transform = 'none';
+  }
+
+  layout() {
+    let y = 0;
+    const gap = this.web() ? 0 : 7;
+    this.cards.forEach((c) => { c.el.style.transform = `translateY(${y}px) scale(1)`; c.el.style.opacity = '1'; y += c.el.offsetHeight + gap; });
+  }
+
+  dropOldest() {
+    const old = this.cards.pop().el;
+    old.style.transition = `transform .5s ${EASE}, opacity .4s ease`;
+    old.style.opacity = '0';
+    old.style.transform = old.style.transform.replace('scale(1)', 'scale(0.96)');
+    setTimeout(() => old.remove(), 500);
+  }
+
+  addCard(n) {
+    const box = this.stackEl(); if (!box) return;
+    const el = this.makeCard(n);
+    el.style.opacity = '0'; el.style.transform = 'translateY(-14px) scale(0.98)'; el.style.transition = 'none';
+    box.appendChild(el);
+    this.cards.unshift({ el });
+    while (this.cards.length > this.maxCards()) this.dropOldest();
+    const gap = this.web() ? 0 : 7, limit = box.clientHeight;
+    let tot = this.cards.reduce((t, c) => t + c.el.offsetHeight + gap, 0);
+    while (this.cards.length > 1 && tot > limit) { tot -= this.cards[this.cards.length - 1].el.offsetHeight + gap; this.dropOldest(); }
+    void el.offsetHeight;
+    this.cards.forEach((c) => { c.el.style.transition = `transform .5s ${EASE}, opacity .5s ${EASE}`; });
+    this.layout();
+  }
+
+  showResult(r) {
+    const box = this.resultEl(); if (!box) return;
+    if (!this.web() && this.cards.length > 2) this.dropOldest();
+    if (this.web()) while (this.cards.length > Math.max(1, this.maxCards() - 1)) this.dropOldest();
+    const el = this.makeResult(r);
+    el.style.opacity = '0'; el.style.transform = 'translateY(24px)';
+    box.appendChild(el);
+    void el.offsetHeight;
+    el.style.transition = `transform .6s ${EASE}, opacity .5s ease`;
+    el.style.opacity = '1'; el.style.transform = 'translateY(0)';
+  }
+
+  msgTime(offset) {
+    const s = STORIES[this.state.story];
+    return stripDay(s.n[Math.min(4, Math.max(0, this.state.shown + offset))].t);
+  }
+
+  send() {
+    const text = this.takePending('cust');
+    this.setInput('');
+    const chat = this.chatRef.current; if (!chat || !text) return;
+    const b = this.makeBubble(text, true, this.msgTime(0));
+    chat.appendChild(b); this.pop(b);
+    this.lastSent = text;
+  }
+
+  recv(text) {
+    const chat = this.chatRef.current; if (!chat) return;
+    const b = this.makeBubble(text, false, this.msgTime(-1));
+    chat.appendChild(b); this.pop(b);
+  }
+
+  fly(dir) {
+    if (this.custVisible === false) return;
+    const layer = this.flyRef.current, stage = this.stageRef.current, chat = this.chatRef.current, stack = this.stackEl();
+    if (!layer || !stage || !chat || !stack) return;
+    const S = stage.getBoundingClientRect();
+    let src, dst, text, out;
+    if (dir === 'in') {
+      const last = chat.lastElementChild;
+      src = (last || chat).getBoundingClientRect();
+      const wc = this.webChat() && this.wChatRef.current;
+      const st = (wc || stack).getBoundingClientRect();
+      dst = wc ? { x: st.left + st.width * 0.3, y: st.bottom - 30 } : { x: st.left + st.width / 2, y: st.top + 28 };
+      text = this.lastSent || ''; out = true;
+    } else {
+      const wc = this.webChat() && this.wChatRef.current;
+      const first = wc ? (wc.lastElementChild || wc) : (this.cards[0] ? this.cards[0].el : stack);
+      src = first.getBoundingClientRect();
+      const ch = chat.getBoundingClientRect();
+      dst = { x: ch.left + ch.width * 0.35, y: ch.bottom - 24 };
+      text = this.webChat() ? 'Respuesta de la IA' : 'Respuesta automática'; out = false;
+    }
+    const el = mk('div', `position:absolute;left:0;top:0;max-width:190px;display:flex;align-items:center;gap:7px;padding:6px 11px 6px 6px;border-radius:16px;background:${out ? '#1C6B46' : '#262529'};color:#FFFFFF;font-family:${SYS};font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;box-shadow:0 14px 26px -8px rgba(0,0,0,0.55);`);
+    el.append(out ? appIcon({ k: 'wa' }, 20, 6) : appIcon({ k: 'robot' }, 20, 6), mk('span', 'overflow:hidden;text-overflow:ellipsis;', text));
+    layer.appendChild(el);
+    const w = el.offsetWidth, h = el.offsetHeight;
+    const sx = src.left + src.width / 2 - S.left - w / 2, sy = src.top + src.height / 2 - S.top - h / 2;
+    const dx = dst.x - S.left - w / 2, dy = dst.y - S.top - h / 2;
+    const mx = (sx + dx) / 2, my = Math.max(0, Math.min(sy, dy) - 80);
+    const a = el.animate([
+      { transform: `translate(${sx}px,${sy}px) scale(1)`, opacity: 0 },
+      { transform: `translate(${sx}px,${sy - 10}px) scale(1.05)`, opacity: 1, offset: 0.12 },
+      { transform: `translate(${mx}px,${my}px) scale(0.92) rotate(${out ? 6 : -6}deg)`, opacity: 1, offset: 0.55 },
+      { transform: `translate(${dx}px,${dy}px) scale(0.55)`, opacity: 0 }
+    ], { duration: 900, easing: 'cubic-bezier(.45,0,.25,1)', fill: 'forwards' });
+    a.onfinish = () => el.remove();
+  }
+
+  renderStatic(s) {
+    const box = this.stackEl(); if (!box) return;
+    box.style.overflowY = 'auto';
+    [...s.n].reverse().forEach((n) => { const el = this.makeCard(n); el.style.position = 'relative'; el.style.marginBottom = this.web() ? '0' : '8px'; box.appendChild(el); });
+    const res = this.makeResult(s.r); res.style.marginBottom = '14px'; box.appendChild(res);
+    const c = this.botRef.current;
+    if (this.web() && c) [[s.bot.m], [s.bot.tip], [s.bot.reply, true], [s.bot.done]].forEach(([t, o]) => c.appendChild(this.botBubble(t, !!o)));
+  }
+
+  run(a) {
+    const s = STORIES[this.state.story];
+    const [, type, arg] = a;
+    if (type === 'mode') this.setState({ mode: arg });
+    else if (type === 'type') { this.typeText(arg); if (this.webChat()) this.wcDots(true); }
+    else if (type === 'send') { if (this.webChat()) { const tx = this.pend.cust ? this.pend.cust.text : ''; this.send(); if (tx) { if (this.instant) { this.wcDots(false); this.wcBubble(tx, false); } else this.later(1250, () => { this.wcDots(false); this.wcBubble(tx, false); }); } } else this.send(); }
+    else if (type === 'fly') this.fly(arg);
+    else if (type === 'recv') { if (this.webChat()) this.wcBubble(arg, true); this.recv(arg); }
+    else if (type === 'download') this.downloadCard();
+    else if (type === 'day') { const c = this.chatRef.current; if (c) { const d = this.makeDay(arg); c.appendChild(d); this.pop(d); } }
+    else if (type === 'notif') { this.addCard(s.n[arg]); this.setState({ shown: arg + 1 }); }
+    else if (type === 'result') this.showResult(s.r);
+    else if (type === 'sunat') this.sunatCard();
+    else if (type === 'print') this.printTicket();
+    else if (type === 'bdots') { this.dotsEl = this.botDots(); this.bAdd(this.dotsEl); }
+    else if (type === 'bmsg') { if (this.dotsEl) { this.dotsEl.remove(); this.dotsEl = null; } this.bAdd(this.botBubble(arg, false)); }
+    else if (type === 'otype') this.typeText(arg, 'bot');
+    else if (type === 'osend') {
+      const t = this.takePending('bot');
+      this.setInput('', 'bot');
+      if (this.botSendRef.current) this.botSendRef.current.animate([{ transform: 'scale(1)' }, { transform: 'scale(0.85)' }, { transform: 'scale(1)' }], { duration: 260, easing: 'ease-out' });
+      if (t) this.bAdd(this.botBubble(t, true));
+    }
+  }
+
+  startStory(i, from) {
+    this.clearTimers();
+    const s = STORIES[i];
+    const reduced = this.state.reduced;
+    const inDemo = this.state.demo === 'play';
+    const T = from || 0;
+    this.setState((st) => ({ story: i, shown: reduced ? 5 : 0, run: st.run + 1, mode: reduced ? 'solo' : s.acts[0][2], sDone: inDemo && reduced }), () => {
+      this.clearAll();
+      if (reduced) { this.renderStatic(s); return; }
+      const web = this.web();
+      const chatMode = web && !!s.client;
+      const list = (web && !chatMode ? s.acts.concat(s.bacts) : s.acts).slice().sort((x, y) => x[0] - y[0]);
+      this.instant = true;
+      list.forEach((a) => { if (a[0] < T) this.runInstant(a); });
+      this.instant = false;
+      list.forEach((a) => { if (a[0] >= T) this.later(a[0] - T, () => this.run(a)); });
+      const end = (web && !chatMode ? s.totalWeb : s.total) - T;
+      if (inDemo) this.later(Math.max(400, end), () => this.setState({ sDone: true }));
+      else if (this.props.autoplay ?? true) this.later(Math.max(400, end), () => this.startStory((i + 1) % STORIES.length));
+    });
+  }
+
+  runInstant(a) {
+    const [, type, arg] = a;
+    if (type === 'type') { this.pend.cust = { text: arg, timers: [] }; return; }
+    if (type === 'otype') { this.pend.bot = { text: arg, timers: [] }; return; }
+    if (type === 'fly' || type === 'bdots' || type === 'sunat' || type === 'print' || type === 'download') return;
+    this.run(a);
+  }
+
+  jumpTo(k) {
+    const s = STORIES[this.state.story];
+    const hit = s.acts.find((a) => a[1] === 'notif' && a[2] === k);
+    this.startStory(this.state.story, k === 0 || !hit ? 0 : Math.max(0, hit[0] - 700));
+  }
+
+  toastMode() { return false; }
+  webChat() { return this.web() && !!STORIES[this.state.story].client; }
+  wcAdd(el) { const c = this.wChatRef.current; if (!c) return; c.appendChild(el); this.pop(el); }
+  wcDots(on) {
+    if (this.wcTyping) { this.wcTyping.remove(); this.wcTyping = null; }
+    if (!on || this.instant) return;
+    const el = mk('div', 'align-self:flex-start;display:flex;gap:4px;padding:9px 11px;border-radius:12px 12px 12px 3px;background:#FFFFFF;');
+    for (let i = 0; i < 3; i++) el.append(mk('span', `width:6px;height:6px;border-radius:50%;background:#8A867E;animation:bo-pulse 1s ease-in-out ${i * 0.15}s infinite;`));
+    this.wcTyping = el; this.wcAdd(el);
+  }
+  wcBubble(text, ai) {
+    const el = mk('div', `align-self:${ai ? 'flex-end' : 'flex-start'};max-width:84%;padding:7px 10px 5px;border-radius:${ai ? '12px 12px 3px 12px' : '12px 12px 12px 3px'};background:${ai ? '#D9FDD3' : '#FFFFFF'};${ai ? 'border:1.5px solid #6366F1;' : ''}color:#121110;font-size:12.5px;line-height:1.4;box-shadow:0 1px 1px rgba(0,0,0,0.08);`);
+    if (ai) {
+      const tag = mk('div', 'display:flex;align-items:center;gap:4px;margin-bottom:2px;font-size:11px;font-weight:800;color:#4338CA;');
+      tag.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="#4338CA" aria-hidden="true"><path d="M12 2.5l2.2 6.3 6.3 2.2-6.3 2.2L12 19.5l-2.2-6.3L3.5 11l6.3-2.2z"/></svg>';
+      tag.append(mk('span', '', 'Respuesta de la IA'));
+      el.append(tag);
+    }
+    el.append(mk('div', '', text));
+    const meta = mk('div', 'display:flex;justify-content:flex-end;gap:3px;margin-top:1px;font-size:10.5px;color:#6E6A63;', this.msgTime(ai ? -1 : 0));
+    if (ai) meta.append(mk('span', 'color:#3B82F6;font-weight:700;letter-spacing:-2px;', '✓✓'));
+    el.append(meta);
+    this.wcAdd(el);
+    if (ai && !this.instant) el.animate([{ boxShadow: '0 0 0 6px rgba(99,102,241,0.35)' }, { boxShadow: '0 0 0 0 rgba(99,102,241,0)' }], { duration: 1200, easing: 'ease-out' });
+  }
+
+  toast(dir, text) {
+    const layer = this.flyRef.current; if (!layer || !text || this.instant) return;
+    if (this.toastEl) this.toastEl.remove();
+    const who = STORIES[this.state.story].webToast;
+    const el = mk('div', "position:absolute;right:12px;top:60px;width:300px;max-width:calc(100% - 24px);display:flex;gap:10px;padding:11px 12px;border-radius:14px;background:#FFFFFF;color:#121110;font-family:'Archivo',sans-serif;box-shadow:0 22px 44px -18px rgba(0,0,0,0.55);border:1px solid #E6E4DF;z-index:4;");
+    const icon = img(IMG.wa, 'flex:none;width:30px;height:30px;'); icon.setAttribute('aria-hidden', 'true');
+    const body = mk('div', 'flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;');
+    const head = mk('div', 'display:flex;justify-content:space-between;gap:8px;font-size:11.5px;font-weight:700;color:#57544E;');
+    head.append(mk('span', '', dir === 'in' ? 'WhatsApp · ' + who : 'Enviado a ' + who.split(' ')[0] + ' por WhatsApp'), mk('span', 'flex:none;font-weight:600;', 'ahora'));
+    body.append(head, mk('div', 'font-size:12.5px;line-height:1.4;color:#121110;', text));
+    el.append(icon, body); layer.appendChild(el); this.toastEl = el;
+    el.animate([{ opacity: 0, transform: 'translateX(30px)' }, { opacity: 1, transform: 'none' }], { duration: 450, easing: EASE, fill: 'both' });
+    this.later(3800, () => { const an = el.animate([{ opacity: 1 }, { opacity: 0, transform: 'translateX(20px)' }], { duration: 350, fill: 'forwards' }); an.onfinish = () => el.remove(); });
+  }
+
+  downloadCard() {
+    const layer = this.flyRef.current; if (!layer) return;
+    const el = mk('div', "position:absolute;right:12px;top:60px;width:310px;max-width:calc(100% - 24px);display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:14px;background:#FFFFFF;color:#121110;font-family:'Archivo',sans-serif;box-shadow:0 22px 44px -18px rgba(0,0,0,0.55);border:1px solid #E6E4DF;z-index:4;");
+    const head = mk('div', 'display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:800;');
+    head.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#121110" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>';
+    head.append(mk('span', '', 'Descargas'));
+    el.append(head);
+    const file = (name, tag, color, size, delay) => {
+      const row = mk('div', 'display:flex;align-items:center;gap:10px;');
+      row.append(mk('span', `flex:none;width:34px;height:34px;border-radius:8px;background:${color};color:#FFFFFF;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;`, tag));
+      const col = mk('div', 'flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;');
+      col.append(mk('span', 'font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', name));
+      const track = mk('span', 'height:4px;border-radius:2px;background:#ECEAE6;overflow:hidden;');
+      const bar = mk('span', `display:block;height:100%;width:0;background:${color};`);
+      track.append(bar);
+      const sub = mk('span', 'font-size:11px;color:#57544E;', 'Descargando… ' + size);
+      col.append(track, sub); row.append(col);
+      const open = mk('span', 'flex:none;padding:5px 10px;border-radius:999px;border:1px solid #DEDCD7;font-size:11.5px;font-weight:700;opacity:0;', 'Abrir');
+      row.append(open); el.append(row);
+      this.later(300 + delay, () => bar.animate([{ width: '0%' }, { width: '100%' }], { duration: 1200, easing: 'ease-in-out', fill: 'forwards' }));
+      this.later(1550 + delay, () => { sub.textContent = 'Listo · ' + size; sub.style.color = '#126B33'; sub.style.fontWeight = '700'; open.animate([{ opacity: 0, transform: 'scale(.8)' }, { opacity: 1, transform: 'none' }], { duration: 300, fill: 'forwards' }); });
+    };
+    file('Reporte_ventas_lunes.xlsx', 'XLS', '#177A41', '2.4 MB', 0);
+    file('Reporte_ventas_lunes.pdf', 'PDF', '#B91C1C', '860 KB', 500);
+    layer.appendChild(el);
+    el.animate([{ opacity: 0, transform: 'translateY(-14px) scale(.97)' }, { opacity: 1, transform: 'none' }], { duration: 450, easing: EASE, fill: 'both' });
+  }
+
+  go(delta) { const i = DEMO_IDX.indexOf(this.state.story); this.startStory(DEMO_IDX[(Math.max(0, i) + delta + DEMO_IDX.length) % DEMO_IDX.length]); }
+  setDevice(d) { if (d === this.state.device) return; this.clearTimers(); this.setState({ device: d }, () => { this.measure && this.measure(); this.startStory(this.state.story); }); }
+
+  renderVals() {
+    const { story, shown, run, vw, vh, sw, sh, reduced, mode, device } = this.state;
+    const s = STORIES[story];
+    const mw = (q, fb) => (typeof window !== 'undefined' && window.matchMedia) ? window.matchMedia(q).matches : fb;
+    const wide = mw('(min-width: 900px)', vw >= 900);
+    const web = device === 'web';
+    const dual = mode === 'dual' || mode === 'phone';
+    const phoneOnly = mode === 'phone';
+    const clock = stripDay(s.n[Math.max(0, shown - 1)].t);
+    const m = clock.match(/^(\S+)(\s.*)?$/);
+    const { demo, hs, dSvc, dHover, dt, sDone, seen } = this.state;
+    const demoPlay = demo === 'play';
+    const pw = wide ? Math.min(300, (sh - 8) / 1.8333) : demoPlay ? Math.max(150, Math.min(300, vw * 0.66, (sh - 8) / 1.8333)) : Math.min(300, vw * 0.66);
+    const phoneW = wide || demoPlay ? `${Math.round(pw)}px` : 'min(300px, 66vw)';
+    const C = 'translate(-50%,-50%)';
+    const hasChat = !!s.chat;
+    const webChat = web && !!s.client;
+    const showCust = web ? (hasChat && dual) : dual;
+    const csc = Math.max(0.3, Math.min(0.62, (sh * 0.7) / (pw * 1.8333), (sw * 0.4 - 24) / pw));
+    const phoneSpace = Math.round(pw * csc + 24);
+    const ew = Math.min(sw, 1120);
+    const portalSide = ew >= 980, portalRail = ew >= 640 && ew < 980;
+    const split = ew >= 640;
+    this.custVisible = !web || hasChat;
+    let mainT, custT;
+    if (web && showCust && (!split || phoneOnly)) {
+      mainT = `${C} translateX(${Math.round(sw / 2 + ew / 2 + 60)}px)`;
+      custT = `${C} scale(${Math.min(1, (sh - 8) / (pw * 1.8333)).toFixed(3)})`;
+    } else if (web) {
+      const s2 = Math.min(1, (sw - phoneSpace) / ew);
+      mainT = showCust ? `${C} translateX(${Math.round(phoneSpace / 2)}px) scale(${s2.toFixed(3)})` : C;
+      custT = showCust ? `${C} translateX(${Math.round(-(sw / 2 - pw * csc / 2 - 2))}px) scale(${csc.toFixed(3)})` : `${C} translateX(${Math.round(-(sw / 2 + pw * csc))}px) scale(${(csc * 0.85).toFixed(3)}) rotate(-8deg)`;
+    } else {
+      const off = Math.min(sw / 4, pw * 0.62);
+      const sc = Math.min(wide ? 1 : 0.84, (sw / 2 - 8) / pw);
+      mainT = dual ? `${C} translateX(${off}px) scale(${sc}) rotate(1.5deg)` : C;
+      custT = dual ? `${C} translateX(${-off}px) scale(${sc * 0.96}) rotate(-2deg)` : `${C} translateX(${-off - pw - 40}px) scale(${sc * 0.85}) rotate(-8deg)`;
+    }
+    const fill = { display: 'block', width: '100%', height: '100%', transformOrigin: 'left center', background: '#E8501F' };
+    const tabs = STORIES.map((st, k) => {
+      const sel = k === story;
+      let bar = null;
+      if (sel) bar = reduced
+        ? React.createElement('span', { style: { ...fill, transform: 'scaleX(1)' } })
+        : React.createElement('span', { key: 'r' + run, style: { ...fill, transform: 'scaleX(0)', animation: `bo-fill ${web ? st.totalWeb : st.total}ms linear forwards` } });
+      return {
+        id: 'bo-tab-' + k, num: '0' + (k + 1), label: st.tab, meta: st.meta, selected: sel, open: sel && wide && vh >= 860, tabIndex: sel ? 0 : -1,
+        weight: sel ? 800 : 600, numColor: sel ? '#E8501F' : '#8A867E', bar,
+        onClick: () => this.startStory(k)
+      };
+    });
+    const last = Math.max(0, shown - 1);
+    const steps = s.n.map((n, k) => {
+      const done = k < shown, latest = shown > 0 && k === shown - 1, next = k === shown && !this.state.sDone;
+      return {
+        n: k + 1, label: n.step || n.ti, aria: latest ? 'step' : 'false', isDone: done, notDone: !done,
+        rowBg: latest ? '#FFFFFF' : 'rgba(255,255,255,0)', rowShadow: latest ? '0 12px 26px -16px rgba(0,0,0,0.45)' : '0 0 0 rgba(0,0,0,0)', rowX: latest ? '6px' : '0px',
+        circleBg: done ? '#E8501F' : '#F3F2EE', circleBorder: done || next ? '#E8501F' : '#C9C5BD', circleColor: next ? '#E8501F' : '#8A867E',
+        textColor: done || next ? '#121110' : '#6E6A63', weight: latest ? 800 : done ? 650 : 500,
+        hasLine: k < s.n.length - 1, lineFill: k < shown - 1 ? '100%' : '0%', delay: (0.18 + k * 0.07).toFixed(2) + 's',
+        seg: done ? '100%' : '0%', go: () => this.jumpTo(k), mHidden: k === last ? 'false' : 'true', mOp: k === last ? 1 : 0, mY: k === last ? '0px' : (k < last ? '-12px' : '12px')
+      };
+    });
+    const kpis = s.kpi.map(([label, vals], k) => {
+      const ch = shown > 0 && vals[shown] !== vals[shown - 1];
+      return { label, value: vals[shown], color: ch ? '#B83A12' : '#121110', sep: k === 0 ? 'transparent' : '#E6E4DF' };
+    });
+    const th = THEME[story] || THEME_DEF;
+    // Pedidos: tablero kanban
+    const kStage = [-1, 0, 1, 1, 2, 3][shown];
+    const kTag = ['WhatsApp', 'Registrado', 'Stock ok', 'Boleta lista', 'Entregado'][Math.max(0, shown - 1)];
+    const kNarrow = ew < 560;
+    const kBase = [[['#1043', 'Minimarket Sol', 'S/ 86.00'], ['#1044', 'Bodega Mía', 'S/ 64.00']], [['#1039', 'Bodega Lucho', 'S/ 240.00'], ['#1040', 'Minimarket Luz', 'S/ 152.30']], [['#1036', 'Doña Carmen', 'S/ 132.00']], [['#1031', 'Bodega Rosa', 'S/ 98.00'], ['#1033', 'Tienda Paz', 'S/ 175.50']]];
+    const kanCols = ['Nuevos', 'Preparando', 'En reparto', 'Entregados'].map((name, c) => {
+      let cards = kBase[c].map(([id, who, total]) => ({ id, who, total, border: '#E6E4DF', shadow: '0 1px 2px rgba(0,0,0,0.08)', anim: 'bd-pop .4s ease backwards', hasTag: false, tag: '' }));
+      if (kNarrow) cards = cards.slice(0, c === kStage ? 0 : 1);
+      if (c === kStage) cards.push({ id: '#1042', who: 'Bodega Rosita', total: 'S/ 198.40', border: th.accent, shadow: '0 0 0 3px ' + th.accent + '2E, 0 10px 20px -12px rgba(0,0,0,0.5)', anim: 'bd-land .65s cubic-bezier(0.22,1,0.36,1) backwards', hasTag: true, tag: kTag });
+      return { name, count: String(kBase[c].length + (c === kStage ? 1 : 0)), cards, bg: c === kStage ? th.accent + '17' : '#F4F3F0' };
+    });
+    // Facturación: comprobantes
+    const fBase = [['F001-00870', 'Constructora Ríos', 'S/ 1,240.00'], ['B001-02311', 'Cliente varios', 'S/ 46.00'], ['F001-00871', 'Inversiones Lima', 'S/ 312.50'], ['F001-00872', 'Comercial Paz', 'S/ 98.00']];
+    const fRows = (ew < 640 ? fBase.slice(-2) : fBase).map(([id, who, total]) => ({ id, who, total, bg: '#FFFFFF', st: 'Aceptada', stBg: GREEN[0], stColor: GREEN[1] }));
+    if (shown >= 3) { const st = shown >= 5 ? ['Enviada al cliente', GREEN] : shown >= 4 ? ['Aceptada', GREEN] : ['Enviando…', AMBER]; fRows.push({ id: 'F001-00873', who: 'Inversiones Paredes S.A.C.', total: 'S/ 186.00', bg: shown >= 5 ? '#FFFFFF' : '#FFF7ED', st: st[0], stBg: st[1][0], stColor: st[1][1] }); }
+    // Citas: agenda del día
+    const offered = shown >= 2 && shown < 4, booked = shown >= 4;
+    const slot = (time, label, note, kind) => {
+      const S = { busy: ['#EEF2F3', '#EEF2F3', 'solid', '#121110', 650], free: ['#FFFFFF', '#D8D5CE', 'dashed', '#57544E', 500], offer: ['#ECF8FB', th.accent, 'dashed', '#0B5568', 700], mine: [th.accent, th.accent, 'solid', '#FFFFFF', 800] }[kind];
+      return { time, label, note, bg: S[0], border: S[1], line: S[2], color: S[3], weight: S[4] };
+    };
+    const freeKind = offered ? 'offer' : 'free', freeNote = offered ? 'Ofrecido por el bot' : '';
+    const cSlots = [
+      slot('9:00', 'Carlos Quispe', 'Control', 'busy'),
+      booked ? slot('10:00', 'Lucía Torres', shown >= 5 ? 'Recordatorio enviado' : 'Consulta nueva', 'mine') : slot('10:00', 'Libre', freeNote, freeKind),
+      slot('11:30', 'Libre', freeNote, freeKind),
+      slot('12:30', 'Ana Flores', 'Control', 'busy'),
+      slot('16:00', 'Libre', freeNote, freeKind),
+      slot('17:00', 'Pedro Ríos', 'Consulta', 'busy')
+    ];
+    // Reportes: archivos y gráfico
+    const rFiles = [['ventas_lunes.xlsx', 'Caja', 1], ['almacen_lunes.xlsx', 'Almacén', 2], ['compras_lunes.xlsx', 'Compras', 3]].map(([name, from, at]) => {
+      const ok = shown >= at; return { name, from, op: ok ? 1 : 0.55, st: ok ? 'Recibido' : 'Esperando', stBg: ok ? GREEN[0] : GRAY[0], stColor: ok ? GREEN[1] : GRAY[1] };
+    });
+    const showBars = shown >= 4;
+    const rBars = [['Surco', 48, 'S/ 2,410', '#C2410C'], ['Miraflores', 74, 'S/ 3,720', th.accent], ['Barranco', 92, 'S/ 4,610', th.accent], ['Los Olivos', 36, 'S/ 1,740', th.accent]].map(([name, h, val, color], k) => ({ name, val, color, h: showBars ? h + '%' : '4%', op: showBars ? 1 : 0, delay: (k * 0.12).toFixed(2) + 's' }));
+    const wData = {
+      wPedido: story === 0, wFactura: story === 6, wCitas: story === 2, wReporte: story === 1,
+      kanCols, kGrid: kNarrow ? 'repeat(2, minmax(0, 1fr))' : 'repeat(4, minmax(0, 1fr))', fRows, fCols: ew < 640 ? '86px minmax(0,1fr) 112px' : '96px minmax(0,1fr) 84px 120px', fCliDisp: ew < 640 ? 'none' : 'block', rCols: ew < 640 ? 'minmax(0,1fr)' : 'minmax(0,0.9fr) minmax(0,1.1fr)', rFilesDisp: ew < 640 ? 'none' : 'flex', cSlots, cFree: booked ? '2 horarios libres' : '3 horarios libres',
+      rFiles, rBars, rMerge: shown >= 3 ? '100%' : '0%', rMergeLabel: shown >= 3 ? '1,284 filas juntadas y revisadas' : 'Esperando los archivos…',
+      rChip: shown >= 5 ? 'Enviado a gerencia' : showBars ? 'Listo' : 'Armando…', rChipBg: shown >= 4 ? GREEN[0] : GRAY[0], rChipColor: shown >= 4 ? GREEN[1] : GRAY[1],
+      searchPh: SEARCH[story] || 'Buscar…'
+    };
+    const navItems = (NAVS[story] || NAV).map((l) => {
+      const on = l === s.page;
+      return { label: l, icon: NAV_ICON[l], on, badge: String(Math.max(1, shown)), weight: on ? 750 : 500, color: on ? th.navOnText : th.navText, bg: on ? th.navOn : 'rgba(0,0,0,0)' };
+    });
+    const chat = s.chat || STORIES[0].chat;
+    const short = wide && vh < 760;
+    const BG = DIMG;
+    const bgs = BG.map(([src, pos], k) => ({ src, pos, op: k === story ? 1 : 0, scale: k === story ? 1.06 : 1 }));
+    const dS = STORIES[dSvc], dSeen = seen ? STORIES[story] : null;
+    const cur = Math.max(1, Math.min(s.n.length, shown));
+    const dVals = {
+      demoOpen: !!demo && demo !== 'play',
+      xAction: () => (demo === 'exit' ? this.closeDemo() : this.exitDemo()), xLabel: demo === 'exit' ? 'Cerrar' : 'Salir de las demostraciones',
+      waDone: 'https://wa.me/51945574190?text=' + encodeURIComponent('Hola, vi la demostración de "' + s.tab + '" en bitwise.pe y quiero algo así para mi negocio'), dIntro: demo === 'intro', dPick: demo === 'pick', dLoad: demo === 'load', dExit: demo === 'exit', dShowX: !!demo,
+      dPlay: demoPlay, dPlayWide: demoPlay && wide, dPlayNarrow: demoPlay && !wide,
+      dlgRef: this.dlgRef, demoBtnRef: this.demoBtnRef,
+      openDemo: () => this.openDemo(), goPick: () => this.goPick(), exitDemo: () => this.exitDemo(), closeDemo: () => this.closeDemo(), replay: () => this.startStory(story),
+      introBgs: [['assets/hero-1.jpg', '50% 35%', '0s'], ['assets/hero-2.jpg', '74% 40%', '1.2s'], ['assets/hero-3.jpg', '50% 40%', '2.4s']].map(([src, pos, delay]) => ({ src, pos, delay })),
+      svcCards: DEMO_IDX.map((k, j) => { const x = STORIES[k]; const on = wide && k === dHover; return { icon: DICON[k], iconBg: DGRAD[k], ring: on ? '2px' : '0px', iconScale: on ? 1.06 : 1, sum: DSUM[k], title: x.tab, tag: DTAG[k], img: DIMG[k][0], pos: DIMG[k][1], delay: (0.12 + j * 0.06).toFixed(2) + 's', op: k === dHover ? 1 : 0, scale: k === dHover ? 1 : 1.04, bg: on ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0)', arrow: on ? '#E8501F' : 'rgba(255,255,255,0.55)', ax: on ? '4px' : '0px', pick: () => this.pickSvc(k), hover: () => { if (this.state.dHover !== k) this.setState({ dHover: k }); } }; }),
+      pvTitle: STORIES[dHover].tab, pvSteps: STORIES[dHover].n.map((n) => ({ label: n.step || n.ti })),
+      pickCols: wide ? 'minmax(0, 5fr) minmax(0, 6fr)' : 'minmax(0, 1fr)', thumbW: '52px', thumbH: '52px',
+      pickPad: wide ? '56px 40px 40px' : '22px 16px 32px',
+      dImg: DIMG[dSvc][0], dPos: DIMG[dSvc][1],
+      dTitle: demoPlay ? s.tab : dS.tab, dMeta: s.service + ' · ' + s.biz.name, dNum: '0' + ((demoPlay ? story : dSvc) + 1),
+      loadLabel: ['Conectando WhatsApp…', 'Cargando el sistema de ' + dS.biz.name + '…', 'Preparando al asistente…'][Math.min(2, Math.floor(dt / 900))],
+      sDone: demoPlay && sDone, sNotDone: !sDone, curStepN: cur, stepCount: s.n.length, curStep: s.n[cur - 1].step || s.n[cur - 1].ti,
+      waOther: 'https://wa.me/51945574190?text=' + encodeURIComponent('Hola, vi las demostraciones en bitwise.pe. Mi proceso es otro y quiero saber cómo se haría'),
+      exitImg: dSeen ? DIMG[story][0] : 'assets/hero-1.jpg', exitPos: dSeen ? DIMG[story][1] : '50% 35%',
+      exitText: dSeen ? 'Lo que viste en «' + dSeen.tab + '» lo podemos hacer para tu negocio. Te decimos cómo y cuánto, con precio fijo por escrito.' : 'Podemos hacer un sistema así para tu negocio. Te decimos cómo y cuánto, con precio fijo por escrito.',
+      exitWa: 'https://wa.me/51945574190?text=' + encodeURIComponent(dSeen ? 'Hola, vi la demostración de "' + dSeen.tab + '" en bitwise.pe y quiero algo así para mi negocio' : 'Hola, vi las demostraciones en bitwise.pe y quiero un sistema para mi negocio'),
+      stageZ: demoPlay ? '120' : '-1', stageVis: demoPlay ? 'visible' : 'hidden', stageHidden: demoPlay ? 'false' : 'true',
+      togTop: demoPlay ? (wide ? '14px' : '72px') : '14px', togLeft: demoPlay && wide ? 'calc(380px + (100% - 380px) / 2)' : '50%',
+      inTop: demoPlay ? (wide ? '64px' : '118px') : '56px', inLeft: demoPlay && wide ? '396px' : (demoPlay ? '10px' : '16px'),
+      inRight: demoPlay && !wide ? '10px' : '16px', inBottom: demoPlay && !wide ? '172px' : '16px'
+    };
+    return {
+      ...dVals,
+      ...wData,
+      heroWide: vw >= 980, heroNarrow: vw < 980, heroRootH: vw >= 980 ? '100dvh' : 'auto', heroOverflow: vw >= 980 ? 'hidden' : 'visible',
+      heroBgs: HERO.map((h, k) => ({ src: h.src, pos: h.pos, posM: h.posM, alt: k === hs ? h.alt : '', op: k === hs ? 1 : 0, scale: k === hs ? 1.03 : 1.08, x: k === hs ? '0%' : (k < hs ? '-4%' : '4%') })),
+      heroLines: HERO.map((h, k) => ({ text: h.line, hidden: k === hs ? 'false' : 'true', op: k === hs ? 1 : 0, y: k === hs ? '0px' : '10px', blur: k === hs ? '0px' : '6px' })),
+      heroChips: HERO.map((h, k) => ({ label: h.chip, on: k === hs ? 'true' : 'false', bg: k === hs ? '#E0242C' : 'rgba(12,11,14,0.55)', border: k === hs ? '#E0242C' : 'rgba(255,255,255,0.3)', bar: k === hs && !reduced ? React.createElement('span', { key: 'hb' + this.state.hRun, style: { display: 'block', width: '100%', height: '100%', background: 'linear-gradient(90deg, #FF4F6A, #FFA62B)', transformOrigin: 'left center', animation: 'bd-bar 7s linear both' } }) : (k === hs ? React.createElement('span', { style: { display: 'block', width: '100%', height: '100%', background: '#FFA62B' } }) : null), go: () => this.heroGo(k) })),
+      heroPrev: () => this.heroGo(hs - 1), heroNext: () => this.heroGo(hs + 1),
+      heroTS: (e) => { const p = e.touches[0]; this.hTouch = { x: p.clientX, y: p.clientY }; },
+      heroTE: (e) => { if (!this.hTouch) return; const p = e.changedTouches[0]; const dx = p.clientX - this.hTouch.x, dy = p.clientY - this.hTouch.y; this.hTouch = null; if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.4) this.heroGo(hs + (dx < 0 ? 1 : -1)); },
+      navLinks: [['Servicios', 'servicios'], ['Proyectos', 'proyectos'], ['Nosotros', 'nosotros'], ['Blog', 'blog'], ['Contacto', 'contacto']].map(([label, slug]) => ({ label, href: 'https://bitwise.pe/' + slug + '/' })),
+      navOpen: this.state.navOpen, navOpenStr: this.state.navOpen ? 'true' : 'false', navIcon: this.state.navOpen ? 'M6 6l12 12M18 6L6 18' : 'M5 9h14M5 15h14',
+      toggleNav: () => this.setState((st) => ({ navOpen: !st.navOpen })),
+      waHero: 'https://wa.me/51945574190?text=' + encodeURIComponent('Hola Bitwise, quiero automatizar los procesos de mi empresa'),
+
+      bgs,
+      wide, narrow: !wide,
+      rootH: wide ? '100dvh' : 'auto', rootMinH: wide ? '0px' : '100vh', rootOy: wide ? 'auto' : 'visible',
+      mainPad: wide ? '14px 28px 8px' : '12px 18px 20px',
+      mainCols: wide ? (vw < 1120 ? 'minmax(300px,360px) minmax(0,1fr)' : 'minmax(340px,430px) minmax(0,1fr)') : 'minmax(0,1fr)',
+      mainRows: wide ? 'auto 1fr auto' : 'auto auto auto auto',
+      mainAreas: wide ? '"head stage" "tabs stage" "cta stage"' : '"head" "stage" "tabs" "cta"',
+      rowGap: wide ? (short ? '12px' : 'clamp(14px, 2.6vh, 28px)') : '20px',
+      h1Size: wide ? `clamp(2.6rem, ${short ? '6.4vh' : '7.4vh'}, 4.8rem)` : 'clamp(2.4rem, 12vw, 3.6rem)',
+      showSub: !wide || vh >= 800,
+      tabPad: short ? '10px 0' : '13px 0', tabSize: short ? '1rem' : '1.08rem',
+      ctaTitle: wide ? '1.35rem' : '1.6rem',
+      footPad: wide ? '4px 28px 12px' : '8px 18px 24px', footJustify: wide ? 'flex-start' : 'center',
+      panelH: demoPlay ? '100dvh' : wide ? 'auto' : (web ? '640px' : `calc(${phoneW} * 1.8333 + 76px)`),
+      phoneW,
+      isPhone: !web, isWeb: web,
+      phoneBtnBg: web ? 'transparent' : '#121110', phoneBtnColor: web ? '#121110' : '#FFFFFF',
+      webBtnBg: web ? '#121110' : 'transparent', webBtnColor: web ? '#FFFFFF' : '#121110',
+      setPhone: () => this.setDevice('phone'), setWeb: () => this.setDevice('web'),
+      mainT, custT, custOp: (web ? showCust : dual) ? 1 : 0, webW: Math.round(ew) + 'px', portalRail, toolDisp: split ? 'flex' : 'none', lowCols: split ? (webChat ? 'minmax(0,1fr) minmax(0,380px)' : 'minmax(0,1fr) minmax(0,290px)') : 'minmax(0,1fr)', botDisp: split && !webChat ? 'flex' : 'none', chatDisp: webChat ? 'flex' : 'none', movDisp: webChat && !split ? 'none' : 'flex', lowFlex: webChat ? '1.3' : '1', wcName: s.client ? s.client.name : '', wcAvatar: s.client ? s.client.avatar : IMG.robot, wChatRef: this.wChatRef,
+      frameBg: FINISH[this.props.finish] || FINISH['Titanio negro'],
+      service: s.service, panelLabel: s.tab + ' · ' + s.biz.name, dateLabel: s.date,
+      chatName: chat.name, chatAvatar: chat.avatar,
+      bizName: s.biz.name, bizPlace: s.biz.place, webUrl: s.biz.url + '/' + s.page.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''),
+      ownerAvatar: s.biz.avatar, ownerName: s.biz.owner,
+      clockMain: m ? m[1] : clock, clockSuffix: m && m[2] ? m[2] : '',
+      tabs, steps, kpis, navItems,
+      ...(THEME[story] || THEME_DEF),
+      pageTitle: s.page, newLabel: NEW_LABEL[s.page] || 'Nuevo', bizInitial: s.biz.name.split(' ').map((w) => w[0]).slice(0, 2).join(''), webWide: ew >= 900, toolPad: split ? '8px 18px' : '7px 12px',
+      portalSide, portalHeadPad: split ? '12px 18px' : '10px 12px',
+      titleSize: split ? '1.35rem' : '1.1rem',
+      kpiPad: split ? '10px 18px' : '8px 12px',
+      kpiLabelSize: split ? '11.5px' : '10px', kpiValSize: split ? '1.35rem' : '1rem',
+      bodyCols: split ? 'minmax(0,1fr) minmax(0,270px)' : 'minmax(0,1fr)',
+      bodyRows: split ? 'minmax(0,1fr)' : 'minmax(0,1fr) 210px',
+      colPad: split ? '12px 18px' : '10px 12px',
+      botBorderL: split ? '1px solid #E6E4DF' : '0', botBorderT: split ? '0' : '1px solid #E6E4DF',
+      stageRef: this.stageRef, flyRef: this.flyRef,
+      phoneStackRef: this.phoneStackRef, phoneResultRef: this.phoneResultRef,
+      webStackRef: this.webStackRef, webResultRef: this.webResultRef,
+      chatRef: this.chatRef, inputRef: this.inputRef, placeholderRef: this.placeholderRef, sendRef: this.sendRef, micRef: this.micRef,
+      botRef: this.botRef, botInputRef: this.botInputRef, botPhRef: this.botPhRef, botSendRef: this.botSendRef,
+      tablistRef: this.tablistRef,
+      waCloseUrl: 'https://wa.me/51945574190?text=' + encodeURIComponent('Hola, vi los ejemplos en bitwise.pe y quiero un sistema para mi negocio'),
+      onTS: (e) => { const t = e.touches[0]; this.touch = { x: t.clientX, y: t.clientY }; },
+      onTE: (e) => {
+        if (!this.touch) return;
+        const t = e.changedTouches[0];
+        const dx = t.clientX - this.touch.x, dy = t.clientY - this.touch.y;
+        this.touch = null;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) this.go(dx < 0 ? 1 : -1);
+      },
+      onTabKey: (e) => {
+        const map = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
+        let next = null;
+        if (map[e.key]) next = (story + map[e.key] + STORIES.length) % STORIES.length;
+        if (e.key === 'Home') next = 0;
+        if (e.key === 'End') next = STORIES.length - 1;
+        if (next === null) return;
+        e.preventDefault();
+        this.startStory(next);
+        const btn = this.tablistRef.current && this.tablistRef.current.querySelectorAll('[role="tab"]')[next];
+        btn && btn.focus();
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

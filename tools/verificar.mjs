@@ -18,6 +18,9 @@ const PAGINAS = ['/'];
 // Páginas de prueba para que el dueño las revise: se compilan y se revisan,
 // pero llevan noindex y no van al sitemap.
 const PRUEBAS = ['/demo/'];
+// Diseño de Claude Design copiado tal cual en public/portada/ (se arma con React en el navegador):
+// no pasa por las revisiones de título y H1, solo se deja fuera de la regla de páginas sueltas.
+const DISENOS = ['/portada/'];
 // Las que viven en bitwise.pe: aquí solo queda la redirección (astro.config.mjs).
 const REDIRIGIDAS = {
   '/sistemas/': 'https://bitwise.pe/servicios/desarrollo-de-software-a-medida/',
@@ -120,7 +123,7 @@ const htmlSueltos = (dir, base = '/') => readdirSync(dir, { withFileTypes: true 
   e.isDirectory() ? (e.name === '_astro' ? [] : htmlSueltos(join(dir, e.name), `${base}${e.name}/`)) : e.name === 'index.html' ? [base] : []);
 let redirecciones = 0;
 for (const ruta of htmlSueltos(DIST)) {
-  if (PAGINAS.includes(ruta) || PRUEBAS.includes(ruta)) continue;
+  if (PAGINAS.includes(ruta) || PRUEBAS.includes(ruta) || DISENOS.includes(ruta)) continue;
   const destino = (readFileSync(archivoDe(ruta), 'utf8').match(/http-equiv="refresh" content="0;url=([^"]+)"/) || [])[1];
   if (!destino) fallos.push(`${ruta}: página que no es la portada ni una redirección`);
   else if (!PAGINAS.includes(destino) && !destino.startsWith('https://bitwise.pe/')) fallos.push(`${ruta}: redirige a ${destino}, que no es la portada ni bitwise.pe`);
