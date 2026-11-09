@@ -5,9 +5,10 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node tools/publicar-revision.mjs",
     "preview": "astro preview",
-    "verificar": "astro build && node tools/verificar.mjs"
+    "verificar": "astro build && node tools/verificar.mjs",
+    "build:sitio": "astro build"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

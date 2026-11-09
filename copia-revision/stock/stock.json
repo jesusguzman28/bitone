@@ -1,0 +1,482 @@
+[
+  {
+    "archivo": "stock/bodega-1.webp",
+    "tema": "bodega",
+    "descripcion": "Trabajador de tienda con una caja de tomates",
+    "unsplash_id": "xSdL0ze7Qqc",
+    "autor": "Vitaly Gariev",
+    "url": "https://unsplash.com/photos/xSdL0ze7Qqc"
+  },
+  {
+    "archivo": "stock/bodega-2.webp",
+    "tema": "bodega",
+    "descripcion": "Dueña de tienda de barrio detrás del mostrador",
+    "unsplash_id": "EOkN2pRjFsg",
+    "autor": "Ali Mkumbwa",
+    "url": "https://unsplash.com/photos/EOkN2pRjFsg"
+  },
+  {
+    "archivo": "stock/bodega-3.webp",
+    "tema": "bodega",
+    "descripcion": "Pareja de dueños de tienda con delantal",
+    "unsplash_id": "2oBnIuO9wv4",
+    "autor": "Vitaly Gariev",
+    "url": "https://unsplash.com/photos/2oBnIuO9wv4"
+  },
+  {
+    "archivo": "stock/bodega-4.webp",
+    "tema": "bodega",
+    "descripcion": "Tendero esperando clientes detrás del mostrador",
+    "unsplash_id": "SEDw7QockoU",
+    "autor": "Michael Krahn",
+    "url": "https://unsplash.com/photos/SEDw7QockoU"
+  },
+  {
+    "archivo": "stock/bodega-5.webp",
+    "tema": "bodega",
+    "descripcion": "Dos personas atendiendo en una tienda pequeña y llena",
+    "unsplash_id": "_-wzXGIGt0M",
+    "autor": "Josh Marty",
+    "url": "https://unsplash.com/photos/_-wzXGIGt0M"
+  },
+  {
+    "archivo": "stock/bodega-6.webp",
+    "tema": "bodega",
+    "descripcion": "Vendedor en su puesto de frutas y verduras",
+    "unsplash_id": "uTBJ8Q_2JKU",
+    "autor": "Theo Laflamme",
+    "url": "https://unsplash.com/photos/uTBJ8Q_2JKU"
+  },
+  {
+    "archivo": "stock/bodega-7.webp",
+    "tema": "bodega",
+    "descripcion": "Vendedor feliz en su puesto de frutas",
+    "unsplash_id": "WUG0QcXVh0k",
+    "autor": "Ali Mkumbwa",
+    "url": "https://unsplash.com/photos/WUG0QcXVh0k"
+  },
+  {
+    "archivo": "stock/bodega-8.webp",
+    "tema": "bodega",
+    "descripcion": "Cliente y vendedor conversando en una tienda de barrio",
+    "unsplash_id": "t_JCpP9Ri5k",
+    "autor": "Bruno BD",
+    "url": "https://unsplash.com/photos/t_JCpP9Ri5k"
+  },
+  {
+    "archivo": "stock/bodega-9.webp",
+    "tema": "bodega",
+    "descripcion": "Dos personas ordenando mercadería en una tienda",
+    "unsplash_id": "l4DDftLZcAI",
+    "autor": "Phuong Nguyen",
+    "url": "https://unsplash.com/photos/l4DDftLZcAI"
+  },
+  {
+    "archivo": "stock/bodega-10.webp",
+    "tema": "bodega",
+    "descripcion": "Dueño de una tienda pequeña detrás de su vitrina",
+    "unsplash_id": "gakuij2BVdg",
+    "autor": "Rohit Dey",
+    "url": "https://unsplash.com/photos/gakuij2BVdg"
+  },
+  {
+    "archivo": "stock/ferreteria-1.webp",
+    "tema": "ferreteria",
+    "descripcion": "Dueñas conversando dentro de una ferretería",
+    "unsplash_id": "RB9y8egwRG8",
+    "autor": "Kelvin Zyteng",
+    "url": "https://unsplash.com/photos/RB9y8egwRG8"
+  },
+  {
+    "archivo": "stock/ferreteria-2.webp",
+    "tema": "ferreteria",
+    "descripcion": "Vendedor en una tienda de material eléctrico",
+    "unsplash_id": "GN1D5Xsu92E",
+    "autor": "Asad Kareem musa",
+    "url": "https://unsplash.com/photos/GN1D5Xsu92E"
+  },
+  {
+    "archivo": "stock/ferreteria-3.webp",
+    "tema": "ferreteria",
+    "descripcion": "Pasillo de ferretería con herramientas colgadas",
+    "unsplash_id": "MohB4LCIPyM",
+    "autor": "Jelleke Vanooteghem",
+    "url": "https://unsplash.com/photos/MohB4LCIPyM"
+  },
+  {
+    "archivo": "stock/ferreteria-4.webp",
+    "tema": "ferreteria",
+    "descripcion": "Estante de ferretería con accesorios de gasfitería",
+    "unsplash_id": "KzT5IWf0yHQ",
+    "autor": "Oxana Melis",
+    "url": "https://unsplash.com/photos/KzT5IWf0yHQ"
+  },
+  {
+    "archivo": "stock/ferreteria-5.webp",
+    "tema": "ferreteria",
+    "descripcion": "Martillo y guantes colgados en un tablero",
+    "unsplash_id": "G5i9LQ7sPOw",
+    "autor": "Mitchell Luo",
+    "url": "https://unsplash.com/photos/G5i9LQ7sPOw"
+  },
+  {
+    "archivo": "stock/ferreteria-6.webp",
+    "tema": "ferreteria",
+    "descripcion": "Tablero con herramientas colgadas",
+    "unsplash_id": "e_3E63fQdFY",
+    "autor": "Eka Cahyadi",
+    "url": "https://unsplash.com/photos/e_3E63fQdFY"
+  },
+  {
+    "archivo": "stock/ferreteria-7.webp",
+    "tema": "ferreteria",
+    "descripcion": "Pared de herramientas sobre un mostrador",
+    "unsplash_id": "lDwKKjlHL2Y",
+    "autor": "Anton Savinov",
+    "url": "https://unsplash.com/photos/lDwKKjlHL2Y"
+  },
+  {
+    "archivo": "stock/ferreteria-8.webp",
+    "tema": "ferreteria",
+    "descripcion": "Caja llena de llaves de tuercas",
+    "unsplash_id": "1N5jjLyBafc",
+    "autor": "Alexander Schimmeck",
+    "url": "https://unsplash.com/photos/1N5jjLyBafc"
+  },
+  {
+    "archivo": "stock/ferreteria-9.webp",
+    "tema": "ferreteria",
+    "descripcion": "Estantes con ladrillos y materiales de construcción",
+    "unsplash_id": "HtLkTOr_DQc",
+    "autor": "Markus Winkler",
+    "url": "https://unsplash.com/photos/HtLkTOr_DQc"
+  },
+  {
+    "archivo": "stock/ferreteria-10.webp",
+    "tema": "ferreteria",
+    "descripcion": "Tornillos sueltos de cerca",
+    "unsplash_id": "pvm5QvjFrJ8",
+    "autor": "Eliza Diamond",
+    "url": "https://unsplash.com/photos/pvm5QvjFrJ8"
+  },
+  {
+    "archivo": "stock/restaurante-1.webp",
+    "tema": "restaurante",
+    "descripcion": "Cocinera preparando tortillas a la leña",
+    "unsplash_id": "bw53DWzM8RI",
+    "autor": "Menú Acapulco",
+    "url": "https://unsplash.com/photos/bw53DWzM8RI"
+  },
+  {
+    "archivo": "stock/restaurante-2.webp",
+    "tema": "restaurante",
+    "descripcion": "Puesto de comida al paso con cocinera atendiendo",
+    "unsplash_id": "Mjw-dIbFl-w",
+    "autor": "Daniel Lerman",
+    "url": "https://unsplash.com/photos/Mjw-dIbFl-w"
+  },
+  {
+    "archivo": "stock/restaurante-3.webp",
+    "tema": "restaurante",
+    "descripcion": "Clientes en el mostrador de un local de comida",
+    "unsplash_id": "fG66eEI83AA",
+    "autor": "Kyle Petzer",
+    "url": "https://unsplash.com/photos/fG66eEI83AA"
+  },
+  {
+    "archivo": "stock/restaurante-4.webp",
+    "tema": "restaurante",
+    "descripcion": "Cocinero picando ajos en la cocina",
+    "unsplash_id": "5JeTin55H9U",
+    "autor": "Toa Heftiba",
+    "url": "https://unsplash.com/photos/5JeTin55H9U"
+  },
+  {
+    "archivo": "stock/restaurante-5.webp",
+    "tema": "restaurante",
+    "descripcion": "Cocinero frente a las hornillas",
+    "unsplash_id": "F9v4iq0RDZ0",
+    "autor": "Ahmet Safa Türkyılmaz",
+    "url": "https://unsplash.com/photos/F9v4iq0RDZ0"
+  },
+  {
+    "archivo": "stock/restaurante-6.webp",
+    "tema": "restaurante",
+    "descripcion": "Chef picando verduras en la cocina",
+    "unsplash_id": "y-XZf_TNRms",
+    "autor": "Pylyp Sukhenko",
+    "url": "https://unsplash.com/photos/y-XZf_TNRms"
+  },
+  {
+    "archivo": "stock/restaurante-7.webp",
+    "tema": "restaurante",
+    "descripcion": "Cocineros trabajando en una cocina abierta",
+    "unsplash_id": "80GJUuOhXgA",
+    "autor": "JC Gellidon",
+    "url": "https://unsplash.com/photos/80GJUuOhXgA"
+  },
+  {
+    "archivo": "stock/restaurante-8.webp",
+    "tema": "restaurante",
+    "descripcion": "Olla al fuego en plena hora punta",
+    "unsplash_id": "cC-OMDTczoA",
+    "autor": "Stella He",
+    "url": "https://unsplash.com/photos/cC-OMDTczoA"
+  },
+  {
+    "archivo": "stock/restaurante-9.webp",
+    "tema": "restaurante",
+    "descripcion": "Cocineros preparando platos en la cocina",
+    "unsplash_id": "uMVPq94dd68",
+    "autor": "Jinhan Moon",
+    "url": "https://unsplash.com/photos/uMVPq94dd68"
+  },
+  {
+    "archivo": "stock/restaurante-10.webp",
+    "tema": "restaurante",
+    "descripcion": "Carnicero revisando pedidos en el celular",
+    "unsplash_id": "n8wgapkNu-I",
+    "autor": "Ali Mkumbwa",
+    "url": "https://unsplash.com/photos/n8wgapkNu-I"
+  },
+  {
+    "archivo": "stock/distribuidora-1.webp",
+    "tema": "distribuidora",
+    "descripcion": "Trabajadores caminando por el pasillo de un almacén",
+    "unsplash_id": "c_4eaGRDSVU",
+    "autor": "Adrian Sulyok",
+    "url": "https://unsplash.com/photos/c_4eaGRDSVU"
+  },
+  {
+    "archivo": "stock/distribuidora-2.webp",
+    "tema": "distribuidora",
+    "descripcion": "Dos encargadas revisando el almacén",
+    "unsplash_id": "ZlOlRnWk8zU",
+    "autor": "Centre for Ageing Better",
+    "url": "https://unsplash.com/photos/ZlOlRnWk8zU"
+  },
+  {
+    "archivo": "stock/distribuidora-3.webp",
+    "tema": "distribuidora",
+    "descripcion": "Almacenero con casco revisando una lista",
+    "unsplash_id": "N_nAAwnBDy8",
+    "autor": "Ali Mkumbwa",
+    "url": "https://unsplash.com/photos/N_nAAwnBDy8"
+  },
+  {
+    "archivo": "stock/distribuidora-4.webp",
+    "tema": "distribuidora",
+    "descripcion": "Estantes altos con cajas en un almacén",
+    "unsplash_id": "DU2ybvshovg",
+    "autor": "Ali Mkumbwa",
+    "url": "https://unsplash.com/photos/DU2ybvshovg"
+  },
+  {
+    "archivo": "stock/distribuidora-5.webp",
+    "tema": "distribuidora",
+    "descripcion": "Repartidor descargando cajas de un camión",
+    "unsplash_id": "YjjAU8eQjDc",
+    "autor": "chansu shin",
+    "url": "https://unsplash.com/photos/YjjAU8eQjDc"
+  },
+  {
+    "archivo": "stock/distribuidora-6.webp",
+    "tema": "distribuidora",
+    "descripcion": "Repartidor bajando jabas de una furgoneta",
+    "unsplash_id": "kSeB-cD-Fk8",
+    "autor": "Zhen Yao",
+    "url": "https://unsplash.com/photos/kSeB-cD-Fk8"
+  },
+  {
+    "archivo": "stock/distribuidora-7.webp",
+    "tema": "distribuidora",
+    "descripcion": "Cargador empujando una carretilla llena de cajas",
+    "unsplash_id": "-a_ASRim2Os",
+    "autor": "Lad Hara Caingcoy",
+    "url": "https://unsplash.com/photos/-a_ASRim2Os"
+  },
+  {
+    "archivo": "stock/distribuidora-8.webp",
+    "tema": "distribuidora",
+    "descripcion": "Camión cargado de cajas listo para el reparto",
+    "unsplash_id": "0E7lNwu_bEQ",
+    "autor": "yahdi yasya",
+    "url": "https://unsplash.com/photos/0E7lNwu_bEQ"
+  },
+  {
+    "archivo": "stock/distribuidora-9.webp",
+    "tema": "distribuidora",
+    "descripcion": "Repartidor en moto con cajas",
+    "unsplash_id": "8KeNG7-kqtU",
+    "autor": "Sushanta Rokka",
+    "url": "https://unsplash.com/photos/8KeNG7-kqtU"
+  },
+  {
+    "archivo": "stock/distribuidora-10.webp",
+    "tema": "distribuidora",
+    "descripcion": "Repartidor en moto llevando jabas",
+    "unsplash_id": "3o5NsCjrCrM",
+    "autor": "Reyhan Aviseno",
+    "url": "https://unsplash.com/photos/3o5NsCjrCrM"
+  },
+  {
+    "archivo": "stock/whatsapp-1.webp",
+    "tema": "whatsapp",
+    "descripcion": "Vendedor con delantal revisando mensajes en el celular",
+    "unsplash_id": "uk3ey_vhDKA",
+    "autor": "Ali Mkumbwa",
+    "url": "https://unsplash.com/photos/uk3ey_vhDKA"
+  },
+  {
+    "archivo": "stock/whatsapp-2.webp",
+    "tema": "whatsapp",
+    "descripcion": "Carpintero feliz al leer un mensaje",
+    "unsplash_id": "K-f_gTvdwTM",
+    "autor": "Ali Mkumbwa",
+    "url": "https://unsplash.com/photos/K-f_gTvdwTM"
+  },
+  {
+    "archivo": "stock/whatsapp-3.webp",
+    "tema": "whatsapp",
+    "descripcion": "Manos escribiendo un mensaje en el celular",
+    "unsplash_id": "mw6Onwg4frY",
+    "autor": "freestocks",
+    "url": "https://unsplash.com/photos/mw6Onwg4frY"
+  },
+  {
+    "archivo": "stock/whatsapp-4.webp",
+    "tema": "whatsapp",
+    "descripcion": "Persona revisando el celular de pie",
+    "unsplash_id": "wK-elt11pF0",
+    "autor": "Jonas Leupe",
+    "url": "https://unsplash.com/photos/wK-elt11pF0"
+  },
+  {
+    "archivo": "stock/whatsapp-5.webp",
+    "tema": "whatsapp",
+    "descripcion": "Manos con el celular sobre una mesa",
+    "unsplash_id": "VK-podfv2DU",
+    "autor": "Clay Banks",
+    "url": "https://unsplash.com/photos/VK-podfv2DU"
+  },
+  {
+    "archivo": "stock/whatsapp-6.webp",
+    "tema": "whatsapp",
+    "descripcion": "Mujer sonriendo mientras lee mensajes",
+    "unsplash_id": "eL4xIEuHzzk",
+    "autor": "Brooke Cagle",
+    "url": "https://unsplash.com/photos/eL4xIEuHzzk"
+  },
+  {
+    "archivo": "stock/whatsapp-7.webp",
+    "tema": "whatsapp",
+    "descripcion": "Mujer escribiendo en el celular en la mesa",
+    "unsplash_id": "2f_zK0ruzJE",
+    "autor": "Swello",
+    "url": "https://unsplash.com/photos/2f_zK0ruzJE"
+  },
+  {
+    "archivo": "stock/whatsapp-8.webp",
+    "tema": "whatsapp",
+    "descripcion": "Persona escribiendo en el celular en un local",
+    "unsplash_id": "raWzvTTCBD8",
+    "autor": "Jonas Leupe",
+    "url": "https://unsplash.com/photos/raWzvTTCBD8"
+  },
+  {
+    "archivo": "stock/whatsapp-9.webp",
+    "tema": "whatsapp",
+    "descripcion": "Comerciante usando el celular frente a su tienda",
+    "unsplash_id": "_tpxzbLNUC8",
+    "autor": "atelierbyvineeth",
+    "url": "https://unsplash.com/photos/_tpxzbLNUC8"
+  },
+  {
+    "archivo": "stock/whatsapp-10.webp",
+    "tema": "whatsapp",
+    "descripcion": "Hombre revisando el celular",
+    "unsplash_id": "g4I_Lq-p4o0",
+    "autor": "Utsman Media",
+    "url": "https://unsplash.com/photos/g4I_Lq-p4o0"
+  },
+  {
+    "archivo": "stock/excel-1.webp",
+    "tema": "excel",
+    "descripcion": "Persona revisando papeles frente a la laptop",
+    "unsplash_id": "YDe0nOZyLHI",
+    "autor": "SumUp",
+    "url": "https://unsplash.com/photos/YDe0nOZyLHI"
+  },
+  {
+    "archivo": "stock/excel-2.webp",
+    "tema": "excel",
+    "descripcion": "Laptop con hojas impresas sobre el escritorio",
+    "unsplash_id": "3q4V539j_bw",
+    "autor": "2H Media",
+    "url": "https://unsplash.com/photos/3q4V539j_bw"
+  },
+  {
+    "archivo": "stock/excel-3.webp",
+    "tema": "excel",
+    "descripcion": "Formularios de impuestos con calculadora y lapicero",
+    "unsplash_id": "7edddu99-8Q",
+    "autor": "Kelly Sikkema",
+    "url": "https://unsplash.com/photos/7edddu99-8Q"
+  },
+  {
+    "archivo": "stock/excel-4.webp",
+    "tema": "excel",
+    "descripcion": "Persona llenando una factura en la laptop",
+    "unsplash_id": "IIcjlBm610M",
+    "autor": "SumUp",
+    "url": "https://unsplash.com/photos/IIcjlBm610M"
+  },
+  {
+    "archivo": "stock/excel-5.webp",
+    "tema": "excel",
+    "descripcion": "Laptop con un reporte de ventas en gráficos",
+    "unsplash_id": "hpjSkU2UYSU",
+    "autor": "Carlos Muza",
+    "url": "https://unsplash.com/photos/hpjSkU2UYSU"
+  },
+  {
+    "archivo": "stock/excel-6.webp",
+    "tema": "excel",
+    "descripcion": "Persona llenando una hoja de cálculo al aire libre",
+    "unsplash_id": "RbQ4j2ggOmY",
+    "autor": "Gorilla ROI Data Connector",
+    "url": "https://unsplash.com/photos/RbQ4j2ggOmY"
+  },
+  {
+    "archivo": "stock/excel-7.webp",
+    "tema": "excel",
+    "descripcion": "Manos escribiendo en una hoja de cálculo",
+    "unsplash_id": "9fZuqBYlV1w",
+    "autor": "Gorilla ROI Data Connector",
+    "url": "https://unsplash.com/photos/9fZuqBYlV1w"
+  },
+  {
+    "archivo": "stock/excel-8.webp",
+    "tema": "excel",
+    "descripcion": "Hoja de cálculo abierta en el escritorio",
+    "unsplash_id": "qLf_ML_Rfq8",
+    "autor": "Gorilla ROI Data Connector",
+    "url": "https://unsplash.com/photos/qLf_ML_Rfq8"
+  },
+  {
+    "archivo": "stock/excel-9.webp",
+    "tema": "excel",
+    "descripcion": "Laptop abierta entre hojas de reporte y un lapicero",
+    "unsplash_id": "bI59mOupMYE",
+    "autor": "2H Media",
+    "url": "https://unsplash.com/photos/bI59mOupMYE"
+  },
+  {
+    "archivo": "stock/excel-10.webp",
+    "tema": "excel",
+    "descripcion": "Papeles de impuestos, calculadora y laptop",
+    "unsplash_id": "kpcGHrYiYKg",
+    "autor": "Kelly Sikkema",
+    "url": "https://unsplash.com/photos/kpcGHrYiYKg"
+  }
+]
